@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>占星術 Techmap — 天体記号体系の構造を掴む</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    @media print {
+      #pdf-btn, #toc-sidebar { display: none !important; }
+      section { break-inside: avoid; }
+    }
+    html { scroll-behavior: smooth; }
+    .term-box {
+      border-left: 3px solid #6366f1;
+      background: #f0f0ff;
+      padding: 0.5rem 0.75rem;
+      margin: 0.5rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.875rem;
+    }
+    .analogy-box {
+      border-left: 3px solid #10b981;
+      background: #f0fdf4;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .pitfall-box {
+      border-left: 3px solid #ef4444;
+      background: #fef2f2;
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    #toc-sidebar {
+      position: fixed;
+      top: 80px;
+      left: 12px;
+      width: 200px;
+      z-index: 40;
+      font-size: 0.75rem;
+    }
+    @media (max-width: 1200px) {
+      #toc-sidebar { display: none; }
+    }
+    .flowchart-arrow::after {
+      content: '↓';
+      display: block;
+      text-align: center;
+      color: #6366f1;
+      font-size: 1.5rem;
+      margin: 2px 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed">
+
+<!-- PDF Button -->
+<button id="pdf-btn"
+  onclick="window.print()"
+  class="fixed bottom-6 right-6 z-50 bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 hover:bg-indigo-700 transition">
+  <i data-lucide="file-text" class="w-4 h-4"></i> PDFで保存
+</button>
+
+<!-- TOC Sidebar -->
+<nav id="toc-sidebar" class="bg-white rounded-xl shadow p-3 border border-gray-200">
+  <p class="font-bold text-gray-600 mb-2 text-xs uppercase tracking-wide">目次</p>
+  <ul class="space-y-1 text-gray-500">
+    <li><a href="#summary" class="hover:text-indigo-600">ひとことで言えば</a></li>
+    <li><a href="#history" class="hover:text-indigo-600">なぜ生まれたのか</a></li>
+    <li><a href="#core3" class="hover:text-indigo-600">まず理解する3つ</a></li>
+    <li><a href="#concepts" class="hover:text-indigo-600">主要概念・構造</a></li>
+    <li><a href="#schools" class="hover:text-indigo-600">流派の比較</a></li>
+    <li><a href="#science" class="hover:text-indigo-600">科学的評価</a></li>
+    <li><a href="#usage" class="hover:text-indigo-600">現代の活用法</a></li>
+    <li><a href="#study" class="hover:text-indigo-600">おすすめ勉強法</a></li>
+    <li><a href="#pitfalls" class="hover:text-indigo-600">落とし穴</a></li>
+    <li><a href="#glossary" class="hover:text-indigo-600">専門用語集</a></li>
+    <li><a href="#next" class="hover:text-indigo-600">次に学ぶもの</a></li>
+    <li><a href="#refs" class="hover:text-indigo-600">参考文献</a></li>
+  </ul>
+</nav>
+
+<!-- Header -->
+<header class="bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white py-14 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="flex items-center gap-3 mb-4">
+      <i data-lucide="star" class="w-8 h-8 text-indigo-300"></i>
+      <span class="text-indigo-300 text-sm font-mono uppercase tracking-widest">Techmap</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3">占星術</h1>
+    <p class="text-indigo-200 text-lg">Astrology — 天体記号体系の構造を掴む</p>
+    <p class="text-slate-400 text-sm mt-4">対象：理系の素養があるが占星術は未経験のエンジニア・研究者</p>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-6 py-10 space-y-16">
+
+  <!-- Section 1: ひとことで言えば -->
+  <section id="summary">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="zap" class="w-6 h-6"></i> ひとことで言えば
+    </h2>
+    <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
+      <p class="text-lg font-semibold text-indigo-900 mb-3">
+        占星術とは「天体の位置関係を記号体系として解釈し、人間の性格・出来事・タイミングと象徴的に結びつける伝統的な知的実践」である。
+      </p>
+      <p class="text-gray-700 text-sm">
+        物理的因果関係（惑星の重力が人格を決める、など）としては科学的に支持されていない。
+        しかし<strong>約3000年以上にわたって人類が積み重ねた記号体系・象徴的言語</strong>として、
+        心理学・文化・歴史・神話と深く絡み合っており、「なぜ人はこれを使い続けるのか」を構造的に理解することは知的に有益である。
+      </p>
+    </div>
+    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+      <div class="bg-white rounded-lg border p-4">
+        <p class="font-semibold text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> 占星術が扱うもの</p>
+        <ul class="text-gray-600 space-y-1 list-disc ml-4">
+          <li>出生時の天体配置と象徴的な性格・傾向の対応</li>
+          <li>天体の現在位置と人生イベントのタイミング論</li>
+          <li>文化・宗教・神話と連動した記号体系</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-lg border p-4">
+        <p class="font-semibold text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="x-circle" class="w-4 h-4 text-red-500"></i> 占星術ではないもの</p>
+        <ul class="text-gray-600 space-y-1 list-disc ml-4">
+          <li>天文学（Astronomy）による物理的観測・予測</li>
+          <li>実験・再現性のある科学的予測システム</li>
+          <li>太陽星座だけを使う「星座占い」（の全体）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: なぜ生まれたのか -->
+  <section id="history">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="clock" class="w-6 h-6"></i> なぜ生まれたのか
+    </h2>
+
+    <p class="text-gray-700 mb-4">
+      占星術の起源は<strong>古代メソポタミア（紀元前3000年以上前）</strong>にさかのぼる。
+      農耕社会において「空の秩序を読む」ことは実用そのものだった——
+      種まきの時期、洪水の予測、暦の整備——これらはすべて天体観測と結びついていた。
+    </p>
+
+    <!-- Timeline -->
+    <div class="space-y-0 relative ml-4">
+      <div class="border-l-2 border-indigo-200 pl-6 pb-6 relative">
+        <div class="absolute -left-2 top-1 w-4 h-4 rounded-full bg-indigo-400"></div>
+        <p class="font-semibold text-indigo-700">紀元前3000年〜 — メソポタミア（バビロニア）</p>
+        <p class="text-sm text-gray-600 mt-1">
+          天体オーメン（天変地異の兆候）を粘土板に記録。「彗星が現れたら王が変わる」式の
+          <strong>国家的天変予言</strong>。個人の運命よりも国家・王権が対象。
+        </p>
+      </div>
+      <div class="border-l-2 border-indigo-200 pl-6 pb-6 relative">
+        <div class="absolute -left-2 top-1 w-4 h-4 rounded-full bg-indigo-400"></div>
+        <p class="font-semibold text-indigo-700">紀元前4〜3世紀 — ヘレニズム期（ギリシャ・エジプト）</p>
+        <p class="text-sm text-gray-600 mt-1">
+          バビロニアの観測データ＋ギリシャの幾何学的宇宙論が合流。
+          <strong>黄道（Ecliptic：地球から見た太陽の見かけの通り道）の12分割、個人の出生図（ホロスコープ）</strong>という概念が生まれる。
+          「個人の運命を天球配置で読む」という現在の西洋占星術の骨格がここで確立。
+        </p>
+      </div>
+      <div class="border-l-2 border-indigo-200 pl-6 pb-6 relative">
+        <div class="absolute -left-2 top-1 w-4 h-4 rounded-full bg-indigo-400"></div>
+        <p class="font-semibold text-indigo-700">中世〜ルネサンス — アラビア・ヨーロッパ</p>
+        <p class="text-sm text-gray-600 mt-1">
+          アラビア語圏での技法発展・保存を経てヨーロッパへ再流入。医学・政治・自然哲学と結びつく。
+          大学でも教えられた「学問」だったが、科学革命（17世紀）後に学術的地位を失う。
+        </p>
+      </div>
+      <div class="border-l-2 border-indigo-200 pl-6 pb-6 relative">
+        <div class="absolute -left-2 top-1 w-4 h-4 rounded-full bg-purple-400"></div>
+        <p class="font-semibold text-purple-700">19〜20世紀 — 心理占星術の台頭</p>
+        <p class="text-sm text-gray-600 mt-1">
+          <strong>神智学（Theosophy）</strong>——ブラヴァツキーらが19世紀後半に起こした東西霊性の統合思想運動——と
+          占星術が接合し、「宇宙的・霊的な意味体系」として再評価される。さらに
+          ユング心理学（原型・共時性）との融合が「心理占星術」を生む。
+          「未来予測」から「自己理解・心理的ナラティブ」へのシフト。
+          外惑星（天王星・海王星・冥王星）が発見・取り込まれ、現在の西洋占星術の形に。
+        </p>
+      </div>
+      <div class="border-l-2 border-indigo-200 pl-6 pb-4 relative">
+        <div class="absolute -left-2 top-1 w-4 h-4 rounded-full bg-green-400"></div>
+        <p class="font-semibold text-green-700">現代 — グローバル・デジタル化</p>
+        <p class="text-sm text-gray-600 mt-1">
+          無料チャートアプリ・SNS・ヘレニズム古典復興と、西洋/インド/中国各系統のグローバル併存。
+          自己啓発・コーチング文脈での利用拡大。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: まず理解する3つ -->
+  <section id="core3">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="layers" class="w-6 h-6"></i> まず理解する3つ
+    </h2>
+    <p class="text-gray-600 mb-6">これだけ掴めば「占星術の構造」が見えてくる。</p>
+
+    <div class="space-y-4">
+      <div class="bg-white border-2 border-indigo-400 rounded-xl p-5">
+        <p class="font-bold text-indigo-700 text-lg mb-2">① 占星術は「物理因果」ではなく「象徴体系」</p>
+        <p class="text-gray-700 text-sm">
+          惑星が重力などの物理的経路で人格に影響を与える、という話ではない。
+          「火星はエネルギー・攻撃性を象徴する」という<strong>記号論的な対応関係</strong>を長い文化的蓄積の中で構築した体系である。
+          「なぜその対応があるのか」の物理的根拠は問わず、記号の一貫性と実用性で判断する文化的ツール。
+        </p>
+        <div class="analogy-box mt-3">
+          <p class="text-sm text-green-800"><strong>たとえ話：</strong>
+          ユークリッド幾何学と非ユークリッド幾何学（球面幾何学・双曲幾何学）の関係に近い。
+          「平行線は交わらない（ユークリッド第5公準）」が真かどうかを問うのではなく、
+          どの公理系を採用するかを先に決め、その体系の内部で一貫した結論を導く。
+          占星術も「惑星の象徴的対応」という公理群を所与として受け取り、
+          体系の内部一貫性と実用性で評価するフレームワークと理解すると構造が見えやすい。
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-white border-2 border-purple-400 rounded-xl p-5">
+        <p class="font-bold text-purple-700 text-lg mb-2">② ホロスコープ = 出生時の天球スナップショット</p>
+        <p class="text-gray-700 text-sm">
+          <strong>ホロスコープ（Horoscope）</strong>とは、特定の時刻・場所において、
+          天球上の天体（太陽・月・惑星）がどの<strong>サイン（Sign：黄道十二区分）</strong>の
+          どの<strong>ハウス（House：人生12領域）</strong>に位置し、
+          互いにどんな<strong>アスペクト（Aspect：角度関係）</strong>を結んでいるかを示す地図。
+          この三要素の組み合わせが占星術的解釈のベースになる。
+        </p>
+        <div class="analogy-box mt-3">
+          <p class="text-sm text-green-800"><strong>たとえ話：</strong>
+          工場の生産管理レポートに近い。「どの設備（天体）が」「どの運転モード（サイン）で動いており」
+          「どの工程ライン（ハウス）に配置され」「設備同士がどんな干渉関係（アスペクト）にあるか」
+          ——この4軸の組み合わせで工場全体の状態を記述するスナップショット。
+          ホロスコープはその「工場の瞬間断面図」。
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-white border-2 border-green-400 rounded-xl p-5">
+        <p class="font-bold text-green-700 text-lg mb-2">③ 「流派」によって前提座標系も技法も別物</p>
+        <p class="text-gray-700 text-sm">
+          <strong>西洋占星術（トロピカル）</strong>は春分点を牡羊座0度と定義する季節ベースの座標系。
+          <strong>インド占星術（ジャヨーティシャ / Vedic Astrology）</strong>は実際の恒星配置を基準とするサイデリアル座標系で、
+          約23〜24度のズレ（アヤナムシャ）が生じる。
+          同じ人物のチャートでも「太陽の星座」が変わりうる。さらに中国命理（四柱推命・紫微斗数）は
+          そもそもホロスコープ型ではなく、干支・五行の別体系。
+          これを混同すると議論が噛み合わなくなる。
+        </p>
+        <div class="analogy-box mt-3">
+          <p class="text-sm text-green-800"><strong>たとえ話：</strong>
+          緯度経度（GPS）と住所表記（都道府県〜丁目）と地番（不動産登記）は、
+          同じ「場所」を指すが座標系が違う。どれが「正しい」かではなく、文脈に応じたシステム選択の問題。
+          流派を比較するときは「どの座標系・どの技法で話しているか」を先に確認するのが必須。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: 主要概念・アーキテクチャ -->
+  <section id="concepts">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="map" class="w-6 h-6"></i> 主要概念・アーキテクチャ
+    </h2>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">ホロスコープの三層構造</h3>
+
+    <!-- 概念フロー図 -->
+    <div class="bg-white rounded-xl border p-5 mb-6">
+      <div class="flex flex-col items-center gap-0">
+        <div class="bg-indigo-100 border border-indigo-300 rounded-lg px-6 py-3 text-center w-64">
+          <p class="font-bold text-indigo-800">天体 (Planets / Luminaries)</p>
+          <p class="text-xs text-gray-600">「何が」作用するか — エネルギー・衝動の種類</p>
+          <p class="text-xs text-indigo-600 mt-1">太陽・月・水星・金星・火星・木星・土星（古典7）</p>
+        </div>
+        <div class="text-indigo-400 text-2xl my-1">↓ どこに？</div>
+        <div class="bg-purple-100 border border-purple-300 rounded-lg px-6 py-3 text-center w-64">
+          <p class="font-bold text-purple-800">サイン (Sign / 星座)</p>
+          <p class="text-xs text-gray-600">「どのような色合いで」作用するか — スタイル・性質</p>
+          <p class="text-xs text-purple-600 mt-1">牡羊〜魚座の12区分（黄道30°ずつ）</p>
+        </div>
+        <div class="text-indigo-400 text-2xl my-1">↓ どの領域で？</div>
+        <div class="bg-green-100 border border-green-300 rounded-lg px-6 py-3 text-center w-64">
+          <p class="font-bold text-green-800">ハウス (House)</p>
+          <p class="text-xs text-gray-600">「人生のどの領域で」発現するか</p>
+          <p class="text-xs text-green-600 mt-1">第1〜12ハウス（自己・金・兄弟・家族・創造・健康…）</p>
+        </div>
+        <div class="text-indigo-400 text-2xl my-1">↓ 天体間の関係は？</div>
+        <div class="bg-yellow-100 border border-yellow-300 rounded-lg px-6 py-3 text-center w-64">
+          <p class="font-bold text-yellow-800">アスペクト (Aspect)</p>
+          <p class="text-xs text-gray-600">天体同士の角度関係 — 調和・緊張のパターン</p>
+          <p class="text-xs text-yellow-600 mt-1">合(0°)・六分(60°)・四分(90°)・三分(120°)・対分(180°)</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 text-center mt-3">ホロスコープ解釈 = 天体 × サイン × ハウス × アスペクトの多変量読み解き</p>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">4つのアングルとアセンダント</h3>
+    <div class="term-box mb-3">
+      <strong>アングル（Angles）：</strong>地平線と子午線が天球と交わる4点。ホロスコープの骨格をなす最重要軸。
+      天体がアングル付近に位置すると、その天体のテーマが「強く発現しやすい」とされる。
+    </div>
+    <div class="overflow-x-auto mb-3">
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="text-left p-3 border-b">略称</th>
+            <th class="text-left p-3 border-b">正式名称</th>
+            <th class="text-left p-3 border-b">天球上の位置</th>
+            <th class="text-left p-3 border-b">象徴的テーマ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 font-bold text-indigo-700">ASC</td>
+            <td class="p-3">Ascendant（アセンダント）</td>
+            <td class="p-3 text-gray-600">東の地平線と黄道の交点。第1ハウス始点</td>
+            <td class="p-3 text-gray-600">外から見た印象・社会的な顔・身体</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 font-bold text-indigo-700">DSC</td>
+            <td class="p-3">Descendant（ディセンダント）</td>
+            <td class="p-3 text-gray-600">西の地平線と黄道の交点。第7ハウス始点</td>
+            <td class="p-3 text-gray-600">対人・パートナーシップ・他者との関係</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 font-bold text-indigo-700">MC</td>
+            <td class="p-3">Midheaven / Medium Coeli（天頂）</td>
+            <td class="p-3 text-gray-600">南中点（子午線と黄道の上方交点）。第10ハウス始点</td>
+            <td class="p-3 text-gray-600">社会的地位・キャリア・公的な達成</td>
+          </tr>
+          <tr>
+            <td class="p-3 font-bold text-indigo-700">IC</td>
+            <td class="p-3">Imum Coeli（天底）</td>
+            <td class="p-3 text-gray-600">子午線の下方交点。第4ハウス始点</td>
+            <td class="p-3 text-gray-600">家族・ルーツ・プライベートな基盤</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-gray-600">同じ太陽星座でも出生時刻が違えばASCが変わり（約2時間で1サイン移動）、チャート全体の構造が変わる。これが「出生時刻が必要な理由」。</p>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 mt-5">7天体・12サイン・12ハウスの早見表</h3>
+
+    <div class="overflow-x-auto mb-4">
+      <p class="text-xs text-gray-500 mb-1">▼ 古典7天体（西洋占星術の基本単位）</p>
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-indigo-50">
+          <tr>
+            <th class="text-left p-2 border-b">天体</th>
+            <th class="text-left p-2 border-b">象徴するもの</th>
+            <th class="text-left p-2 border-b">公転周期（地球から）</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-b"><td class="p-2 font-medium">☉ 太陽</td><td class="p-2">自我・本質的なアイデンティティ・意志</td><td class="p-2">約1年（1サイン/月）</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">☽ 月</td><td class="p-2">感情・習慣・安心感・母性</td><td class="p-2">約28日（2〜3日/サイン）</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">☿ 水星</td><td class="p-2">思考・コミュニケーション・移動・情報処理</td><td class="p-2">約88日</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">♀ 金星</td><td class="p-2">美・愛情・価値観・喜び・協調</td><td class="p-2">約225日</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">♂ 火星</td><td class="p-2">行動力・欲求・競争・攻撃性・エネルギー</td><td class="p-2">約687日（約2年）</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">♃ 木星</td><td class="p-2">拡張・幸運・哲学・発展・楽観性</td><td class="p-2">約12年（1年/サイン）</td></tr>
+          <tr><td class="p-2 font-medium">♄ 土星</td><td class="p-2">制限・試練・構造・責任・成熟</td><td class="p-2">約29.5年（2.5年/サイン）</td></tr>
+        </tbody>
+      </table>
+      <p class="text-xs text-gray-400 mt-1">※ 現代西洋占星術では天王星・海王星・冥王星（外惑星）も使用するが、古典系は7天体のみ</p>
+    </div>
+
+    <div class="overflow-x-auto mb-4">
+      <p class="text-xs text-gray-500 mb-1">▼ 12サイン（トロピカル基準）</p>
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-purple-50">
+          <tr>
+            <th class="text-left p-2 border-b">サイン</th>
+            <th class="text-left p-2 border-b">エレメント</th>
+            <th class="text-left p-2 border-b">クオリティ</th>
+            <th class="text-left p-2 border-b">象徴的テーマ（一言）</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-b"><td class="p-2">♈ 牡羊座</td><td class="p-2">火</td><td class="p-2">活動</td><td class="p-2">開始・直接的行動・自立</td></tr>
+          <tr class="border-b"><td class="p-2">♉ 牡牛座</td><td class="p-2">土</td><td class="p-2">固定</td><td class="p-2">安定・物質・感覚的快楽</td></tr>
+          <tr class="border-b"><td class="p-2">♊ 双子座</td><td class="p-2">風</td><td class="p-2">変通</td><td class="p-2">情報・コミュニケーション・二面性</td></tr>
+          <tr class="border-b"><td class="p-2">♋ 蟹座</td><td class="p-2">水</td><td class="p-2">活動</td><td class="p-2">感情・家族・保護・安全基盤</td></tr>
+          <tr class="border-b"><td class="p-2">♌ 獅子座</td><td class="p-2">火</td><td class="p-2">固定</td><td class="p-2">創造・表現・リーダーシップ</td></tr>
+          <tr class="border-b"><td class="p-2">♍ 乙女座</td><td class="p-2">土</td><td class="p-2">変通</td><td class="p-2">分析・奉仕・実用・細部への注意</td></tr>
+          <tr class="border-b"><td class="p-2">♎ 天秤座</td><td class="p-2">風</td><td class="p-2">活動</td><td class="p-2">調和・対人関係・公平・美意識</td></tr>
+          <tr class="border-b"><td class="p-2">♏ 蠍座</td><td class="p-2">水</td><td class="p-2">固定</td><td class="p-2">変容・深層心理・執着・再生</td></tr>
+          <tr class="border-b"><td class="p-2">♐ 射手座</td><td class="p-2">火</td><td class="p-2">変通</td><td class="p-2">哲学・冒険・拡張・真理の探求</td></tr>
+          <tr class="border-b"><td class="p-2">♑ 山羊座</td><td class="p-2">土</td><td class="p-2">活動</td><td class="p-2">野心・構造・責任・長期的目標</td></tr>
+          <tr class="border-b"><td class="p-2">♒ 水瓶座</td><td class="p-2">風</td><td class="p-2">固定</td><td class="p-2">革新・共同体・客観性・理想</td></tr>
+          <tr><td class="p-2">♓ 魚座</td><td class="p-2">水</td><td class="p-2">変通</td><td class="p-2">溶解・霊性・共感・無意識</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="overflow-x-auto mb-4">
+      <p class="text-xs text-gray-500 mb-1">▼ 12ハウスの意味領域</p>
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-green-50">
+          <tr>
+            <th class="text-left p-2 border-b">ハウス</th>
+            <th class="text-left p-2 border-b">伝統的な名称</th>
+            <th class="text-left p-2 border-b">主な人生領域</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-b"><td class="p-2 font-medium">第1</td><td class="p-2">ASCのハウス</td><td class="p-2">自己・外見・身体・出発点</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第2</td><td class="p-2">財のハウス</td><td class="p-2">金銭・物質・自己価値・所有物</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第3</td><td class="p-2">兄弟のハウス</td><td class="p-2">コミュニケーション・学習・兄弟・近距離移動</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第4</td><td class="p-2">ICのハウス</td><td class="p-2">家族・ルーツ・住環境・心理的基盤</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第5</td><td class="p-2">創造のハウス</td><td class="p-2">創造性・恋愛・子供・遊び・表現</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第6</td><td class="p-2">健康のハウス</td><td class="p-2">健康・日常業務・奉仕・習慣・労働</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第7</td><td class="p-2">DSCのハウス</td><td class="p-2">対人関係・パートナー・契約・他者</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第8</td><td class="p-2">変容のハウス</td><td class="p-2">死と再生・共有資産・深層心理・変容</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第9</td><td class="p-2">哲学のハウス</td><td class="p-2">高等教育・哲学・宗教・長距離移動・外国</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第10</td><td class="p-2">MCのハウス</td><td class="p-2">キャリア・社会的地位・権威・公的役割</td></tr>
+          <tr class="border-b"><td class="p-2 font-medium">第11</td><td class="p-2">友人のハウス</td><td class="p-2">友人・コミュニティ・目標・社会的ネットワーク</td></tr>
+          <tr><td class="p-2 font-medium">第12</td><td class="p-2">隠れたハウス</td><td class="p-2">潜在意識・隠遁・自己破壊・霊性・無意識</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 mt-5">アスペクトの幾何学的根拠</h3>
+    <p class="text-gray-700 text-sm mb-3">
+      アスペクトに使われる角度（0°・60°・90°・120°・180°）は恣意的ではない。
+      <strong>円を等分する正多角形の内角</strong>から来ている——
+      正三角形（内角60°→トライン120°の補角）、正方形（90°→スクエア）、
+      正六角形（60°→セクスタイル）、直径（180°→オポジション）。
+      すなわち「円形の天球を幾何学的に等分したときに生じる対称点」を特別視する体系。
+    </p>
+    <div class="overflow-x-auto mb-3">
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-yellow-50">
+          <tr>
+            <th class="text-left p-2 border-b">アスペクト名</th>
+            <th class="text-left p-2 border-b">角度</th>
+            <th class="text-left p-2 border-b">幾何学的根拠</th>
+            <th class="text-left p-2 border-b">象徴的性質</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-b"><td class="p-2">コンジャンクション（合）</td><td class="p-2 font-mono">0°</td><td class="p-2">同点（合一）</td><td class="p-2">強調・融合・集中</td></tr>
+          <tr class="border-b"><td class="p-2">セクスタイル（六分）</td><td class="p-2 font-mono">60°</td><td class="p-2">正六角形の1辺</td><td class="p-2">機会・協力・流動</td></tr>
+          <tr class="border-b"><td class="p-2">スクエア（四分）</td><td class="p-2 font-mono">90°</td><td class="p-2">正方形の1辺</td><td class="p-2">緊張・摩擦・課題</td></tr>
+          <tr class="border-b"><td class="p-2">トライン（三分）</td><td class="p-2 font-mono">120°</td><td class="p-2">正三角形の1辺</td><td class="p-2">調和・才能・流れやすさ</td></tr>
+          <tr><td class="p-2">オポジション（対分）</td><td class="p-2 font-mono">180°</td><td class="p-2">直径（対極）</td><td class="p-2">対立・バランス・意識化</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 mt-5">トランジットとプログレス</h3>
+    <p class="text-gray-700 text-sm mb-3">
+      出生図（静的スナップショット）に対して、現在の天体位置（<strong>トランジット / Transit</strong>）が
+      出生図の天体とアスペクトを形成するとき、「そのテーマが活性化される」と解釈する技法。
+      <strong>プログレス（Progression：進行法）</strong>は出生図を象徴的に「1日＝1年」などの換算で
+      ゆっくり書き換えていく技法（セカンダリープログレスが代表的）。
+    </p>
+    <div class="analogy-box">
+      <p class="text-sm text-green-800"><strong>トランジットのたとえ：</strong>
+      ソフトウェアの設定ファイル（出生図）と、実行時に外部から変化するパラメータ（トランジット）の関係。
+      静的なベース設定に対して、外部入力がどのタイミングでどの設定値に触れるかを追う構造。<br/>
+      <strong>プログレスのたとえ：</strong>
+      設定ファイル自体が非常にゆっくりと書き換わっていくバージョン管理のイメージ。
+      出生直後から始まるgit commitが「1コミット＝1年」のペースで積み重なり、
+      現在のチャートが少しずつ異なるバージョンになっていく。
+      </p>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 mt-5">ハウス分割法の多様性</h3>
+    <p class="text-gray-700 text-sm mb-2">
+      ハウスの境界（カスプ）の決め方には複数の数学的アルゴリズムがある。
+      代表的なものだけでも以下があり、同じ出生データでも惑星が属するハウスが変わりうる。
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="text-left p-3 border-b">分割法</th>
+            <th class="text-left p-3 border-b">特徴</th>
+            <th class="text-left p-3 border-b">主な使用流派</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 font-medium">プラシダス</td>
+            <td class="p-3 text-gray-600">時間分割基準。現代西洋で最も広く普及</td>
+            <td class="p-3 text-gray-600">現代西洋占星術</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 font-medium">コーチ（Koch）</td>
+            <td class="p-3 text-gray-600">出生地の地平線を基準にした時間分割</td>
+            <td class="p-3 text-gray-600">現代西洋</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 font-medium">等分ハウス</td>
+            <td class="p-3 text-gray-600">ASCから30°ずつ均等分割。シンプルで古典的</td>
+            <td class="p-3 text-gray-600">ヘレニズム・入門者</td>
+          </tr>
+          <tr>
+            <td class="p-3 font-medium">ホールサイン</td>
+            <td class="p-3 text-gray-600">ASCのサイン全体を第1ハウスとする。古典復興で再注目</td>
+            <td class="p-3 text-gray-600">ヘレニズム古典</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-gray-700 mb-3 mt-5">たとえ話：CPUとソケットとマザーボード・バス接続</h3>
+    <div class="analogy-box">
+      <p class="text-sm text-green-800">
+        <strong>天体 = CPU（処理ユニットの種類）</strong>：太陽CPU（統合・意志）、火星CPU（実行・競争）、
+        土星CPU（制約・構造）…など、各天体は担当する「処理の性質」を持つ。<br/>
+        <strong>サイン = ソケット規格（動作モード）</strong>：同じ火星CPUでも牡羊座ソケットなら直線的高速動作、
+        蟹座ソケットなら防衛的・感情的モードで動く。<br/>
+        <strong>ハウス = 搭載システム（担当機能領域）</strong>：第10ハウス（キャリア）に搭載されれば
+        職業上の活動として発現し、第7ハウス（対人）に搭載されれば関係性として現れる。<br/>
+        <strong>アスペクト = CPU間のバス接続と帯域</strong>：トライン（120°）は高帯域・低遅延の協調接続、
+        スクエア（90°）は競合が生じる帯域制限状態、オポジション（180°）は対極配置での負荷バランシング要求。<br/>
+        このアーキテクチャの全体像がホロスコープ。
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 5: 流派の比較 -->
+  <section id="schools">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="git-branch" class="w-6 h-6"></i> 流派の比較
+    </h2>
+
+    <div class="grid gap-4">
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-bold text-indigo-700 mb-2">西洋占星術（トロピカル / Tropical Astrology）</h3>
+        <ul class="text-sm text-gray-700 space-y-1 list-disc ml-4">
+          <li>春分点 = 牡羊座0度（季節基準）。恒星の実際の位置とは約23〜24度ずれている</li>
+          <li>心理占星術（Jung との接合）と予測占星術が並存</li>
+          <li>外惑星（天王星・海王星・冥王星）を積極的に使用</li>
+          <li>現代では最も普及しているシステム。アプリ・書籍が豊富</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-bold text-orange-700 mb-2">インド占星術（ジャヨーティシャ / Jyotisha / Vedic Astrology）</h3>
+        <ul class="text-sm text-gray-700 space-y-1 list-disc ml-4">
+          <li>サイデリアル座標系（実際の恒星位置基準）。アヤナムシャ（補正値）約23〜24度</li>
+          <li>月サイン（ラシ）・ナクシャトラ（27宿）・ダシャ（行運期間システム）が独自の強み</li>
+          <li>外惑星を使わない流派が多い（古典7天体中心）</li>
+          <li>インド・ネパール・スリランカ文化圏で今も実生活に使われる</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-bold text-purple-700 mb-2">ヘレニズム占星術（古典復興 / Hellenistic Astrology）</h3>
+        <ul class="text-sm text-gray-700 space-y-1 list-disc ml-4">
+          <li>紀元前1世紀〜7世紀頃のギリシャ・ローマ・エジプトの文献に基づく技法の復興</li>
+          <li>ディグニティ（品位）・タイムロード・ロット（プロフェクション等）が重視される</li>
+          <li>外惑星なし。ホールサイン・等分ハウスが多用される</li>
+          <li>2000年代以降 Chris Brennan らによる翻訳・再興が進む</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-bold text-red-700 mb-2">中国命理（四柱推命・紫微斗数）</h3>
+        <ul class="text-sm text-gray-700 space-y-1 list-disc ml-4">
+          <li>天体観測ベースのホロスコープ型とは構造が異なる。干支・十干・五行が核</li>
+          <li><strong>四柱推命（八字）</strong>：生年月日時の干支4柱から命式を読む</li>
+          <li><strong>紫微斗数</strong>：仮想の星（虚星）を12の宮（ハウス）に配置する独自体系</li>
+          <li>西洋・インド系と「星座」用語が重なるが、体系は別物として理解すること</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: 科学的評価 -->
+  <section id="science">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="microscope" class="w-6 h-6"></i> 科学的・心理学的評価
+    </h2>
+    <p class="text-gray-700 mb-4">
+      占星術を「客観的に」理解するには、なぜ「効く」と感じられるのかのメカニズムと、
+      検証研究の結果を把握しておくことが重要。
+    </p>
+
+    <div class="space-y-4">
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="brain" class="w-5 h-5 text-indigo-500"></i>
+          バーナム効果（Barnum Effect / Forer Effect）
+        </h3>
+        <p class="text-sm text-gray-700">
+          「誰にでも当てはまりうる曖昧な記述」を、読んだ本人が「自分だけを言い当てている」と感じる認知現象。
+          心理学者バートラム・フォアが1948年に実験で実証。「あなたは外向きに見えて内向きな面もある」式の記述が典型。
+          占星術解釈文には構造的にこの効果が乗りやすい。効果の大半を「的中」と感じてしまう主要因の一つ。
+        </p>
+      </div>
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="link" class="w-5 h-5 text-purple-500"></i>
+          カール・ユングと共時性（Synchronicity）
+        </h3>
+        <p class="text-sm text-gray-700">
+          ユングは占星術を「物理因果の予測システム」としてではなく、
+          「原型（Archetype）的なパターンを言語化する象徴的ツール」として捉えた。
+          <strong>共時性（Synchronicity）</strong>——因果なく意味的に連動するように見える偶然の一致——の概念を通じて、
+          占星術と心理的プロセスを接続しようとした。これが「心理占星術」の哲学的根拠になっている。
+          （なお共時性自体も科学的に検証された概念ではない）。
+        </p>
+      </div>
+      <div class="bg-white rounded-xl border p-5">
+        <h3 class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="bar-chart-2" class="w-5 h-5 text-red-500"></i>
+          ゴークランの火星効果（Mars Effect）
+        </h3>
+        <p class="text-sm text-gray-700">
+          フランスの統計家ミシェル・ゴークランが1950〜60年代に発表した研究。
+          「一流スポーツ選手は火星がアングル付近（地平線・子午線近傍）に位置する割合が統計的に高い」と主張。
+          長年にわたって懐疑論者との論争が続いたが、<strong>データ選択バイアス・確認バイアス・複製不成功</strong>などが指摘されており、
+          現在の科学的コンセンサスは「火星効果の実在は支持されない」に近い。
+        </p>
+      </div>
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-sm text-indigo-900">
+        <strong>まとめ：</strong> 占星術が「科学的に証明された予測システム」であるという証拠は現時点では存在しない。
+        しかし「なぜ多くの人が有益と感じるか」はバーナム効果・確証バイアス・ナラティブ効果・コーチング的機能などで説明でき、
+        それ自体は社会学・認知心理学的に興味深い研究対象である。
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: 現代の活用法 -->
+  <section id="usage">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="compass" class="w-6 h-6"></i> 現代における活用法
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="user" class="w-4 h-4 text-indigo-500"></i> 自己理解・心理的ナラティブ
+        </p>
+        <p class="text-sm text-gray-600">
+          自分の傾向・葛藤・強みをチャートの記号で「言語化」する枠組みとして使う。
+          「月が蟹座にある＝感情的安定に家族・安全基盤を必要とする傾向」のように、
+          自己観察の補助言語として活用する心理占星術的アプローチ。
+        </p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="users" class="w-4 h-4 text-green-500"></i> 対人関係・相性の枠組み
+        </p>
+        <p class="text-sm text-gray-600">
+          2枚のチャートを重ね合わせるシナストリー（Synastry）や合成図（コンポジット）で、
+          関係性のダイナミクスを記号的に分析。「なぜあの人とは摩擦が生じやすいか」を
+          外的に言語化するメタファとして使われる。
+        </p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="calendar" class="w-4 h-4 text-purple-500"></i> タイミング・トランジット活用
+        </p>
+        <p class="text-sm text-gray-600">
+          「土星がトランジットで自分の太陽に触れる時期は試練・成長の局面」のように、
+          人生のタイミングに象徴的な枠組みを与える。予定や決断のリフレーミングツールとして。
+        </p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+          <i data-lucide="book-open" class="w-4 h-4 text-orange-500"></i> 歴史・文化・神話の読解補助
+        </p>
+        <p class="text-sm text-gray-600">
+          西洋美術・文学・古典に頻繁に登場する惑星名・星座の象徴体系を理解するために、
+          占星術の記号体系の知識は有効。ルネサンス絵画・シェイクスピア・ダンテ読解の補助文脈として。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: おすすめ勉強法 -->
+  <section id="study">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="graduation-cap" class="w-6 h-6"></i> おすすめの勉強法
+    </h2>
+
+    <div class="space-y-3">
+      <div class="flex gap-4 bg-white border rounded-xl p-4">
+        <div class="text-2xl font-bold text-indigo-300 w-8 shrink-0">1</div>
+        <div>
+          <p class="font-semibold text-gray-800">まず「流派を一つ選んで固定」する</p>
+          <p class="text-sm text-gray-600 mt-1">西洋トロピカル・インド・ヘレニズムのどれかに絞る。
+          最初から複数の流派を横断すると座標系・技法が混乱する。
+          一般的な入門書はほぼ西洋トロピカルなのでそこから始めるのが無難。</p>
+        </div>
+      </div>
+      <div class="flex gap-4 bg-white border rounded-xl p-4">
+        <div class="text-2xl font-bold text-indigo-300 w-8 shrink-0">2</div>
+        <div>
+          <p class="font-semibold text-gray-800">惑星の基本象徴・サイン・ハウスの意味を個別に暗記</p>
+          <p class="text-sm text-gray-600 mt-1">
+          太陽〜土星の7天体（まず外惑星除外）、12サインの性質、12ハウスの人生領域を別々に覚える。
+          組み合わせは後。先に「素材」の理解を固める。</p>
+        </div>
+      </div>
+      <div class="flex gap-4 bg-white border rounded-xl p-4">
+        <div class="text-2xl font-bold text-indigo-300 w-8 shrink-0">3</div>
+        <div>
+          <p class="font-semibold text-gray-800">無料ツールで自分のチャートを作成し、実際に読む</p>
+          <p class="text-sm text-gray-600 mt-1">
+          Astro.com（英語）や Astrodienst などで出生図を生成。
+          出生時刻・出生地が必要。「自分のチャートをひたすら読み込む」ことで
+          抽象的な概念が具体的に理解できる。</p>
+        </div>
+      </div>
+      <div class="flex gap-4 bg-white border rounded-xl p-4">
+        <div class="text-2xl font-bold text-indigo-300 w-8 shrink-0">4</div>
+        <div>
+          <p class="font-semibold text-gray-800">アスペクト・アングルを加える</p>
+          <p class="text-sm text-gray-600 mt-1">
+          メジャーアスペクト5種（コンジャンクション・セクスタイル・スクエア・トライン・オポジション）と
+          ASC・MC（天頂）の意味を理解すると、チャート読みが一気に深まる。</p>
+        </div>
+      </div>
+      <div class="flex gap-4 bg-white border rounded-xl p-4">
+        <div class="text-2xl font-bold text-indigo-300 w-8 shrink-0">5</div>
+        <div>
+          <p class="font-semibold text-gray-800">同一人物のチャートを複数の解釈と比較する</p>
+          <p class="text-sm text-gray-600 mt-1">
+          有名人の公開チャートを使い、複数の著者・解説者の読み方を比較すると、
+          「何が一致し何が解釈者依存か」が見えてくる。
+          テキストを写経するより実践的な読み比べが上達に繋がる。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 9: 落とし穴 -->
+  <section id="pitfalls">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="alert-triangle" class="w-6 h-6"></i> 初心者がはまりやすい落とし穴
+    </h2>
+
+    <div class="space-y-3">
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">「太陽星座だけ」が占星術と思っている</p>
+        <p class="text-sm text-gray-700 mt-1">
+        雑誌の星座欄（サンサイン・ソーラーロジー）はホロスコープ占星術のごく一部。
+        月のサイン・ASC・アスペクト・ハウスが加わると解釈の複雑度が桁違いに増す。
+        「魚座なのに魚座っぽくない」の多くは月・ASCや他の天体配置で説明できる。
+        </p>
+      </div>
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">トロピカルとサイデリアルの混同</p>
+        <p class="text-sm text-gray-700 mt-1">
+        「実際の星空では春分点が魚座に入っているから牡羊座は間違い」という批判があるが、
+        トロピカル系は恒星位置を追うシステムではなく季節（春分点）を牡羊座0度と定義するシステム。
+        比較対象が「座標系の違い」であることを理解しないと議論が噛み合わない。
+        </p>
+      </div>
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">「ハウス分割法はどれでもいい」と思って混用する</p>
+        <p class="text-sm text-gray-700 mt-1">
+        プラシダスとホールサインでは同じ出生データでも惑星のハウス帰属が変わりうる。
+        一つの分割法を選んでその解釈体系の中で一貫させることが重要。
+        ソフト・サービスによってデフォルト分割法が異なるので確認が必要。
+        </p>
+      </div>
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">「決定論」として閉じた解釈をする</p>
+        <p class="text-sm text-gray-700 mt-1">
+        「○○座だから一生○○な人生」式の硬直した解釈は、依存・あきらめを生む。
+        心理占星術的な立場では「可能性・傾向の言語」として扱い、
+        選択・成長の余地を常に残すフレーミングが望ましい。
+        また医療・法律・財務の判断を占星術で代替するのは明確に危険。
+        </p>
+      </div>
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">「水星逆行中は何もするな」という過剰解釈</p>
+        <p class="text-sm text-gray-700 mt-1">
+        水星逆行は物理的には、地球と水星の公転速度差によって生じる<strong>見かけ上の逆行運動</strong>。
+        外合・内合前後に地球から見て水星が天球上を逆方向に動くように見える現象で、
+        年3〜4回、各約3週間発生する。占星術的には「コミュニケーション・情報・移動のテーマが
+        見直しに入る時期」と解釈するが、「逆行中は契約・旅行・購入を一切禁止」式の極端な解釈は
+        文献的根拠に乏しい。SNSで最も拡散されやすい占星術コンテンツなので注意が必要。
+        </p>
+      </div>
+      <div class="pitfall-box">
+        <p class="font-semibold text-red-800">SNS断片情報だけで体系を学ぼうとする</p>
+        <p class="text-sm text-gray-700 mt-1">
+        TikTok・Instagram・Twitterの断片情報は用語の定義が文脈によってバラバラなことが多い。
+        「○○座はこんな人」式の記述は流派・技法・文脈が曖昧。
+        最低でも一冊体系立った入門書か、一人の著者の講座を通しで学ぶことを推奨。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 10: 専門用語集 -->
+  <section id="glossary">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="book" class="w-6 h-6"></i> 専門用語集
+    </h2>
+
+    <div class="space-y-2">
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">ホロスコープ（Horoscope）</p>
+        <p class="text-sm text-gray-600 mt-1">特定の時刻・場所における天体配置を示す円形の地図（出生図）。西洋占星術の解釈の基本単位。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">サイン（Sign / 星座）— 黄道十二宮</p>
+        <p class="text-sm text-gray-600 mt-1">黄道を30°ずつ12分割した区分。各サインはエレメント（火地風水）とクオリティ（活動・固定・変通）で性質が決まる。トロピカルでは季節基準。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">ハウス（House）</p>
+        <p class="text-sm text-gray-600 mt-1">天球を人生の12領域に分割したセクター。第1（自己・外見）〜第12（潜在意識・隠遁）。分割法によって境界の計算方法が異なる。→ サインと混同しないこと。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">アスペクト（Aspect）</p>
+        <p class="text-sm text-gray-600 mt-1">天体同士の角度関係。コンジャンクション（0°・合一）・スクエア（90°・緊張）・オポジション（180°・対立）・トライン（120°・調和）・セクスタイル（60°・機会）が主要5種。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">アセンダント（Ascendant / ASC）</p>
+        <p class="text-sm text-gray-600 mt-1">出生時刻の東の地平線と黄道の交点。第1ハウスの始点。「外から見た印象・社会的な顔」の象徴。出生時刻によって約2時間で1サイン移動するため、正確な時刻が必要。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">トランジット（Transit）</p>
+        <p class="text-sm text-gray-600 mt-1">現在（または任意の時点）の天体位置が出生図の天体・ハウスカスプとアスペクトを形成する動き。「あるテーマが活性化される時期」の分析に使う。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">トロピカル / サイデリアル（Tropical / Sidereal）</p>
+        <p class="text-sm text-gray-600 mt-1">黄道の基準の違い。トロピカル：春分点 = 牡羊座0度（季節基準）。サイデリアル：実際の恒星配置基準（歳差運動を考慮）。約23〜24度（アヤナムシャ）のズレが生じる。→ 流派の根本的な前提差。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">ディグニティ（Dignity / 品位）</p>
+        <p class="text-sm text-gray-600 mt-1">各天体がどのサインに位置するかによる「強さ・弱さ」の評価体系。支配（Rulership）・高揚（Exaltation）・デトリメント・フォールなど。ヘレニズム・古典占星術で特に重視される。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">バーナム効果（Barnum Effect）</p>
+        <p class="text-sm text-gray-600 mt-1">曖昧で一般的な記述を自分専用の洞察と感じてしまう認知バイアス。占星術・血液型・タロットなど多くの「性格診断」に共通する心理的メカニズム。→ フォア効果（Forer Effect）とも。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">ナクシャトラ（Nakshatra）</p>
+        <p class="text-sm text-gray-600 mt-1">インド占星術（ジャヨーティシャ）の27（〜28）宿。月が約27日で黄道を一周することに基づく細分類。西洋の12サインより細かい性質分析に使われる。</p>
+      </div>
+      <div class="bg-white border rounded-lg p-4">
+        <p class="font-semibold text-gray-800">共時性（Synchronicity）</p>
+        <p class="text-sm text-gray-600 mt-1">カール・ユングが提唱した「因果的に無関係だが意味的に連動するように見える偶然の一致」の概念。心理占星術が物理因果に頼らずに占星術と心理を接続する際の哲学的基盤として引用される。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 11: 次に学ぶもの -->
+  <section id="next">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="arrow-right-circle" class="w-6 h-6"></i> 次に学ぶと良いもの
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">ユング心理学・元型論</p>
+        <p class="text-sm text-gray-600">心理占星術の哲学的基盤。「影」「ペルソナ」「アニマ/アニムス」などの概念がサイン・天体の象徴と直接対応する。</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">ギリシャ・ローマ神話</p>
+        <p class="text-sm text-gray-600">惑星名の由来。アレス（火星）・アフロディーテ（金星）・クロノス（土星）など、神話の物語が象徴体系に直接対応する。</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">天文学・歴史天文学</p>
+        <p class="text-sm text-gray-600">黄道・歳差運動・惑星の逆行運動の物理的メカニズムを知ると、占星術用語の起源と科学的実態の違いが明確になる。</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">認知心理学・バイアス論</p>
+        <p class="text-sm text-gray-600">確証バイアス・バーナム効果・フレーミング効果などの知識は、占星術の「なぜ効くと感じるか」を客観的に分析するのに役立つ。</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">タロット・ルーン・易学</p>
+        <p class="text-sm text-gray-600">占星術と同様に「象徴的記号体系」として機能するツール群。比較することで「記号体系がどう機能するか」の理解が深まる。</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-indigo-700 mb-1">ヘレニズム占星術の古典テキスト</p>
+        <p class="text-sm text-gray-600">プトレマイオス『テトラビブロス』、マルクス・マニリウス『アストロノミカ』など。現代復興の流れで英訳が充実してきた。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 12: 参考文献 -->
+  <section id="refs">
+    <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center gap-2">
+      <i data-lucide="external-link" class="w-6 h-6"></i> 参考文献・URL
+    </h2>
+
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">百科・学術解説（英語）</h3>
+    <ul class="space-y-2 mb-5">
+      <li><a href="https://en.wikipedia.org/wiki/History_of_astrology" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> History of astrology — Wikipedia</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hellenistic_astrology" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Hellenistic astrology — Wikipedia</a></li>
+      <li><a href="https://iep.utm.edu/astr-hel/" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Hellenistic Astrology — Internet Encyclopedia of Philosophy</a></li>
+      <li><a href="https://www.britannica.com/topic/astrology" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Astrology — Britannica</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Psychological_astrology" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Psychological astrology — Wikipedia</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Mars_effect" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Mars effect — Wikipedia</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Barnum_effect" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Barnum effect — Wikipedia</a></li>
+    </ul>
+
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">日本語入門書（例）</h3>
+    <ul class="space-y-2 mb-5">
+      <li><a href="https://astromiru.com/books/001-9/" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i>『最新占星術入門』松村潔 — AstroMIRU紹介ページ</a></li>
+      <li><a href="https://www.kadokawa.co.jp/product/322212000895/" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i>『星よみの教科書 1時間でホロスコープが読めるようになる本』— KADOKAWA</a></li>
+    </ul>
+
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">ヘレニズム古典復興（英語）</h3>
+    <ul class="space-y-2 mb-5">
+      <li><a href="https://www.hellenisticastrology.com/" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Chris Brennan — Hellenistic Astrology（公式サイト・ポッドキャスト）</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Hellenistic_astrology" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Hellenistic astrology — Wikipedia（概要・文献リスト）</a></li>
+    </ul>
+
+    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">チャート生成ツール</h3>
+    <ul class="space-y-2">
+      <li><a href="https://www.astro.com/horoscope" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Astro.com — 無料出生図生成（英語・高機能、複数ハウス方式対応）</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="text-center text-xs text-gray-400 py-8 border-t mt-8">
+  Generated by Techmap | 2026-03-28
+</footer>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
