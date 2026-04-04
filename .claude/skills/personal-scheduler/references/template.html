@@ -10,84 +10,143 @@
     <style>
         body {
             font-family: 'Kiwi Maru', serif;
-            background-color: #fdfcf0; /* Warm Beige */
-            color: #4b5d40; /* Natural Green */
+            background-color: #fdfcf0;
+            color: #4b5d40;
         }
-        .paper {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .grid-container {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            background-color: #e5e5e5;
+            gap: 1px;
             border: 1px solid #e5e5e5;
-            background-color: white;
-            border-radius: 0.5rem;
-            height: 100%;
         }
-        .time-line {
+        .time-slot {
+            background-color: #faf9f0;
+            padding: 4px;
+            text-align: center;
+            font-size: 10px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-slot {
+            background-color: white;
+            padding: 4px 8px;
+            height: 40px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
             position: relative;
         }
-        .time-line::before {
-            content: '';
-            position: absolute;
-            left: 1.15rem;
-            top: 1rem;
-            bottom: 1rem;
-            width: 1px;
-            background-color: #c8d8c0;
+        .task-slot.occupied {
+            background-color: #e8f0e0;
+            border-left: 4px solid #4b5d40;
+        }
+        .task-slot.transit {
+            background-color: #e0f2fe;
+            border-left: 4px solid #0ea5e9;
+        }
+        .task-slot.buffer {
+            background-color: #fff7ed;
+            color: #9a3412;
+            font-style: italic;
+            font-size: 10px;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #fdfcf0;
         }
     </style>
 </head>
-<body class="min-h-screen py-8 px-4">
-    <div class="max-w-[1400px] mx-auto">
+<body class="min-h-screen pb-12">
+    <div class="max-w-2xl mx-auto px-2 sm:px-4">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center gap-2">
-                <i data-lucide="calendar"></i>
-                <!-- HEADER_TEXT -->
-            </h1>
-            <p class="text-sm mt-1 opacity-80">無理のない、着実な一歩を。</p>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div class="flex justify-center gap-4 mb-8">
-            <!-- NAV_BUTTONS -->
-        </div>
-
-        <!-- Content Grid -->
-        <div class="grid grid-cols-1 <!-- GRID_LAYOUT --> gap-6">
-            <!-- CONTENT_CARDS -->
-        </div>
-    </div>
-
-    <!-- Template for a single card (for reference during generation) -->
-    <!-- 
-    <div class="paper overflow-hidden flex flex-col">
-        <div class="bg-[#e8f0e0] p-4 border-b border-[#c8d8c0] flex justify-between items-center">
-            <h2 class="font-bold flex items-center gap-2">
-                <i data-lucide="calendar-days" class="w-4 h-4"></i>
-                2026/03/29 (日)
-            </h2>
-            <a href="2026-03-29.html" class="text-xs hover:underline text-[#4b5d40]">詳細 <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>
-        </div>
-        <div class="p-4 flex-grow time-line">
-            <div class="space-y-3 text-sm">
-                <div class="flex items-center gap-3">
-                    <span class="w-10 text-[10px] opacity-60">06:00</span>
-                    <span>起床</span>
+        <div class="sticky-header py-4 border-b border-[#c8d8c0] mb-4">
+            <div class="flex justify-between items-center mb-2">
+                <a href="archive.html" class="text-xs bg-[#e8f0e0] px-3 py-1 rounded-full flex items-center gap-1">
+                    <i data-lucide="calendar-days" class="w-3 h-3"></i> 月間表示
+                </a>
+                <h1 class="text-xl font-bold"><!-- DATE_DISPLAY --></h1>
+                <div class="flex gap-2">
+                    <button onclick="scrollToCurrentTime()" class="text-xs bg-[#4b5d40] text-white px-3 py-1 rounded-full flex items-center gap-1">
+                        <i data-lucide="clock" class="w-3 h-3"></i> 今ここ
+                    </button>
+                    <a href="<!-- PREV_DATE -->.html" class="p-1 hover:bg-gray-100 rounded"><i data-lucide="chevron-left"></i></a>
+                    <a href="<!-- NEXT_DATE -->.html" class="p-1 hover:bg-gray-100 rounded"><i data-lucide="chevron-right"></i></a>
                 </div>
-                ...
             </div>
         </div>
-        <div class="p-4 bg-[#faf9f0] border-t border-[#e5e5e5] text-xs">
-            <h3 class="font-bold mb-1 flex items-center gap-1">
-                <i data-lucide="check-square" class="w-3 h-3"></i> やりたいこと
-            </h3>
-            <ul class="space-y-1 opacity-80">
-                <li>・ 野菜の出荷作業</li>
-            </ul>
+
+        <!-- 24h Grid -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div id="schedule-grid" class="grid-container">
+                <!-- TIME_SLOTS_START_0500 -->
+                <!-- Example Row -->
+                <!-- 
+                <div class="time-slot" id="t0500">05:00</div>
+                <div class="task-slot group">
+                    <span>睡眠 / 起床準備</span>
+                    <button onclick="copyTask('[x] 睡眠 / 起床準備')" class="ml-auto hidden group-hover:block text-[10px] bg-gray-100 px-1 rounded border">MDコピー</button>
+                </div>
+                -->
+                <!-- TIME_SLOTS_END -->
+            </div>
+        </div>
+
+        <!-- Float Buttons -->
+        <div class="fixed bottom-6 right-6 flex flex-col gap-3">
+            <button onclick="scrollToCurrentTime()" class="w-12 h-12 bg-white text-[#4b5d40] border-2 border-[#4b5d40] rounded-full flex items-center justify-center shadow-lg">
+                <i data-lucide="crosshair"></i>
+            </button>
+            <a href="index.html" class="w-12 h-12 bg-[#4b5d40] text-white rounded-full flex items-center justify-center shadow-lg">
+                <i data-lucide="home"></i>
+            </a>
         </div>
     </div>
-    -->
 
     <script>
         lucide.createIcons();
+
+        function scrollToCurrentTime() {
+            const now = new Date();
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = now.getMinutes() < 30 ? '00' : '30';
+            const id = 't' + hour + minute;
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Highlight the slot briefly
+                element.nextElementSibling.classList.add('ring-2', 'ring-[#4b5d40]', 'ring-inset');
+                setTimeout(() => {
+                    element.nextElementSibling.classList.remove('ring-2', 'ring-[#4b5d40]', 'ring-inset');
+                }, 2000);
+            }
+        }
+
+        function copyTask(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // UI feedback
+                const btn = event.currentTarget;
+                const originalText = btn.innerText;
+                btn.innerText = 'OK!';
+                setTimeout(() => btn.innerText = originalText, 1000);
+            });
+        }
+
+        // Auto-scroll on load
+        window.onload = () => {
+            const h1 = document.querySelector('h1');
+            if (!h1) return;
+            const dateDisplay = h1.innerText;
+            const today = new Date();
+            const formattedToday = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+            if (dateDisplay.includes(formattedToday)) {
+                setTimeout(scrollToCurrentTime, 500);
+            }
+        };
     </script>
 </body>
 </html>
