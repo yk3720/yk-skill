@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>パーソナル図解スキル — 設計の工夫ポイント</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- PDF Button -->
+  <button onclick="window.print()" class="no-print fixed bottom-6 right-6 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 flex items-center gap-2 text-sm">
+    <i data-lucide="download" class="w-4 h-4"></i>
+    PDFで保存
+  </button>
+
+  <!-- Floating TOC -->
+  <nav class="no-print fixed top-6 left-6 z-40 hidden xl:block bg-white border border-gray-200 rounded-lg p-4 shadow-sm w-52 text-sm">
+    <p class="font-bold text-gray-700 mb-3 flex items-center gap-2">
+      <i data-lucide="align-left" class="w-4 h-4 text-blue-500"></i>目次
+    </p>
+    <ul class="space-y-2 text-gray-500">
+      <li><a href="#summary" class="block hover:text-blue-600 transition-colors">ひとことで言えば</a></li>
+      <li><a href="#why" class="block hover:text-blue-600 transition-colors">なぜ作ったのか</a></li>
+      <li><a href="#three" class="block hover:text-blue-600 transition-colors">核心の3つ</a></li>
+      <li><a href="#details" class="block hover:text-blue-600 transition-colors">工夫ポイント詳細</a></li>
+      <li><a href="#next" class="block hover:text-blue-600 transition-colors">次に発展できること</a></li>
+    </ul>
+  </nav>
+
+  <main class="max-w-3xl mx-auto px-4 py-12">
+
+    <!-- Header -->
+    <header class="mb-12">
+      <p class="text-xs text-blue-600 font-semibold uppercase tracking-widest mb-3">設計ノート</p>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">パーソナル図解スキル</h1>
+      <p class="text-lg text-gray-500">設計の工夫ポイント まとめ</p>
+    </header>
+
+    <!-- Section 1: ひとことで言えば -->
+    <section id="summary" class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <i data-lucide="zap" class="w-5 h-5 text-blue-500"></i>
+        ひとことで言えば
+      </h2>
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg">
+        <p class="text-gray-800 font-medium">「興味・仕事の調査で大まかな概要を素早くつかむ」ための、<strong>自分専用の学習補助スキル</strong>。</p>
+        <p class="text-gray-600 mt-2 text-sm">難易度・用語説明・参考文献・学習連鎖の4点を設計の軸に据えることで、「調べた知識が次の知識に繋がる」体験を設計している。</p>
+      </div>
+
+      <!-- 概要カード -->
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+          <i data-lucide="target" class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 mb-1">目的</p>
+            <p class="text-sm text-gray-800">大まかな概要を素早くつかむ</p>
+          </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-start gap-3">
+          <i data-lucide="user" class="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 mb-1">使用者</p>
+            <p class="text-sm text-gray-800">自分だけ（個人最適化）</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: なぜ作ったのか -->
+    <section id="why" class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <i data-lucide="history" class="w-5 h-5 text-blue-500"></i>
+        なぜ作ったのか
+      </h2>
+      <div class="bg-white border border-gray-200 rounded-lg p-5 space-y-4">
+        <div class="flex gap-3">
+          <i data-lucide="search" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <p class="text-gray-700 text-sm">興味のある対象を調べるとき・仕事での調査が必要なときに、<strong>大まかな概要を素早くつかむ</strong>ための仕組みが必要だった。</p>
+        </div>
+        <div class="flex gap-3">
+          <i data-lucide="user-check" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <p class="text-gray-700 text-sm">使用者は<strong>自分だけ</strong>なので、自分の知識レベル・学習スタイルに徹底的に最適化できる。</p>
+        </div>
+        <div class="flex gap-3">
+          <i data-lucide="book-open" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <p class="text-gray-700 text-sm">「勉強の取っかかり」として使い、そこから深掘りできる足がかりを作りたかった。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: 核心の3つ -->
+    <section id="three" class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <i data-lucide="layers" class="w-5 h-5 text-blue-500"></i>
+        まず理解する3つ（設計の核心）
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white border-t-4 border-blue-500 rounded-lg p-4 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">核心①</span>
+          </div>
+          <p class="font-bold text-gray-900 mb-1">難易度バランス</p>
+          <p class="text-xs text-gray-500">難しすぎず、優しすぎない説明レベルを保つ</p>
+        </div>
+        <div class="bg-white border-t-4 border-emerald-500 rounded-lg p-4 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">核心②</span>
+          </div>
+          <p class="font-bold text-gray-900 mb-1">用語の丁寧な展開</p>
+          <p class="text-xs text-gray-500">略称・専門用語を必ず説明・一覧化する</p>
+        </div>
+        <div class="bg-white border-t-4 border-violet-500 rounded-lg p-4 shadow-sm">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold text-violet-600 bg-violet-50 px-2 py-0.5 rounded-full">核心③</span>
+          </div>
+          <p class="font-bold text-gray-900 mb-1">学習の連鎖設計</p>
+          <p class="text-xs text-gray-500">次に何を学べばいいかを提案し知識を広げる</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: 工夫ポイント詳細 -->
+    <section id="details" class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        <i data-lucide="settings-2" class="w-5 h-5 text-blue-500"></i>
+        工夫ポイント詳細（全5つ）
+      </h2>
+
+      <!-- Flowchart -->
+      <div class="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5">設計フロー</p>
+        <div class="flex flex-col items-center">
+
+          <div class="bg-blue-600 text-white rounded-lg px-6 py-3 text-sm font-semibold w-full max-w-sm text-center shadow">
+            学習の目的を定める
+            <p class="font-normal text-xs text-blue-200 mt-1">「大まかな概要を素早く掴む」が軸</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-300 rounded-lg px-5 py-3 text-sm w-full max-w-sm">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">①</span>
+              <p class="font-semibold text-amber-800">難易度バランス</p>
+            </div>
+            <p class="text-amber-700 text-xs pl-6">難しすぎず、優しすぎない説明レベルで出力させる</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-sky-50 border border-sky-300 rounded-lg px-5 py-3 text-sm w-full max-w-sm">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-sky-700 bg-sky-100 px-1.5 py-0.5 rounded">②</span>
+              <p class="font-semibold text-sky-800">参考文献の明示</p>
+            </div>
+            <p class="text-sky-700 text-xs pl-6">参考URLを必ず図解に添付させる</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-emerald-50 border border-emerald-300 rounded-lg px-5 py-3 text-sm w-full max-w-sm">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">③</span>
+              <p class="font-semibold text-emerald-800">略称の展開説明</p>
+            </div>
+            <p class="text-emerald-700 text-xs pl-6">英語略称の正式名称・日本語訳を説明させる</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-violet-50 border border-violet-300 rounded-lg px-5 py-3 text-sm w-full max-w-sm">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-violet-700 bg-violet-100 px-1.5 py-0.5 rounded">④</span>
+              <p class="font-semibold text-violet-800">専門用語集</p>
+            </div>
+            <p class="text-violet-700 text-xs pl-6">重要語の一覧・定義を末尾に追加する</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-rose-50 border border-rose-300 rounded-lg px-5 py-3 text-sm w-full max-w-sm">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-bold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded">⑤</span>
+              <p class="font-semibold text-rose-800">学習の連鎖提案</p>
+            </div>
+            <p class="text-rose-700 text-xs pl-6">次に学ぶべきトピックを提案し知識を広げる</p>
+          </div>
+
+          <div class="flex flex-col items-center my-1">
+            <div class="w-0.5 h-4 bg-gray-300"></div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </div>
+
+          <div class="bg-gray-800 text-white rounded-lg px-6 py-3 text-sm font-semibold w-full max-w-sm text-center shadow">
+            知識が連鎖する学習体験へ
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detail Cards -->
+      <div class="space-y-5">
+
+        <!-- Card 1 -->
+        <div class="bg-white border border-gray-200 rounded-lg p-5">
+          <div class="flex items-start gap-3">
+            <div class="bg-amber-100 p-2 rounded-lg flex-shrink-0">
+              <i data-lucide="sliders-horizontal" class="w-5 h-5 text-amber-600"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-amber-700">①</span>
+                <p class="font-bold text-gray-900">難易度バランス</p>
+              </div>
+              <p class="text-gray-500 text-sm mb-3">「勉強の取っかかり」として使うため、説明が難しすぎても優しすぎても価値が下がる。</p>
+              <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-sm">
+                <p class="text-xs font-semibold text-gray-500 mb-1">工夫</p>
+                <p class="text-gray-700">「実務経験があるが、このトピックは初めて」という立場を前提に設計。概念の本質を既知の知識に接続する形で説明させ、過度な簡略化も難解な専門的記述も避ける。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white border border-gray-200 rounded-lg p-5">
+          <div class="flex items-start gap-3">
+            <div class="bg-sky-100 p-2 rounded-lg flex-shrink-0">
+              <i data-lucide="link" class="w-5 h-5 text-sky-600"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-sky-700">②</span>
+                <p class="font-bold text-gray-900">参考文献の明示</p>
+              </div>
+              <p class="text-gray-500 text-sm mb-3">図解は「概要をつかむ入口」であり、詳細は一次情報で確認する必要がある。</p>
+              <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-sm">
+                <p class="text-xs font-semibold text-gray-500 mb-1">工夫</p>
+                <p class="text-gray-700">参考文献URLを末尾に必ず貼り付けるよう指示。図解を読んだ後に一次情報へ自然にアクセスできる導線を設ける。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white border border-gray-200 rounded-lg p-5">
+          <div class="flex items-start gap-3">
+            <div class="bg-emerald-100 p-2 rounded-lg flex-shrink-0">
+              <i data-lucide="book-marked" class="w-5 h-5 text-emerald-600"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-emerald-700">③</span>
+                <p class="font-bold text-gray-900">略称の展開説明</p>
+              </div>
+              <p class="text-gray-500 text-sm mb-3">英語の略称は正式名称を知らないと意味が定着しにくく、後で調べるときに困る。</p>
+              <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-sm">
+                <p class="text-xs font-semibold text-gray-500 mb-1">工夫</p>
+                <p class="text-gray-700">略称の初出時に「正式名称（日本語訳）」を必ず展開させる。</p>
+                <p class="mt-2 text-gray-500 text-xs">例: <code class="bg-gray-200 px-1 py-0.5 rounded text-gray-700">API（Application Programming Interface：アプリケーション プログラミング インタフェース）</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white border border-gray-200 rounded-lg p-5">
+          <div class="flex items-start gap-3">
+            <div class="bg-violet-100 p-2 rounded-lg flex-shrink-0">
+              <i data-lucide="list-ordered" class="w-5 h-5 text-violet-600"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-violet-700">④</span>
+                <p class="font-bold text-gray-900">専門用語集</p>
+              </div>
+              <p class="text-gray-500 text-sm mb-3">図解を読み終えた後、「あの用語なんだったっけ」と見返せる参照点が必要。</p>
+              <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-sm">
+                <p class="text-xs font-semibold text-gray-500 mb-1">工夫</p>
+                <p class="text-gray-700">本文に登場した用語を末尾の専門用語集にまとめる。定義・関連語のクロス参照を添えることで、単なるリストではなく「辞書的な参照ページ」として機能させる。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="bg-white border border-gray-200 rounded-lg p-5">
+          <div class="flex items-start gap-3">
+            <div class="bg-rose-100 p-2 rounded-lg flex-shrink-0">
+              <i data-lucide="arrow-right-circle" class="w-5 h-5 text-rose-600"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-rose-700">⑤</span>
+                <p class="font-bold text-gray-900">学習の連鎖提案</p>
+              </div>
+              <p class="text-gray-500 text-sm mb-3">一つの図解だけで学習が止まらず、好奇心を次の行動に繋げることが目的。</p>
+              <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-sm">
+                <p class="text-xs font-semibold text-gray-500 mb-1">工夫</p>
+                <p class="text-gray-700">図解の末尾に「次に学ぶと良いトピック」を提案させ、関連知識への自然な接続を促す。調べた知識が孤立せず、広がっていく体験を設計している。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: 次に発展できること -->
+    <section id="next" class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <i data-lucide="compass" class="w-5 h-5 text-blue-500"></i>
+        次に発展できること
+      </h2>
+      <div class="bg-white border border-gray-200 rounded-lg divide-y divide-gray-100">
+        <div class="p-4 flex items-start gap-3">
+          <i data-lucide="users" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="font-semibold text-gray-800 text-sm">対象読者の拡張</p>
+            <p class="text-gray-500 text-xs mt-0.5">「自分だけ」からチームへの共有を想定した設計変更点の検討</p>
+          </div>
+        </div>
+        <div class="p-4 flex items-start gap-3">
+          <i data-lucide="bar-chart-2" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="font-semibold text-gray-800 text-sm">難易度の自動推定</p>
+            <p class="text-gray-500 text-xs mt-0.5">トピックと既存知識レベルから適切な難易度を自動調整する仕組みの実装</p>
+          </div>
+        </div>
+        <div class="p-4 flex items-start gap-3">
+          <i data-lucide="git-branch" class="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="font-semibold text-gray-800 text-sm">知識グラフの構築</p>
+            <p class="text-gray-500 text-xs mt-0.5">「次に学ぶと良いもの」の連鎖を蓄積し、自分の学習マップとして可視化する</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-400 pt-8 border-t border-gray-200">
+      <p>パーソナル図解スキル — 設計メモ &nbsp;|&nbsp; 2026-04-04</p>
+    </footer>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIを動かす側になる — 3つの壁とAI駆動の法則 | Techmap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --techmap-primary: #1e3a5f;
+      --techmap-accent: #0ea5e9;
+      --techmap-gradient: linear-gradient(135deg, #1e3a5f 0%, #0ea5e9 100%);
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    }
+
+    .header-gradient {
+      background: var(--techmap-gradient);
+    }
+
+    .section-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .term-explain {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border-left: 4px solid #0ea5e9;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .term-word { color: #0369a1; }
+
+    .badge-essential {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: white; padding: 0.25rem 0.75rem;
+      border-radius: 9999px; font-size: 0.875rem; font-weight: 600;
+    }
+    .badge-recommended {
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      color: white; padding: 0.25rem 0.75rem;
+      border-radius: 9999px; font-size: 0.875rem; font-weight: 600;
+    }
+    .badge-optional {
+      background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+      color: white; padding: 0.25rem 0.75rem;
+      border-radius: 9999px; font-size: 0.875rem; font-weight: 600;
+    }
+
+    .ref-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1rem; background: #f8fafc;
+      border: 1px solid #e2e8f0; border-radius: 0.5rem;
+      text-decoration: none; color: #0ea5e9; transition: background 0.15s;
+    }
+    .ref-link:hover { background: #e0f2fe; }
+
+    .wall-card {
+      border: 2px solid transparent;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: box-shadow 0.2s;
+    }
+    .wall-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+
+    .analogy-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .rule-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .rule-card:hover {
+      border-color: #0ea5e9;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+    }
+
+    .toc {
+      position: fixed; right: 2rem; top: 50%;
+      transform: translateY(-50%);
+      background: white; padding: 1rem; border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      max-height: 80vh; overflow-y: auto;
+      z-index: 50; min-width: 160px;
+    }
+    @media (max-width: 1280px) { .toc { display: none; } }
+
+    .pdf-btn {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--techmap-gradient);
+      color: white; border: none;
+      padding: 0.75rem 1.25rem; border-radius: 9999px;
+      font-size: 0.875rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
+      transition: opacity 0.15s, transform 0.15s; z-index: 100;
+    }
+    .pdf-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .performance-bar {
+      height: 12px; border-radius: 6px; background: #e2e8f0;
+      overflow: hidden; margin: 0.5rem 0;
+    }
+    .performance-fill {
+      height: 100%; border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    @media print {
+      .toc, .pdf-btn { display: none !important; }
+      body { background: white; }
+      .section-card {
+        box-shadow: none; border: 1px solid #e2e8f0;
+        break-inside: avoid; page-break-inside: avoid;
+      }
+      .header-gradient {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      a[href]::after { content: none; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- 目次（デスクトップ専用・フローティング） -->
+  <nav class="toc">
+    <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">目次</p>
+    <ul class="space-y-1 text-sm">
+      <li><a href="#summary" class="text-gray-600 hover:text-sky-600">概要</a></li>
+      <li><a href="#background" class="text-gray-600 hover:text-sky-600">背景</a></li>
+      <li><a href="#basics" class="text-gray-600 hover:text-sky-600">まず理解する3つ</a></li>
+      <li><a href="#wall1" class="text-gray-600 hover:text-sky-600 pl-3">壁①コンテキスト</a></li>
+      <li><a href="#wall2" class="text-gray-600 hover:text-sky-600 pl-3">壁②アテンション</a></li>
+      <li><a href="#wall3" class="text-gray-600 hover:text-sky-600 pl-3">壁③自己回帰</a></li>
+      <li><a href="#rules" class="text-gray-600 hover:text-sky-600">10の法則</a></li>
+      <li><a href="#pitfalls" class="text-gray-600 hover:text-sky-600">落とし穴</a></li>
+      <li><a href="#glossary" class="text-gray-600 hover:text-sky-600">専門用語集</a></li>
+      <li><a href="#related" class="text-gray-600 hover:text-sky-600">次に学ぶもの</a></li>
+      <li><a href="#references" class="text-gray-600 hover:text-sky-600">参考文献</a></li>
+    </ul>
+  </nav>
+
+  <!-- ヘッダー -->
+  <header class="header-gradient text-white py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-medium tracking-wide">Techmap</span>
+        <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-medium">AI / LLM 実務運用</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold leading-tight">AIを動かす側になる</h1>
+      <p class="mt-3 text-xl opacity-90">越えるべき3つの壁とAI駆動の10法則</p>
+      <p class="mt-2 text-sm opacity-70">LLMの構造的限界を理解し、最大性能を引き出す実践的フレームワーク</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- ひとことで言えば -->
+    <section id="summary" class="section-card">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="map" class="w-6 h-6 text-sky-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">ひとことで言えば</h2>
+          <p class="text-gray-500">まずここだけ押さえる</p>
+        </div>
+      </div>
+      <div class="bg-gradient-to-r from-sky-50 to-blue-50 border border-sky-200 rounded-xl p-6">
+        <p class="text-xl font-bold text-sky-900">「AIを動かす側」とは、LLMの3つの構造的限界を理解し、その上で運用指針を設計できる人間のことである。</p>
+        <p class="mt-4 text-gray-700">AIを単に「使う」のではなく「動かす」側に立つためには、LLM（Large Language Model：大規模言語モデル）が抱える物理的・アーキテクチャ的な制約——コンテキストウィンドウの枯渇、アテンションの分散、オートリグレッション（自己回帰）によるエラー連鎖——を正確に把握することが出発点になる。これらの壁を無視して指示を出しても、AIは本来の性能を発揮できない。</p>
+      </div>
+
+      <!-- 対象読者と範囲 -->
+      <div class="mt-6 grid sm:grid-cols-3 gap-4">
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <i data-lucide="user-check" class="w-5 h-5 text-gray-600 mb-2"></i>
+          <div class="text-sm font-bold text-gray-700 mb-1">対象</div>
+          <div class="text-sm text-gray-600">AIを実務で使い始めて「もっと精度を上げたい」と感じているエンジニア・プロフェッショナル</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <i data-lucide="target" class="w-5 h-5 text-gray-600 mb-2"></i>
+          <div class="text-sm font-bold text-gray-700 mb-1">カバー範囲</div>
+          <div class="text-sm text-gray-600">LLMの3つの構造的限界 + 実務で使えるAI駆動の10法則</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <i data-lucide="trending-up" class="w-5 h-5 text-gray-600 mb-2"></i>
+          <div class="text-sm font-bold text-gray-700 mb-1">ゴール</div>
+          <div class="text-sm text-gray-600">90点止まりの成果を100点に引き上げる運用設計ができるようになる</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- なぜ生まれたのか -->
+    <section id="background" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="history" class="w-6 h-6 text-amber-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">なぜ「動かす側」という概念が必要になったのか</h2>
+          <p class="text-gray-500">AI利活用の分岐点——使う人と動かす人の乖離</p>
+        </div>
+      </div>
+
+      <p class="text-gray-700 mb-6">ChatGPT（2022年11月）以降、LLMは一般に広く普及し、「誰でも使える」ツールになった。しかしこれは同時に、成果物の品質が「AIの使い方を知っているかどうか」で大きく分かれる時代の始まりでもあった。</p>
+
+      <!-- タイムライン -->
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 text-xs font-bold text-gray-500 pt-1 text-right">2022年</div>
+          <div class="w-px bg-gray-300 self-stretch mx-2"></div>
+          <div class="flex-1 pb-4">
+            <div class="font-bold text-gray-800">ChatGPT登場・「使う側」の爆発的拡大</div>
+            <div class="text-sm text-gray-600 mt-1">プログラミング知識不要でLLMが使えるようになり、利用者が急増。「AIを使う」こと自体は差別化要因ではなくなる。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 text-xs font-bold text-gray-500 pt-1 text-right">2023-24年</div>
+          <div class="w-px bg-gray-300 self-stretch mx-2"></div>
+          <div class="flex-1 pb-4">
+            <div class="font-bold text-gray-800">コンテキストウィンドウの拡大と「Lost in the Middle」問題の顕在化</div>
+            <div class="text-sm text-gray-600 mt-1">GPT-4・Claude・Geminiが相次いで長文コンテキストに対応。しかしMicrosoftResearch等の研究で、長大なコンテキストが必ずしも性能向上に繋がらないことが実証される。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="flex-shrink-0 w-16 text-xs font-bold text-gray-500 pt-1 text-right">2025-26年</div>
+          <div class="w-px bg-gray-300 self-stretch mx-2"></div>
+          <div class="flex-1">
+            <div class="font-bold text-gray-800">「動かす側」の技術が体系化</div>
+            <div class="text-sm text-gray-600 mt-1">指示過多による性能劣化（IFScaleベンチマーク）、オートリグレッションのエラー構造（Key Tokensフレームワーク）など、AIの限界を把握した上で最大性能を引き出す知識体系が整備されてきた。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analogy-box">
+        <div class="flex items-start gap-3">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-amber-900">たとえ話①：料理キットとプロのシェフ</div>
+            <div class="text-sm text-amber-800 mt-1">「CookDo（炒め物の合わせ調味料）」を使えば、誰でも90点の料理が作れる。しかしレストランレベルの100点を出すには、素材・調味料・火加減の原理を深く理解したシェフが必要だ。AIも同様で、「とりあえず使える」状態から「制御して最大性能を引き出す」状態には、構造の理解が必要になる。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- まず理解する3つ -->
+    <section id="basics" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">まず理解する3つ</h2>
+          <p class="text-gray-500">これだけ知れば「動かす側」の入門完了</p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        <a href="#wall1" class="wall-card border-red-200 bg-red-50 block no-underline hover:no-underline">
+          <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mb-3">
+            <i data-lucide="database" class="w-5 h-5 text-red-600"></i>
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="badge-essential">必須</span>
+          </div>
+          <div class="font-bold text-gray-800 mb-1">壁① コンテキストウィンドウ</div>
+          <div class="text-sm text-gray-600">AIの「作業机」は仕様上の大きさより実質的にずっと狭い。100万トークンと書いてあっても有効利用率は60%まで落ちる。</div>
+        </a>
+
+        <a href="#wall2" class="wall-card border-orange-200 bg-orange-50 block no-underline hover:no-underline">
+          <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
+            <i data-lucide="focus" class="w-5 h-5 text-orange-600"></i>
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="badge-essential">必須</span>
+          </div>
+          <div class="font-bold text-gray-800 mb-1">壁② アテンション</div>
+          <div class="text-sm text-gray-600">注意力の「パイ」は有限。500個の指示を出すと32%は無視される。指示は絞るほど効く。</div>
+        </a>
+
+        <a href="#wall3" class="wall-card border-purple-200 bg-purple-50 block no-underline hover:no-underline">
+          <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+            <i data-lucide="git-branch" class="w-5 h-5 text-purple-600"></i>
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="badge-essential">必須</span>
+          </div>
+          <div class="font-bold text-gray-800 mb-1">壁③ オートリグレッション（自己回帰）</div>
+          <div class="text-sm text-gray-600">AIは1語ずつ「一発書き」する。前半のミスは後半に伝播し、長文ほど後半が崩れる。出力コストは入力の5倍。</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 壁①コンテキストウィンドウ -->
+    <section id="wall1" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="database" class="w-6 h-6 text-red-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">壁① コンテキストウィンドウ</h2>
+          <p class="text-gray-500">Context Window（コンテキスト ウィンドウ）—— AIの作業机は仕様より狭い</p>
+        </div>
+      </div>
+
+      <div class="term-explain">
+        <div class="flex items-start gap-4">
+          <i data-lucide="lightbulb" class="w-8 h-8 text-sky-500 flex-shrink-0"></i>
+          <div>
+            <div class="term-word text-xl font-bold">「コンテキストウィンドウ」とは？</div>
+            <div class="text-lg mt-2">
+              LLMが1回のリクエストで同時に処理できる<span class="font-bold text-sky-700">テキスト量の上限</span>のこと。<br>
+              単位は<strong>トークン（Token：テキストの最小処理単位。日本語では1文字≒1〜2トークン）</strong>で表される。<br>
+              システムプロンプト・ツール定義・会話履歴・思考トークン・ユーザーの質問すべてがこの枠を消費する。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="text-lg font-bold text-gray-800 mt-6 mb-4">コンテキストの中身を分解すると……</h3>
+
+      <!-- コンテキストの構成図 -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-6">
+        <div class="text-sm font-bold text-gray-500 mb-4 uppercase tracking-wide">コンテキストウィンドウの内訳（イメージ）</div>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-gray-700">システムプロンプト</span>
+              <span class="text-gray-500">〜10%</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-indigo-400" style="width:10%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-gray-700">ツール定義・関数スキーマ</span>
+              <span class="text-gray-500">〜15%</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-purple-400" style="width:15%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-gray-700">会話履歴（過去のやりとり）</span>
+              <span class="text-gray-500">〜40%</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-amber-400" style="width:40%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-gray-700">思考トークン（推論過程）</span>
+              <span class="text-gray-500">〜20%</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-rose-400" style="width:20%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium text-gray-700">ユーザーの質問（今回の指示）</span>
+              <span class="text-gray-500">〜15%</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-sky-400" style="width:15%"></div></div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">※ エージェント系ユースケースの参考値（実測ではなくイメージ図）。会話が長くなるほど履歴が膨らみ、有効な思考・指示への余裕が圧迫される。</p>
+        <div class="mt-3 bg-sky-50 rounded-lg p-3 text-xs text-sky-800 border border-sky-200">
+          <strong>思考トークン（Thinking / Reasoning Token）</strong>とは：Claude Extended Thinking・OpenAI o系モデルなど「推論モード」が有効な場合、モデルが回答前に内部で論理を展開するステップをトークン化したもの。可視化される場合と非表示の場合があるが、コンテキストを消費する。
+        </div>
+      </div>
+
+      <!-- U字型性能曲線 -->
+      <h3 class="text-lg font-bold text-gray-800 mb-4">「Lost in the Middle」—— U字型の性能曲線</h3>
+      <p class="text-gray-700 mb-4">LLMはコンテキストの<strong>冒頭（Primacy Bias：一次性バイアス）</strong>と<strong>末尾（Recency Bias：近接性バイアス）</strong>に強く注目するが、<strong>中間部分の情報を見落としやすい</strong>。これが「Lost in the Middle（中間で迷子）」と呼ばれる現象である（Liu et al., 2023）。</p>
+
+      <!-- 注目度の視覚化 -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-6">
+        <div class="text-sm font-bold text-gray-500 mb-3">コンテキスト内の位置と注目度（U字型）</div>
+        <div class="flex items-end gap-1 h-24">
+          <div class="flex-1 bg-sky-400 rounded-t" style="height:80%"></div>
+          <div class="flex-1 bg-sky-300 rounded-t" style="height:60%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:25%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:20%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:22%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:18%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:20%"></div>
+          <div class="flex-1 bg-red-200 rounded-t" style="height:24%"></div>
+          <div class="flex-1 bg-sky-300 rounded-t" style="height:55%"></div>
+          <div class="flex-1 bg-sky-400 rounded-t" style="height:75%"></div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 mt-1">
+          <span>冒頭（高注目）</span>
+          <span class="text-red-400">← 中間部分（見落としやすい） →</span>
+          <span>末尾（高注目）</span>
+        </div>
+      </div>
+
+      <!-- 研究データ -->
+      <div class="bg-blue-50 rounded-xl p-5 border border-blue-200 mb-6">
+        <div class="flex items-start gap-3">
+          <i data-lucide="bar-chart-2" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-blue-900 mb-2">研究データ（2025年 Microsoft Research）</div>
+            <ul class="text-sm text-blue-800 space-y-1">
+              <li>・コンテキスト長が増えるだけで、情報取得の精度が13.9%〜85%低下</li>
+              <li>・100Kトークンを超えると有効なコンテキスト利用率は<strong>約60%</strong>まで低下</li>
+              <li>・500Kトークン入力時：モデルは実質200Kトークン分の情報を無効化してしまう</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="analogy-box">
+        <div class="flex items-start gap-3">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-amber-900">たとえ話②：記憶をなくす天才へのメモ渡し</div>
+            <div class="text-sm text-amber-800 mt-1">AIとの対話は「毎回記憶をリセットされる天才研究者に、メモを渡して仕事を頼む」構造に等しい。メモが長くなるほど研究者は重要な部分を見落とし、中間の指示は読み飛ばされる。だから渡すメモは「短く・絶対に見てほしい情報だけ」に絞るべきである。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 壁②アテンション -->
+    <section id="wall2" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="focus" class="w-6 h-6 text-orange-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">壁② アテンション（注意力）の分散</h2>
+          <p class="text-gray-500">Attention（アテンション）—— 注意力のパイは有限、指示は絞るほど効く</p>
+        </div>
+      </div>
+
+      <div class="term-explain">
+        <div class="flex items-start gap-4">
+          <i data-lucide="lightbulb" class="w-8 h-8 text-sky-500 flex-shrink-0"></i>
+          <div>
+            <div class="term-word text-xl font-bold">「アテンション（Attention）」とは？</div>
+            <div class="text-lg mt-2">
+              Transformer（トランスフォーマー）アーキテクチャの中核機能で、入力トークン間の<span class="font-bold text-sky-700">関連度を計算して重み付けするメカニズム</span>。「どの単語が、今処理している単語に関係が深いか」を動的に判断する。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- なぜアテンションは有限か -->
+      <div class="bg-indigo-50 rounded-xl p-5 border border-indigo-200 mb-4">
+        <div class="flex items-start gap-3">
+          <i data-lucide="cpu" class="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-indigo-900 mb-2">なぜ注意力の「パイ」は有限なのか——softmax関数の数学的制約</div>
+            <div class="text-sm text-indigo-800">
+              アテンション重みは<strong>softmax関数</strong>で正規化される。softmaxはすべてのトークンへの重みを計算し、その合計が必ず<strong>1.0</strong>になるよう変換する。<br>
+              つまり「トークンAへの重み0.6」「トークンBへの重み0.4」のように、コンテキスト内の全トークンで重みが奪い合う構造になっている。<br>
+              コンテキストにトークンが増えるほど、個々のトークン（指示・情報）に割り当てられる重みが数学的に薄まる。これは設計上の制約であり、「大きなウィンドウにすれば解決する」問題ではない。
+            </div>
+            <div class="mt-3 code-block rounded-lg p-3 font-mono text-sm">
+              softmax(z_i) = e^(z_i) / Σ_j e^(z_j) &nbsp;→&nbsp; Σ_i weight_i = 1.0 （合計は常に1.0）
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- コンテキストとアテンションの因果リンク -->
+      <div class="bg-orange-50 rounded-xl p-5 border border-orange-200 mb-6">
+        <div class="flex items-start gap-3">
+          <i data-lucide="link" class="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-orange-900 mb-1">壁①と壁②の因果関係：コンテキストが長い → アテンションが薄まる</div>
+            <div class="text-sm text-orange-800">
+              指示・情報をコンテキストに詰め込むほど、softmaxの計算対象トークン数が増加し、1つの指示に割り当てられるアテンション重みが算数的に低下する。「多くの指示＝処理能力の無駄遣い」はモデルの怠慢ではなく、Transformerアーキテクチャの数学的帰結である。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="text-lg font-bold text-gray-800 mt-6 mb-4">指示の数と失敗率の関係</h3>
+
+      <!-- 劣化グラフ -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-6">
+        <div class="text-sm font-bold text-gray-500 mb-4">指示数と遵守率（IFScaleベンチマーク 2025年）</div>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">少数の指示（10個以下）</span>
+              <span class="font-bold text-emerald-600">〜95%遵守</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-emerald-400" style="width:95%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">中程度の指示（100個）</span>
+              <span class="font-bold text-amber-600">〜80%遵守</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-amber-400" style="width:80%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">過多な指示（500個）</span>
+              <span class="font-bold text-red-600">〜68%遵守（=32%は指示に従わない）</span>
+            </div>
+            <div class="performance-bar"><div class="performance-fill bg-red-400" style="width:68%"></div></div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-3">※ 最高性能モデル（o3・Claude・Gemini等20モデル）でも同様の傾向。指示数が増えるほど省略・無視が増える。</p>
+      </div>
+
+      <!-- モデルごとの劣化パターン -->
+      <div class="grid sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+          <div class="font-bold text-red-800 mb-2">指数的劣化</div>
+          <div class="text-sm text-red-700">GPT-4o、LLaMA-4<br>指示が増えると急激に崩壊</div>
+        </div>
+        <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <div class="font-bold text-amber-800 mb-2">線形劣化</div>
+          <div class="text-sm text-amber-700">GPT-4.1、Claude Sonnet<br>指示数に比例して着実に低下</div>
+        </div>
+        <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+          <div class="font-bold text-emerald-800 mb-2">閾値劣化</div>
+          <div class="text-sm text-emerald-700">o3、Gemini 2.5 Pro<br>閾値まで高性能→急落</div>
+        </div>
+      </div>
+
+      <!-- 否定指示の問題 -->
+      <div class="bg-rose-50 rounded-xl p-5 border border-rose-200 mb-6">
+        <div class="flex items-start gap-3">
+          <i data-lucide="triangle-alert" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-rose-900 mb-1">「〜しないで」という否定指示は逆効果</div>
+            <div class="text-sm text-rose-800">
+              誤出力に対して「〜は避けてください」「〜しないで」と修正指示を重ねると、否定形の指示がコンテキストを圧迫し、アテンションがさらに分散する。望む結果が出ない場合は、<strong>会話をリセット（新チャット）してから正しい模範解答付きの指示を与える</strong>方が速い。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analogy-box">
+        <div class="flex items-start gap-3">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-amber-900">たとえ話③：予算を100%配分する資源配分問題</div>
+            <div class="text-sm text-amber-800 mt-1">
+              softmaxによるアテンションの構造は「合計予算100%を全項目に配分する」問題と等しい。10個のプロジェクト（指示）があれば平均10%ずつ、100個あれば平均1%ずつしか割り当てられない——これは担当者の怠慢ではなく、予算の総額が固定されているという数学的制約である。<br>
+              「最重要の指示を3つに絞る」とは、予算配分先を3項目に絞って各プロジェクトに33%を投じることに相当する。指示を絞るほど、1指示あたりのアテンションが算術的に高まる。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 壁③オートリグレッション -->
+    <section id="wall3" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="git-branch" class="w-6 h-6 text-purple-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">壁③ オートリグレッション（自己回帰）</h2>
+          <p class="text-gray-500">Autoregression（自己回帰）—— AIは「修正ペンなしの一発書き」をしている</p>
+        </div>
+      </div>
+
+      <div class="term-explain">
+        <div class="flex items-start gap-4">
+          <i data-lucide="lightbulb" class="w-8 h-8 text-sky-500 flex-shrink-0"></i>
+          <div>
+            <div class="term-word text-xl font-bold">「オートリグレッション（自己回帰）」とは？</div>
+            <div class="text-lg mt-2">
+              LLMが文章を生成する際、<span class="font-bold text-sky-700">1トークンずつ順番に生成し、それまでに生成した全トークンを条件として次のトークンを予測する</span>仕組み。<br>
+              「読む（入力処理）」は全トークンを一度に並列処理できる。しかし「書く（出力生成）」は、直前に生成したトークンが確定して初めて次のトークンを計算できる。このため出力ではトークン数だけ逐次的なforward passが必要になり、<strong>計算コストが入力の約3〜5倍になり、後戻りができない</strong>。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 並列 vs 逐次の技術的根拠 -->
+      <div class="bg-purple-50 rounded-xl p-5 border border-purple-200 mb-6">
+        <div class="flex items-start gap-3">
+          <i data-lucide="cpu" class="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-purple-900 mb-2">なぜ出力だけが逐次処理になるのか</div>
+            <div class="text-sm text-purple-800">
+              <strong>入力（エンコード）</strong>：全トークンが既知なので、Self-Attentionを全トークン間で同時計算できる。1回のforward passで完了。<br>
+              <strong>出力（デコード）</strong>：次のトークンの確率分布は「直前までの生成済みトークン」を条件に計算される。トークンnを生成するにはトークン1〜(n-1)の確定が必要なため、n回の逐次的なforward passが必須。<br>
+              1,000トークン出力 = 1,000回のforward pass。これが入力に比べた高コストの直接原因である。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 出力フロー図 -->
+      <h3 class="text-lg font-bold text-gray-800 mt-6 mb-4">エラーが連鎖するメカニズム</h3>
+
+      <div class="flex flex-col md:flex-row items-center justify-center gap-3 my-6">
+        <div class="bg-sky-100 px-5 py-4 rounded-xl text-center min-w-28">
+          <i data-lucide="play" class="w-7 h-7 text-sky-600 mx-auto mb-1"></i>
+          <div class="font-bold text-sm text-sky-800">前半</div>
+          <div class="text-xs text-sky-700">論理的・丁寧</div>
+        </div>
+        <i data-lucide="arrow-right" class="w-7 h-7 text-gray-400 hidden md:block"></i>
+        <i data-lucide="arrow-down" class="w-7 h-7 text-gray-400 md:hidden"></i>
+        <div class="bg-amber-100 px-5 py-4 rounded-xl text-center min-w-28">
+          <i data-lucide="alert-circle" class="w-7 h-7 text-amber-600 mx-auto mb-1"></i>
+          <div class="font-bold text-sm text-amber-800">Key Token（分岐点）</div>
+          <div class="text-xs text-amber-700">全体の5〜10%の重要な判断点</div>
+        </div>
+        <i data-lucide="arrow-right" class="w-7 h-7 text-gray-400 hidden md:block"></i>
+        <i data-lucide="arrow-down" class="w-7 h-7 text-gray-400 md:hidden"></i>
+        <div class="bg-red-100 px-5 py-4 rounded-xl text-center min-w-28">
+          <i data-lucide="x-circle" class="w-7 h-7 text-red-600 mx-auto mb-1"></i>
+          <div class="font-bold text-sm text-red-800">後半</div>
+          <div class="text-xs text-red-700">雑・矛盾・前提が崩れる</div>
+        </div>
+        <i data-lucide="arrow-right" class="w-7 h-7 text-gray-400 hidden md:block"></i>
+        <i data-lucide="arrow-down" class="w-7 h-7 text-gray-400 md:hidden"></i>
+        <div class="bg-gray-100 px-5 py-4 rounded-xl text-center min-w-28">
+          <i data-lucide="info" class="w-7 h-7 text-gray-600 mx-auto mb-1"></i>
+          <div class="font-bold text-sm text-gray-800">後戻り不可</div>
+          <div class="text-xs text-gray-700">修正ペンなし</div>
+        </div>
+      </div>
+
+      <!-- Key Tokensフレームワーク -->
+      <div class="bg-purple-50 rounded-xl p-5 border border-purple-200 mb-6">
+        <div class="flex items-start gap-3">
+          <i data-lucide="cpu" class="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-purple-900 mb-2">Key Tokensフレームワーク（2025年研究）</div>
+            <div class="text-sm text-purple-800">
+              最新研究によると、エラーは均等に分散するのではなく、<strong>全トークンの5〜10%にあたる「Key Token（重要分岐点）」に集中する</strong>。<br>
+              残りの90%以上のトークンは前後の文脈から決まりやすく、ほぼ自動的に正しく生成される。<br>
+              つまり長文での品質劣化は「Key Tokenでの判断ミス」が連鎖した結果であり、<strong>こまめに出力させて分岐点を確認する</strong>ことが最も効果的な対策となる。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 入力vs出力コスト -->
+      <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 mb-6">
+        <div class="text-sm font-bold text-gray-700 mb-3">入力トークン vs 出力トークンのコスト比（2025年実勢価格）</div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <div class="text-xs text-gray-500 mb-1">入力（読む・並列処理）</div>
+            <div class="performance-bar"><div class="performance-fill bg-sky-300" style="width:20%"></div></div>
+            <div class="text-sm font-bold text-gray-700 mt-1">Claude Sonnet: $3 / 100万トークン</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500 mb-1">出力（書く・逐次処理）</div>
+            <div class="performance-bar"><div class="performance-fill bg-red-400" style="width:100%"></div></div>
+            <div class="text-sm font-bold text-gray-700 mt-1">Claude Sonnet: $15 / 100万トークン（5倍）</div>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-gray-500 space-y-1">
+          <div>GPT-4o: 入力$2.5 → 出力$10（4倍）　|　Claude Opus: 入力$15 → 出力$75（5倍）</div>
+          <div class="text-gray-400">※ モデルによって3〜5倍の幅がある。出力はトークンごとに逐次forward passが必要なため計算量が大幅に増える。</div>
+        </div>
+      </div>
+
+      <div class="analogy-box">
+        <div class="flex items-start gap-3">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-amber-900">たとえ話④：修正ペンなしの長文手紙</div>
+            <div class="text-sm text-amber-800 mt-1">AIは原稿用紙に修正ペンなしで手紙を書いている状態に等しい。前半で誤字・論理の飛躍があっても書き直せず、そのまま後半を続けるしかない。対策は「1段落書いたら確認する」ように、要望を細分化して都度確認することである。一気に書かせると後半が崩れる。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI駆動の10法則 -->
+    <section id="rules" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="zap" class="w-6 h-6 text-emerald-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">AI-Driven Rules：AI駆動の10法則</h2>
+          <p class="text-gray-500">3つの壁を踏まえた、AIを効果的に動かすための行動指針</p>
+        </div>
+      </div>
+
+      <!-- 法則全体マップ -->
+      <div class="bg-gradient-to-r from-emerald-50 to-sky-50 rounded-xl p-5 border border-emerald-200 mb-6">
+        <div class="text-sm font-bold text-gray-600 mb-3">10法則のグループ分け</div>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <div class="bg-white rounded-lg p-3 border border-emerald-200">
+            <div class="text-xs font-bold text-emerald-700 mb-2">品質への姿勢（法則1-3）</div>
+            <div class="text-xs text-gray-600">90点→100点、理解優先、自律的スキル形成</div>
+          </div>
+          <div class="bg-white rounded-lg p-3 border border-sky-200">
+            <div class="text-xs font-bold text-sky-700 mb-2">情報設計（法則4・6・8）</div>
+            <div class="text-xs text-gray-600">図解・ASCII活用、コンテキスト整理、模範解答提示</div>
+          </div>
+          <div class="bg-white rounded-lg p-3 border border-purple-200">
+            <div class="text-xs font-bold text-purple-700 mb-2">対話の作法（法則5・7・9・10）</div>
+            <div class="text-xs text-gray-600">プロトタイプ先行、学習継続、こまめな対話、効率化</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4">
+        <!-- 法則1 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-red-700">1</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">90点→100点の戦いに備えよ</div>
+              <div class="text-sm text-gray-600 mt-1">AIで容易に到達できる90点から100点に引き上げる努力は指数関数的に増大する。「AIが自動的に100点を出す」という期待を捨て、最後の品質向上を自分が担う構造を設計する。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：すべて共通</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則2 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-red-700">2</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">理解できないものを作るな</div>
+              <div class="text-sm text-gray-600 mt-1">AIへの丸投げは厳禁。素材・構成要素・アルゴリズムへの深い理解がなければ、AIが出した成果物の品質を評価も修正もできない。「作る過程」を学習機会と捉える。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：オートリグレッション（エラーを見抜けないと修正できない）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則3 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-red-700">3</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">自分の武器を自分で作れ</div>
+              <div class="text-sm text-gray-600 mt-1">既製ツール（ChatGPT UI・Copilot等）の操作者として留まらず、<strong>プロンプトテンプレート・RAGパイプライン・エージェントワークフローを自分で設計・実装できる状態</strong>を目指す。「どのツールを使うか」ではなく「どう組み合わせてシステムを作るか」が差別化要因になる。（法則7「スキルを育てる」とは異なり、こちらは資産として残る成果物の設計・実装を指す）</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：コンテキストウィンドウ（最適化されたプロンプト設計が必要）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則4 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-sky-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-sky-700">4</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">図解で認知コストを下げろ</div>
+              <div class="text-sm text-gray-600 mt-1">ASCIIアートやテキスト図解を活用し、AIが構造を一目で把握できる視覚的情報を提供する。自然言語の文章より、構造化された図や表の方がコンテキスト効率が高い。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：コンテキストウィンドウ（同じ情報を少ないトークンで伝える）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則5 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-sky-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-sky-700">5</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">議論する前にプロトタイプを作れ</div>
+              <div class="text-sm text-gray-600 mt-1">100枚の企画書より1個のプロトタイプの方が価値が高い。AIで作れるものは先に粗く作り、議論の土台にする。抽象的な議論は時間とコンテキストを消費するだけで精度向上に繋がらない。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：アテンション（具体物があれば曖昧な指示が減る）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則6 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-sky-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-sky-700">6</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">AIが見る情報を整えろ</div>
+              <div class="text-sm text-gray-600 mt-1">AIの「机（コンテキスト）」を整理し、絶対に見てほしいファイル・情報だけを厳選して配置する。不要な会話履歴・関係ない資料は積極的に排除する。「情報が多い＝精度が高い」は誤解である。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：コンテキストウィンドウ・アテンション</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則7 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-purple-700">7</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">スキルを育て続けろ</div>
+              <div class="text-sm text-gray-600 mt-1">作る過程こそが最強の学習機会。AIが出力した結果を「なぜこうなったか」まで理解することを習慣にする。法則3が「何を作るか（設計・実装）」なら、こちらは<strong>「どう動くかを理解し続ける（継続的な内省と学習）」</strong>を指す。理解なき丸投げは、エラーに気づけない・修正できない・改善できないという三重の無力状態を生む。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：すべて（理解が深まるほど制御精度が上がる）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則8 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-purple-700">8</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">抽象指示より模範解答を作れ</div>
+              <div class="text-sm text-gray-600 mt-1">「もっと良くして」「自然な文体で」といった曖昧な指示はアテンションを浪費する。期待する結果の具体例（Few-shot例）をプロンプトに含める方が、AIは確実にその形式・品質に収束する。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：アテンション（具体例はアテンションを正確にアンカーする）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則9 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-purple-700">9</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">スピードを出すな、対話しろ</div>
+              <div class="text-sm text-gray-600 mt-1">一気に長文・複雑なタスクを求めると、オートリグレッションのエラーが連鎖して品質が崩壊する。「1つ出力させて確認→次へ」のこまめなサイクルを徹底し、Key Tokenでの判断ミスを早期に検出する。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：オートリグレッション（エラー連鎖の予防）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 法則10 -->
+        <div class="rule-card">
+          <div class="flex items-start gap-4">
+            <div class="w-9 h-9 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <span class="text-sm font-bold text-purple-700">10</span>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold text-gray-800">1クリックを減らせ</div>
+              <div class="text-sm text-gray-600 mt-1">運用フローを徹底的に効率化し、認知負荷を削減する。毎回手動で行っている操作・コピーペースト・プロンプト入力をスキルやマクロに落とし込む。摩擦のない環境があってこそ、こまめな対話が続く。</div>
+              <div class="mt-2 text-xs text-gray-400">対応する壁：すべて（効率化でこまめな対話が持続可能になる）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 落とし穴 -->
+    <section id="pitfalls" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="triangle-alert" class="w-6 h-6 text-rose-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">初心者がはまりやすい落とし穴</h2>
+          <p class="text-gray-500">よくある失敗パターンと回避策</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-rose-50 rounded-xl p-5 border border-rose-200">
+          <div class="flex items-start gap-3">
+            <i data-lucide="x-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="font-bold text-rose-900">落とし穴①：コンテキストウィンドウを「フル活用できる」と思い込む</div>
+              <div class="text-sm text-rose-800 mt-1"><strong>失敗例：</strong>「100万トークンまで対応しているから、全資料を貼り付けよう」と巨大なコンテキストを送ってしまう。<br><strong>現実：</strong>100Kトークン超えで有効利用率が60%まで低下。重要な指示が「中間」に埋もれて無視される。</div>
+              <div class="bg-white rounded-lg p-3 mt-3 text-sm text-gray-700"><i data-lucide="check" class="w-4 h-4 text-emerald-500 inline mr-1"></i><strong>回避策：</strong>「絶対に見てほしい情報だけ」を厳選して配置。プロンプトの冒頭と末尾に最重要事項を置く。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-rose-50 rounded-xl p-5 border border-rose-200">
+          <div class="flex items-start gap-3">
+            <i data-lucide="x-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="font-bold text-rose-900">落とし穴②：否定的な修正指示を重ねてコンテキストを圧迫する</div>
+              <div class="text-sm text-rose-800 mt-1"><strong>失敗例：</strong>「さっきの出力、堅すぎます。もっとカジュアルに。でも専門用語は使って。でも長くしないで……」と指示を追加し続ける。<br><strong>現実：</strong>否定形の指示がアテンションを分散し、コンテキストを消費するだけで改善されない。</div>
+              <div class="bg-white rounded-lg p-3 mt-3 text-sm text-gray-700"><i data-lucide="check" class="w-4 h-4 text-emerald-500 inline mr-1"></i><strong>回避策：</strong>望む結果が出ない場合は新チャットを開始し、理想の出力例（模範解答）を添えて再指示する。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-rose-50 rounded-xl p-5 border border-rose-200">
+          <div class="flex items-start gap-3">
+            <i data-lucide="x-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="font-bold text-rose-900">落とし穴③：一気に長文を書かせて後半が崩壊する</div>
+              <div class="text-sm text-rose-800 mt-1"><strong>失敗例：</strong>「5000字の提案書を一気に書いて」と依頼する。前半2000字は優れているが、後半になるにつれて繰り返しが増え、論理が破綻し始める。<br><strong>現実：</strong>オートリグレッションの特性上、長文はKey Tokenでのミスが積み重なって後半品質が劣化する。</div>
+              <div class="bg-white rounded-lg p-3 mt-3 text-sm text-gray-700"><i data-lucide="check" class="w-4 h-4 text-emerald-500 inline mr-1"></i><strong>回避策：</strong>「序文→確認→本論前半→確認→本論後半→確認→結論」のようにセクション単位で分割依頼する。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-rose-50 rounded-xl p-5 border border-rose-200">
+          <div class="flex items-start gap-3">
+            <i data-lucide="x-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="font-bold text-rose-900">落とし穴④：モデルの性能を「固定」として判断する</div>
+              <div class="text-sm text-rose-800 mt-1"><strong>失敗例：</strong>「Geminiは文章が良い」「Claudeはコードが得意」という2024年の知識をそのまま2026年に適用する。<br><strong>現実：</strong>2025年はGeminiが文章品質でClaudeを上回っていたが、2026年現在はClaudeが文章品質で優位に立っている。モデルの特性は急速に変化する。</div>
+              <div class="bg-white rounded-lg p-3 mt-3 text-sm text-gray-700"><i data-lucide="check" class="w-4 h-4 text-emerald-500 inline mr-1"></i><strong>回避策：</strong>重要なタスクでは複数モデルで同一の指示を試し、現時点での最適モデルを随時評価する。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-rose-50 rounded-xl p-5 border border-rose-200">
+          <div class="flex items-start gap-3">
+            <i data-lucide="x-circle" class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <div class="font-bold text-rose-900">落とし穴⑤：「出力コスト＝無料」と思いAPIを乱用する</div>
+              <div class="text-sm text-rose-800 mt-1"><strong>失敗例：</strong>動作確認のたびに不必要な長文を出力させる。コストは「ほぼ無料」と思っている。<br><strong>現実：</strong>出力トークンは入力の5倍のコストがかかる（Claude: 入力$3→出力$15/100万トークン）。プロトタイプ段階では出力長を制限し、不要な詳細出力を避ける。</div>
+              <div class="bg-white rounded-lg p-3 mt-3 text-sm text-gray-700"><i data-lucide="check" class="w-4 h-4 text-emerald-500 inline mr-1"></i><strong>回避策：</strong>プロンプトに「最大〇〇字で」と出力長を明示するか、まず骨子だけ出させて詳細を後から追加する設計にする。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 専門用語集 -->
+    <section id="glossary" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="book-open" class="w-6 h-6 text-gray-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">専門用語集</h2>
+          <p class="text-gray-500">この資料を読み解くために必要な用語</p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">LLM（Large Language Model：大規模言語モデル）</div>
+          <div class="text-sm text-gray-600 mt-1">大量のテキストデータで学習した確率的言語モデル。GPT・Claude・Gemini等。</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">トークン（Token：テキストの最小処理単位）</div>
+          <div class="text-sm text-gray-600 mt-1">LLMが処理するテキストの基本単位。英語は1単語≒1-2トークン、日本語は1文字≒1-2トークン。</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">コンテキストウィンドウ（Context Window）</div>
+          <div class="text-sm text-gray-600 mt-1">LLMが1リクエストで同時処理できるトークン数の上限。仕様上の容量と有効利用可能な容量は異なる。→関連：トークン</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">アテンション（Attention：自己注意機構）</div>
+          <div class="text-sm text-gray-600 mt-1">Transformerの中核で、入力トークン間の関連度を計算する機構。指示が増えると1指示あたりのアテンション重みが薄まる。→関連：Transformer</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">オートリグレッション（Autoregression：自己回帰）</div>
+          <div class="text-sm text-gray-600 mt-1">直前までに生成したトークンを条件として次のトークンを順番に生成する仕組み。後戻り不可でエラーが連鎖しやすい。→関連：Key Token</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">Transformer（トランスフォーマー）</div>
+          <div class="text-sm text-gray-600 mt-1">2017年にGoogleが提案したニューラルネットワークアーキテクチャ。Self-Attentionを使って長距離依存関係を効率的に学習する。現代のほぼ全LLMの基盤。</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">プロンプト（Prompt）</div>
+          <div class="text-sm text-gray-600 mt-1">ユーザーがLLMに与える入力テキスト。氷山の一角部分であり、その下にシステムプロンプト・ツール定義・会話履歴が沈んでいる。</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">Few-shot（フューショット）</div>
+          <div class="text-sm text-gray-600 mt-1">プロンプト内に少数の具体例を含めることでAIの出力形式・品質を誘導するテクニック。「模範解答を渡す」法則8の実装手法。→関連：プロンプト</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">Key Token（キートークン：重要分岐点）</div>
+          <div class="text-sm text-gray-600 mt-1">出力全体の5〜10%を占める、論理の方向性を決定づける重要なトークン。ここでの判断ミスが後半品質劣化の主因。→関連：オートリグレッション</div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+          <div class="font-bold text-gray-800">Lost in the Middle（ロスト・イン・ザ・ミドル）</div>
+          <div class="text-sm text-gray-600 mt-1">コンテキストの中間部分の情報がLLMに見落とされやすい現象。U字型のアテンション分布に起因する。→関連：コンテキストウィンドウ・アテンション</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 次に学ぶと良いもの -->
+    <section id="related" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="compass" class="w-6 h-6 text-emerald-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">次に学ぶと良いもの</h2>
+          <p class="text-gray-500">「動かす側」の理解をさらに深める関連トピック</p>
+        </div>
+      </div>
+      <p class="text-sm text-gray-500 mb-4">推奨学習順（上から優先度が高い）</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="flex items-start gap-3 p-4 bg-red-50 rounded-xl border border-red-200">
+          <div class="flex-shrink-0">
+            <i data-lucide="arrow-right-circle" class="w-6 h-6 text-red-600 mt-0.5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="font-bold text-gray-800">Transformerアーキテクチャ</div>
+              <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">最優先</span>
+            </div>
+            <div class="text-sm text-gray-600">Self-Attention・Multi-Head Attention・Positional Encodingなど。<strong>本資料のアテンション壁・オートリグレッションの根拠となる数学的基盤</strong>であり、ここを理解しないと「なぜ中間が見落とされるか」が信仰で終わる。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200">
+          <div class="flex-shrink-0">
+            <i data-lucide="arrow-right-circle" class="w-6 h-6 text-amber-600 mt-0.5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <div class="font-bold text-gray-800">プロンプトエンジニアリング</div>
+              <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">次に学ぶ</span>
+            </div>
+            <div class="text-sm text-gray-600">Chain-of-Thought（段階的思考誘導）・Tree-of-Thoughts・Few-shotなど。Transformerの仕組みを踏まえてアテンションを正確に操作するための実装技法。法則4・8の直接的な実践知識。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+          <i data-lucide="arrow-right-circle" class="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-gray-800">RAG（Retrieval-Augmented Generation：検索拡張生成）</div>
+            <div class="text-sm text-gray-600 mt-1">コンテキストウィンドウの限界を超えるための実用技術。外部データベースから必要な情報だけを動的に取得してコンテキストに注入する。「机を整理する」法則6の実装パターン。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+          <i data-lucide="arrow-right-circle" class="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-gray-800">LLMエージェント設計</div>
+            <div class="text-sm text-gray-600 mt-1">ツール呼び出し・自律的な計画立案・マルチエージェント連携など、AIを複数連鎖させた際のコンテキスト設計。RAGとプロンプトエンジニアリングを習得してから取り組む。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+          <i data-lucide="arrow-right-circle" class="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-gray-800">ファインチューニング（Fine-tuning：微調整）</div>
+            <div class="text-sm text-gray-600 mt-1">特定のタスク・スタイルに特化したモデルを作るための追加学習。Few-shotでは対応できない規模の「模範解答」を学習させる手法。法則8の究極形態。</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+          <i data-lucide="arrow-right-circle" class="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <div class="font-bold text-gray-800">LLM評価・ベンチマーク</div>
+            <div class="text-sm text-gray-600 mt-1">IFScale・LM Eval Harness・MT-Benchなど、モデルの能力を定量的に比較する手法。「90点→100点の戦い（法則1）」を定量化し、モデル選定の根拠を持てるようになる。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 参考文献 -->
+    <section id="references" class="section-card">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+          <i data-lucide="book-open" class="w-6 h-6 text-gray-600"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">参考文献・公式資料</h2>
+          <p class="text-gray-500">さらに深く学びたい場合はこちら</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Lost in the Middle: How Language Models Use Long Contexts（Liu et al., 2023）</div>
+            <div class="text-xs text-gray-500">コンテキストウィンドウのU字型性能曲線を実証した原著論文（arXiv:2307.03172）</div>
+          </div>
+        </a>
+        <a href="https://aclanthology.org/2025.coling-main.128/" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Efficient Solutions For LLMs: Long Context Window Does Not Mean Flawless Analysis (ACL 2025)</div>
+            <div class="text-xs text-gray-500">長大コンテキストでの性能劣化を実証した査読論文</div>
+          </div>
+        </a>
+        <a href="https://arxiv.org/abs/2502.20082" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Long Context Scaling: Effective Utilization Analysis（2025, arXiv:2502.20082）</div>
+            <div class="text-xs text-gray-500">100Kトークン超でコンテキスト有効利用率が約60%まで低下することを定量分析した査読論文</div>
+          </div>
+        </a>
+        <a href="https://maxpool.dev/research-papers/curse_of_instructions_report.html" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Curse of Instructions: Large Language Models Cannot Follow Multiple Instructions at Once</div>
+            <div class="text-xs text-gray-500">500指示で32%が無視される「指示の呪い」研究</div>
+          </div>
+        </a>
+        <a href="https://arxiv.org/html/2507.11538" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">How Many Instructions Can LLMs Follow at Once? (IFScale Benchmark)</div>
+            <div class="text-xs text-gray-500">GPT・Claude・Gemini等20モデルの指示遵守率を定量化したベンチマーク</div>
+          </div>
+        </a>
+        <a href="https://arxiv.org/abs/2505.24187" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Beyond Exponential Decay: Rethinking Error Accumulation in LLMs（2025, arXiv:2505.24187）</div>
+            <div class="text-xs text-gray-500">オートリグレッションのエラーがKey Token（全体の5-10%）に集中することを示した原著論文</div>
+          </div>
+        </a>
+        <a href="https://aicodereview.cc/blog/input-vs-output-vs-reasoning-tokens-cost" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Input vs Output vs Reasoning Tokens Cost - LLM Pricing Explained</div>
+            <div class="text-xs text-gray-500">入力・出力・推論トークンのコスト構造（出力が5倍高い理由）の技術解説</div>
+          </div>
+        </a>
+        <a href="https://sureprompts.com/blog/claude-vs-gemini-2026" target="_blank" rel="noopener" class="ref-link">
+          <i data-lucide="external-link" class="w-4 h-4 flex-shrink-0"></i>
+          <div>
+            <div class="font-medium">Claude vs Gemini in 2026: Which AI Is Actually Better?</div>
+            <div class="text-xs text-gray-500">2026年現在のClaude vs Gemini文章品質比較（Claudeが優位）</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PDFダウンロードボタン -->
+  <button class="pdf-btn" onclick="window.print()">
+    <i data-lucide="download" class="w-4 h-4"></i>
+    PDFで保存
+  </button>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
