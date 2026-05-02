@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>デザインの4大原則 | Techmap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+    body { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+    .toc-item { transition: all 0.2s; }
+    .toc-item:hover { transform: translateX(4px); }
+    .principle-card { transition: box-shadow 0.2s; }
+    .principle-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    .analogy-box { border-left: 4px solid; }
+    @media print {
+      .no-print { display: none !important; }
+      section { break-inside: avoid; }
+      .principle-card { break-inside: avoid; }
+      .toc-sidebar { display: none !important; }
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            proximity: { DEFAULT: '#3B82F6', light: '#EFF6FF', border: '#BFDBFE' },
+            alignment: { DEFAULT: '#10B981', light: '#ECFDF5', border: '#A7F3D0' },
+            repetition: { DEFAULT: '#8B5CF6', light: '#F5F3FF', border: '#DDD6FE' },
+            contrast:   { DEFAULT: '#F59E0B', light: '#FFFBEB', border: '#FDE68A' },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- TOC Sidebar (desktop) -->
+<aside class="toc-sidebar no-print fixed top-0 left-0 h-full w-56 bg-white border-r border-gray-200 pt-8 px-4 hidden xl:block z-10 overflow-y-auto">
+  <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">目次</p>
+  <nav class="space-y-1">
+    <a href="#summary"      class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="zap" class="w-3.5 h-3.5"></i>ひとことで言えば
+    </a>
+    <a href="#why"          class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="history" class="w-3.5 h-3.5"></i>なぜ生まれたのか
+    </a>
+    <a href="#core3"        class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="target" class="w-3.5 h-3.5"></i>まず理解する3つ
+    </a>
+    <a href="#principles"   class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>4原則の詳細
+    </a>
+    <a href="#css"          class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="code-2" class="w-3.5 h-3.5"></i>CSS実装対応
+    </a>
+    <a href="#pitfalls"     class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>落とし穴
+    </a>
+    <a href="#glossary"     class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="book-open" class="w-3.5 h-3.5"></i>専門用語集
+    </a>
+    <a href="#next"         class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>次に学ぶもの
+    </a>
+    <a href="#refs"         class="toc-item flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1">
+      <i data-lucide="link" class="w-3.5 h-3.5"></i>参考文献
+    </a>
+  </nav>
+</aside>
+
+<main class="xl:ml-56 max-w-4xl mx-auto px-4 py-10">
+
+  <!-- Header -->
+  <header class="mb-12">
+    <div class="flex items-center gap-2 text-xs font-mono text-gray-400 mb-3">
+      <i data-lucide="layers" class="w-4 h-4"></i>
+      <span>Techmap — デザイン原則</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-3">
+      デザインの4大原則
+    </h1>
+    <p class="text-lg text-gray-500 mb-4">
+      接近（Proximity）・整列（Alignment）・反復（Repetition）・対比（Contrast）
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <span class="text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 py-1">UI/UXデザイン</span>
+      <span class="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-3 py-1">フロントエンド</span>
+      <span class="text-xs bg-purple-50 text-purple-700 border border-purple-200 rounded-full px-3 py-1">CSS設計</span>
+      <span class="text-xs bg-gray-100 text-gray-600 border border-gray-200 rounded-full px-3 py-1">対象: 実務エンジニア</span>
+    </div>
+  </header>
+
+  <!-- 1. ひとことで言えば -->
+  <section id="summary" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">1</div>
+      <h2 class="text-2xl font-bold text-gray-900">ひとことで言えば</h2>
+    </div>
+
+    <div class="bg-gray-900 text-white rounded-2xl p-6 mb-6">
+      <p class="text-lg font-medium leading-relaxed">
+        デザインの4大原則（PARC / CRAP）とは、<br class="hidden md:block"/>
+        <span class="text-yellow-300">「なぜこの画面は読みにくいのか」</span>を4つの軸で診断し、<br class="hidden md:block"/>
+        修正する判断フレームワークである。
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <i data-lucide="users" class="w-4 h-4 text-gray-500"></i>
+          <span class="text-sm font-semibold text-gray-700">対象読者</span>
+        </div>
+        <p class="text-sm text-gray-600">UIを実装するエンジニア。デザイナーとの協業経験があるが、デザイン原則を体系的に学んだことはないケース。</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <i data-lucide="map" class="w-4 h-4 text-gray-500"></i>
+          <span class="text-sm font-semibold text-gray-700">カバー範囲</span>
+        </div>
+        <p class="text-sm text-gray-600">レイアウト・タイポグラフィ・余白設計の基礎。UXリサーチやユーザビリティテストは範囲外。</p>
+      </div>
+    </div>
+
+    <!-- PARC visual overview -->
+    <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i data-lucide="move" class="w-5 h-5 text-white"></i>
+        </div>
+        <p class="font-bold text-blue-700">接近</p>
+        <p class="text-xs text-blue-600">Proximity</p>
+        <p class="text-xs text-gray-600 mt-1">関連を近く</p>
+      </div>
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i data-lucide="align-left" class="w-5 h-5 text-white"></i>
+        </div>
+        <p class="font-bold text-green-700">整列</p>
+        <p class="text-xs text-green-600">Alignment</p>
+        <p class="text-xs text-gray-600 mt-1">軸に揃える</p>
+      </div>
+      <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i data-lucide="repeat" class="w-5 h-5 text-white"></i>
+        </div>
+        <p class="font-bold text-purple-700">反復</p>
+        <p class="text-xs text-purple-600">Repetition</p>
+        <p class="text-xs text-gray-600 mt-1">パターンを通す</p>
+      </div>
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+        <div class="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i data-lucide="sliders" class="w-5 h-5 text-white"></i>
+        </div>
+        <p class="font-bold text-amber-700">対比</p>
+        <p class="text-xs text-amber-600">Contrast</p>
+        <p class="text-xs text-gray-600 mt-1">差で強調する</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. なぜ生まれたのか -->
+  <section id="why" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">2</div>
+      <h2 class="text-2xl font-bold text-gray-900">なぜ生まれたのか</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-5">
+      <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <i data-lucide="history" class="w-4 h-4 text-gray-500"></i>
+        背景：DTPの民主化（1990年代前半）
+      </h3>
+      <p class="text-sm text-gray-700 leading-relaxed mb-4">
+        Macintoshの普及とDTP（Desktop Publishing：デスクトップ パブリッシング）ツールの登場により、「デザイン専門教育を受けていない人」が
+        チラシ・スライド・Webページを自分で作る局面が急増した。
+        ツールは使えるようになったが、<strong>「どう配置すれば読みやすいか」の判断基準</strong>を持つ人は少なかった。
+      </p>
+      <p class="text-sm text-gray-700 leading-relaxed">
+        著者のロビン・ウィリアムズ（Robin Williams）は、この状況に対し「ビジュアル素人が今日から使える、少数の反復可能なルール」を
+        体系化した。それが1994年初版の『The Non-Designer's Design Book（ノンデザイナーズ・デザインブック）』で提示した4原則である。
+      </p>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-5">
+      <h3 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <i data-lucide="cpu" class="w-4 h-4 text-gray-500"></i>
+        なぜ人間に効くのか — 知覚的根拠（ゲシュタルト心理学）
+      </h3>
+      <p class="text-sm text-gray-700 leading-relaxed mb-3">
+        4原則が「なんとなく正しい」のではなく、実際に機能するのは人間の<strong>知覚が構造を自動補完する</strong>という認知特性に根ざしているからだ。
+        1910〜1930年代に発展した<strong>ゲシュタルト心理学（Gestalt Psychologie）</strong>は、
+        「人間は個々の要素の集合ではなく、まとまり（全体）として視覚情報を認識する」という原則を体系化した。
+      </p>
+      <div class="grid md:grid-cols-2 gap-3 text-xs">
+        <div class="bg-blue-50 border border-blue-100 rounded-lg p-3">
+          <p class="font-semibold text-blue-700 mb-1">接近 ← 近接の法則（Law of Proximity）</p>
+          <p class="text-blue-800">近いものは「同じグループ」として知覚される</p>
+        </div>
+        <div class="bg-purple-50 border border-purple-100 rounded-lg p-3">
+          <p class="font-semibold text-purple-700 mb-1">反復 ← 類似の法則（Law of Similarity）</p>
+          <p class="text-purple-800">見た目が似たものは「同じ種類」として知覚される</p>
+        </div>
+        <div class="bg-green-50 border border-green-100 rounded-lg p-3">
+          <p class="font-semibold text-green-700 mb-1">整列 ← 連続の法則（Law of Continuity）</p>
+          <p class="text-green-800">連続した線・方向に沿うものは「一続き」として知覚される</p>
+        </div>
+        <div class="bg-amber-50 border border-amber-100 rounded-lg p-3">
+          <p class="font-semibold text-amber-700 mb-1">対比 ← 図地の法則（Figure-Ground）</p>
+          <p class="text-amber-800">差が大きいほど「前景（主役）」が際立つ</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-3">
+        4大原則はゲシュタルト知覚の事実を「レイアウト操作の手順」に翻訳したものであり、原則を守ると「なぜか読みやすい」ではなく「知覚特性に乗っているから速く理解できる」という因果がある。
+      </p>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <i data-lucide="alert-circle" class="w-4 h-4 text-gray-500"></i>
+        解きたかった「あるある」課題
+      </h3>
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-sm text-red-700">
+          <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>
+          全要素を等間隔に並べれば整うという思い込み
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-sm text-red-700">
+          <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>
+          何がひとかたまりなのか見た目から判断できない
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-sm text-red-700">
+          <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>
+          フォントの種類・罫線・装飾が多すぎてごちゃつく
+        </div>
+        <div class="bg-red-50 border border-red-100 rounded-lg p-3 text-sm text-red-700">
+          <i data-lucide="x-circle" class="w-4 h-4 inline mr-1"></i>
+          同じ階層なのに見た目がバラバラで一貫性がない
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. まず理解する3つ -->
+  <section id="core3" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">3</div>
+      <h2 class="text-2xl font-bold text-gray-900">まず理解する3つ</h2>
+    </div>
+
+    <div class="space-y-4">
+      <div class="bg-white rounded-xl border-l-4 border-blue-500 border border-gray-200 p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">A</span>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">4原則は「視覚的な文法」である</p>
+            <p class="text-sm text-gray-600">
+              英語の文法が「動詞の位置」で意味を決めるように、デザインは「要素の位置・差・一貫性」で情報構造を伝える。
+              コードを書く前に「この配置は何を読者に伝えるか」を問うのが4原則の使い方。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border-l-4 border-purple-500 border border-gray-200 p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-7 h-7 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">B</span>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">反復と対比はセットで機能する</p>
+            <p class="text-sm text-gray-600">
+              反復（同じパターン）が土台にあって初めて、対比（差）が「意図的な強調」として読める。
+              反復なしの対比は「バラつき」にしか見えない。この2原則は常に一緒に設計する。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border-l-4 border-amber-500 border border-gray-200 p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">C</span>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">余白は「空き」ではなく「境界の情報」</p>
+            <p class="text-sm text-gray-600">
+              接近と整列を正しく適用すると、余白が「ここで意味のグループが切れる」という論理的な境界を担う。
+              デフォルトの <code class="bg-gray-100 px-1 rounded text-xs">margin</code> を全て8pxに統一するだけでは不十分で、
+              グループ内（密）・グループ間（疎）を意図的に設計する必要がある。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 4原則の詳細 -->
+  <section id="principles" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">4</div>
+      <h2 class="text-2xl font-bold text-gray-900">4原則の詳細</h2>
+    </div>
+
+    <!-- 用語解説ボックス: PARC/CRAP -->
+    <div class="bg-gray-100 border border-gray-200 rounded-xl p-4 mb-6 text-sm">
+      <p class="font-semibold text-gray-700 mb-1 flex items-center gap-2">
+        <i data-lucide="info" class="w-4 h-4 text-gray-500"></i>
+        用語：PARC / CRAP
+      </p>
+      <p class="text-gray-600">
+        4原則の頭文字を並べた略称。PARC = Proximity, Alignment, Repetition, Contrast の順。
+        同じ4語を並べ替えた <strong>CRAP</strong>（Contrast, Repetition, Alignment, Proximity）も広く使われる
+        ―ロビン・ウィリアムズ自身がユーモアとして紹介した覚え方。
+      </p>
+    </div>
+
+    <!-- 原則同士の構造図 -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-8">
+      <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <i data-lucide="git-branch" class="w-4 h-4 text-gray-500"></i>
+        4原則の作業順序（典型的なワークフロー）
+      </h3>
+      <div class="flex flex-col md:flex-row items-center gap-2 text-sm">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-center min-w-[120px]">
+          <p class="font-bold text-blue-700">① 接近</p>
+          <p class="text-blue-600 text-xs mt-1">情報の塊を決める</p>
+        </div>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 rotate-90 md:rotate-0"></i>
+        <div class="bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-center min-w-[120px]">
+          <p class="font-bold text-green-700">② 整列</p>
+          <p class="text-green-600 text-xs mt-1">各塊に軸を通す</p>
+        </div>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 rotate-90 md:rotate-0"></i>
+        <div class="bg-purple-50 border border-purple-200 rounded-lg px-4 py-3 text-center min-w-[120px]">
+          <p class="font-bold text-purple-700">③ 反復</p>
+          <p class="text-purple-600 text-xs mt-1">全体に合図を敷く</p>
+        </div>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400 rotate-90 md:rotate-0"></i>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-center min-w-[120px]">
+          <p class="font-bold text-amber-700">④ 対比</p>
+          <p class="text-amber-600 text-xs mt-1">視線の入口を作る</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 接近 -->
+    <div class="principle-card bg-white rounded-2xl border border-blue-200 p-6 mb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+          <i data-lucide="move" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-blue-700">接近（Proximity）</h3>
+          <p class="text-sm text-blue-500">P of PARC</p>
+        </div>
+      </div>
+
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4">
+        <p class="text-sm font-semibold text-blue-800 mb-1">定義</p>
+        <p class="text-sm text-blue-700">
+          関連する項目同士を<strong>近く</strong>に、関連が弱い（または無関係な）もの同士は<strong>遠ざける</strong>ことで、
+          視覚的な「まとまり（グループ）」を作る原則。
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-500"></i>効果
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・情報が「塊」として素早く理解される</li>
+            <li>・余白が意味を帯びる（論理境界になる）</li>
+            <li>・スキャン速度が上がる</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-500"></i>よくある誤用
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・全要素を「同じ間隔」で並べる</li>
+            <li>・詰めすぎで「混線」状態になる</li>
+            <li>・罫線で無理に囲い、ノイズを増やす</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- たとえ話 1 -->
+      <div class="analogy-box border-blue-400 bg-blue-50 rounded-r-xl p-4 mb-4">
+        <p class="text-xs font-semibold text-blue-600 mb-1 flex items-center gap-1">
+          <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>たとえ話：仕分けセンターの棚
+        </p>
+        <p class="text-sm text-blue-800">
+          宅配便の仕分けセンターでは、同じ地域への荷物をひとつの棚にまとめる。
+          「A棚 = 東京23区」「B棚 = 大阪市内」のように物理的な近さで「仕分け」を表現する。
+          同じ考え方で、画面上のラベルと値を同じ「塊」として配置し、他の塊とは間隔を広げる。
+        </p>
+      </div>
+
+      <!-- 具体例 -->
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+        <p class="text-xs font-semibold text-gray-600 mb-3">実装例：フォームのグルーピング</p>
+        <div class="grid md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <p class="text-red-600 font-semibold mb-2 flex items-center gap-1"><i data-lucide="x" class="w-3.5 h-3.5"></i>Bad: 全て8px間隔</p>
+            <div class="bg-white border border-red-200 rounded-lg p-3 space-y-2">
+              <div class="bg-gray-100 h-3 rounded w-16"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+              <div class="bg-gray-100 h-3 rounded w-20"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+              <div class="bg-gray-100 h-3 rounded w-14"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+            </div>
+          </div>
+          <div>
+            <p class="text-green-600 font-semibold mb-2 flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i>Good: グループ内密・グループ間疎</p>
+            <div class="bg-white border border-green-200 rounded-lg p-3 space-y-1">
+              <div class="bg-gray-100 h-3 rounded w-16"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+              <div class="mt-4 bg-gray-100 h-3 rounded w-20"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+              <div class="mt-4 bg-gray-100 h-3 rounded w-14"></div>
+              <div class="bg-gray-200 h-5 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 整列 -->
+    <div class="principle-card bg-white rounded-2xl border border-green-200 p-6 mb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
+          <i data-lucide="align-left" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-green-700">整列（Alignment）</h3>
+          <p class="text-sm text-green-500">A of PARC</p>
+        </div>
+      </div>
+
+      <div class="bg-green-50 border border-green-100 rounded-xl p-4 mb-4">
+        <p class="text-sm font-semibold text-green-800 mb-1">定義</p>
+        <p class="text-sm text-green-700">
+          各要素の位置を、見えている・見えていないにかかわらず<strong>共通の軸</strong>（辺・ベースライン・グリッド線）に揃える原則。
+          「偶然そろった」ではなく、<strong>一貫した基準にそろえる</strong>という意図が重要。
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-500"></i>効果
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・視覚的な「静かな秩序」が生まれる</li>
+            <li>・視線の導線が予測可能になる</li>
+            <li>・「どこに次の情報があるか」が分かる</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-500"></i>よくある誤用
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・要素ごとに違う左マージンが累積する</li>
+            <li>・画像と文字の開始軸がバラつく</li>
+            <li>・グリッド未設定で数pxのズレが多発</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- たとえ話 2 -->
+      <div class="analogy-box border-green-400 bg-green-50 rounded-r-xl p-4 mb-4">
+        <p class="text-xs font-semibold text-green-600 mb-1 flex items-center gap-1">
+          <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>たとえ話：方眼紙のマス目
+        </p>
+        <p class="text-sm text-green-800">
+          数学の方眼紙では、グラフの点を「縦横のマス目という共通の軸」に乗せることで、
+          複数の点の位置関係が即座に読める。この「共通の軸」がなければ
+          点の間の関係は座標なしの平面に打った点と同じ―関係性が読めない。
+          デザインのグリッドも同様で、「見えない縦軸（垂直グリッド線）」に各要素の左端を揃えると、
+          読者は「次の要素がどこに来るか」を無意識に予測しながら視線を動かせる。
+        </p>
+      </div>
+
+      <!-- 用語解説: ベースライン -->
+      <div class="bg-gray-100 border border-gray-200 rounded-xl p-3 text-xs text-gray-600 mb-4">
+        <span class="font-semibold text-gray-700">用語：ベースライン（Baseline）</span> ―
+        テキストの文字が載る仮想の水平線。Flexboxの <code class="bg-white px-1 rounded">align-items: baseline</code> は複数要素のベースラインを揃えるプロパティ。
+      </div>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+        <p class="text-xs font-semibold text-gray-600 mb-2">整列の失敗と修正</p>
+        <div class="grid md:grid-cols-2 gap-4 text-xs">
+          <div>
+            <p class="text-red-600 font-semibold mb-2"><i data-lucide="x" class="w-3.5 h-3.5 inline"></i> Bad: 軸がバラバラ</p>
+            <div class="bg-white border border-red-200 rounded-lg p-3 space-y-2 text-gray-500">
+              <div class="ml-3 bg-gray-700 h-3 rounded w-24 text-white"></div>
+              <div class="ml-8 bg-gray-300 h-2.5 rounded w-32"></div>
+              <div class="ml-5 bg-gray-700 h-3 rounded w-20"></div>
+              <div class="ml-2 bg-gray-300 h-2.5 rounded w-28"></div>
+            </div>
+          </div>
+          <div>
+            <p class="text-green-600 font-semibold mb-2"><i data-lucide="check" class="w-3.5 h-3.5 inline"></i> Good: 左軸で統一</p>
+            <div class="bg-white border border-green-200 rounded-lg p-3 space-y-2 text-gray-500">
+              <div class="bg-gray-700 h-3 rounded w-24"></div>
+              <div class="bg-gray-300 h-2.5 rounded w-32"></div>
+              <div class="bg-gray-700 h-3 rounded w-20"></div>
+              <div class="bg-gray-300 h-2.5 rounded w-28"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 反復 -->
+    <div class="principle-card bg-white rounded-2xl border border-purple-200 p-6 mb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-purple-500 rounded-xl flex items-center justify-center">
+          <i data-lucide="repeat" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-purple-700">反復（Repetition）</h3>
+          <p class="text-sm text-purple-500">R of PARC</p>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 border border-purple-100 rounded-xl p-4 mb-4">
+        <p class="text-sm font-semibold text-purple-800 mb-1">定義</p>
+        <p class="text-sm text-purple-700">
+          色・形・太さ・角丸・行間・余白段階など、<strong>意図した視覚要素を全体に繰り返し</strong>使用し、
+          「同じ家系」の統一感を作る原則。コードで言えば、コンポーネントの単一化に相当する。
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-500"></i>効果
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・学習コストが下がる（2ページ目から速い）</li>
+            <li>・ブランド的な統一感が生まれる</li>
+            <li>・対比（例外）が意図として読める土台になる</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-500"></i>よくある誤用
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・似せたつもりが微妙に違う（色・余白・フォント）</li>
+            <li>・コピペ由来の例外CSSが点在する</li>
+            <li>・反復だけで単調になる（対比が必要）</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- たとえ話 3 -->
+      <div class="analogy-box border-purple-400 bg-purple-50 rounded-r-xl p-4 mb-4">
+        <p class="text-xs font-semibold text-purple-600 mb-1 flex items-center gap-1">
+          <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>たとえ話：工場の組み立てライン
+        </p>
+        <p class="text-sm text-purple-800">
+          自動車工場の組み立てラインでは、各工程で使うボルトの規格・トルク・工具が統一されている。
+          「工程Aだけ違う規格のボルト」があると、品質検査と修正コストが跳ね上がる。
+          UIも同じで、<code class="bg-white px-1 rounded text-xs">border-radius: 8px</code> を「このカードだけ6px」にすると
+          保守コストと統一感の両方が壊れる。デザイントークンとして変数化するのが解決策。
+        </p>
+      </div>
+
+      <!-- 用語解説: デザイントークン -->
+      <div class="bg-gray-100 border border-gray-200 rounded-xl p-3 text-xs text-gray-600">
+        <span class="font-semibold text-gray-700">用語：デザイントークン（Design Token）</span> ―
+        色・スペーシング・フォントサイズ等の視覚的な値を変数として定義したもの（例：<code class="bg-white px-1 rounded">--color-primary: #3B82F6</code>）。
+        反復を機械的に保証するための仕組み。Tailwindの <code class="bg-white px-1 rounded">theme</code> 設定が代表例。
+      </div>
+    </div>
+
+    <!-- 対比 -->
+    <div class="principle-card bg-white rounded-2xl border border-amber-200 p-6 mb-6">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center">
+          <i data-lucide="sliders" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-amber-700">対比（Contrast）</h3>
+          <p class="text-sm text-amber-500">C of PARC</p>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-4">
+        <p class="text-sm font-semibold text-amber-800 mb-1">定義</p>
+        <p class="text-sm text-amber-700">
+          大きさ・明度・太さ・色面積・密度などで<strong>差</strong>を作り、重要度・種類・階層を一目で分ける原則。
+          差が曖昧なら対比ではない―<strong>はっきり違わせるか、全く同じにするか</strong>の二択。
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-500"></i>効果
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・視線の入口（最初に見る場所）が確定する</li>
+            <li>・スキャン（ざっと読み）が可能になる</li>
+            <li>・情報の階層が一目で伝わる</li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-red-500"></i>よくある誤用
+          </p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>・差が弱い（全部が「中の強さ」で平坦）</li>
+            <li>・強調が多すぎて視線の入口が消える</li>
+            <li>・コントラスト比不足（アクセシビリティ違反）</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- たとえ話 4 -->
+      <div class="analogy-box border-amber-400 bg-amber-50 rounded-r-xl p-4 mb-4">
+        <p class="text-xs font-semibold text-amber-600 mb-1 flex items-center gap-1">
+          <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>たとえ話：オーケストラの指揮
+        </p>
+        <p class="text-sm text-amber-800">
+          オーケストラで全楽器が常にフォルテ（最大音量）で演奏し続けたら、
+          ソロパートは埋もれてしまう。ピアニッシモ（弱音）があるからフォルテが際立つ。
+          UIでも「全要素を目立たせる」と結果的に「何も目立たない」画面になる。
+          主役の行動ボタン（CTA）を1つ決め、それ以外を意図的に「弱音」にすることが対比の本質。
+        </p>
+      </div>
+
+      <!-- 用語解説: WCAG / コントラスト比 -->
+      <div class="bg-gray-100 border border-gray-200 rounded-xl p-3 text-xs text-gray-600">
+        <span class="font-semibold text-gray-700">用語：WCAG（Web Content Accessibility Guidelines：ウェブコンテンツ アクセシビリティ ガイドライン）</span> ―
+        W3Cが定めるWebアクセシビリティの国際標準。テキストと背景のコントラスト比を
+        <strong>4.5:1以上（標準テキスト）</strong>にすることを要求している。<br/>
+        計算式: <code class="bg-white px-1 rounded">比 = (L1 + 0.05) / (L2 + 0.05)</code>（L1 が明るい方、L2 が暗い方の相対輝度）。
+        相対輝度はsRGBの非線形補正値から求める知覚工学的な定義であり、「なんとなく」ではなく人間の輝度感度に基づいた数値。
+        <a href="https://webaim.org/resources/contrastchecker/" class="text-blue-600 underline" target="_blank">WebAIM Contrast Checker</a> で即座に確認可能。
+      </div>
+    </div>
+
+    <!-- 原則同士の関係性 -->
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <h3 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <i data-lucide="network" class="w-4 h-4 text-gray-500"></i>
+        原則同士の関係性
+      </h3>
+      <div class="grid md:grid-cols-2 gap-3 text-sm">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <p class="font-semibold text-gray-700 mb-1">接近 ↔ 整列</p>
+          <p class="text-gray-600">接近でグループを作り、その内部を整列で揃える二段構成が基本。フォーム・カード群・ダッシュボードで頻出。</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <p class="font-semibold text-gray-700 mb-1">反復 ↔ 対比</p>
+          <p class="text-gray-600">反復が「基本パターン」を作り、対比が「例外・強調」を生む。反復なき対比はただのバラつきになる。</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <p class="font-semibold text-gray-700 mb-1">整列 ↔ 反復</p>
+          <p class="text-gray-600">同じグリッド段階・行長・基準幅を繰り返すと、整列の維持コストが大幅に下がる。</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <p class="font-semibold text-gray-700 mb-1">接近 ↔ 対比</p>
+          <p class="text-gray-600">グループ内の差（ラベルと値）に弱い対比、グループ間には強い距離（空間的な対比）を使う合わせ技が多い。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CSS / Tailwind 実装対応 -->
+  <section id="css" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">5</div>
+      <h2 class="text-2xl font-bold text-gray-900">CSS / Tailwind 実装対応</h2>
+    </div>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-5 text-sm text-amber-800">
+      <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+      デザイン原則は「意味」、CSSは「手段」です。1対1の完全対応ではなく、複数のCSSプロパティが協奏して1つの原則を実現します。
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm bg-white border border-gray-200 rounded-2xl overflow-hidden">
+        <thead class="bg-gray-900 text-white">
+          <tr>
+            <th class="text-left p-4 font-semibold">原則</th>
+            <th class="text-left p-4 font-semibold">CSS プロパティ</th>
+            <th class="text-left p-4 font-semibold">Tailwind クラス</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-blue-50">
+            <td class="p-4 font-semibold text-blue-700 align-top">接近</td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              margin, padding,<br/>gap, row-gap,<br/>column-gap
+            </td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              space-y-*, space-x-*,<br/>gap-*, p-*, m-*,<br/>divide-y-*
+            </td>
+          </tr>
+          <tr class="hover:bg-green-50">
+            <td class="p-4 font-semibold text-green-700 align-top">整列</td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              display: flex,<br/>align-items, justify-content,<br/>display: grid,<br/>grid-template-*, text-align
+            </td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              flex, items-*, justify-*,<br/>grid, col-span-*,<br/>text-left, text-right
+            </td>
+          </tr>
+          <tr class="hover:bg-purple-50">
+            <td class="p-4 font-semibold text-purple-700 align-top">反復</td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              CSS変数 --color-*,<br/>--space-*, @layer,<br/>共通クラス
+            </td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              theme拡張で固定,<br/>rounded-*, shadow-*,<br/>コンポーネント統一
+            </td>
+          </tr>
+          <tr class="hover:bg-amber-50">
+            <td class="p-4 font-semibold text-amber-700 align-top">対比</td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              font-size, font-weight,<br/>color, background,<br/>box-shadow, outline
+            </td>
+            <td class="p-4 text-gray-700 align-top font-mono text-xs">
+              text-*, font-*,<br/>bg-*, shadow-*,<br/>hover:, focus:, dark:
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 6. 初心者がはまりやすい落とし穴 -->
+  <section id="pitfalls" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">6</div>
+      <h2 class="text-2xl font-bold text-gray-900">エンジニアがはまりやすい落とし穴</h2>
+    </div>
+
+    <div class="space-y-4">
+
+      <div class="bg-white rounded-xl border border-red-100 p-5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">余白のマジックナンバー化（反復の崩壊）</p>
+            <p class="text-sm text-gray-600 mb-2">
+              <code class="bg-gray-100 px-1 rounded text-xs">margin: 4px</code>、
+              <code class="bg-gray-100 px-1 rounded text-xs">5px</code>、
+              <code class="bg-gray-100 px-1 rounded text-xs">7px</code> が混在している状態。
+              デザイントークンを使わずにその場で調整した結果、視覚的な統一感が失われる。
+            </p>
+            <p class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <i data-lucide="check" class="w-3.5 h-3.5 inline mr-1"></i>
+              <strong>対策:</strong> 4の倍数（4/8/12/16/24/32px）などの段階的なスペーシングスケールを変数化し、そこから外れない。Tailwindなら <code>space-y-2</code>（8px）/<code>space-y-4</code>（16px）の段階を守る。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-red-100 p-5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">「とりあえず中央揃え」でスキャン性が死ぬ（整列の誤用）</p>
+            <p class="text-sm text-gray-600 mb-2">
+              テキストを全て <code class="bg-gray-100 px-1 rounded text-xs">text-center</code> にすると、
+              見出し・本文・ラベルの左端が揃わず視線の導線がなくなる。
+              ヒーロー見出しなら中央でもよいが、情報量が多いコンテンツには左揃えが原則。
+            </p>
+            <p class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <i data-lucide="check" class="w-3.5 h-3.5 inline mr-1"></i>
+              <strong>対策:</strong> 本文・フォーム・リストは左揃えを基本とし、中央揃えはコンパクトな要素（ボタン・バッジ・ヒーローコピー）に限定する。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-red-100 p-5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">罫線・シャドウで「接近」の代替をしようとする</p>
+            <p class="text-sm text-gray-600 mb-2">
+              グルーピングが弱い箇所を <code class="bg-gray-100 px-1 rounded text-xs">border</code> や <code class="bg-gray-100 px-1 rounded text-xs">box-shadow</code> で囲って補おうとする癖。
+              結果として罫線が増え、視覚的ノイズが積み上がる。接近（余白の差）で解決できるなら、罫線は不要。
+            </p>
+            <p class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <i data-lucide="check" class="w-3.5 h-3.5 inline mr-1"></i>
+              <strong>対策:</strong> まず余白の「密・疎」で解決を試みる。どうしても境界が必要な場合のみ、細い罫線か背景色の変化を使う。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-red-100 p-5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">「強調インフレ」―対比が多すぎて何も目立たない</p>
+            <p class="text-sm text-gray-600 mb-2">
+              太字・赤字・下線・アイコン・背景色をページ全体に使い散らかした状態。
+              全ての要素を強調すると、優先度の差が消えてしまう。
+            </p>
+            <p class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <i data-lucide="check" class="w-3.5 h-3.5 inline mr-1"></i>
+              <strong>対策:</strong> 1画面に「最も重要な視線の入口」を1つだけ決め、それだけを強い対比にする。その他は反復でトーンを下げる。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-red-100 p-5">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-800 mb-1">低コントラスト比によるアクセシビリティ違反</p>
+            <p class="text-sm text-gray-600 mb-2">
+              グレーのプレースホルダーテキスト、薄いサブテキスト、ライトモードの薄いボーダーなど。
+              視覚的に「洗練されたデザイン」に見えても、WCAG 2.1 AA基準（4.5:1）を下回るケースが多い。
+            </p>
+            <p class="text-xs text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+              <i data-lucide="check" class="w-3.5 h-3.5 inline mr-1"></i>
+              <strong>対策:</strong> Chrome DevToolsのコントラストチェッカー、または <a href="https://webaim.org/resources/contrastchecker/" class="underline" target="_blank">WebAIM Contrast Checker</a> で実装時に必ず確認する。
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. 専門用語集 -->
+  <section id="glossary" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">7</div>
+      <h2 class="text-2xl font-bold text-gray-900">専門用語集</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+      <div class="divide-y divide-gray-100">
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">PARC / CRAP</span>
+            <span class="text-xs text-gray-500">デザイン4原則の略称</span>
+          </div>
+          <p class="text-sm text-gray-600">Proximity, Alignment, Repetition, Contrast の頭文字。CRAPは同じ4語を並べ替えたユーモアある別名。</p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">ゲシュタルト原則（Gestalt Principles）</span>
+          </div>
+          <p class="text-sm text-gray-600">人間が視覚情報を「まとまり」として認識する知覚心理学の法則群。4大原則はこの知覚事実を実践的操作に落とし込んだもの。
+          <span class="text-xs text-blue-600">→ 関連: 接近・反復</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">デザイントークン（Design Token）</span>
+          </div>
+          <p class="text-sm text-gray-600">色・スペース・フォントサイズ等の視覚値を変数として一元管理する仕組み。反復原則をコードレベルで保証する手段。
+          <span class="text-xs text-blue-600">→ 関連: 反復</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">ベースライン（Baseline）</span>
+          </div>
+          <p class="text-sm text-gray-600">テキストの文字が乗る仮想の水平線。CSSの <code class="bg-gray-100 px-1 rounded text-xs">align-items: baseline</code> はこの軸を揃えるプロパティ。
+          <span class="text-xs text-blue-600">→ 関連: 整列</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">WCAG（Web Content Accessibility Guidelines）</span>
+            <span class="text-xs text-gray-500">ウェブコンテンツ アクセシビリティ ガイドライン</span>
+          </div>
+          <p class="text-sm text-gray-600">W3Cが定めるWebアクセシビリティ国際標準。AA基準でテキストコントラスト比4.5:1以上を要求。
+          <span class="text-xs text-blue-600">→ 関連: 対比</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">ネガティブスペース（Negative Space）</span>
+          </div>
+          <p class="text-sm text-gray-600">要素と要素の間、または要素の外側の「空き」領域。接近原則では余白が論理的な境界情報を担う。
+          <span class="text-xs text-blue-600">→ 関連: 接近</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">CTA（Call to Action：行動喚起）</span>
+          </div>
+          <p class="text-sm text-gray-600">ユーザーに特定の行動（クリック・購入・登録）を促すUI要素。対比原則で最も強調すべきターゲット。
+          <span class="text-xs text-blue-600">→ 関連: 対比</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">グリッドシステム（Grid System）</span>
+          </div>
+          <p class="text-sm text-gray-600">画面を等分した仮想の縦/横線網。整列原則の実装基盤。CSSの <code class="bg-gray-100 px-1 rounded text-xs">display: grid</code> で実現。
+          <span class="text-xs text-blue-600">→ 関連: 整列・反復</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">フィッツの法則（Fitts' Law）</span>
+          </div>
+          <p class="text-sm text-gray-600">ターゲット（ボタン等）への到達時間は「サイズが大きく、近いほど短い」という到達容易性の法則。対比・整列と相性が良い。
+          <span class="text-xs text-blue-600">→ 関連: 対比・整列</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">DTP（Desktop Publishing）</span>
+            <span class="text-xs text-gray-500">デスクトップ パブリッシング</span>
+          </div>
+          <p class="text-sm text-gray-600">PCを使って印刷物・出版物のレイアウト・デザインを行うこと。4大原則が生まれた1990年代の技術的背景。</p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">ヒーローセクション（Hero Section）</span>
+          </div>
+          <p class="text-sm text-gray-600">Webページの最上部に配置される大型の視覚的ブロック。キャッチコピー・画像・CTAボタンが置かれることが多い。落とし穴セクション内「ヒーロー見出し」「ヒーローコピー」はここに置かれるテキスト要素を指す。
+          <span class="text-xs text-blue-600">→ 関連: 対比</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">行長（Measure）</span>
+          </div>
+          <p class="text-sm text-gray-600">1行に収まるテキストの横幅・文字数。CSSでは <code class="bg-gray-100 px-1 rounded text-xs">max-width</code> で制御する。長すぎると視線の折り返しコストが増え、短すぎると読みにくい。一般に 45〜75文字が読みやすい行長とされる。
+          <span class="text-xs text-blue-600">→ 関連: 整列・反復</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">タイプスケール（Type Scale）</span>
+          </div>
+          <p class="text-sm text-gray-600">見出しH1・H2・本文・キャプションなど、テキスト階層ごとのフォントサイズを比率で定義したもの（例：1.25倍または1.5倍の等比数列）。反復・対比の両方に関わる中核的な設計パラメータ。
+          <span class="text-xs text-blue-600">→ 関連: 反復・対比</span></p>
+        </div>
+
+        <div class="p-4 hover:bg-gray-50">
+          <div class="flex flex-wrap items-baseline gap-2 mb-1">
+            <span class="font-semibold text-gray-800">Atomic Design（アトミックデザイン）</span>
+          </div>
+          <p class="text-sm text-gray-600">Brad Frost が提唱したUI設計方法論。Atom（原子：ボタン・入力欄）→ Molecule（分子：フォームグループ）→ Organism（有機体：ヘッダー）→ Template → Page という5階層でコンポーネントを体系化する。反復原則をコードアーキテクチャレベルで実現する手法。
+          <span class="text-xs text-blue-600">→ 関連: 反復</span></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 次に学ぶと良いもの -->
+  <section id="next" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">8</div>
+      <h2 class="text-2xl font-bold text-gray-900">次に学ぶと良いもの</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <a href="https://www.interaction-design.org/literature/topics/gestalt-principles" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-indigo-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="brain" class="w-5 h-5 text-indigo-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">ゲシュタルト原則の全体像</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">近接・類似・閉合・連続・共通領域など、4原則の知覚心理学的な背景を深掘りする。</p>
+        <p class="text-xs text-indigo-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> IDF: Gestalt Principles</p>
+      </a>
+      <a href="https://storybook.js.org/" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="layout" class="w-5 h-5 text-blue-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">デザインシステム構築</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">Atomic Design・Storybook・デザイントークンなど、反復原則をスケールさせる組織的手法。</p>
+        <p class="text-xs text-blue-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> Storybook 公式</p>
+      </a>
+      <a href="https://typescale.com/" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-purple-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="type" class="w-5 h-5 text-purple-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">タイポグラフィの基礎</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">フォントの選び方・行間・文字間隔・タイプスケール。対比と反復がタイポグラフィで最も強く現れる領域。</p>
+        <p class="text-xs text-purple-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> Type Scale（スケール設計ツール）</p>
+      </a>
+      <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-green-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="accessibility" class="w-5 h-5 text-green-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">WCAG / アクセシビリティ</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">対比原則のコントラスト比要件を出発点に、フォーカス管理・スクリーンリーダー対応まで拡張する。</p>
+        <p class="text-xs text-green-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> WCAG 2.1 Quick Reference</p>
+      </a>
+      <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-amber-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="bar-chart-2" class="w-5 h-5 text-amber-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">UXの10ヒューリスティクス</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">ヤコブ・ニールセン（Jakob Nielsen）のUIデザイン評価原則10項目。4原則の発展的な実務フレームワーク。</p>
+        <p class="text-xs text-amber-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> NN/g: 10 Usability Heuristics</p>
+      </a>
+      <a href="https://tailwindcss.com/docs/customizing-colors" target="_blank" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-red-300 hover:shadow-sm transition-all block">
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="palette" class="w-5 h-5 text-red-500"></i>
+          <p class="font-semibold text-gray-800 text-sm">カラーシステム設計</p>
+        </div>
+        <p class="text-xs text-gray-600 mb-2">プライマリ/セカンダリ/セマンティック色の体系化。対比・反復の色彩版。Tailwindのカラーパレット設計が入門に最適。</p>
+        <p class="text-xs text-red-500 flex items-center gap-1"><i data-lucide="external-link" class="w-3 h-3"></i> Tailwind: Customizing Colors</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- 9. 参考文献 -->
+  <section id="refs" class="mb-14">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-sm font-bold">9</div>
+      <h2 class="text-2xl font-bold text-gray-900">参考文献・URL</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100">
+
+      <div class="p-4">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">書籍</p>
+        <div class="space-y-3">
+          <div>
+            <a href="https://openlibrary.org/works/OL15856230W/The_non-designer%27s_design_book" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              The Non-Designer's Design Book, 4th Edition — Robin Williams (書誌: Open Library)
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">4原則の出典。PARC/CRAPフレームワークの原著（初版1994年）。ISBN: 9780133966152。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Web リソース</p>
+        <div class="space-y-3">
+          <div>
+            <a href="https://lawsofux.com/" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              Laws of UX — lawsofux.com
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">ゲシュタルト・フィッツの法則・ヒックの法則など、UIに関連する知覚・認知法則の辞書的サイト。</p>
+          </div>
+          <div>
+            <a href="https://www.nngroup.com/" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              Nielsen Norman Group — nngroup.com
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">ユーザビリティ・ヒューリスティクスなど、実務UX記事の最高品質ソース。</p>
+          </div>
+          <div>
+            <a href="https://www.adobe.com/express/learn/blog/design-principles" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              Design Principles — Adobe Express Learn
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">Adobe による4原則の実践解説。具体的なビジュアル例が豊富。</p>
+          </div>
+          <div>
+            <a href="https://webaim.org/resources/contrastchecker/" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              WebAIM Contrast Checker
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">コントラスト比を即座に検証できるツール。WCAG AA/AAA基準で合否判定。</p>
+          </div>
+          <div>
+            <a href="https://www.interaction-design.org/literature/topics/gestalt-principles" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              Gestalt Principles — Interaction Design Foundation
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">4原則の知覚心理学的な背景（ゲシュタルト原則）を学術寄りに解説。</p>
+          </div>
+          <div>
+            <a href="https://typescale.com/" class="font-semibold text-blue-600 hover:underline text-sm" target="_blank">
+              Type Scale — typescale.com
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">タイプスケールをインタラクティブに設計・確認できるツール。反復・対比の実装で必携。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 pt-6 text-center text-xs text-gray-400">
+    <p>Techmap — デザインの4大原則 | 2026年4月生成</p>
+    <p class="mt-1">対象: 実務経験のある理系エンジニアが今日初めてこのトピックを調べた状態から本質を掴む</p>
+  </footer>
+
+</main>
+
+<!-- PDF ボタン -->
+<button
+  onclick="window.print()"
+  class="no-print fixed bottom-6 right-6 bg-gray-900 text-white text-sm font-semibold px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 hover:bg-gray-700 transition-colors z-50"
+>
+  <i data-lucide="file-text" class="w-4 h-4"></i>
+  PDFで保存
+</button>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

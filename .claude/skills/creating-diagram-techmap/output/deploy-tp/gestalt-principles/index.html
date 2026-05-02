@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゲシュタルト原則 — Techmap</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  @media print {
+    #pdf-btn, #toc-sidebar { display: none !important; }
+    section { break-inside: avoid; }
+  }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .term-box {
+    background: #f0f7ff;
+    border-left: 4px solid #3b82f6;
+    padding: 0.6rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .principle-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: #ffffff;
+    transition: box-shadow 0.2s;
+  }
+  .principle-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .visual-demo {
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0.75rem 0;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+  .dot-group { display: inline-flex; gap: 4px; margin: 0 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .analogy-card {
+    background: #fefce8;
+    border: 1px solid #fbbf24;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+  .pitfall-card {
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    border-radius: 0 0.375rem 0.375rem 0;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+  }
+  .next-topic-tag {
+    display: inline-block;
+    background: #ede9fe;
+    color: #5b21b6;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.82rem;
+    margin: 0.25rem;
+  }
+  #toc-sidebar {
+    position: fixed;
+    top: 5rem;
+    right: 1.5rem;
+    width: 200px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    z-index: 100;
+    font-size: 0.78rem;
+  }
+  @media (max-width: 1280px) { #toc-sidebar { display: none; } }
+  .section-icon { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .fig-ground-demo { position: relative; width: 100px; height: 100px; margin: 0 auto; }
+  .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  .arch-node { background: #dbeafe; border: 1.5px solid #3b82f6; border-radius: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.82rem; white-space: nowrap; }
+  .arch-arrow { color: #94a3b8; font-size: 1.1rem; }
+  .badge { display: inline-block; background: #e0e7ff; color: #3730a3; border-radius: 9999px; padding: 0.15rem 0.6rem; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- PDF Button -->
+<button id="pdf-btn" onclick="window.print()"
+  class="fixed bottom-6 right-6 z-50 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm hover:bg-blue-700 transition-colors">
+  <i data-lucide="file-text" class="w-4 h-4"></i> PDFで保存
+</button>
+
+<!-- TOC Sidebar -->
+<nav id="toc-sidebar">
+  <p class="font-bold text-gray-600 mb-2 text-xs uppercase tracking-wide">目次</p>
+  <ul class="space-y-1 text-gray-500">
+    <li><a href="#summary" class="hover:text-blue-600">ひとことで言えば</a></li>
+    <li><a href="#history" class="hover:text-blue-600">なぜ生まれたのか</a></li>
+    <li><a href="#core3" class="hover:text-blue-600">まず理解する3つ</a></li>
+    <li><a href="#principles" class="hover:text-blue-600">主要原則・詳細</a></li>
+    <li><a href="#pitfalls" class="hover:text-blue-600">落とし穴</a></li>
+    <li><a href="#glossary" class="hover:text-blue-600">専門用語集</a></li>
+    <li><a href="#next" class="hover:text-blue-600">次に学ぶと良いもの</a></li>
+    <li><a href="#refs" class="hover:text-blue-600">参考文献</a></li>
+  </ul>
+</nav>
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200 px-6 py-5 shadow-sm">
+  <div class="max-w-3xl mx-auto">
+    <p class="text-xs text-blue-500 font-semibold uppercase tracking-widest mb-1">Techmap — 知識ゼロから本質を掴む</p>
+    <h1 class="text-3xl font-bold text-gray-900 mb-1">ゲシュタルト原則</h1>
+    <p class="text-gray-500 text-sm">Gestalt Principles（ゲシュタルト知覚原則） | 認知心理学 × UI/UXデザイン</p>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 py-8 space-y-12">
+
+  <!-- 1. ひとことで言えば -->
+  <section id="summary">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="zap" class="w-5 h-5 text-blue-500"></i> ひとことで言えば
+    </h2>
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
+      <p class="text-lg font-semibold text-blue-900 mb-2">「人間の知覚は、バラバラな要素を自動的に"まとまり"として組織化する」</p>
+      <p class="text-gray-700 text-sm leading-relaxed">
+        ゲシュタルト原則とは、1900年代初頭にドイツ心理学者が発見した<strong>知覚のグルーピング法則群</strong>。
+        「近い・似ている・繋がっている」などの手がかりを使い、視野内の要素を無意識に群化（グルーピング）する仕組みを記述する。
+        UIデザイン・データビジュアライゼーション・広告など、<strong>「見せ方」を設計するすべての分野で実務的な指針</strong>となる。
+      </p>
+      <div class="mt-3 flex flex-wrap gap-2 text-xs">
+        <span class="bg-blue-100 text-blue-700 rounded-full px-3 py-1">対象: UIデザイナー・フロントエンド・データエンジニア</span>
+        <span class="bg-blue-100 text-blue-700 rounded-full px-3 py-1">前提知識: 不要（ただし心理学の素養があると深く理解できる）</span>
+      </div>
+    </div>
+
+    <div class="term-box">
+      <strong>Gestalt（ゲシュタルト）</strong>：ドイツ語で「形・全体的な姿」を意味する。「形態」とも訳される。
+      心理学文脈では「知覚が全体として組織化される性質」を指す。
+    </div>
+
+    <!-- 全体マップ -->
+    <div class="visual-demo mt-4">
+      <p class="font-semibold text-gray-600 mb-3 text-sm">ゲシュタルト原則の全体マップ</p>
+      <div class="flex flex-col items-center gap-2">
+        <div class="bg-blue-600 text-white rounded-lg px-5 py-2 text-sm font-bold">ゲシュタルト原則</div>
+        <div class="text-gray-400 text-xs">「全体は部分の総和以上」</div>
+        <div class="flex flex-wrap justify-center gap-2 mt-1">
+          <div class="arch-node">近接</div>
+          <div class="arch-node">類同</div>
+          <div class="arch-node">閉合</div>
+          <div class="arch-node">連続</div>
+          <div class="arch-node">共通運命</div>
+          <div class="arch-node">図と地</div>
+          <div class="arch-node">プレグナンツ</div>
+          <div class="arch-node">対称性</div>
+          <div class="arch-node">共通領域</div>
+          <div class="arch-node">連結性</div>
+        </div>
+        <div class="mt-2 flex flex-wrap justify-center gap-3 text-xs text-gray-500">
+          <span>↓ 応用</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+          <div class="bg-green-100 text-green-700 rounded px-3 py-1 text-xs">UIデザイン</div>
+          <div class="bg-green-100 text-green-700 rounded px-3 py-1 text-xs">データビジュアライゼーション</div>
+          <div class="bg-green-100 text-green-700 rounded px-3 py-1 text-xs">広告・グラフィック</div>
+          <div class="bg-green-100 text-green-700 rounded px-3 py-1 text-xs">コンピュータビジョン</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. なぜ生まれたのか -->
+  <section id="history">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="clock" class="w-5 h-5 text-amber-500"></i> なぜ生まれたのか
+    </h2>
+
+    <div class="space-y-4">
+      <div class="principle-card">
+        <h3 class="font-bold text-gray-800 mb-2">批判の矛先：要素主義・連合主義</h3>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          19世紀末〜20世紀初頭、ヴィルヘルム・ヴントを中心とする<strong>構造主義（Structuralism）</strong>が主流だった。
+          知覚を「感覚の原子の足し算」で説明しようとする立場で、「赤い丸い柔らかい」という感覚素片が積み上がって「リンゴ」になる、という発想だ。
+        </p>
+        <p class="text-sm text-gray-700 leading-relaxed mt-2">
+          ゲシュタルト派はこれを実験で反証した。同じ音を交互に鳴らすと「メロディー」が知覚されるが、音の素片の総和にメロディーは含まれていない。
+          <strong>「まとまり（Gestalt）そのものが先にある」</strong>という主張が出発点だ。
+        </p>
+      </div>
+
+      <div class="principle-card">
+        <h3 class="font-bold text-gray-800 mb-2">仮現運動（φ現象 / Phi Phenomenon）が示したこと</h3>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          1912年、マックス・ヴェルトハイマー（Max Wertheimer）は離れた位置の光が交互に点滅するだけで
+          「動いているように見える（仮現運動）」を論文で報告した。
+          光点が「動いた」のではなく、脳が<strong>「動き」という全体的パターンを能動的に生成した</strong>ことを示す。
+        </p>
+        <div class="term-box">
+          <strong>仮現運動（Phi Phenomenon）</strong>：実際には動いていない刺激が、位置変化と適切な時間間隔により「動いて見える」現象。映画・アニメーションの原理でもある。ヴェルトハイマーの1912年論文 *Experimentelle Studien über das Sehen von Bewegung* が起点。
+        </div>
+      </div>
+
+      <div class="principle-card">
+        <h3 class="font-bold text-gray-800 mb-2">3人の創始者</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+          <div class="bg-gray-50 rounded-lg p-3 text-sm">
+            <p class="font-semibold text-gray-800">マックス・ヴェルトハイマー</p>
+            <p class="text-gray-600 text-xs mt-1">仮現運動の発見者。知覚の組織化法則を実験で定式化。</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 text-sm">
+            <p class="font-semibold text-gray-800">クルト・コフカ</p>
+            <p class="text-gray-600 text-xs mt-1">理論の体系化と英語圏への普及。発達・学習への拡張。</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 text-sm">
+            <p class="font-semibold text-gray-800">ヴォルフガング・ケーラー</p>
+            <p class="text-gray-600 text-xs mt-1">チンパンジーの洞察学習を報告。問題構造の「一気把握」を実証。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 年表 -->
+      <div class="visual-demo">
+        <p class="font-semibold text-gray-600 mb-3 text-sm">歴史の流れ</p>
+        <div class="flex flex-col gap-2 text-left text-xs text-gray-700">
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1879年</span><span>ヴントが世界初の心理学実験室を設立（要素主義の全盛期）</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1912年</span><span>ヴェルトハイマーが仮現運動の論文を発表 → ゲシュタルト心理学の出発点</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1920年代</span><span>コフカ・ケーラーが「知覚の組織化の法則」を体系化・発表</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1930年代</span><span>ナチズム台頭によりヴェルトハイマー・ケーラー・コフカの3人全員がアメリカへ亡命 → 英語圏での普及が加速</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1935年</span><span>コフカ著 *Principles of Gestalt Psychology* 刊行（アメリカでの認知科学への組み込みが始まる）</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">1990年代〜</span><span>UIデザイン・HCI分野での実務応用が本格化</span></div>
+          <div class="flex gap-3 items-start"><span class="font-mono text-blue-500 min-w-[60px]">2000年代〜</span><span>コンピュータビジョン・深層学習との対応が議論される</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. まず理解する3つ -->
+  <section id="core3">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="layers" class="w-5 h-5 text-green-500"></i> まず理解する3つ
+    </h2>
+    <p class="text-sm text-gray-600 mb-4">ここだけ押さえれば「ゲシュタルト原則を理解した」と言えるレベルになる。</p>
+
+    <div class="grid grid-cols-1 gap-4">
+      <div class="principle-card border-l-4 border-green-400">
+        <div class="flex items-start gap-3">
+          <span class="bg-green-100 text-green-700 font-bold rounded-full w-7 h-7 flex items-center justify-center flex-shrink-0 text-sm">1</span>
+          <div>
+            <h3 class="font-bold text-gray-800">「全体は部分の総和以上」とはどういう意味か</h3>
+            <p class="text-sm text-gray-700 mt-1 leading-relaxed">
+              6つの点を「3つ・3つ」に分けて表示すると、「2つのグループ」として知覚される。しかし同じ6点を等間隔に並べると「6点の列」になる。
+              <strong>要素（点）は同じでも、空間配置が変わることで知覚が変わる</strong>。この「配置が生む意味」こそがゲシュタルト（全体形）だ。
+            </p>
+            <div class="visual-demo mt-2">
+              <div class="flex justify-center items-center gap-6">
+                <div>
+                  <div class="flex gap-1 mb-1">
+                    <div class="dot bg-blue-500"></div><div class="dot bg-blue-500"></div><div class="dot bg-blue-500"></div>
+                    <div class="ml-3 dot bg-blue-500"></div><div class="dot bg-blue-500"></div><div class="dot bg-blue-500"></div>
+                  </div>
+                  <p class="text-xs text-gray-500">「2グループ」に見える</p>
+                </div>
+                <div>
+                  <div class="flex gap-1 mb-1">
+                    <div class="dot bg-gray-400"></div><div class="dot bg-gray-400"></div><div class="dot bg-gray-400"></div>
+                    <div class="dot bg-gray-400"></div><div class="dot bg-gray-400"></div><div class="dot bg-gray-400"></div>
+                  </div>
+                  <p class="text-xs text-gray-500">「6点の列」に見える</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="principle-card border-l-4 border-blue-400">
+        <div class="flex items-start gap-3">
+          <span class="bg-blue-100 text-blue-700 font-bold rounded-full w-7 h-7 flex items-center justify-center flex-shrink-0 text-sm">2</span>
+          <div>
+            <h3 class="font-bold text-gray-800">近接・類同・閉合 ── 最頻出の「グループ化」3原則</h3>
+            <p class="text-sm text-gray-700 mt-1 leading-relaxed">
+              UIデザインの現場でグループ化に最もよく参照される3つ。
+              <strong>近接（Proximity）</strong>は「近いものを同じグループと見なす」、
+              <strong>類同（Similarity）</strong>は「似たものを同じグループと見なす」、
+              <strong>閉合（Closure）</strong>は「欠けた輪郭を脳が補完して完全な形として見る」。
+              この3つを理解するだけで、カード・ナビ・フォームの大半の設計判断に根拠が持てる。
+              （図と地は「グループ化」とは別の軸の概念として、3番目に別枠で扱う）
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="principle-card border-l-4 border-purple-400">
+        <div class="flex items-start gap-3">
+          <span class="bg-purple-100 text-purple-700 font-bold rounded-full w-7 h-7 flex items-center justify-center flex-shrink-0 text-sm">3</span>
+          <div>
+            <h3 class="font-bold text-gray-800">図と地（Figure-Ground）── すべての視覚デザインの前提</h3>
+            <p class="text-sm text-gray-700 mt-1 leading-relaxed">
+              人間は視野の中で常に「注目すべき対象（図）」と「背景（地）」を無意識に分離する。
+              <strong>デザイナーが意図した「図」と「地」がユーザーの知覚と一致しているかどうか</strong>が、
+              UIの分かりやすさの根本を左右する。ルビンの杯（杯にも顔にも見える）は「図と地の反転」の典型例。
+            </p>
+            <div class="visual-demo mt-2">
+              <p class="text-xs mb-2">ルビンの杯：黒背景→「白い杯」、白背景→「向き合う2つの顔」に見える</p>
+              <svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto">
+                <!-- 黒背景版（左）: 杯が「図」 -->
+                <rect x="0" y="0" width="90" height="120" fill="#1e293b"/>
+                <!-- 白い杯シルエット（やや幅広） -->
+                <path d="M20,0 L20,10 Q20,30 45,45 Q70,30 70,10 L70,0 Z" fill="white"/>
+                <!-- 杯の脚 -->
+                <rect x="40" y="44" width="10" height="25" fill="white"/>
+                <!-- 杯の台座 -->
+                <rect x="30" y="68" width="30" height="8" fill="white"/>
+                <text x="45" y="110" text-anchor="middle" fill="#94a3b8" font-size="8">→杯が見える（白＝図）</text>
+
+                <!-- 白背景版（右）: 顔が「図」 -->
+                <rect x="110" y="0" width="90" height="120" fill="white"/>
+                <!-- 黒い領域（杯のシルエットと同形）= これが「地」になり、左右の黒が「顔」として浮かぶ -->
+                <path d="M130,0 L130,10 Q130,30 155,45 Q180,30 180,10 L180,0 Z" fill="#1e293b"/>
+                <rect x="150" y="44" width="10" height="25" fill="#1e293b"/>
+                <rect x="140" y="68" width="30" height="8" fill="#1e293b"/>
+                <!-- 左右の黒領域（顔のシルエット） -->
+                <rect x="110" y="0" width="20" height="75" fill="#1e293b"/>
+                <rect x="170" y="0" width="30" height="75" fill="#1e293b"/>
+                <text x="155" y="110" text-anchor="middle" fill="#475569" font-size="8">→顔が見える（黒＝図）</text>
+              </svg>
+              <p class="text-xs text-gray-400 mt-1">同じ輪郭でも「何が図で何が地か」で全く異なる対象が見える</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 主要概念・アーキテクチャ（詳細）-->
+  <section id="principles">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="layout-grid" class="w-5 h-5 text-indigo-500"></i> 主要概念・詳細
+    </h2>
+    <p class="text-sm text-gray-600 mb-5">各原則の定義・視覚デモ・実務での使い方・エンジニア向けのたとえ話を併記する。</p>
+
+    <div class="space-y-6">
+
+      <!-- 近接 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">01</span>
+          <h3 class="font-bold text-gray-800 text-base">近接の原則（Proximity）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">空間的に近い要素は同一グループとして知覚されやすい。余白・間隔のコントロールだけで、説明テキストなしにグループ構造を伝えられる。</p>
+        <div class="visual-demo mt-3">
+          <div class="flex justify-center gap-6 items-end">
+            <div class="text-center">
+              <div class="flex gap-0.5 mb-1">
+                <div class="dot bg-slate-400"></div><div class="dot bg-slate-400"></div>
+                <div style="width:16px"></div>
+                <div class="dot bg-slate-400"></div><div class="dot bg-slate-400"></div>
+                <div style="width:16px"></div>
+                <div class="dot bg-slate-400"></div><div class="dot bg-slate-400"></div>
+              </div>
+              <p class="text-xs text-gray-500">→ 3グループに見える</p>
+            </div>
+          </div>
+        </div>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話①：満員電車のグループ判定</strong><br>
+          <span class="text-xs text-gray-700">
+            見知らぬ人だらけの車内でも、隣り合わせに座った4人組は「一緒に来た人たち」と判断する。距離だけで「グループか否か」を決めているのが近接の原則。k-means法がユークリッド距離で点をクラスタに割り当てるのと同じロジックだ。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>フォームのラベルと入力欄の間隔を狭め、フィールド間の間隔を広げると「どのラベルがどの入力欄に対応するか」を文字なしで伝えられる。</p>
+      </div>
+
+      <!-- 類同 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">02</span>
+          <h3 class="font-bold text-gray-800 text-base">類同の原則（Similarity）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">色・形・大きさ・向きなど属性が似た要素は群化（グルーピング）されて見える。近接と競合することがあり、類同の方が強い場合と弱い場合がある。</p>
+        <div class="visual-demo mt-3">
+          <div class="flex justify-center flex-wrap gap-1">
+            <div class="dot bg-blue-500"></div><div class="dot bg-orange-400"></div><div class="dot bg-blue-500"></div><div class="dot bg-orange-400"></div>
+            <div class="dot bg-blue-500"></div><div class="dot bg-orange-400"></div><div class="dot bg-blue-500"></div><div class="dot bg-orange-400"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">等間隔でも「青チーム」「橙チーム」の2グループが見える</p>
+        </div>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話②：コサイン類似度による文書クラスタリング</strong><br>
+          <span class="text-xs text-gray-700">
+            文書検索では、単語のベクトル空間でコサイン類似度が高いドキュメントが「同じトピック」としてクラスタ化される。類同の原則も同じ構造で、色・形・大きさなどの「属性ベクトル」が似た要素を自動的にグループと見なす。近接①の「ユークリッド距離（位置の近さ）」ではなく、「属性空間の類似度」がグループの根拠になる点が異なる。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>データビジュアライゼーションで系列ごとに色を揃えると、凡例を見なくても「同じ系列か否か」が瞬時に分かる。</p>
+      </div>
+
+      <!-- 閉合 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs">03</span>
+          <h3 class="font-bold text-gray-800 text-base">閉合の原則（Closure）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">輪郭が欠けた形でも、閉じた全体として補完して知覚する。ロゴデザインで円や輪郭の一部を省略しても認識できるのはこの原則による。</p>
+        <div class="visual-demo mt-3">
+          <svg width="120" height="60" viewBox="0 0 120 60" class="mx-auto">
+            <!-- 欠けた円 -->
+            <path d="M 30,10 A 20,20 0 1 1 10,30" stroke="#3b82f6" stroke-width="3" fill="none"/>
+            <text x="30" y="55" text-anchor="middle" fill="#94a3b8" font-size="9">欠けた円</text>
+            <!-- 完全な円（脳の補完イメージ） -->
+            <circle cx="90" cy="30" r="20" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+            <text x="90" y="55" text-anchor="middle" fill="#94a3b8" font-size="9">脳が補完した形</text>
+          </svg>
+        </div>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話③：エラー訂正符号（ECC）</strong><br>
+          <span class="text-xs text-gray-700">
+            RAID や QR コードは一部データが欠損しても元のデータを復元できる。閉合の原則も同様で、輪郭の一部が欠けていても脳が「もとの形」を復元する。ただし生物的な補完はアルゴリズムではなく確率的な推論（どう閉じると「良い形」か）に基づく。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>Uber・IBM などの有名ロゴは閉合を意図的に利用。スクロールカードが画面端で少し見切れている（スクロール可能を示唆する）UIデザインにも使われる。</p>
+      </div>
+
+      <!-- 連続 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">04</span>
+          <h3 class="font-bold text-gray-800 text-base">連続の原則（Continuity / Good Continuation）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">なめらかに続く線や流れは、急に方向転換するものより「一本の経路」として知覚されやすい。交差する2本の曲線でも「2本の別々の曲線」として認識され、交差点で入れ替わるとは見えない。</p>
+        <div class="visual-demo mt-3">
+          <svg width="160" height="60" viewBox="0 0 160 60" class="mx-auto">
+            <path d="M0,30 Q80,5 160,30" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+            <path d="M0,10 Q80,55 160,10" stroke="#f97316" stroke-width="2.5" fill="none"/>
+            <text x="80" y="58" text-anchor="middle" fill="#94a3b8" font-size="9">交差しても「2本の曲線」に見える</text>
+          </svg>
+        </div>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話④：スプライン曲線の滑らかさ条件（C¹/C²連続）</strong><br>
+          <span class="text-xs text-gray-700">
+            ベジェ曲線同士をつなぐとき、接線方向（C¹連続）や曲率（C²連続）が一致していないと「折れ目」が見える。連続の原則も同様で、方向変化が滑らかな経路ほど「一本のつながり」として自然に追える。急な折れ目は「別の要素」の境界と知覚される。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>視線誘導（eye flow）のデザイン。折れ線グラフでなめらかなトレンドを示す際、連続の原則が読み取りを助ける一方、交差部での誤読も生む（後述の落とし穴参照）。</p>
+      </div>
+
+      <!-- 共通運命 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded text-xs">05</span>
+          <h3 class="font-bold text-gray-800 text-base">共通運命の原則（Common Fate）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">同じ方向・同じタイミングで動く要素はグループとして知覚される。静止画より<strong>アニメーション</strong>で特に強力に機能する原則だ。</p>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話⑤：時系列の相関係数が高い系列のクラスタリング</strong><br>
+          <span class="text-xs text-gray-700">
+            株価チャートで同じタイミングに同方向に動く系列は「同じ銘柄グループ（セクター）」に見える。これは時系列相関が高いクラスタが視覚的に「一緒に動くもの」として認識される共通運命と同じ現象。UIのローディングアニメーションが複数の要素を同期させると「一つのローダー」として見える。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>モーダルを開くときバックドロップと本体を同時にフェードさせると「セットの要素」として知覚される。ドラッグ可能なリスト要素で「一緒に動く」ものをグループとして示す。</p>
+      </div>
+
+      <!-- 図と地 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded text-xs">06</span>
+          <h3 class="font-bold text-gray-800 text-base">図と地の分離（Figure-Ground）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          視覚は常に「前景（図）」と「背景（地）」に分割される。図は「まとまった物体」として、地は「連続した背景」として知覚される。
+          デザインで意図した要素が「図」として見えない場合、ユーザーはその要素を「無視」する。
+        </p>
+        <div class="term-box">
+          <strong>図（Figure）</strong>：前景に見えるオブジェクト。輪郭を持ち、「物」として認識される側。<br>
+          <strong>地（Ground）</strong>：背景として見える領域。輪郭を持たず、「空間」として認識される側。
+        </div>
+        <div class="analogy-card mt-2">
+          <strong>たとえ話⑥：セマンティックセグメンテーション（CNN）</strong><br>
+          <span class="text-xs text-gray-700">
+            DeepLab などのセマンティックセグメンテーションは、画像の各ピクセルを「前景クラス」か「背景クラス」か（またはその他のクラス）に分類する。人間の視覚系も同様に、低レベルの輝度・色・テクスチャ情報から「どこが図でどこが地か」を高速に推論している。ただし人間の場合、学習・文脈・期待も推論に強く影響する。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>CTAボタン（Call To Action）は十分なコントラストと余白で「図」として際立たせる必要がある。背景画像上にテキストを置くと「地」との区別が曖昧になり読みにくい。</p>
+      </div>
+
+      <!-- プレグナンツ -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-purple-100 text-purple-700 font-bold px-2 py-0.5 rounded text-xs">07</span>
+          <h3 class="font-bold text-gray-800 text-base">プレグナンツの原則（Prägnanz / 良好形の法則）</h3>
+        </div>
+        <div class="term-box">
+          <strong>プレグナンツ（Prägnanz）</strong>：ドイツ語で「簡潔さ・明快さ」を意味する。英語では "Law of Prägnanz" または "Law of Good Form" と呼ばれる。他の原則の「上位原理」として位置づけられることが多い。
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          複数の解釈が可能な場合、人間は<strong>最もシンプルで対称・安定した「良い形（good form）」</strong>に落ち着く傾向がある。他のゲシュタルト原則すべてを包括する上位法則とも言える。
+        </p>
+        <div class="analogy-card mt-2">
+          <strong>たとえ話⑦：最小記述長（MDL）原理</strong><br>
+          <span class="text-xs text-gray-700">
+            情報理論の最小記述長（Minimum Description Length）原理は「データを最も短く記述できるモデルを選べ」というもの。プレグナンツの原則も「最も経済的（シンプル）な知覚解釈を優先する」という点で同じ構造だ。脳は複雑な説明より「単純な形のまとまり」という解釈を好む。
+          </span>
+        </div>
+      </div>
+
+      <!-- 対称性 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-teal-100 text-teal-700 font-bold px-2 py-0.5 rounded text-xs">08</span>
+          <h3 class="font-bold text-gray-800 text-base">対称性の原則（Symmetry）</h3>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">対称な形は「一つのまとまった図」として捉えやすい。対称軸を中心に要素が鏡像関係にあると、それらは同一グループ（一つのオブジェクト）として知覚される。また、複数の解釈が可能な場合、対称性の高い解釈が選ばれやすい（プレグナンツと連動）。</p>
+        <div class="visual-demo mt-3">
+          <svg width="200" height="60" viewBox="0 0 200 60" class="mx-auto">
+            <!-- 対称なブラケット群 -->
+            <text x="20" y="35" font-size="24" fill="#3b82f6">[ ]</text>
+            <text x="70" y="35" font-size="24" fill="#3b82f6">{ }</text>
+            <text x="120" y="35" font-size="24" fill="#3b82f6">( )</text>
+            <text x="100" y="55" text-anchor="middle" fill="#94a3b8" font-size="9">対称ペアは「1つの括弧」として見える</text>
+          </svg>
+        </div>
+        <div class="analogy-card mt-3">
+          <strong>たとえ話⑧：スタック上の対応する括弧（括弧の対応チェック）</strong><br>
+          <span class="text-xs text-gray-700">
+            コンパイラが「({[]})」の対応を取るとき、開き括弧と閉じ括弧のペアを「一つの構造」として解析する。対称性の原則は、人間の視覚が対称なペアを自動的に「一つのオブジェクト」として認識するのと同じ仕組みだ。対称が崩れると（例：`([)]`）違和感が生じ、「別々の要素が入り混じっている」と知覚される。
+          </span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2"><strong>実務応用：</strong>ダイアログボックスや確認モーダルで「キャンセル」「OK」ボタンを左右対称に配置すると「2つで一つの選択肢ペア」として見える。Webデザインの左右対称レイアウトが安定感・信頼感を与えるのも対称性の原則による。</p>
+      </div>
+
+      <!-- 共通領域・連結性 -->
+      <div class="principle-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-teal-100 text-teal-700 font-bold px-2 py-0.5 rounded text-xs">09–10</span>
+          <h3 class="font-bold text-gray-800 text-base">共通領域（Common Region）& 連結性（Connectedness）</h3>
+          <span class="badge">現代追加</span>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          <strong>共通領域</strong>：同じ枠や背景ブロックに囲まれた要素はグループ化されやすい。カードUIがその典型。<br>
+          <strong>連結性</strong>：視覚的に線などで接続された要素は、近接や類同より強くグループ化される。
+        </p>
+        <div class="visual-demo mt-2">
+          <div class="flex justify-center gap-4 text-xs">
+            <div class="border-2 border-blue-300 rounded-lg px-4 py-2 bg-blue-50">
+              <div class="flex gap-2">
+                <div class="dot bg-blue-400"></div><div class="dot bg-blue-400"></div>
+              </div>
+              <p class="text-gray-500 mt-1">共通領域（枠内 = グループ）</p>
+            </div>
+            <div class="flex items-center gap-1">
+              <div class="dot bg-orange-400"></div>
+              <div class="w-6 h-0.5 bg-orange-400"></div>
+              <div class="dot bg-orange-400"></div>
+              <p class="text-gray-500 ml-1">連結（線でつながる = グループ）</p>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          <strong>注：</strong>共通領域と連結性は古典の3人組が発表したものではなく、1980〜90年代以降に研究者が追加した原則。現代UIでは特に共通領域（カードUI）が多用される。
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. 落とし穴 -->
+  <section id="pitfalls">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-500"></i> 初心者がはまりやすい落とし穴
+    </h2>
+
+    <div class="space-y-4">
+      <div class="pitfall-card">
+        <h3 class="font-semibold text-orange-800 mb-1">落とし穴①：原則同士が競合したとき、どちらが「勝つ」か分からない</h3>
+        <p class="text-sm text-gray-700">近接でグループ化したい要素が、色の類同で「別グループ」に見えることがある。例：ラベルと入力欄は近接でペアのはずが、ラベルの色が別セクションの見出しと同じなら「同一グループ」に誤読される。</p>
+        <p class="text-sm text-blue-700 mt-1"><strong>回避策：</strong>一つのデザイン判断で複数の原則を「同じ方向」に使う（近接と共通領域を重ねる、など）。競合が生じたら実際のユーザーでテストする。</p>
+      </div>
+
+      <div class="pitfall-card">
+        <h3 class="font-semibold text-orange-800 mb-1">落とし穴②：連続の原則が折れ線グラフの誤読を引き起こす</h3>
+        <p class="text-sm text-gray-700">複数の折れ線が交差する部分で、脳は「交差しない方の経路」（より滑らかな経路）を優先して追う。2つの系列が交差点で「入れ替わって見える」誤読が起きやすい。</p>
+        <p class="text-sm text-blue-700 mt-1"><strong>回避策：</strong>交差しやすい系列は色・線種の両方で区別する（色だけでは色覚多様性対応も不十分）。系列ラベルを線の末端に直接配置する。</p>
+      </div>
+
+      <div class="pitfall-card">
+        <h3 class="font-semibold text-orange-800 mb-1">落とし穴③：原則の機械的な適用でタップ領域・可読性が犠牲になる</h3>
+        <p class="text-sm text-gray-700">「近接の原則だから要素を詰める」だけでモバイルのタップターゲットが 44pt を下回ることがある。原則は診断と意図の言語であり、ピクセル値のテンプレートではない。</p>
+        <p class="text-sm text-blue-700 mt-1"><strong>回避策：</strong>Apple HIG（Human Interface Guidelines：ヒューマンインタフェースガイドライン）/ Material Design のタップターゲット最小サイズ（44pt（iOS point：iOSの密度非依存ピクセル単位） / 48dp（Android density-independent pixels：密度非依存ピクセル））を下限として、その範囲内で近接を調整する。</p>
+      </div>
+
+      <div class="pitfall-card">
+        <h3 class="font-semibold text-orange-800 mb-1">落とし穴④：文化差・読み方向の違いを「普遍法則」で無視する</h3>
+        <p class="text-sm text-gray-700">LTR（Left-to-Right：左から右への記述方向）文化では自然な視線流れが右方向だが、RTL（Right-to-Left：右から左への記述方向、アラビア語・ヘブライ語など）圏では逆になる。連続の原則や視線誘導の「方向」が文化依存する。</p>
+        <p class="text-sm text-blue-700 mt-1"><strong>回避策：</strong>多言語対応プロダクトでは RTL 対応のレイアウトを別途検証する。</p>
+      </div>
+
+      <div class="pitfall-card">
+        <h3 class="font-semibold text-orange-800 mb-1">落とし穴⑤：「ゲシュタルト療法」と混同する</h3>
+        <p class="text-sm text-gray-700">「ゲシュタルト療法」は1950年代にフリッツ・パールズが創始した心理療法で、知覚心理学のゲシュタルト原則とは<strong>全く別の理論体系</strong>。「今・ここでの体験」を重視する療法であり、デザイン原則とは無関係。名前が似ているだけ。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 専門用語集 -->
+  <section id="glossary">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="book-open" class="w-5 h-5 text-gray-500"></i> 専門用語集
+    </h2>
+    <div class="space-y-3">
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">Gestalt（ゲシュタルト）</p>
+        <p class="text-xs text-gray-600">ドイツ語で「形・全体的な姿」。心理学では知覚が全体として組織化される性質を指す。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">群化（Perceptual Grouping）</p>
+        <p class="text-xs text-gray-600">個別の視覚要素が「まとまり」として知覚される現象。近接・類同・共通運命などが群化の手がかりとなる。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">Phi Phenomenon（ファイ現象 / 仮現運動）</p>
+        <p class="text-xs text-gray-600">実際には動いていない刺激が「動いて見える」現象。ゲシュタルト心理学の出発点となった実験現象。→ 共通運命の原則と関連。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">Prägnanz（プレグナンツ）</p>
+        <p class="text-xs text-gray-600">ドイツ語で「簡潔さ・明快さ」。最もシンプルで安定した解釈に落ち着く傾向を指す、他の原則の上位法則。→ 全原則に関連。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">Figure-Ground（図と地）</p>
+        <p class="text-xs text-gray-600">視覚を「前景（図）」と「背景（地）」に分ける知覚の分離プロセス。すべての視覚デザインの前提となる。→ プレグナンツと関連。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">CTA（Call To Action：行動喚起）</p>
+        <p class="text-xs text-gray-600">ユーザーに特定のアクション（購入・登録など）を促すボタンやリンク。図と地の原則で「図」として際立たせる設計が重要。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">HCI（Human-Computer Interaction：人間コンピュータ相互作用）</p>
+        <p class="text-xs text-gray-600">人間とコンピュータの相互作用を研究する学際領域。ゲシュタルト原則はHCI・UXデザインの基礎理論として広く参照される。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">MDL（Minimum Description Length：最小記述長）</p>
+        <p class="text-xs text-gray-600">データを最短で記述できるモデルを選ぶ情報理論の原理。プレグナンツの原則（最もシンプルな知覚解釈）と構造的に対応する概念。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">セマンティックセグメンテーション（Semantic Segmentation）</p>
+        <p class="text-xs text-gray-600">画像の各ピクセルをクラスに分類するコンピュータビジョンのタスク。人間の図と地の分離の計算機的な対応として比較されることがある。</p>
+      </div>
+      <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <p class="font-semibold text-sm text-gray-800">WCAG（Web Content Accessibility Guidelines：ウェブコンテンツアクセシビリティガイドライン）</p>
+        <p class="text-xs text-gray-600">W3C が定めるウェブアクセシビリティの国際標準。色だけに依存したグループ化はWCAGに反する場合があり、ゲシュタルト原則と組み合わせて設計する必要がある。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 次に学ぶと良いもの -->
+  <section id="next">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="arrow-right-circle" class="w-5 h-5 text-violet-500"></i> 次に学ぶと良いもの
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">認知心理学（Cognitive Psychology）</h3>
+        <p class="text-xs text-gray-600">ワーキングメモリ・チャンキング・注意の選択性など、ゲシュタルト原則が「なぜ働くのか」を神経・認知レベルで理解する。</p>
+      </div>
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">ヒューリスティック評価（Heuristic Evaluation）</h3>
+        <p class="text-xs text-gray-600">Nielsen の10原則などと組み合わせて、UIの問題点を構造的に発見する評価手法。ゲシュタルト原則は「一貫性・フィードバック可視化」のチェックと連動する。</p>
+      </div>
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">データビジュアライゼーション（Data Visualization）</h3>
+        <p class="text-xs text-gray-600">Edward Tufte の "The Visual Display of Quantitative Information" など。ゲシュタルト原則を定量データの表現に応用する実践的な学習。</p>
+      </div>
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">コンピュータビジョン（Computer Vision）</h3>
+        <p class="text-xs text-gray-600">エッジ検出（Canny）・セグメンテーション（SAM（Segment Anything Model：Meta AI が公開した汎用的セグメンテーションモデル）, DeepLab）。人間のゲシュタルト的知覚と計算機的アプローチの対応と差異を理解する。</p>
+      </div>
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">アクセシビリティ設計（a11y：Accessibility の a〜y 間の11文字を数字で省略したnumeronym）</h3>
+        <p class="text-xs text-gray-600">WCAG・色覚多様性・スクリーンリーダー対応。「色だけ」に依存したゲシュタルト的グループ化の限界と代替手段を学ぶ。</p>
+      </div>
+      <div class="principle-card">
+        <h3 class="font-semibold text-gray-800 text-sm mb-1">アテンション機構（Attention Mechanism）</h3>
+        <p class="text-xs text-gray-600">Transformer の注意重みと選択的注意の類比。人間の「図の際立ち」と deep learning の attention の異同を批判的に考察する出発点。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 参考文献 -->
+  <section id="refs">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="link" class="w-5 h-5 text-gray-400"></i> 参考文献・URL
+    </h2>
+    <ul class="space-y-3 text-sm">
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://www.nngroup.com/articles/principles-visual-design/" target="_blank" class="text-blue-600 hover:underline font-medium">Nielsen Norman Group — Principles of Visual Design</a>
+          <p class="text-gray-500 text-xs">UIデザインとゲシュタルト原則の概要。実務への適用事例が豊富。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://www.nngroup.com/articles/gestalt-proximity/" target="_blank" class="text-blue-600 hover:underline font-medium">Nielsen Norman Group — Gestalt Proximity</a>
+          <p class="text-gray-500 text-xs">近接の原則をUI設計に適用する具体的な解説。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://www.nngroup.com/articles/principle-closure/" target="_blank" class="text-blue-600 hover:underline font-medium">Nielsen Norman Group — Principle of Closure</a>
+          <p class="text-gray-500 text-xs">閉合の原則と実務への応用（ロゴ・カルーセルなど）。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://www.interaction-design.org/literature/topics/gestalt-principles" target="_blank" class="text-blue-600 hover:underline font-medium">Interaction Design Foundation — Gestalt Principles</a>
+          <p class="text-gray-500 text-xs">原則ごとの解説・図解が充実。入門から実践まで網羅的。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://www.figma.com/resource-library/gestalt-principles/" target="_blank" class="text-blue-600 hover:underline font-medium">Figma Resource Library — Gestalt Principles</a>
+          <p class="text-gray-500 text-xs">デザインツールの視点からゲシュタルト原則をまとめた実務向け資料。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="book" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <span class="font-medium text-gray-700">Kurt Koffka, <em>Principles of Gestalt Psychology</em>（1935）</span>
+          <p class="text-gray-500 text-xs">英語圏への普及に貢献したゲシュタルト心理学の古典的教科書。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="book" class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <span class="font-medium text-gray-700">Wolfgang Köhler, <em>Gestalt Psychology</em>（1947）</span>
+          <p class="text-gray-500 text-xs">物理脳過程と知覚経験の対応（同型説）を論じるケーラーの代表作。</p>
+        </div>
+      </li>
+      <li class="flex items-start gap-2">
+        <i data-lucide="external-link" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0"></i>
+        <div>
+          <a href="https://academic.oup.com/edited-volume/38175/chapter/333037805" target="_blank" class="text-blue-600 hover:underline font-medium">The Oxford Handbook of Perceptual Organization（章）</a>
+          <p class="text-gray-500 text-xs">ゲシュタルト革命の歴史的文脈を学術的に解説した章。</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="mt-16 border-t border-gray-200 py-6 text-center text-xs text-gray-400">
+  Techmap — ゲシュタルト原則 | 生成日: 2026-04-26
+</footer>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

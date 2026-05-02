@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>surge.sh — Techmap</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  @media print {
+    #pdf-btn, #toc-sidebar { display: none !important; }
+    section { break-inside: avoid; }
+  }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .term-box {
+    background: #f0f7ff;
+    border-left: 4px solid #3b82f6;
+    padding: 0.6rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+  .analogy-card {
+    background: #fefce8;
+    border: 1px solid #fbbf24;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+  .pitfall-card {
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    border-radius: 0 0.375rem 0.375rem 0;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+  }
+  .next-topic-tag {
+    display: inline-block;
+    background: #ede9fe;
+    color: #5b21b6;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.82rem;
+    margin: 0.25rem;
+  }
+  #toc-sidebar {
+    position: fixed;
+    top: 5rem;
+    right: 1.5rem;
+    width: 200px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    z-index: 100;
+    font-size: 0.78rem;
+  }
+  @media (max-width: 1280px) { #toc-sidebar { display: none; } }
+  .section-icon { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .arch-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  .arch-node { background: #dbeafe; border: 1.5px solid #3b82f6; border-radius: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.82rem; white-space: nowrap; }
+  .arch-node-green { background: #dcfce7; border: 1.5px solid #22c55e; border-radius: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.82rem; white-space: nowrap; }
+  .arch-node-purple { background: #ede9fe; border: 1.5px solid #8b5cf6; border-radius: 0.5rem; padding: 0.35rem 0.75rem; font-size: 0.82rem; white-space: nowrap; }
+  .arch-arrow { color: #94a3b8; font-size: 1.1rem; }
+  .badge { display: inline-block; background: #e0e7ff; color: #3730a3; border-radius: 9999px; padding: 0.15rem 0.6rem; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+  .badge-green { display: inline-block; background: #dcfce7; color: #166534; border-radius: 9999px; padding: 0.15rem 0.6rem; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+  .badge-orange { display: inline-block; background: #fed7aa; color: #9a3412; border-radius: 9999px; padding: 0.15rem 0.6rem; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+  }
+  .code-comment { color: #94a3b8; }
+  .code-cmd { color: #86efac; }
+  .code-arg { color: #fde68a; }
+  .pricing-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    background: #fff;
+  }
+  .pricing-card.featured { border-color: #3b82f6; box-shadow: 0 0 0 2px #dbeafe; }
+  .glossary-item {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 0.75rem 0;
+  }
+  .glossary-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- PDF Button -->
+<button id="pdf-btn" onclick="window.print()"
+  class="fixed bottom-6 right-6 z-50 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm hover:bg-blue-700 transition-colors">
+  <i data-lucide="file-text" class="w-4 h-4"></i> PDFで保存
+</button>
+
+<!-- TOC Sidebar -->
+<nav id="toc-sidebar">
+  <p class="font-bold text-gray-600 mb-2 text-xs uppercase tracking-wide">目次</p>
+  <ul class="space-y-1 text-gray-500">
+    <li><a href="#summary" class="hover:text-blue-600 block py-0.5">ひとことで言えば</a></li>
+    <li><a href="#history" class="hover:text-blue-600 block py-0.5">なぜ生まれたのか</a></li>
+    <li><a href="#core3" class="hover:text-blue-600 block py-0.5">まず理解する3つ</a></li>
+    <li><a href="#concepts" class="hover:text-blue-600 block py-0.5">主要概念・仕組み</a></li>
+    <li><a href="#custom-domain" class="hover:text-blue-600 block py-0.5">カスタムドメイン設定</a></li>
+    <li><a href="#pitfalls" class="hover:text-blue-600 block py-0.5">落とし穴</a></li>
+    <li><a href="#pricing" class="hover:text-blue-600 block py-0.5">料金プラン</a></li>
+    <li><a href="#glossary" class="hover:text-blue-600 block py-0.5">専門用語集</a></li>
+    <li><a href="#next" class="hover:text-blue-600 block py-0.5">次に学ぶもの</a></li>
+    <li><a href="#refs" class="hover:text-blue-600 block py-0.5">参考文献</a></li>
+  </ul>
+</nav>
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200 py-8 px-4">
+  <div class="max-w-3xl mx-auto">
+    <div class="flex items-center gap-3 mb-2">
+      <span class="text-xs font-semibold uppercase tracking-widest text-blue-500">Techmap</span>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-1">surge.sh</h1>
+    <p class="text-gray-500 text-sm">静的ファイルをコマンド一発でCDN公開する、フロントエンド向けホスティングサービス</p>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 py-10 space-y-14">
+
+  <!-- 1. ひとことで言えば -->
+  <section id="summary">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="zap" class="w-5 h-5 text-blue-500"></i> ひとことで言えば
+    </h2>
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5">
+      <p class="text-lg font-semibold text-blue-900 mb-2">
+        「<code>npx surge dist/ myapp.surge.sh</code>」の一行で、ビルド済みHTMLをHTTPS付きのCDNに公開できる静的ホスティングサービス。
+      </p>
+      <p class="text-gray-700 text-sm">
+        サーバー管理・DNS設定・SSL証明書の取得——これらを一切意識せず、<strong>ローカルのフォルダ</strong>をそのまま全世界に公開する体験を提供する。対象は<strong>HTML/CSS/JS/画像などの静的ファイルのみ</strong>で、PHPやNode.jsのサーバーサイド処理は動かない。
+      </p>
+    </div>
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+      <div class="bg-white border rounded-lg p-3 flex gap-2 items-start">
+        <i data-lucide="target" class="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0"></i>
+        <div><span class="font-semibold block">対象読者</span>フロントエンドエンジニア・デモ公開を急ぐ開発者</div>
+      </div>
+      <div class="bg-white border rounded-lg p-3 flex gap-2 items-start">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0"></i>
+        <div><span class="font-semibold block">得意なこと</span>静的ファイルの即時公開・プロトタイプ共有</div>
+      </div>
+      <div class="bg-white border rounded-lg p-3 flex gap-2 items-start">
+        <i data-lucide="x-circle" class="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0"></i>
+        <div><span class="font-semibold block">できないこと</span>サーバーサイド処理・DB・サーバーレス関数</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. なぜ生まれたのか -->
+  <section id="history">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="clock" class="w-5 h-5 text-blue-500"></i> なぜ生まれたのか
+    </h2>
+    <p class="text-gray-700 mb-3">
+      2015年、<strong>Chloi Inc.</strong>（Harpなど静的サイトツールを手がけるチーム）が公開した。当時のフロントエンド開発では、<strong>Grunt・Gulp・Browserify・npm scripts</strong>（2015年当時主流だったJavaScriptビルドツール群）によるビルドフローが成熟しつつあったが、「<strong>そのビルド成果物を本番品質のCDNに出す手段</strong>」が整っていなかった。
+    </p>
+    <div class="bg-gray-50 border rounded-lg p-4 mb-3">
+      <p class="font-semibold text-gray-800 mb-2 text-sm">既存の代替手段の不満点（2015年当時）</p>
+      <ul class="text-sm text-gray-700 space-y-1.5">
+        <li class="flex gap-2"><i data-lucide="alert-circle" class="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i><span><strong>GitHub Pages</strong>：Gitリポジトリとの結合が前提。任意フォルダを今すぐ出す使い方には弱い</span></li>
+        <li class="flex gap-2"><i data-lucide="alert-circle" class="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i><span><strong>Amazon S3</strong>：バケット設定・IAM・CloudFront設定が必要で手数が多い</span></li>
+        <li class="flex gap-2"><i data-lucide="alert-circle" class="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5"></i><span>クライアントサイドルーティング（SPA）の <strong>404フォールバック</strong> や <strong>PushState</strong> 対応が手動設定必須</span></li>
+      </ul>
+    </div>
+    <p class="text-gray-700 mb-3">
+      Surgeが解決したのは、<strong>クリーンURL・404カスタム・SPA対応・Gzip・CDN配信・HTTPS</strong>を、コマンド一発のワークフローに凝縮することだった。思想的背景として、創業者はCordova（PhoneGap）の共同開発者でもあり、<strong>オープンWeb</strong>へのコミットメントが公式に明記されている。
+    </p>
+    <div class="arch-flow py-3">
+      <div class="arch-node">npm run build</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node-green">surge dist/</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node-purple">Surge CDN</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">ブラウザ</div>
+    </div>
+    <p class="text-center text-xs text-gray-400 mt-1">ビルド → デプロイ → 配信の最小ワークフロー</p>
+  </section>
+
+  <!-- 3. まず理解する3つ -->
+  <section id="core3">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="list-ordered" class="w-5 h-5 text-blue-500"></i> まず理解する3つ
+    </h2>
+    <p class="text-sm text-gray-500 mb-4">この3点を押さえれば、surge.shの実用は9割カバーできる。</p>
+    <div class="space-y-4">
+      <div class="bg-white border-l-4 border-blue-500 rounded-r-xl p-4 shadow-sm">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+          <span class="font-bold text-gray-900">コマンド一発でデプロイできる</span>
+        </div>
+        <p class="text-sm text-gray-700 pl-8"><code class="bg-gray-100 px-1 rounded">npx surge [フォルダ] [ドメイン]</code> で完結する。gitリポジトリが不要で、アカウント登録後は任意のフォルダを指定して即公開できる。</p>
+      </div>
+      <div class="bg-white border-l-4 border-blue-500 rounded-r-xl p-4 shadow-sm">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+          <span class="font-bold text-gray-900">静的ファイルしかホストできない</span>
+        </div>
+        <p class="text-sm text-gray-700 pl-8">HTML・CSS・JS・画像のみ対象。Node.js/PHP/Pythonのサーバープロセスは起動できない。<strong>「クライアントで完結するアプリケーション」</strong>が使用前提となる。</p>
+      </div>
+      <div class="bg-white border-l-4 border-blue-500 rounded-r-xl p-4 shadow-sm">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+          <span class="font-bold text-gray-900">SPAは <code>200.html</code> が必要</span>
+        </div>
+        <p class="text-sm text-gray-700 pl-8">React Router等で <code>/user/123</code> のような深いURLを直打ちすると、デフォルトでは404になる。<code>200.html</code>（<code>index.html</code>のコピー）を置くと全URLをキャッチオールでき、SPAが正常動作する。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 主要概念・仕組み -->
+  <section id="concepts">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="cpu" class="w-5 h-5 text-blue-500"></i> 主要概念・アーキテクチャ
+    </h2>
+
+    <!-- 基本ワークフロー -->
+    <h3 class="font-bold text-gray-800 mt-6 mb-3">基本ワークフローとCLIコマンド</h3>
+    <p class="text-sm text-gray-600 mb-2">以下のコードが行うこと：surge CLIのインストールから、デプロイ・削除までの主要コマンド</p>
+    <div class="code-block">
+      <span class="code-comment"># インストール（グローバル）</span><br>
+      <span class="code-cmd">npm install -g surge</span><br><br>
+      <span class="code-comment"># 初回：アカウント作成を促すプロンプトが出る</span><br>
+      <span class="code-cmd">surge</span><br><br>
+      <span class="code-comment"># 特定フォルダ・ドメインを指定してデプロイ</span><br>
+      <span class="code-cmd">surge</span> <span class="code-arg">dist/ myapp.surge.sh</span><br><br>
+      <span class="code-comment"># npx でインストール不要（CI/スクリプトに向く）</span><br>
+      <span class="code-cmd">npx --yes surge</span> <span class="code-arg">dist/ myapp.surge.sh</span><br><br>
+      <span class="code-comment"># 公開サイト一覧</span><br>
+      <span class="code-cmd">surge list</span><br><br>
+      <span class="code-comment"># サイトを削除</span><br>
+      <span class="code-cmd">surge teardown myapp.surge.sh</span>
+    </div>
+
+    <div class="term-box">
+      <strong>CLI（Command Line Interface：コマンドライン インターフェース）</strong><br>
+      ターミナル（黒い画面）からテキストコマンドでツールを操作する仕組み。GUIとは対称的で、自動化・CI組み込みに適している。
+    </div>
+
+    <!-- CDN内部構造 -->
+    <h3 class="font-bold text-gray-800 mt-8 mb-3">Surge CDNの内部構造：どうファイルが届くのか</h3>
+    <p class="text-gray-700 text-sm mb-3">
+      Surgeは商用CDNに依存せず、<strong>自前のSurge CDN</strong>を構築・運用している（公式: "About the Surge CDN"）。ファイルのアップロード時に各ファイルへ<strong>ETag（Entity Tag：エンティティ タグ）</strong>と呼ばれる識別子が付与され、世界10リージョンのエッジノードへ配信される。
+    </p>
+    <div class="arch-flow py-3 gap-2">
+      <div class="text-center">
+        <div class="arch-node">ローカル<br><span class="text-xs text-gray-500">dist/ フォルダ</span></div>
+      </div>
+      <span class="arch-arrow">→</span>
+      <div class="text-center">
+        <div class="arch-node-green">surge upload<br><span class="text-xs text-gray-600">ETag付与・差分検出</span></div>
+      </div>
+      <span class="arch-arrow">→</span>
+      <div class="text-center">
+        <div class="arch-node-purple">Surge CDN<br><span class="text-xs text-gray-600">10リージョン</span></div>
+      </div>
+      <span class="arch-arrow">→</span>
+      <div class="text-center">
+        <div class="arch-node">ブラウザ<br><span class="text-xs text-gray-500">最寄りエッジから取得</span></div>
+      </div>
+    </div>
+    <p class="text-center text-xs text-gray-400 mt-1">ETagを使った差分アップロード→エッジ配信の流れ</p>
+
+    <div class="term-box mt-4">
+      <strong>CDN（Content Delivery Network：コンテンツ デリバリー ネットワーク）</strong><br>
+      地理的に分散した複数のサーバー（エッジノード）からコンテンツを配信するネットワーク。ユーザーの最寄りノードから応答するため、レイテンシが低減する。
+    </div>
+    <div class="term-box">
+      <strong>ETag（Entity Tag：エンティティ タグ）</strong><br>
+      HTTPヘッダの一種。リソースの特定バージョンを識別するハッシュ値的な文字列。ブラウザが保持しており、次回リクエスト時に「手元のバージョンが最新か」をサーバーに確認できる。ファイルが変わっていなければ本体を再送しない（304 Not Modified）。
+    </div>
+
+    <!-- Lucid Caching -->
+    <h3 class="font-bold text-gray-800 mt-8 mb-3">Lucid Caching：自動キャッシュ戦略</h3>
+    <p class="text-gray-700 text-sm mb-3">
+      Surgeは<strong>Lucid Caching</strong>と呼ぶキャッシュ制御を自動で適用する。ファイルの内容変化をETagで検出し、変わっていないファイルは再配信しない。変わった場合は新しいETagで配信する。加えて、静的アセット（JS・CSS等）には<strong>Far-future Expires</strong>ヘッダ（長期キャッシュ）を付与し、GZip圧縮で転送量を削減する。
+    </p>
+
+    <!-- アナロジー -->
+    <h3 class="font-bold text-gray-800 mt-8 mb-2">たとえ話で理解する</h3>
+
+    <div class="analogy-card">
+      <div class="flex gap-2 items-start">
+        <i data-lucide="mail" class="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>たとえ1：手紙をポストに投函する</strong><br>
+          <span class="text-sm text-gray-700"><code>surge</code>コマンドを叩くのは、書いた手紙（HTMLファイル群）をポストに投函するようなもの。投函後は郵便局（Surge CDN）が各地の配達拠点（エッジノード）へ仕分けして届ける。宛先（ドメイン）は自分で書く。手紙の内容を変えたければ新しい手紙を投函するだけで、古い手紙は自動で差し替わる。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analogy-card">
+      <div class="flex gap-2 items-start">
+        <i data-lucide="phone-call" class="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>たとえ2：200.html＝ビルの交換台オペレーター</strong><br>
+          <span class="text-sm text-gray-700">SPAで<code>200.html</code>を置かない場合、「101号室に来てください」という案内（URL）でビルを訪れた来客が「そんな部屋はない」と玄関で追い返される状態になる。<code>200.html</code>は「どの部屋番号で来ても、まずロビー（index.html）に通す交換台オペレーター」として機能する。部屋割り（ルーティング）は入館後にJavaScriptが判断する。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analogy-card">
+      <div class="flex gap-2 items-start">
+        <i data-lucide="package" class="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>たとえ3：ETag＝商品の「品番シール」照合</strong><br>
+          <span class="text-sm text-gray-700">ブラウザはファイルを受け取る際に、サーバーが発行した「品番シール」（ETag文字列）を手帳（キャッシュ）に控えておく。次回アクセス時、「この品番のものが手元にあるが、まだ最新か？」とサーバーに問い合わせる（<code>If-None-Match</code>ヘッダ）。品番が変わっていなければ「それが最新です（304）」と返すだけで本体を再送しない。ファイルの内容が変わった時だけ新しい品番で本体を再送する。これがLucid Cachingの核心動作。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analogy-card">
+      <div class="flex gap-2 items-start">
+        <i data-lucide="shield-off" class="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>たとえ4：.surgeignore＝「持出禁止リスト」</strong><br>
+          <span class="text-sm text-gray-700">機密書類を会議室の外に持ち出さないためのルールシートと同じ構造。<code>.surgeignore</code>に書いたファイルはアップロード対象から除外される。<code>.git/</code>・<code>node_modules/</code>・<code>.env</code>などを明示しないと<strong>APIキーや開発ログが丸ごと公開される</strong>リスクがある。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 特殊ファイル -->
+    <h3 class="font-bold text-gray-800 mt-8 mb-3">挙動を制御する特殊ファイル</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="text-left p-2 border border-gray-200 font-semibold">ファイル名</th>
+            <th class="text-left p-2 border border-gray-200 font-semibold">役割</th>
+            <th class="text-left p-2 border border-gray-200 font-semibold">使いどころ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bg-white">
+            <td class="p-2 border border-gray-200 font-mono text-blue-700">200.html</td>
+            <td class="p-2 border border-gray-200">全URLを200として返すキャッチオール</td>
+            <td class="p-2 border border-gray-200">SPAでReact Router等を使う場合</td>
+          </tr>
+          <tr class="bg-gray-50">
+            <td class="p-2 border border-gray-200 font-mono text-blue-700">404.html</td>
+            <td class="p-2 border border-gray-200">カスタム404ページ</td>
+            <td class="p-2 border border-gray-200">存在しないURLへのアクセス時</td>
+          </tr>
+          <tr class="bg-white">
+            <td class="p-2 border border-gray-200 font-mono text-blue-700">CNAME</td>
+            <td class="p-2 border border-gray-200">デプロイ先ドメインを記憶させる</td>
+            <td class="p-2 border border-gray-200">再デプロイ時に毎回ドメインを打たなくて済む</td>
+          </tr>
+          <tr class="bg-gray-50">
+            <td class="p-2 border border-gray-200 font-mono text-blue-700">.surgeignore</td>
+            <td class="p-2 border border-gray-200">アップロード除外ファイルを指定</td>
+            <td class="p-2 border border-gray-200">秘密情報・開発専用ファイルの除外</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- カスタムドメイン -->
+    <h3 id="custom-domain" class="font-bold text-gray-800 mt-8 mb-3">カスタムドメインの設定方法</h3>
+    <p class="text-gray-700 text-sm mb-3">
+      カスタムドメインは無料プランでも使用できる。DNS設定とSurge側の指定の2ステップで完了する。
+    </p>
+    <div class="overflow-x-auto mb-3">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="text-left p-2 border border-gray-200 font-semibold">ステップ</th>
+            <th class="text-left p-2 border border-gray-200 font-semibold">作業</th>
+            <th class="text-left p-2 border border-gray-200 font-semibold">具体的な設定値（例）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="bg-white">
+            <td class="p-2 border border-gray-200">①DNS設定</td>
+            <td class="p-2 border border-gray-200">ドメインレジストラのDNS管理でCNAMEを追加</td>
+            <td class="p-2 border border-gray-200 font-mono text-xs"><code>www</code> → <code>na-west1.surge.sh</code></td>
+          </tr>
+          <tr class="bg-gray-50">
+            <td class="p-2 border border-gray-200">②Surge側</td>
+            <td class="p-2 border border-gray-200">デプロイ時にカスタムドメインを指定</td>
+            <td class="p-2 border border-gray-200 font-mono text-xs"><code>surge dist/ www.example.com</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-gray-600 mb-2">以下のコードが行うこと：CNAMEファイルにドメインを書いておくことで、次回以降のデプロイでドメイン指定を省略できる</p>
+    <div class="code-block">
+      <span class="code-comment"># dist/CNAMEファイルにドメインを書く</span><br>
+      <span class="code-cmd">echo</span> <span class="code-arg">www.example.com</span> &gt; dist/CNAME<br><br>
+      <span class="code-comment"># 以降はドメイン指定なしでデプロイ可（CNAMEから自動読み込み）</span><br>
+      <span class="code-cmd">surge dist/</span>
+    </div>
+    <div class="term-box">
+      <strong>CNAME（Canonical Name：正規名）レコード</strong>の補足<br>
+      surgeの場合、CNAMEレコードの向け先（surgeのホスト名）は<code>na-west1.surge.sh</code>が一般的に使われているが、最新の推奨値は <a href="https://surge.sh/help/adding-a-custom-domain" class="text-blue-600 underline" target="_blank">公式ドキュメント</a> で確認すること。<strong>Apex（ルート）ドメイン</strong>（例: <code>example.com</code> そのもの、<code>www</code>なし）の場合はCNAMEではなくAレコードが必要なケースもある。
+    </div>
+
+    <!-- CI連携 -->
+    <h3 class="font-bold text-gray-800 mt-8 mb-3">CI/CDへの組み込み</h3>
+    <p class="text-sm text-gray-700 mb-2">以下のコードが行うこと：GitHub ActionsからSurgeへ自動デプロイする設定例</p>
+    <div class="code-block">
+      <span class="code-comment"># .github/workflows/deploy.yml（抜粋）</span><br>
+      - name: Deploy to Surge<br>
+      &nbsp;&nbsp;env:<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;SURGE_LOGIN: <span class="code-arg">${{ secrets.SURGE_LOGIN }}</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;SURGE_TOKEN: <span class="code-arg">${{ secrets.SURGE_TOKEN }}</span><br>
+      &nbsp;&nbsp;run: <span class="code-cmd">npx --yes surge dist/ myapp.surge.sh</span>
+    </div>
+    <p class="text-sm text-gray-600 mt-2">
+      <code>SURGE_LOGIN</code>（メールアドレス）と<code>SURGE_TOKEN</code>をリポジトリのSecretsに登録することで、対話なしに自動デプロイできる。
+      <code>--yes</code>フラグはCLIの対話プロンプト（「このフォルダでよいか？」等の確認）を自動的にスキップするためのオプションで、CI環境では必須。
+    </p>
+    <p class="text-sm text-gray-700 mt-2 font-semibold">SURGE_TOKENの取得方法：</p>
+    <div class="code-block">
+      <span class="code-comment"># ログイン済みの状態でトークンを表示</span><br>
+      <span class="code-cmd">surge token</span><br>
+      <span class="code-comment"># → 表示された文字列をGitHub Secrets の SURGE_TOKEN に登録</span>
+    </div>
+
+    <div class="term-box">
+      <strong>SPA（Single Page Application：シングル ページ アプリケーション）</strong><br>
+      単一のHTMLファイルを読み込んだ後、JavaScriptがDOMを動的に書き換えてページ遷移をエミュレートするアーキテクチャ。React・Vue・Angularで一般的。URLの変化はPushState APIで実現し、サーバーへの追加リクエストを発生させない。
+    </div>
+
+    <div class="term-box">
+      <strong>PushState API</strong><br>
+      ブラウザのHistory APIの一部。JavaScriptからURLバーの表示を変更できる（ページリロードなし）。<code>history.pushState()</code>で実現。SPAのルーティングの根幹を支える。
+    </div>
+  </section>
+
+  <!-- 5. 落とし穴 -->
+  <section id="pitfalls">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="alert-triangle" class="w-5 h-5 text-orange-500"></i> 初心者がはまりやすい落とし穴
+    </h2>
+
+    <div class="pitfall-card">
+      <div class="flex items-start gap-2">
+        <i data-lucide="x-circle" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>SPA の深いURLが 404 になる</strong>
+          <p class="text-sm text-gray-700 mt-1"><strong>状況</strong>：React Routerで <code>/user/123</code> にリンクして共有したら、相手が直打ちすると404になる。<br><strong>原因</strong>：Surgeはデフォルトでリクエストパスに対応するファイルを探す。<code>/user/123.html</code>が存在しないため404を返す。<br><strong>対策</strong>：<code>index.html</code>を<code>200.html</code>にコピーして一緒にアップロードする。<code>cp dist/index.html dist/200.html</code> をビルドスクリプトに追加。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pitfall-card">
+      <div class="flex items-start gap-2">
+        <i data-lucide="x-circle" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>更新が反映されない（キャッシュ問題）</strong>
+          <p class="text-sm text-gray-700 mt-1"><strong>状況</strong>：<code>surge</code>を実行して「アップロード完了」と表示されたのに、ブラウザを開くと古い表示のまま。<br><strong>原因</strong>：Lucid Cachingで強いキャッシュが付いている。ETagが変わっていないとブラウザは手元のキャッシュを使い続ける。<br><strong>対策</strong>：ブラウザのハードリロード（Ctrl+Shift+R）か、シークレットウィンドウで確認。また、JSやCSSのファイル名にコンテンツハッシュ（<code>app.abc123.js</code>のような命名）を含めるビルド設定が根本的な解決策。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pitfall-card">
+      <div class="flex items-start gap-2">
+        <i data-lucide="x-circle" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>秘密情報が公開される</strong>
+          <p class="text-sm text-gray-700 mt-1"><strong>状況</strong>：<code>surge .</code>（カレントディレクトリ全体）を実行したら、<code>.env</code>ファイルが公開されてAPIキーが漏洩した。<br><strong>原因</strong>：デフォルトで<code>.git/</code>・<code>node_modules/</code>は除外されるが、<code>.env</code>は除外されない。<br><strong>対策</strong>：<code>.surgeignore</code>に<code>.env</code>・<code>*.pem</code>・秘密情報を含むファイルを明示的に追加する。ビルド成果物のみのフォルダ（<code>dist/</code>や<code>build/</code>）を対象にするのがベストプラクティス。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pitfall-card">
+      <div class="flex items-start gap-2">
+        <i data-lucide="x-circle" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong>カスタムドメインの独自SSLは無料ではない</strong>
+          <p class="text-sm text-gray-700 mt-1"><strong>誤解</strong>：「カスタムドメインが無料ならHTTPSも当然ついてくる」と思ったが、独自ドメインでの本格的なSSL証明書・HTTP→HTTPS強制は有料プラン（Surge Professional）が必要。<br><strong>実態</strong>：<code>*.surge.sh</code>サブドメインはBasic SSLで無料HTTPS対応。独自ドメインの厳格なTLS運用には月額 $30 のプロプランが必要。プロトタイプ・内部共有なら<code>surge.sh</code>サブドメインで十分なケースが多い。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pitfall-card">
+      <div class="flex items-start gap-2">
+        <i data-lucide="x-circle" class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5"></i>
+        <div>
+          <strong><code>surge teardown</code>が期待通りに動かないことがある</strong>
+          <p class="text-sm text-gray-700 mt-1"><strong>状況</strong>：<code>surge teardown myapp.surge.sh</code>を実行しても、しばらくはURLにアクセスできる・エラーが出る、といった報告が <a href="https://github.com/sintaxi/surge/issues" class="text-blue-600 underline" target="_blank">GitHub Issuesに複数存在する</a>。<br><strong>原因</strong>：CDNキャッシュの伝播（プロパゲーション）には時間がかかる。コマンドの完了≠全エッジノードへの削除反映ではない。<br><strong>対策</strong>：削除は「一度で確実」と過信しないこと。数分待ってからシークレットウィンドウで確認する。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 料金プラン -->
+  <section id="pricing">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="credit-card" class="w-5 h-5 text-blue-500"></i> 料金プラン
+    </h2>
+    <p class="text-sm text-gray-500 mb-4">2026年4月現在。詳細・最新情報は <a href="https://surge.sh/pricing" class="text-blue-600 underline" target="_blank">surge.sh/pricing</a> で確認のこと。</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="pricing-card">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="badge-green">無料</span>
+          <span class="font-bold text-gray-900">Surge（フリー）</span>
+        </div>
+        <ul class="text-sm text-gray-700 space-y-2">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>プロジェクト数無制限</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>カスタムドメイン（無制限）</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i><code>*.surge.sh</code>のBasic SSL（HTTPS）</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>CDN配信・Gzip・クリーンURL</li>
+          <li class="flex gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400 flex-shrink-0"></i>独自ドメインのSSL証明書</li>
+          <li class="flex gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400 flex-shrink-0"></i>HTTP→HTTPS強制リダイレクト</li>
+          <li class="flex gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400 flex-shrink-0"></i>カスタムリダイレクト・CORS設定</li>
+          <li class="flex gap-2"><i data-lucide="x" class="w-4 h-4 text-red-400 flex-shrink-0"></i>パスワード保護</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="badge">$30/月</span>
+          <span class="font-bold text-gray-900">Surge Professional</span>
+        </div>
+        <ul class="text-sm text-gray-700 space-y-2">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>無料プランの全機能</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>独自ドメインのカスタムSSL証明書</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>HTTP→HTTPS強制リダイレクト</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>カスタムリダイレクトルール</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>CORSヘッダのカスタム設定</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>パスワード保護</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>コラボレーター機能</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-gray-700 mb-3">
+      <strong>注意：</strong>公式の料金ページには月間転送量・1ファイルサイズ・総ストレージの上限が明記されていない（2026年4月現在）。個人の学習・プロトタイプ共有では実質制限に達しないが、大規模なアセットを含むサービスで無料運用する場合は実際の挙動を確認すること。「なぜ無料なのか」は <a href="https://surge.sh/help/why-is-surge-free" class="text-blue-600 underline" target="_blank">Why is Surge free?</a> に背景が記述されている。
+    </div>
+    <div class="bg-gray-50 border rounded-lg p-4 text-sm text-gray-700">
+      <strong>コスト感の目安：</strong>プロトタイプの社内共有・デモ・学習用途なら<strong>無料プランで十分</strong>。本番投入・独自ドメインでHTTPS必須の場合は、NetlifyやCloudflare Pagesとも比較検討する価値がある（いずれも独自SSL無料のプランあり）。
+    </div>
+  </section>
+
+  <!-- 7. 専門用語集 -->
+  <section id="glossary">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="book-open" class="w-5 h-5 text-blue-500"></i> 専門用語集
+    </h2>
+    <div class="bg-white border rounded-xl p-4 divide-y divide-gray-100">
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">CDN（Content Delivery Network：コンテンツ デリバリー ネットワーク）</span>
+        <p class="text-sm text-gray-600 mt-0.5">地理的に分散した複数のエッジサーバーからコンテンツを配信する仕組み。ユーザーに近いサーバーが応答するためレイテンシが低い。→関連: エッジノード、Lucid Caching</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">CLI（Command Line Interface：コマンドライン インターフェース）</span>
+        <p class="text-sm text-gray-600 mt-0.5">ターミナルからテキストコマンドで操作するインターフェース。Surge CLIは<code>npm install -g surge</code>で入れる。→関連: npx、CI/CD</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">SPA（Single Page Application：シングル ページ アプリケーション）</span>
+        <p class="text-sm text-gray-600 mt-0.5">単一HTMLを読み込んでJavaScriptがDOMを動的に書き換えるアーキテクチャ。URLはPushState APIで変化させる。Surgeでは<code>200.html</code>が必要。→関連: PushState、200.html</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">ETag（Entity Tag：エンティティ タグ）</span>
+        <p class="text-sm text-gray-600 mt-0.5">HTTPレスポンスヘッダ。リソースのバージョン識別子。ブラウザは次回リクエスト時にETagをサーバーに送り、変化がなければ304（Not Modified）で本体を再送しない。→関連: Lucid Caching、キャッシュ</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">Lucid Caching</span>
+        <p class="text-sm text-gray-600 mt-0.5">SurgeのCDNが採用するキャッシュ制御戦略。ETagによる差分検出・Far-future Expiresヘッダ・Gzip圧縮を組み合わせる。→関連: ETag、CDN</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">200.html</span>
+        <p class="text-sm text-gray-600 mt-0.5">Surge固有の特殊ファイル。このファイルが存在すると、マッチするファイルが見つからないURLすべてに対してHTTP 200でこのファイルを返す（キャッチオール）。SPAのクライアントサイドルーティングで必須。→関連: SPA、PushState</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">CNAME（Canonical Name：正規名）</span>
+        <p class="text-sm text-gray-600 mt-0.5">①DNSレコードの一種。ドメインを別のドメイン（エイリアス）に解決する。カスタムドメイン設定で使用。②Surgeプロジェクト内の<code>CNAME</code>ファイル：デプロイ先ドメインを記憶させ、再デプロイ時に省略可能にする。</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">静的ホスティング（Static Hosting）</span>
+        <p class="text-sm text-gray-600 mt-0.5">サーバーがHTMLやファイルをそのまま配信するモデル。PHPやNode.jsのようなサーバーサイド処理は行わない。ビルド済みの成果物を配信するJamstackアーキテクチャの基盤。→関連: Jamstack</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">npx</span>
+        <p class="text-sm text-gray-600 mt-0.5">npmに同梱されたコマンド実行ツール。パッケージをグローバルインストールせずに一時実行できる（<code>npx surge</code>など）。CI環境での利用に向く。→関連: CLI、CI/CD</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">クリーンURL（Clean URL）</span>
+        <p class="text-sm text-gray-600 mt-0.5">URLに拡張子を含めない表記スタイル。<code>/about.html</code>ではなく<code>/about</code>のようにアクセスできる状態。SurgeはデフォルトでクリーンURLに対応しており、<code>about.html</code>が存在すれば<code>/about</code>でもアクセスできる。→関連: 静的ホスティング</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">Far-future Expires（長期Expiresヘッダ）</span>
+        <p class="text-sm text-gray-600 mt-0.5">HTTPレスポンスヘッダの一種。ブラウザに「このリソースは非常に長期間（例：1年後まで）有効」と伝え、期間内は再リクエストなしにキャッシュを使わせる。`Cache-Control: max-age=31536000`として表現されることが多い。Surgeは静的アセットに自動で適用する。→関連: Lucid Caching、ETag</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">Jamstack</span>
+        <p class="text-sm text-gray-600 mt-0.5">JavaScript・API・Markupの頭文字。事前ビルド済み静的ファイル＋外部APIの組み合わせでWebアプリを構成するアーキテクチャ思想。Surgeはその配信層（ホスティング）を担う。→関連: 静的ホスティング、CDN</p>
+      </div>
+      <div class="glossary-item">
+        <span class="font-semibold text-gray-900">CORS（Cross-Origin Resource Sharing：クロス オリジン リソース シェアリング）</span>
+        <p class="text-sm text-gray-600 mt-0.5">異なるオリジン（ドメイン）間のリソース共有を制御するHTTP仕組み。CORSヘッダのカスタム設定はSurge Professionalで可能。→関連: HTTP、セキュリティ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 次に学ぶもの -->
+  <section id="next">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="arrow-right-circle" class="w-5 h-5 text-blue-500"></i> 次に学ぶと良いもの
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 text-sm">代替・比較サービス</p>
+        <div>
+          <span class="next-topic-tag">Netlify</span>
+          <span class="next-topic-tag">Vercel</span>
+          <span class="next-topic-tag">Cloudflare Pages</span>
+          <span class="next-topic-tag">GitHub Pages</span>
+          <span class="next-topic-tag">AWS S3 + CloudFront</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Git連携・サーバーレス関数・ビルドプラットフォームが必要になったら移行を検討</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 text-sm">CI/CD・自動化</p>
+        <div>
+          <span class="next-topic-tag">GitHub Actions</span>
+          <span class="next-topic-tag">環境変数とSecrets管理</span>
+          <span class="next-topic-tag">npm scripts</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">SURGE_TOKEN + GitHub Actionsで自動デプロイパイプラインを構築</p>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 text-sm">アーキテクチャ・概念</p>
+        <div>
+          <span class="next-topic-tag">Jamstack</span>
+          <span class="next-topic-tag">CDNとエッジコンピューティング</span>
+          <span class="next-topic-tag">DNS・CNAMEとAレコード</span>
+          <span class="next-topic-tag">HTTPキャッシュ制御（Cache-Control / ETag）</span>
+        </div>
+      </div>
+      <div class="bg-white border rounded-xl p-4">
+        <p class="font-semibold text-gray-800 mb-2 text-sm">セキュリティ</p>
+        <div>
+          <span class="next-topic-tag">HTTPS / TLS証明書</span>
+          <span class="next-topic-tag">CORS詳細</span>
+          <span class="next-topic-tag">CSP（Content Security Policy）</span>
+          <span class="next-topic-tag">.env 管理のベストプラクティス</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. 参考文献 -->
+  <section id="refs">
+    <h2 class="text-xl font-bold text-gray-900 mb-4 section-icon">
+      <i data-lucide="external-link" class="w-5 h-5 text-blue-500"></i> 参考文献・URL
+    </h2>
+    <ul class="space-y-2 text-sm">
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/" class="text-blue-600 underline" target="_blank">surge.sh — 公式トップ</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/getting-started-with-surge" class="text-blue-600 underline" target="_blank">Getting Started with Surge — 公式ドキュメント</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/" class="text-blue-600 underline" target="_blank">Surge Help — ヘルプ目次</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/pricing" class="text-blue-600 underline" target="_blank">Surge Pricing — 料金プラン</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/adding-a-200-page-for-client-side-routing" class="text-blue-600 underline" target="_blank">200ページの追加（SPAルーティング対応）— 公式</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/adding-a-custom-domain" class="text-blue-600 underline" target="_blank">カスタムドメインの追加 — 公式</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/about-the-surge-cdn" class="text-blue-600 underline" target="_blank">About the Surge CDN — CDN内部構造</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://surge.sh/help/why-is-surge-free" class="text-blue-600 underline" target="_blank">Why is Surge free? — 無料の理由と思想</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://github.com/sintaxi/surge" class="text-blue-600 underline" target="_blank">sintaxi/surge — GitHub（CLIソースコード）</a>
+      </li>
+      <li class="flex gap-2">
+        <i data-lucide="link" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
+        <a href="https://medium.com/surge-sh/introducing-surge-the-cdn-for-front-end-developers-b4a50a61bcfc" class="text-blue-600 underline" target="_blank">Introducing Surge（Medium, 2015）— 誕生の背景</a>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="border-t border-gray-200 mt-16 py-6 text-center text-xs text-gray-400">
+  Techmap — surge.sh &nbsp;|&nbsp; Generated 2026-04-26
+</footer>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
