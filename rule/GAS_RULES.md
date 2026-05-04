@@ -59,8 +59,17 @@ function doGet() {
 }
 ```
 
-> **`setXFrameOptionsMode(ALLOWALL)` のリスク**：クリックジャック攻撃の対象になりやすい。  
-> 他サイトへの埋め込みが不要な場合は省略すること（デフォルトは DENY）。
+#### ⚠️ 「接続が拒否されました」エラーの注意点
+GAS Web アプリを直接開いているのにこのエラーが出る場合、以下の原因が考えられる。
+1. **ファイル名の不一致**: `createTemplateFromFile('FileName')` の引数が GAS エディタ上のファイル名と 1 文字でも違うと、GAS は内部エラーを起こし、ブラウザ側で「接続拒否」として表示されることがある。
+2. **メソッドチェーンの失敗**: `.evaluate().setXFrameOptionsMode(...)` のように繋げて書くと設定が反映されないケースがある。一度変数に代入してから設定を適用すると確実。
+
+```javascript
+// ✅ より確実な書き方
+const output = HtmlService.createTemplateFromFile('Report').evaluate();
+output.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+return output;
+```
 
 #### この設定がないと発生する問題
 
@@ -69,6 +78,7 @@ function doGet() {
 | モバイルで CSS メディアクエリが効かない | ブラウザが画面幅を約 980px（PC デフォルト）と認識する |
 | `@media (max-width: 639px)` が発火しない | 実際の幅は 390px なのにビューポートが 980px と判定される |
 | `window.innerWidth` が 980 前後を返す | viewport 未設定によるブラウザのデフォルト動作 |
+| **接続が拒否されました** | `XFrameOptionsMode` の設定不備、またはファイル名指定ミスによる内部エラー |
 
 ---
 
@@ -279,7 +289,7 @@ const safeMsg = String(err.message)
 | スクリプトオーナー | 全員（匿名を含む） | オーナー権限でシートを読む（データ全開示リスク） |
 | アクセスするユーザー | 組織内 | ユーザー権限でシートを読む（適切な場合が多い） |
 
-> **匿名アクセス＋オーナー実行**の組み合わせは、認証なしで全データが見える。用途を慎重に選択すること。
+|> **匿名アクセス＋オーナー実行**の組み合わせは、認証なしで全データが見える。用途を慎重に選択すること。
 
 ---
 
@@ -367,7 +377,7 @@ const pct = (row.total > 0) ? Math.round(safeCur / row.total * 100) : null;
 | ✅ viewport 設定 | `doGet()` 内で `addMetaTag('viewport', 'width=device-width, initial-scale=1')` |
 | ✅ CSS メディアクエリ | `@media (max-width: 639px)` で上書き |
 | ✅ インラインスタイル排除 | 切り替えが必要なスタイルは CSS クラスで管理 |
-| ✅ Tailwind クラスの競合確認 | `whitespace-nowrap` 等は独自クラスに移管 |
+| ✅ Tailwind ククラスの競合確認 | `whitespace-nowrap` 等は独自クラスに移管 |
 | ✅ テーブル識別クラス | `rpt-tbl-planned` / `rpt-tbl-trouble` でテーブルを識別して個別制御 |
 
 ---
