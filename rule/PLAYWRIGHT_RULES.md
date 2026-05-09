@@ -350,14 +350,17 @@ const context = await browser.newContext({
 
 ### 10-1. PowerShell でのコマンド連結
 
-**Cursor のターミナルは PowerShell のため `&&` は使えない。** `;` で連結する。
+**シェルにより `&&` の有無が変わる。** **Windows PowerShell 5.1** では **`&&` が使えない**（エラーになる）。**PowerShell 7（`pwsh`）以降**では **`&&` が使える**。Cursor の既定が 5.1 の場合が多いため、**互換性重視なら `;` で連結**する。
 
 ```powershell
-# ❌ エラー：PowerShell では && は無効
+# ❌ Windows PowerShell 5.1：&& は構文エラーになりうる
 cd c:\yk-memo\playwright-test && npx playwright test
 
-# ✅ 正しい：; で連結する
+# ✅ 互換：; で連結（5.1 / 7 共通）
 cd c:\yk-memo\playwright-test; npx playwright test
+
+# ✅ PowerShell 7+（pwsh）のみ：&& 可
+# cd c:\yk-memo\playwright-test && npx playwright test
 ```
 
 **テストが失敗したら**: `npm run test:ui` または `npx playwright show-trace` でトレースを確認する。  
@@ -376,6 +379,6 @@ cd c:\yk-memo\playwright-test; npx playwright test
 | テストは通るがアサーションが検証されていない | `await` の付け忘れ | `await expect(locator)...` と記載する |
 | 並列実行でスプレッドシートのデータが壊れる | 書き込みテストの競合 | `test.describe.configure({ mode: 'serial' })` を追加 |
 | IME が ON で `type` がおかしい | 日本語入力モードの干渉 | `fill()` を使うか IME OFF を確認 |
-| `トークン '&&' は...有効なステートメント区切りではありません` | PowerShell では `&&` が使えない | コマンド連結は `;` を使う（`10-1` 参照） |
+| `トークン '&&' は...有効なステートメント区切りではありません` | **Windows PowerShell 5.1** では `&&` 非対応 | コマンド連結は `;` を使うか **`pwsh`（7+）** に切り替える（`10-1` 参照） |
 | `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
 | `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |

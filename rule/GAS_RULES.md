@@ -289,7 +289,7 @@ const safeMsg = String(err.message)
 | スクリプトオーナー | 全員（匿名を含む） | オーナー権限でシートを読む（データ全開示リスク） |
 | アクセスするユーザー | 組織内 | ユーザー権限でシートを読む（適切な場合が多い） |
 
-|> **匿名アクセス＋オーナー実行**の組み合わせは、認証なしで全データが見える。用途を慎重に選択すること。
+> **匿名アクセス＋オーナー実行**の組み合わせは、認証なしで全データが見える。用途を慎重に選択すること。
 
 ---
 
@@ -330,7 +330,9 @@ return data;
 
 ```javascript
 const lock = LockService.getScriptLock();
-lock.tryLock(5000); // 最大 5 秒待機
+if (!lock.tryLock(5000)) {
+  throw new Error('ロック取得に失敗（同時書き込みが競合）');
+}
 try {
   // スプレッドシートへの書き込み
 } finally {
@@ -377,7 +379,7 @@ const pct = (row.total > 0) ? Math.round(safeCur / row.total * 100) : null;
 | ✅ viewport 設定 | `doGet()` 内で `addMetaTag('viewport', 'width=device-width, initial-scale=1')` |
 | ✅ CSS メディアクエリ | `@media (max-width: 639px)` で上書き |
 | ✅ インラインスタイル排除 | 切り替えが必要なスタイルは CSS クラスで管理 |
-| ✅ Tailwind ククラスの競合確認 | `whitespace-nowrap` 等は独自クラスに移管 |
+| ✅ Tailwind クラスの競合確認 | `whitespace-nowrap` 等は独自クラスに移管 |
 | ✅ テーブル識別クラス | `rpt-tbl-planned` / `rpt-tbl-trouble` でテーブルを識別して個別制御 |
 
 ---
