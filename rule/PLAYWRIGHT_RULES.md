@@ -346,6 +346,19 @@ const context = await browser.newContext({
 | `npm run report` | HTML レポートを表示 | Cursor ターミナル可 |
 | `npm run setup` | Google ログイン状態を保存 | **別窓 PowerShell のみ** |
 | `npx playwright test --debug` | デバッグモード（ステップ実行） | Cursor ターミナル可 |
+| `npx playwright install chromium` | Chromium ブラウザをインストール（初回 or 環境構築時） | Cursor ターミナル可 |
+
+### 10-1. PowerShell でのコマンド連結
+
+**Cursor のターミナルは PowerShell のため `&&` は使えない。** `;` で連結する。
+
+```powershell
+# ❌ エラー：PowerShell では && は無効
+cd c:\yk-memo\playwright-test && npx playwright test
+
+# ✅ 正しい：; で連結する
+cd c:\yk-memo\playwright-test; npx playwright test
+```
 
 **テストが失敗したら**: `npm run test:ui` または `npx playwright show-trace` でトレースを確認する。  
 推測で `waitForTimeout` を増やすより、Trace Viewer でどこで止まっているかを確認する方が確実。
@@ -363,3 +376,6 @@ const context = await browser.newContext({
 | テストは通るがアサーションが検証されていない | `await` の付け忘れ | `await expect(locator)...` と記載する |
 | 並列実行でスプレッドシートのデータが壊れる | 書き込みテストの競合 | `test.describe.configure({ mode: 'serial' })` を追加 |
 | IME が ON で `type` がおかしい | 日本語入力モードの干渉 | `fill()` を使うか IME OFF を確認 |
+| `トークン '&&' は...有効なステートメント区切りではありません` | PowerShell では `&&` が使えない | コマンド連結は `;` を使う（`10-1` 参照） |
+| `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
+| `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |

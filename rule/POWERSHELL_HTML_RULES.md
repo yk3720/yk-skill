@@ -136,6 +136,27 @@ with open(path, 'w', encoding='utf-8') as f:
     f.write(html)
 ```
 
+### 【重要】`python -c` のインラインスクリプトに日本語を書かない
+
+PowerShellから `python -c "..."` でインラインスクリプトを実行する場合、
+**スクリプト文字列自体がCP932として渡される**ため、日本語リテラルが文字化けしてファイルに書き込まれる。
+
+```powershell
+# NG：日本語がCP932として解釈され、ファイルへの書き込みが化ける
+python -c "
+content = 'このスキルを改善する'
+open('out.txt', 'w', encoding='utf-8').write(content)
+"
+
+# OK：.pyファイルに書き出してから実行する（WriteツールはUTF-8で保存する）
+# → Write ツールで fix.py を作成 → python -u "fix.py" で実行
+```
+
+**正しい手順**：
+1. Writeツールで `.py` ファイルを作成する（Writeツールは常にUTF-8で保存する）
+2. `python -u "スクリプト名.py"` で実行する
+3. 実行後に不要な一時 `.py` ファイルを削除する
+
 Pillowが必要な場合のインストール：
 ```powershell
 # ワークスペース内のフォルダに--targetでインストール（要 all権限）

@@ -114,6 +114,7 @@ Task({
 |------|--------------|
 | PowerShellでHTMLファイルを生成・編集・Base64埋め込みを行う場合 | `c:\yk-skill\rule\POWERSHELL_HTML_RULES.md` |
 | デザイン（色・余白・タイポグラフィ・バッジ）の判断に迷った場合 | `c:\yk-skill\rule\DESIGN_RULES.md` |
+|| このスキル自体（SKILL.md）を改善・更新する場合 | `c:\yk-skill\rule\SKILL_AUTHORING_RULES.md` |
 
 ---
 
