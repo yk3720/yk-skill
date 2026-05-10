@@ -1,0 +1,67 @@
+# Next.js 参照ルール
+
+## このルールが必要な背景
+
+React を前提としたフルスタック Web 開発で **Next.js** を触る際、公式ドキュメントの構成・App Router と Pages Router の違い・前提知識を揃えておくと、エージェントや人間の両方が手戻りを減らせる。本ファイルは **公式要点とリンクの SSOT** とする。
+
+**ファイルパス（エージェント・スキル参照用）:** `c:\yk-skill\rule\NEXTJS_RULES.md`
+
+**最終更新:** 2026-05-10
+
+---
+
+## 1. 概要（一言）
+
+**React でフルスタック Web アプリを組み立てるためのフレームワーク。** UI は React コンポーネント、ルーティング・ビルド・最適化などは Next.js が肩代わりするイメージ。
+
+---
+
+## 2. 公式ドキュメントで押さえること
+
+### 2-1. 役割
+
+React コンポーネントで UI を作り、Next.js が追加機能と最適化を提供する。**バンドラなど下位ツールは自動設定**され、プロダクト実装に集中しやすい。
+
+### 2-2. ドキュメント構成（公式）
+
+| 区分 | URL |
+|------|-----|
+| Getting Started | https://nextjs.org/docs/app/getting-started |
+| Guides | https://nextjs.org/docs/app/guides |
+| API Reference | https://nextjs.org/docs/app/api-reference |
+
+### 2-3. ルータは 2 系統
+
+| 名称 | 説明 |
+|------|------|
+| **App Router** | 新方式。Server Components など新しい React 機能に対応。 |
+| **Pages Router** | 従来方式。引き続きサポート・改善中。 |
+
+### 2-4. App Router と React（公式の説明）
+
+App Router は **React canary（安定した React 19 の変更＋検証中機能を含む）を内蔵**する説明がある。Pages Router は `package.json` に入れた React のバージョンを使う。
+
+### 2-5. 前提知識（公式の想定）
+
+HTML / CSS / JavaScript / React にある程度慣れていること。React が不安な場合は [React Foundations](https://nextjs.org/learn/react-foundations) や [Next.js Foundations（ダッシュボードアプリ）](https://nextjs.org/learn/dashboard-app) が案内されている。
+
+### 2-6. Getting Started で触れるトピック（目次レベル）
+
+インストール（`create-next-app`）、プロジェクト構成、レイアウトとページ、リンクとナビ、Server / Client Components、データ取得・更新、キャッシュ・再検証、エラー処理、CSS（Tailwind 含む）、画像・フォント、メタデータ、Route Handlers、デプロイ、アップグレードなど。
+
+---
+
+## 3. 参照 URL（公式）
+
+| 説明 | URL |
+|------|-----|
+| ドキュメント入口 | https://nextjs.org/docs |
+| App Router · Getting Started | https://nextjs.org/docs/app/getting-started |
+| インストール（個別ページ） | https://nextjs.org/docs/app/getting-started/installation |
+| LLM 向け索引（公式） | https://nextjs.org/docs/llms.txt |
+
+---
+
+## 4. エージェント向けメモ
+
+- まず **Getting Started の見出し一覧**で全体像を掴み、プロジェクトが **App Router か Pages Router か** を README または `app/` と `pages/` の有無で確認する。
