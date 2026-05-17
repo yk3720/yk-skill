@@ -6,7 +6,43 @@
 
 **ファイルパス（エージェント・スキル参照用）:** `c:\yk-skill\rule\VERCEL_RULES.md`
 
-**最終更新:** 2026-05-10
+**最終更新:** 2026-05-13
+
+---
+
+## 0. Neon 連携・CLI・ローカル env（実務で詰まりやすい点）
+
+AI-Driven School の **commenting-visual-explainers** 等、Vercel Marketplace 経由で Neon を繋ぐときの再現メモ。**機密はチャットに貼らない。**
+
+### 0-1. `vercel link`（非対話）
+
+- チームが複数あると **`Provide --scope or --team explicitly`** で止まる。CLI が提示した **`vercel link --yes --project … --scope …`** をそのまま使う。
+
+### 0-2. Neon 接続時の Custom Prefix
+
+- デフォルトの **`STORAGE`** のままだと **`STORAGE_URL`** になり、アプリが期待する **`DATABASE_URL`** にならない。
+- **Custom Prefix は `DATABASE`** にし、**`DATABASE_URL`** が付くようにする（README / setup-fb-tool スキルと一致）。
+
+### 0-3. `vercel env pull` と Sensitive
+
+- **Sensitive** な変数は、`vercel env pull` で **ローカルの `.env.local` に値が入らない**（空文字の行になることがある）。
+- **ローカルで `npm run db:migrate` 等を回す**には、次のいずれかが必要:
+  - Vercel の **Environment Variables** で `DATABASE_URL` を表示し、**1 行で** `.env.local` に手で追記する。
+  - Neon コンソールの **Quickstart → `.env.local` タブ → Show secret** で表示してからコピーする（**`********` のままコピーしない**）。
+
+### 0-4. 接続文字列の形
+
+- Neon / Postgres の URI は **`postgresql://` または `postgres://` で始まる**必要がある。
+- 先頭がそれ以外なら、**別フィールドをコピーしている**か **途中からしかコピーしていない**可能性が高い。
+
+### 0-5. Next.js が「ルートだけ 404」
+
+- **`/` に `page.tsx` がない**プロジェクトでは、本番 URL のルートは **404 でも正常**なことがある（API と静的ファイルのみ、など）。
+- 動作確認は **`/widget.js`** や **`?url=` 付きの利用形**など、README どおりの URL で行う。
+
+### 0-6. コマンドの実行ディレクトリ
+
+- **`npm run db:migrate`** は **`package.json` があるリポジトリのルート**で実行する。別フォルダ（例: メモ用リポジトリのルート）では `ENOENT: package.json` になる。
 
 ---
 
