@@ -99,7 +99,8 @@ push: 未実施（依頼があれば別途）
 |------|------|
 | pre-commit / commit-msg hook 失敗 | **amend しない** — 原因修正後 **新規 commit**（User Rules） |
 | コミット対象なし | 報告して終了 |
-| index.lock | 他プロセス確認後、ユーザー同意のうえ削除して再試行 |
+| `&&` 構文エラー · 日本語で Shell パーサエラー · `.git/objects` Permission denied · index.lock | [commit-shell.md](references/commit-shell.md) **トラブルシュート** — Write + `-F` · `;` 連結 · **`all` 権限で再試行** |
+| index.lock（単独） | 他プロセス確認後、削除して [commit-shell.md](references/commit-shell.md) の再試行手順 |
 
 ## スキル改善時
 
