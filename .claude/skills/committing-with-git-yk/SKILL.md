@@ -99,6 +99,7 @@ push: 未実施（依頼があれば別途）
 | pre-commit / commit-msg hook 失敗 | **amend しない** — 原因修正後 **新規 commit**（User Rules） |
 | コミット対象なし | 報告して終了 |
 | `&&` 構文エラー · 日本語で Shell パーサエラー · `.git/objects` Permission denied · index.lock | [commit-shell.md](references/commit-shell.md) **トラブルシュート** — Write + `-F` · `;` 連結 · **`all` 権限で再試行** |
+| `could not read log file ... COMMIT_EDITMSG_YK.txt` | commit **前**にメッセージファイルを削除した — [commit-shell.md](references/commit-shell.md) **履歴** · 再 Write → `commit -F`（ステージ済みなら add 不要） |
 | index.lock（単独） | 他プロセス確認後、削除して [commit-shell.md](references/commit-shell.md) の再試行手順 |
 
 ## スキル改善時

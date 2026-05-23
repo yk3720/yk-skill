@@ -24,7 +24,7 @@ feat(scope): 日本語の要約
 git -C "c:/yk-memo" add <paths...>
 git -C "c:/yk-memo" commit -F "c:/yk-memo/.git/COMMIT_EDITMSG_YK.txt"
 git -C "c:/yk-memo" status
-# 成功後、COMMIT_EDITMSG_YK.txt は削除してよい（コミット履歴には残らない）
+# 成功後のみ COMMIT_EDITMSG_YK.txt を削除（commit 前に消すと失敗 — 下記「履歴」）
 ```
 
 ### B. 手動 PowerShell — ローカル端末のみ
@@ -76,6 +76,8 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 
 push はユーザーが **当ターンで push を明示**したときのみ。commit と **同じターン**なら add → commit → push を **1 本の `;` 連結**してよい。
 
+**マルチリポ:** リポ **ごとに** Write → add → commit →（push）→ **そのリポのメッセージファイル削除** の順。別リポの `COMMIT_EDITMSG_YK.txt` を commit 前に消さない。
+
 ## トラブルシュート（Cursor エージェント · Windows）
 
 2026-05-23 の実運用で発生した事象と対処。**詳細手順は本ファイルが SSOT**（`GIT_WORKFLOW` / User Rules は方針のみ）。
@@ -86,6 +88,15 @@ push はユーザーが **当ターンで push を明示**したときのみ。c
 | Shell 実行直後に PowerShell の **パーサエラー**（日本語が文字化け・`UnexpectedToken`） | エージェントが **1 行の Shell 引数に日本語 commit 文を埋め込んだ**（`@(...)` · `-m "日本語"` 等） | **A. Write → `git commit -F`**。短い英語のみなら **2 つの `-m`** も可 |
 | `Permission denied`（`.git/objects/...`）· `failed to insert into database` | Cursor **サンドボックス**が `.git` 書き込みを拒否 | Shell を **`required_permissions: ["all"]`** で再実行（`git_write` のみでは不足することがある） |
 | `Unable to create '.git/index.lock': File exists` | 上記失敗の直後に **壊れた lock** が残った | 他の git プロセスが無いことを確認し、`index.lock` を削除してから **all** で add/commit をやり直す |
+| `fatal: could not read log file '.../COMMIT_EDITMSG_YK.txt': No such file or directory` | **`git commit -F` より前に** メッセージファイルを削除した（マルチリポで先に片方だけ消した等） | メッセージを **Write で再作成** → `git commit -F` のみ再実行（**add はステージ済みなら不要**）→ 成功後に削除 |
+
+### 履歴（失敗事例）
+
+| 日付 | リポ | 症状 | 原因 | 結果 |
+|------|------|------|------|------|
+| 2026-05-23 | yk-memo | `could not read log file 'c:/yk-memo/.git/COMMIT_EDITMSG_YK.txt'` | yk-skill の commit/push **成功直後**に、エージェントが **yk-memo 用ファイルも含めて** `COMMIT_EDITMSG_YK.txt` を一括 Delete。yk-memo は **add 済み・commit 未実行**のままメッセージだけ消えた | メッセージ再 Write → `git commit -F` → push で **`788652b`** として成功。ステージは残っていたため add 不要 |
+
+**教訓:** `COMMIT_EDITMSG_YK.txt` の削除は **当該リポで `git commit` が成功したあと**のみ。並列 Delete や「片方成功したら両方消す」は禁止。
 
 **commit 1 リポの Shell 例（RUN 1 回 + Write）**
 
@@ -99,7 +110,13 @@ git -C "c:/yk-memo" status
 ```
 
 3. push 依頼があれば **続けて 1 本**（または上記に `; git -C ... push` を足す）  
-4. `index.lock` が残っていれば削除してから再実行
+4. **commit 成功後**にのみ `COMMIT_EDITMSG_YK.txt` を Delete  
+5. `index.lock` が残っていれば削除してから再実行
+
+**マルチリポの正しい順（例: yk-skill → yk-memo）**
+
+1. Write `yk-skill/.git/COMMIT_EDITMSG_YK.txt` → add → commit → push → Delete **yk-skill のみ**  
+2. Write `yk-memo/.git/COMMIT_EDITMSG_YK.txt` → add → commit → push → Delete **yk-memo のみ**
 
 ## 禁止・注意
 
@@ -107,3 +124,4 @@ git -C "c:/yk-memo" status
 - `--no-verify` — ユーザー明示時のみ
 - コミットメッセージに `.env` の値 · API キーを書かない
 - エージェントの Shell に **日本語の長い here-string を渡さない**（B は手動端末向け）
+- **`COMMIT_EDITMSG_YK.txt` を commit 前に Delete しない**（マルチリポで他リポ分を先に消さない）
