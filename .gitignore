@@ -1,2 +1,10 @@
 output/*.html
 deploy-history.log
+
+# commenting-visual-explainers (Next.js / FBツール) — 秘密情報・ビルド成果物
+.claude/skills/commenting-visual-explainers/node_modules/
+.claude/skills/commenting-visual-explainers/.next/
+.claude/skills/commenting-visual-explainers/.vercel/
+.claude/skills/commenting-visual-explainers/.env*
+.claude/skills/commenting-visual-explainers/fb-api-token.txt
+.claude/skills/commenting-visual-explainers/fb-tool-url.txt

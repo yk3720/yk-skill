@@ -1,0 +1,657 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta property="og:title" content="Vercelの仕組み">
+  <meta property="og:description" content="「git pushするだけでWebサイトが公開される」Vercelの仕組みを、フローと図で丁寧に解説します。">
+  <meta property="og:type" content="article">
+  <title>Vercelの仕組み</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><circle cx='32' cy='40' r='10' fill='%233B82F6' opacity='0.8'/><circle cx='68' cy='40' r='10' fill='%2360A5FA' opacity='0.8'/><rect x='25' y='62' width='50' height='6' rx='3' fill='%2394A3B8' opacity='0.6'/><rect x='30' y='74' width='40' height='6' rx='3' fill='%2394A3B8' opacity='0.3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF',
+              surface: '#F8FAFC',
+              hover: '#F1F5F9',
+              border: '#E2E8F0',
+              accent: '#3B82F6',
+              'accent-light': '#2563EB',
+              text: '#1E293B',
+              muted: '#64748B',
+              dim: '#94A3B8',
+              positive: '#10B981',
+              negative: '#EF4444',
+              warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      .md\:flex-row { flex-direction: row !important; }
+      .md\:hidden { display: none !important; }
+      .hidden.md\:block { display: block !important; }
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .md\:mb-20 { margin-bottom: 5rem !important; }
+      .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
+      .bg-clip-text.text-transparent {
+        -webkit-background-clip: initial !important;
+        background-clip: initial !important;
+        color: #2563EB !important;
+        -webkit-text-fill-color: #2563EB !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+      PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+
+<!-- ============================================================ -->
+<!--  HERO                                                        -->
+<!-- ============================================================ -->
+<div class="text-center mb-8 md:mb-10">
+  <div class="inline-flex items-center gap-2 bg-ads-accent/10 text-ads-accent-light px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+    <i data-lucide="cloud" class="w-4 h-4"></i>
+    開発ツール
+  </div>
+  <h1 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-6">
+    <span class="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">Vercel</span>の仕組み
+  </h1>
+  <p class="text-lg text-ads-muted max-w-xl mx-auto leading-relaxed">
+    「コードを保存したら、もうWebに公開されていた」<br>
+    ひとことで言うと ──
+  </p>
+</div>
+
+
+<!-- ============================================================ -->
+<!--  ONE-PAGE SUMMARY                                            -->
+<!-- ============================================================ -->
+<div class="bg-ads-surface border border-ads-border rounded-2xl p-6 md:p-10 mb-6">
+  <div class="text-center mb-8 md:mb-10">
+    <p class="text-xl md:text-2xl font-black text-slate-900 mb-2">
+      Vercel = コードを<span class="text-ads-accent-light">「自動でWeb公開」</span>するサービス
+    </p>
+    <p class="text-sm text-ads-muted">
+      git push するだけ。サーバー設定もビルドも、全部おまかせ
+    </p>
+  </div>
+
+  <!-- Core flow: Code → Vercel → World -->
+  <div class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-0 mb-8">
+    <!-- PC / コード -->
+    <div class="flex flex-col items-center w-36 p-3">
+      <div class="w-14 h-14 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center mb-2.5">
+        <i data-lucide="code-2" class="w-7 h-7 text-slate-600"></i>
+      </div>
+      <div class="font-bold text-slate-900 text-sm">あなたのPC</div>
+      <div class="text-[11px] text-slate-500 mt-0.5">「git push」</div>
+    </div>
+
+    <!-- Arrow 1 -->
+    <div class="flex items-center justify-center md:w-16 py-1 md:py-0">
+      <div class="flex flex-col items-center gap-0.5">
+        <span class="text-[9px] font-medium text-ads-accent tracking-wider">送信</span>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-ads-accent hidden md:block"></i>
+        <i data-lucide="arrow-down" class="w-5 h-5 text-ads-accent md:hidden"></i>
+      </div>
+    </div>
+
+    <!-- Vercel (centerpiece) -->
+    <div class="flex flex-col items-center w-44 p-4 bg-ads-accent/5 border-2 border-ads-accent/20 rounded-2xl">
+      <div class="w-16 h-16 rounded-2xl bg-ads-accent/15 border-2 border-ads-accent/30 flex items-center justify-center mb-2.5">
+        <i data-lucide="triangle" class="w-8 h-8 text-ads-accent-light"></i>
+      </div>
+      <div class="font-bold text-ads-accent-light text-base">Vercel</div>
+      <div class="text-[11px] text-ads-muted mt-0.5 mb-2">自動ビルド＆デプロイ</div>
+      <div class="text-[10px] text-ads-muted bg-white rounded-lg px-2.5 py-1 border border-ads-border/50">宅配業者がまとめてやってくれる</div>
+    </div>
+
+    <!-- Arrow 2 -->
+    <div class="flex items-center justify-center md:w-16 py-1 md:py-0">
+      <div class="flex flex-col items-center gap-0.5">
+        <span class="text-[9px] font-medium text-ads-accent tracking-wider">公開</span>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-ads-accent hidden md:block"></i>
+        <i data-lucide="arrow-down" class="w-5 h-5 text-ads-accent md:hidden"></i>
+      </div>
+    </div>
+
+    <!-- World -->
+    <div class="flex flex-col items-center w-36 p-3">
+      <div class="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-2.5">
+        <i data-lucide="globe" class="w-7 h-7 text-emerald-600"></i>
+      </div>
+      <div class="font-bold text-slate-900 text-sm">世界中に公開</div>
+      <div class="text-[11px] text-emerald-600/70 mt-0.5">URLが即座に使える</div>
+    </div>
+  </div>
+
+  <!-- Return flow -->
+  <div class="flex justify-center mb-8">
+    <div class="flex items-center gap-2 text-xs text-emerald-600 bg-emerald-500/5 border border-emerald-500/15 rounded-full px-4 py-1.5">
+      <i data-lucide="corner-down-left" class="w-3.5 h-3.5"></i>
+      公開 URL が自動で発行される
+    </div>
+  </div>
+
+  <div class="flex items-center gap-4 mb-6">
+    <div class="flex-1 border-t border-ads-border/50"></div>
+    <div class="text-[11px] text-ads-dim font-medium">このセットアップで使っているサービス</div>
+    <div class="flex-1 border-t border-ads-border/50"></div>
+  </div>
+
+  <!-- Everyday examples as pills -->
+  <div class="flex flex-wrap justify-center gap-2 mb-2">
+    <div class="flex items-center gap-1.5 bg-white border border-ads-border rounded-full px-3.5 py-1.5 text-xs text-slate-700">
+      <i data-lucide="message-square" class="w-3.5 h-3.5 text-blue-500"></i>
+      図解コメントツール
+    </div>
+    <div class="flex items-center gap-1.5 bg-white border border-ads-border rounded-full px-3.5 py-1.5 text-xs text-slate-700">
+      <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-500"></i>
+      コメントAPI（/api/comments）
+    </div>
+    <div class="flex items-center gap-1.5 bg-white border border-ads-border rounded-full px-3.5 py-1.5 text-xs text-slate-700">
+      <i data-lucide="zap" class="w-3.5 h-3.5 text-violet-500"></i>
+      widget.js の配信
+    </div>
+  </div>
+  <p class="text-xs text-ads-dim text-center mt-2">出典: <a href="https://vercel.com/docs/getting-started-with-vercel" class="underline decoration-ads-dim/30 hover:text-ads-accent transition-colors">Vercel 公式ドキュメント</a></p>
+</div>
+
+<p class="text-center text-ads-muted mb-16 md:mb-20">
+  ここから先で、Vercel が何をしているかをひとつずつ解説していきます。
+</p>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 1: Vercel って何？                                    -->
+<!-- ============================================================ -->
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-500/10 flex-shrink-0">
+      <i data-lucide="help-circle" class="w-5 h-5 text-blue-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">Vercel って何？</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    Vercel（バーセル）は、<strong class="text-slate-900">Webサイトやアプリを「インターネットに公開する」作業をまるごと肩代わりしてくれるサービス</strong>です。Next.js の開発元が作っており、2026年現在も世界で最も広く使われるデプロイプラットフォームの一つです。
+  </p>
+
+  <p class="mb-8 leading-relaxed">
+    たとえ話で考えてみましょう。あなたが手紙（コード）を書いたとします。その手紙を「封筒に入れて → 宛名を書いて → 郵便局に持って行く」作業が、これまでのWeb公開でした。Vercelは<strong class="text-slate-900">その一切をやってくれる宅配業者</strong>です。手紙を渡すだけで、世界中の相手に届けてくれます。
+  </p>
+
+  <!-- 比喩フロー図 -->
+  <div class="bg-ads-surface border border-ads-border rounded-xl p-6 md:p-8 mb-8">
+    <h3 class="text-lg font-bold text-slate-900 text-center mb-8">「宅配業者」としてのVercel</h3>
+    <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
+      <!-- あなた -->
+      <div class="w-44 bg-blue-500/10 border border-blue-500/20 rounded-xl p-5 text-center">
+        <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="user" class="w-6 h-6 text-blue-600"></i>
+        </div>
+        <div class="font-bold text-blue-700 mb-1">あなた（開発者）</div>
+        <div class="text-xs text-ads-muted mt-3 bg-slate-100/80 rounded-lg px-3 py-1.5">「git push」するだけ</div>
+      </div>
+      <!-- 矢印1 -->
+      <div class="flex items-center justify-center md:w-16 py-2 md:py-0">
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-[10px] text-ads-muted">渡す</span>
+          <i data-lucide="arrow-right" class="w-5 h-5 text-ads-accent hidden md:block"></i>
+          <i data-lucide="arrow-down" class="w-5 h-5 text-ads-accent md:hidden"></i>
+        </div>
+      </div>
+      <!-- Vercel -->
+      <div class="w-44 bg-ads-accent/10 border-2 border-ads-accent/30 rounded-xl p-5 text-center">
+        <div class="w-12 h-12 rounded-full bg-ads-accent/20 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="package" class="w-6 h-6 text-ads-accent-light"></i>
+        </div>
+        <div class="font-bold text-ads-accent-light mb-1">Vercel</div>
+        <div class="text-xs text-ads-accent/70">宅配業者</div>
+        <div class="text-xs text-ads-muted mt-3 bg-slate-100/80 rounded-lg px-3 py-1.5">ビルド・梱包・配送をすべて自動で</div>
+      </div>
+      <!-- 矢印2 -->
+      <div class="flex items-center justify-center md:w-16 py-2 md:py-0">
+        <div class="flex flex-col items-center gap-1">
+          <span class="text-[10px] text-ads-muted">届ける</span>
+          <i data-lucide="arrow-right" class="w-5 h-5 text-ads-accent hidden md:block"></i>
+          <i data-lucide="arrow-down" class="w-5 h-5 text-ads-accent md:hidden"></i>
+        </div>
+      </div>
+      <!-- 世界中のユーザー -->
+      <div class="w-44 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-5 text-center">
+        <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
+          <i data-lucide="users" class="w-6 h-6 text-emerald-600"></i>
+        </div>
+        <div class="font-bold text-emerald-700 mb-1">世界中のユーザー</div>
+        <div class="text-xs text-ads-muted mt-3 bg-slate-100/80 rounded-lg px-3 py-1.5">URLを開くとすぐ見られる</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-ads-accent/5 border border-ads-accent/20 rounded-xl p-5">
+    <div class="flex items-start gap-3">
+      <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-ads-accent/10 flex-shrink-0 mt-0.5">
+        <i data-lucide="lightbulb" class="w-4 h-4 text-ads-accent-light"></i>
+      </div>
+      <div>
+        <p class="font-bold text-ads-accent-light mb-1">ここがポイント</p>
+        <p class="text-ads-muted leading-relaxed">
+          以前のWeb公開は「サーバーを借りて → Node.jsを設定して → ビルドして → ファイルを転送して…」と多くの手順が必要でした。Vercelはこれを<strong class="text-slate-800">ゼロコンフィギュレーション（設定ほぼなし）</strong>で実現します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 2: デプロイの流れ（5ステップ）                         -->
+<!-- ============================================================ -->
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-violet-500/10 flex-shrink-0">
+      <i data-lucide="git-branch" class="w-5 h-5 text-violet-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">「git push」から公開まで何が起きているか</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    「git push したら公開された」── この一言の裏側で、Vercelは5つのステップを自動で実行しています。
+  </p>
+
+  <!-- ターミナルUIモック -->
+  <div class="rounded-xl overflow-hidden border border-slate-700/50 mb-8">
+    <div class="flex items-center gap-3 bg-slate-800 px-4 py-2.5">
+      <div class="flex gap-1.5">
+        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-slate-400">
+        <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+        ターミナル
+      </div>
+    </div>
+    <pre class="bg-slate-950 p-5 overflow-x-auto text-sm leading-loose"><code><span class="text-emerald-400">$</span> git push origin main
+
+<span class="text-slate-400">Enumerating objects: 5, done.</span>
+<span class="text-slate-400">Counting objects: 100% (5/5), done.</span>
+<span class="text-slate-400">Writing objects: 100% (3/3), done.</span>
+<span class="text-slate-400">To https://github.com/you/your-app.git</span>
+<span class="text-slate-400">   abc1234..def5678  main -> main</span>
+
+<span class="text-blue-400">▶ Vercelがpushを検知して自動でビルド開始...</span>
+<span class="text-emerald-400">✓ Deployed: https://your-app.vercel.app  [28s]</span></code></pre>
+  </div>
+
+  <!-- 5ステップフロー -->
+  <div class="bg-ads-surface border border-ads-border rounded-xl p-6 md:p-8 mb-8">
+    <h3 class="text-lg font-bold text-slate-900 text-center mb-8">Vercelが自動で実行する5ステップ</h3>
+    <div class="space-y-4">
+      <!-- Step 1 -->
+      <div class="flex gap-4 items-start">
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
+        <div class="flex-1 bg-blue-500/5 border border-blue-500/15 rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="git-commit" class="w-4 h-4 text-blue-600"></i>
+            <span class="font-bold text-slate-900 text-sm">検知（トリガー）</span>
+          </div>
+          <p class="text-sm text-ads-muted">GitHubへの push や PR のマージを Webhook で即座に検知。「コードが変わった」と判断した瞬間、次のステップが自動で始まります。</p>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="flex gap-4 items-start">
+        <div class="w-8 h-8 rounded-full bg-purple-500 text-white text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
+        <div class="flex-1 bg-purple-500/5 border border-purple-500/15 rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="search" class="w-4 h-4 text-purple-600"></i>
+            <span class="font-bold text-slate-900 text-sm">フレームワーク自動検出</span>
+          </div>
+          <p class="text-sm text-ads-muted">Next.js・Astro・SvelteKit など、<strong class="text-slate-800">何で作られているかを自動判定</strong>し、最適なビルド設定を自動適用。設定ファイルを書く必要はありません。</p>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="flex gap-4 items-start">
+        <div class="w-8 h-8 rounded-full bg-amber-500 text-white text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">3</div>
+        <div class="flex-1 bg-amber-500/5 border border-amber-500/15 rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="hammer" class="w-4 h-4 text-amber-600"></i>
+            <span class="font-bold text-slate-900 text-sm">ビルド</span>
+          </div>
+          <p class="text-sm text-ads-muted"><code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-emerald-700">npm run build</code> を隔離された仮想マシン上で実行。TypeScript のコンパイル・画像の最適化・HTMLの生成など、公開に必要な変換をすべて行います（30秒〜2分程度）。</p>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="flex gap-4 items-start">
+        <div class="w-8 h-8 rounded-full bg-emerald-500 text-white text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">4</div>
+        <div class="flex-1 bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-600"></i>
+            <span class="font-bold text-slate-900 text-sm">世界中のサーバーへ配置</span>
+          </div>
+          <p class="text-sm text-ads-muted">ビルド成果物を <strong class="text-slate-800">100か所以上の拠点（PoP）</strong>に自動配置。日本のユーザーには日本のサーバーから、アメリカのユーザーにはアメリカのサーバーから届くため、表示が速くなります。</p>
+          <p class="text-xs text-ads-dim mt-2">出典: <a href="https://vercel.com/docs/fundamentals/infrastructure" class="underline decoration-ads-dim/30 hover:text-ads-accent transition-colors">Vercel 公式ドキュメント — How requests flow</a></p>
+        </div>
+      </div>
+      <!-- Step 5 -->
+      <div class="flex gap-4 items-start">
+        <div class="w-8 h-8 rounded-full bg-sky-500 text-white text-sm font-bold flex items-center justify-center flex-shrink-0 mt-0.5">5</div>
+        <div class="flex-1 bg-sky-500/5 border border-sky-500/15 rounded-xl p-4">
+          <div class="flex items-center gap-2 mb-1">
+            <i data-lucide="link" class="w-4 h-4 text-sky-600"></i>
+            <span class="font-bold text-slate-900 text-sm">URL が発行される</span>
+          </div>
+          <p class="text-sm text-ads-muted">デプロイが完了すると、<strong class="text-slate-800">本番URL（xxx.vercel.app）</strong> が即座に使えるようになります。直前まで古いバージョンが表示されていて、完了と同時に新しいバージョンに切り替わります（ダウンタイムなし）。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 3: 3つの環境                                         -->
+<!-- ============================================================ -->
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500/10 flex-shrink-0">
+      <i data-lucide="layers" class="w-5 h-5 text-emerald-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">3つの「環境」── 本番・プレビュー・ローカル</h2>
+  </div>
+
+  <p class="mb-6 leading-relaxed">
+    Vercel には<strong class="text-slate-900">3種類の環境</strong>があります。「本番」「プレビュー」「ローカル」です。それぞれ役割が違い、うまく使い分けることで「本番に間違いを出さない」開発ができるようになります。
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <!-- Production -->
+    <div class="bg-ads-surface border border-ads-border rounded-xl overflow-hidden">
+      <div class="bg-emerald-500/10 border-b border-ads-border px-5 py-4 flex items-center gap-2">
+        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+        <span class="font-bold text-emerald-700 text-sm">Production（本番）</span>
+      </div>
+      <div class="p-5">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3">
+          <i data-lucide="globe" class="w-5 h-5 text-emerald-600"></i>
+        </div>
+        <p class="text-sm text-ads-muted leading-relaxed">実際にユーザーが見る「本物」のサイト。<code class="text-xs bg-slate-100 px-1 rounded text-emerald-700">main</code> ブランチへのpushで更新される。</p>
+        <div class="mt-3 text-xs text-emerald-700 bg-emerald-500/5 border border-emerald-500/20 rounded-lg px-3 py-2">xxx.vercel.app</div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="bg-ads-surface border border-ads-border rounded-xl overflow-hidden">
+      <div class="bg-blue-500/10 border-b border-ads-border px-5 py-4 flex items-center gap-2">
+        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+        <span class="font-bold text-blue-700 text-sm">Preview（プレビュー）</span>
+      </div>
+      <div class="p-5">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-3">
+          <i data-lucide="eye" class="w-5 h-5 text-blue-600"></i>
+        </div>
+        <p class="text-sm text-ads-muted leading-relaxed">PR（プルリクエスト）ごとに<strong class="text-slate-800">自動で別URLが発行</strong>される仮の環境。「本番に出す前に確認」する場所。</p>
+        <div class="mt-3 text-xs text-blue-700 bg-blue-500/5 border border-blue-500/20 rounded-lg px-3 py-2">xxx-git-branch.vercel.app</div>
+      </div>
+    </div>
+
+    <!-- Local -->
+    <div class="bg-ads-surface border border-ads-border rounded-xl overflow-hidden">
+      <div class="bg-slate-500/10 border-b border-ads-border px-5 py-4 flex items-center gap-2">
+        <div class="w-2.5 h-2.5 rounded-full bg-slate-400"></div>
+        <span class="font-bold text-slate-600 text-sm">Development（ローカル）</span>
+      </div>
+      <div class="p-5">
+        <div class="w-10 h-10 rounded-lg bg-slate-500/10 flex items-center justify-center mb-3">
+          <i data-lucide="monitor" class="w-5 h-5 text-slate-600"></i>
+        </div>
+        <p class="text-sm text-ads-muted leading-relaxed">自分のPCの中だけで動く開発用環境。<code class="text-xs bg-slate-100 px-1 rounded text-emerald-700">npm run dev</code> で起動し、外からは見えない。</p>
+        <div class="mt-3 text-xs text-slate-600 bg-slate-500/5 border border-slate-500/20 rounded-lg px-3 py-2">localhost:3000</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5">
+    <div class="flex items-start gap-3">
+      <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/10 flex-shrink-0 mt-0.5">
+        <i data-lucide="info" class="w-4 h-4 text-amber-600"></i>
+      </div>
+      <div>
+        <p class="font-bold text-amber-700 mb-1">今回のセットアップで使っているのは</p>
+        <p class="text-ads-muted leading-relaxed text-sm">
+          <strong class="text-slate-800">Production（本番）環境</strong>に <code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-emerald-700">vercel --prod</code> でデプロイしました。<code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-emerald-700">DATABASE_URL</code> や <code class="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-emerald-700">API_TOKEN</code> などの環境変数も Production 向けに設定されているので、本番 URL（commenting-visual-explainers-liart.vercel.app）でコメントAPIが動作します。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 4: 料金と制限                                        -->
+<!-- ============================================================ -->
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-amber-500/10 flex-shrink-0">
+      <i data-lucide="credit-card" class="w-5 h-5 text-amber-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">料金プランと無料枠</h2>
+  </div>
+
+  <p class="mb-8 leading-relaxed">
+    Vercel は無料プラン（Hobby）から使い始められます。今回のセットアップもすべて無料の範囲内です。
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <!-- Hobby -->
+    <div class="bg-ads-surface border-2 border-ads-accent/30 rounded-xl p-6 relative">
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+        <span class="bg-ads-accent text-white text-[10px] font-bold px-3 py-1 rounded-full">今使っているプラン</span>
+      </div>
+      <div class="text-center mb-4 mt-2">
+        <div class="text-2xl font-black text-ads-accent-light">無料</div>
+        <div class="text-sm font-bold text-slate-900">Hobby</div>
+        <div class="text-xs text-ads-muted mt-1">個人・学習・非商用向け</div>
+      </div>
+      <ul class="space-y-2 text-xs text-ads-muted">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>デプロイ無制限</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>プレビューURL自動生成</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>グローバルCDN</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>自動HTTPS</li>
+        <li class="flex items-center gap-2"><i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-500 flex-shrink-0"></i>商用利用は不可</li>
+      </ul>
+    </div>
+
+    <!-- Pro -->
+    <div class="bg-ads-surface border border-ads-border rounded-xl p-6">
+      <div class="text-center mb-4">
+        <div class="text-2xl font-black text-slate-900">$20<span class="text-sm font-normal text-ads-muted">/月</span></div>
+        <div class="text-sm font-bold text-slate-900">Pro</div>
+        <div class="text-xs text-ads-muted mt-1">チーム・商用向け</div>
+      </div>
+      <ul class="space-y-2 text-xs text-ads-muted">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>商用利用OK</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>チームメンバー追加可</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>高度な分析機能</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>優先サポート</li>
+      </ul>
+    </div>
+
+    <!-- Enterprise -->
+    <div class="bg-ads-surface border border-ads-border rounded-xl p-6">
+      <div class="text-center mb-4">
+        <div class="text-2xl font-black text-slate-900">要相談</div>
+        <div class="text-sm font-bold text-slate-900">Enterprise</div>
+        <div class="text-xs text-ads-muted mt-1">大規模企業向け</div>
+      </div>
+      <ul class="space-y-2 text-xs text-ads-muted">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>SLA保証</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>セキュリティ強化</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0"></i>専任サポート</li>
+      </ul>
+    </div>
+  </div>
+  <p class="text-xs text-ads-dim text-center">出典: <a href="https://vercel.com/pricing" class="underline decoration-ads-dim/30 hover:text-ads-accent transition-colors">Vercel 料金ページ（公式）</a></p>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 5: このツールでVercelがやっていること                  -->
+<!-- ============================================================ -->
+<section class="mb-16 md:mb-20">
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-500/10 flex-shrink-0">
+      <i data-lucide="message-square" class="w-5 h-5 text-blue-600"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">このツール（図解コメントツール）でVercelがやっていること</h2>
+  </div>
+
+  <p class="mb-8 leading-relaxed">
+    あなたが今日セットアップした「図解コメントツール」では、Vercelは<strong class="text-slate-900">コメントデータを受け取って保存・取得するAPIサーバー</strong>として動いています。
+  </p>
+
+  <!-- ブラウザUIモック -->
+  <div class="rounded-xl overflow-hidden border border-slate-700/50 mb-8">
+    <div class="flex items-center gap-3 bg-slate-800 px-4 py-2.5">
+      <div class="flex gap-1.5">
+        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+      </div>
+      <div class="flex-1 bg-slate-700/50 rounded-lg px-3 py-1 text-xs text-slate-400 flex items-center gap-1.5">
+        <i data-lucide="lock" class="w-3 h-3 text-emerald-400"></i>
+        commenting-visual-explainers-liart.vercel.app
+      </div>
+    </div>
+    <div class="bg-white p-6">
+      <div class="text-xs text-ads-dim mb-4 font-medium">Vercel上で動いているもの</div>
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 bg-blue-500/5 border border-blue-500/15 rounded-lg px-4 py-3">
+          <i data-lucide="zap" class="w-4 h-4 text-blue-600 flex-shrink-0"></i>
+          <div>
+            <div class="text-xs font-bold text-slate-900">/api/comments</div>
+            <div class="text-xs text-ads-muted">コメントの保存・取得・削除を行うAPIエンドポイント。Neon（データベース）と繋がっている</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 bg-violet-500/5 border border-violet-500/15 rounded-lg px-4 py-3">
+          <i data-lucide="file-code" class="w-4 h-4 text-violet-600 flex-shrink-0"></i>
+          <div>
+            <div class="text-xs font-bold text-slate-900">/widget.js</div>
+            <div class="text-xs text-ads-muted">図解ページに埋め込まれるフィードバックUIのJavaScriptファイル。世界中から高速に配信される</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 bg-emerald-500/5 border border-emerald-500/15 rounded-lg px-4 py-3">
+          <i data-lucide="shield" class="w-4 h-4 text-emerald-600 flex-shrink-0"></i>
+          <div>
+            <div class="text-xs font-bold text-slate-900">API_TOKEN による保護</div>
+            <div class="text-xs text-ads-muted">セットアップ時に生成したトークンが環境変数として設定済み。不正アクセスを防いでいる</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-ads-accent/5 border border-ads-accent/20 rounded-xl p-5">
+    <div class="flex items-start gap-3">
+      <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-ads-accent/10 flex-shrink-0 mt-0.5">
+        <i data-lucide="lightbulb" class="w-4 h-4 text-ads-accent-light"></i>
+      </div>
+      <div>
+        <p class="font-bold text-ads-accent-light mb-1">なぜVercelを使うのか</p>
+        <p class="text-ads-muted leading-relaxed text-sm">
+          コメントAPIを動かすには「サーバー」が必要です。自分でサーバーを立てると維持費・管理の手間がかかりますが、Vercel なら<strong class="text-slate-800">無料で・管理なしで・世界中から使えるAPIサーバー</strong>が手に入ります。図解ページがどこに公開されていても、コメントは常にこのURLに届きます。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  SECTION 6: まとめ                                            -->
+<!-- ============================================================ -->
+<section>
+  <div class="flex items-center gap-3 mb-8">
+    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-ads-accent/10 flex-shrink-0">
+      <i data-lucide="check-circle" class="w-5 h-5 text-ads-accent-light"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-bold text-slate-900">まとめ ── 覚えておきたい3つのこと</h2>
+  </div>
+
+  <div class="space-y-4 mb-10">
+    <div class="bg-ads-surface border border-ads-border rounded-xl p-6 border-l-4 border-l-blue-500">
+      <div class="flex items-start gap-4">
+        <div class="text-2xl font-black text-blue-500 leading-none flex-shrink-0 mt-1">01</div>
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2">Vercelは「Web公開の宅配業者」</h3>
+          <p class="text-sm text-ads-muted leading-relaxed">git push するだけで、ビルド・世界中への配置・URLの発行まですべて自動でやってくれます。サーバーの知識は不要です。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-ads-surface border border-ads-border rounded-xl p-6 border-l-4 border-l-emerald-500">
+      <div class="flex items-start gap-4">
+        <div class="text-2xl font-black text-emerald-500 leading-none flex-shrink-0 mt-1">02</div>
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2">3つの環境を使い分ける</h3>
+          <p class="text-sm text-ads-muted leading-relaxed">ローカル（自分のPC）→ プレビュー（確認用）→ 本番（公開）の3段階で、本番に間違いを出さない開発ができます。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-ads-surface border border-ads-border rounded-xl p-6 border-l-4 border-l-violet-500">
+      <div class="flex items-start gap-4">
+        <div class="text-2xl font-black text-violet-500 leading-none flex-shrink-0 mt-1">03</div>
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2">無料で世界規模のインフラが使える</h3>
+          <p class="text-sm text-ads-muted leading-relaxed">個人利用なら完全無料。100か所以上の拠点から高速配信・自動HTTPS・ゼロダウンタイム更新が、設定なしで手に入ります。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center bg-gradient-to-b from-ads-accent/5 to-transparent border border-ads-accent/10 rounded-xl p-8 md:p-10">
+    <i data-lucide="triangle" class="w-8 h-8 text-ads-accent mx-auto mb-4"></i>
+    <p class="text-lg font-bold text-slate-900 mb-3">「公開する」の敷居がなくなる、それがVercelです。</p>
+    <p class="text-ads-muted max-w-lg mx-auto leading-relaxed text-sm">
+      以前は「サーバーを借りて・設定して・デプロイして…」という複雑な作業が必要でした。Vercel はその作業を消し去り、「作ることに集中する」開発者体験を実現しました。今回セットアップした図解コメントツールも、この仕組みの上で動いています。
+    </p>
+  </div>
+</section>
+
+  </main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">AI-Driven School の図解ツールで作成</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+<script src="https://commenting-visual-explainers-liart.vercel.app/widget.js" data-token="daa219f90c86d72414a6721405c7d2291d4669712c3de889"></script>
+</body>
+</html>
