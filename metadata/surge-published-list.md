@@ -1,14 +1,15 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年5月17日  
+**最終更新**: 2026年5月23日（publish パス表記を移行後に合わせて更新）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
-**HTMLファイル保存先（目標）**: `c:\yk-tool\publish\` — **現（未移行）**: `c:\yk-memo\output\`
+**HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
+**作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
 
 ---
 
 ## 公開一覧
 
-| # | タイトル | ツール | 公開日 | URL | ローカルファイル | サイズ |
+| # | タイトル | ツール | 公開日 | URL | ローカルファイル（`publish/` 直下） | サイズ |
 |---|---------|--------|--------|-----|----------------|--------|
 | 1 | Cursorで使えるAIモデル完全ガイド（2026年3月） | Techmap | 2026/03/28 | [techmap-cursor-ai-models.surge.sh](https://techmap-cursor-ai-models.surge.sh) | `cursor-ai-models.html` | 51.9KB |
 | 2 | Excel テックマップ — 実務エンジニアのための技術図解 | Techmap | 2026/03/28 | [techmap-excel.surge.sh](https://techmap-excel.surge.sh) | `excel-techmap.html` | 61.3KB |
@@ -81,7 +82,7 @@
 - URLは `{tool}-{slug}.surge.sh` の形式で統一されています
 - Techmap：`techmap-{slug}.surge.sh`
 - CuriosityMap：`curimap-{slug}.surge.sh`
-- ローカル HTML の**目標**保存先は `c:\yk-tool\publish\`（**現**は `c:\yk-memo\output\` — 物理移行は未実施）
+- 公開済み HTML の正本は `c:\yk-tool\publish\`（2026-05-23 移行完了。旧 `c:\yk-memo\output\` は Git 上削除済み · 実体は `yk-tool` へ）
 - このリストは `c:\yk-skill\metadata\surge-published-list.md` で管理（各スキルがデプロイ後に更新）
 - 図解管理 UI（`workspace-ui-kit/data/figures.ts`）は本台帳と **手動同期**（`url` · 公開日 · 種別）。UI 専用の `topicId` / タグ / メモは `figures.ts` のみ
 - surge.sh の無料プランには **URL の有効期限はなく、永続的に公開される**（公式明記）

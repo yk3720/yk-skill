@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-23（移行スタブ削除 · リポジトリマップ追加）
+**最終更新:** 2026-05-23（スキル台帳パス追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -47,7 +47,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 **目的:** 複数 Git ルートにまたがるパスの正本。詳細・移行手順は `c:/yk-memo/handoffs/workspace-layout/HANDOFF.md`。
 
-**注意（2026-05-23）:** 下表の **目標パス** は対話で確定済み。**物理移動・スキル内パス置換は未実施**のため、実ファイルは旧場所に残っている場合がある。矛盾時は本表（目標）を正とし、実装フェーズで揃える。
+**注意（2026-05-23）:** 図解 HTML の `yk-tool/publish/` · 主要ツールの `yk-tool/` 移行は **完了**。`surge-published-list.md` は移行後表記に更新済み。古いメモ・スキル断片に旧パスが残る場合は本表を正とする。
 
 ### リポジトリの役割
 
@@ -66,6 +66,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |------|----------|------|
 | AI 指示・実装 rule の SSOT | `c:/yk-skill/rule/` | 本ファイル所在 |
 | surge 公開図解台帳 | `c:/yk-skill/metadata/surge-published-list.md` | 図解スキルがデプロイ後に更新 |
+| スキル台帳（インベントリ） | `c:/yk-skill/metadata/SKILL_CATALOG.md` | `creating-skills` 完了時に再生成 · 整理依頼時は `managing-skills-yk` · `yk-tool/catalog.yaml` と混同しない |
 | 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
 | 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
 | 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
@@ -75,6 +76,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 企画・背景（参考のみ） | `c:/yk-memo/` | Governance 段階 7 — 実装の正解ではない |
 | Excel 原本 | `c:/yk-document/**/originals/` | Git ignore · 変換は `5.Python` + `exports/` |
 | セッション引き継ぎ MD | `c:/yk-memo/handoffs/{project}/` | スキル `handoff-session-work` · テンプレはスキル `references/template.md` |
+| Git commit（ユーザー明示時） | 各リポの Git ルート | スキル `committing-with-git-yk` · 方針は `GIT_WORKFLOW_RULES.md` |
 
 ### Cursor マルチルート（目安）
 
@@ -166,6 +168,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 2. **`10_meta/SECRETS_HYGIENE_RULES.md`** — コミットしてはいけないファイル・チャット貼付禁止
 3. **ドメイン補足** — 例: Python rev 積層 → `40_python/PYTHON_RULES.md` §9 · Playwright セッション → No 53 §5
 4. **実行手順** — Cursor User Rules（`git status` / `git diff` / HEREDOC 等）
+5. **（任意）** スキル `committing-with-git-yk` — マルチリポ判定 · 日本語メッセージ草案 · `/committing-with-git-yk` 明示起動
 
 ---
 

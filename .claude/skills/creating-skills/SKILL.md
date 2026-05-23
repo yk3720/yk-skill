@@ -66,3 +66,15 @@ SKILL.md に置く情報と references/ に置く情報を分離する。
 スキルを書いて終わりにしない。実際の使用を観察して改善する。
 
 → [exemplar.md](references/exemplar.md)（評価と反復プロセス）
+
+### Step 8: スキル台帳を再生成（完了ゲート）
+
+**新規作成・更新・改善の作業が完了したら必ず実行する。** 通常のスキル発火だけでは更新しない（台帳ドリフト防止）。
+
+1. [managing-skills-yk の regenerate-procedure.md](../managing-skills-yk/references/regenerate-procedure.md) と [catalog-schema.md](../managing-skills-yk/references/catalog-schema.md) を Read
+2. `c:/yk-skill` 配下の `SKILL.md` をスキャンし、機械列（`name` · `skill_path` · `tier` · `explicit_only`）を抽出
+3. `canonical` はスキーマの確定済み重複表に従う（`notes` は重複・要整理のみ）
+4. `c:/yk-skill/metadata/SKILL_CATALOG.md` を **全文置換**
+5. ユーザーに件数サマリと `canonical=no` 行があれば一覧を 1 回報告
+
+**専用スキル:** 整理依頼のみのときは `managing-skills-yk`（手順は同一）。

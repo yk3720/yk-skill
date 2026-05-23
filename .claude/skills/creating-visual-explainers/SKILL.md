@@ -1,6 +1,6 @@
 ---
 name: creating-visual-explainers
-description: Generates an illustrated HTML page about any topic and deploys it to surge.sh. Triggered by requests like "図解を作って", "図解を生成して", "このトピックを図解して", or "図解してデプロイして".
+description: Generates an illustrated HTML page about any topic and deploys it to surge.sh. Triggered by requests like "図解を作って", "図解を生成して", "このトピックを図解して", or "図解してデプロイして". For FB-comment bundle use creating-visual-explainers-fb (commenting-visual-explainers only).
 ---
 
 # Creating Visual Explainers

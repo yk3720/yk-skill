@@ -1,11 +1,14 @@
 ---
-name: creating-visual-explainers
-description: Generates an illustrated HTML page about any topic and deploys it to surge.sh. Triggered by requests like "図解を作って", "図解を生成して", "このトピックを図解して", or "図解してデプロイして".
+name: creating-visual-explainers-fb
+description: >
+  FBコメント付き図解（commenting-visual-explainers バンドル専用）。図解HTMLを生成し widget 付きで surge 公開。
+  汎用図解は L1 の creating-visual-explainers。fb-tool-url.txt 未設定時は setup-fb-tool を先に。
+  「FB付きで図解」「コメント付き図解して」などの依頼で使用。Do NOT use for generic diagram-only requests.
 ---
 
-# Creating Visual Explainers
+# Creating Visual Explainers (FB)
 
-任意のトピックについて、前提知識がなくても理解できる図解HTMLを生成し、surge.shに公開する。品質基準は「入社したての新卒社会人が読んでも腹落ちする明快さ」だが、この基準は出力には表示しない。
+`commenting-visual-explainers` バンドル内専用。任意のトピックについて図解HTMLを生成し、**フィードバック widget 付き**で surge.sh に公開する。汎用図解のみの依頼は `.claude/skills/creating-visual-explainers/`（L1）を使う。品質基準は「入社したての新卒社会人が読んでも腹落ちする明快さ」だが、この基準は出力には表示しない。
 
 ## 依存
 

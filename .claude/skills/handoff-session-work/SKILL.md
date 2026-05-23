@@ -24,6 +24,7 @@ description: >
 | `RULE_IMPROVEMENT_HANDOFF.md` の更新だけ | そのファイルの手順に従う（本スキル非使用） |
 | rule 構造の P1〜P7 バックログ | 同上 · 別トラック |
 | 122KB 級の単一 HANDOFF を毎回上書き | 禁止 — セッション MD を新規 Write |
+| ユーザーが **コミットして** と明示 | `committing-with-git-yk`（本スキルは commit しない） |
 
 ## 終了時（Write · Agent モード必須）
 
