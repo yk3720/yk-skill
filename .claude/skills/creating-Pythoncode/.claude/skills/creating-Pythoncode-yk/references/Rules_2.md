@@ -1,5 +1,8 @@
 # Git 履歴保護規律 (Git History Protection Rule)
 
+**横断 Git 方針（SSOT）:** `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` — commit / push / force push 等  
+本ファイルは **yk-skill ナレッジ・規律ファイル** の更新方法に特化した補足。
+
 ## ■ 背景と目的
 本リポジトリでは、ナレッジ/規律の変更履歴は **Git を唯一のSSoT** として管理する。
 従来の「rev番号ファイルを積層する運用（二世代維持ルール）」は採用しない。

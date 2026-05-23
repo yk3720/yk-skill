@@ -1,10 +1,10 @@
-# Next.js 参照ルール
+﻿# Next.js 参照ルール
 
 ## このルールが必要な背景
 
 React を前提としたフルスタック Web 開発で **Next.js** を触る際、公式ドキュメントの構成・App Router と Pages Router の違い・前提知識を揃えておくと、エージェントや人間の両方が手戻りを減らせる。本ファイルは **公式要点とリンクの SSOT** とする。
 
-**ファイルパス（エージェント・スキル参照用）:** `c:\yk-skill\rule\NEXTJS_RULES.md`
+**ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/NEXTJS_RULES.md`
 
 **最終更新:** 2026-05-10
 

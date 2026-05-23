@@ -4,7 +4,7 @@
 
 **shadcn/ui** は「npm の黒箱コンポーネント」と設計思想が異なり、CLI でソースを取り込む **Open Code** モデルである。誤解すると依存関係やカスタマイズ方針の説明がずれる。本ファイルは **公式要点とリンクの SSOT** とする。
 
-**ファイルパス（エージェント・スキル参照用）:** `c:\yk-skill\rule\SHADCN_UI_RULES.md`
+**ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md`
 
 **最終更新:** 2026-05-17
 
@@ -57,13 +57,13 @@ import { Button } from "@/components/ui/button"
 ## 4. エージェント向けメモ
 
 - **「ライブラリを import するだけ」ではなく「コードがプロジェクトにコピーされる」** と説明できると、AI やチームへの指示もブレにくい。
-- スタイルの土台は **Tailwind** が前提になりやすい（Next の公式流儀とも相性がよい）。詳細は `c:\yk-skill\rule\TAILWINDCSS_RULES.md` を参照。
+- スタイルの土台は **Tailwind** が前提になりやすい（Next の公式流儀とも相性がよい）。詳細は `c:/yk-skill/rule/30_web_stack/TAILWINDCSS_RULES.md` を参照。
 
 ---
 
 ## 5. workspace-ui-kit 実践メモ（2026-05-17 追記）
 
-`c:\yk-skill\workspace-ui-kit` は shadcn/ui の **base**（Base UI）バリアントを使用している。標準の shadcn/ui とは一部 API が異なるため注意が必要。
+`c:\yk-tool\workspace-ui-kit` は shadcn/ui の **base**（Base UI）バリアントを使用している。標準の shadcn/ui とは一部 API が異なるため注意が必要。
 
 ### 5-1. `asChild` は使わない → `render` を使う
 

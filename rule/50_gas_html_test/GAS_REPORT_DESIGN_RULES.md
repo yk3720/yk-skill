@@ -1,5 +1,7 @@
-# デザインシステム設計書
-## GAS 進捗報告レポート — Design Rules v2
+# GAS 進捗報告レポート — デザインシステム設計書
+## GAS_REPORT_DESIGN_RULES v2（surge 向け静的 HTML の chip デザインも本 SSOT）
+
+**ファイルパス:** `c:/yk-skill/rule/50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` · **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md)
 
 ---
 

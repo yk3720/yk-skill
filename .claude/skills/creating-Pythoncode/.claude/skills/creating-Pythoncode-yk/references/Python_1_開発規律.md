@@ -1,4 +1,6 @@
-# Python 開発規律（Git管理）
+﻿# Python 開発規律（Git管理）
+
+> **入口 SSOT:** `yk-skill/rule/40_python/PYTHON_RULES.md` を先に読む。本ファイルは詳細・復唱用。
 
 ## ■ コード作成における四大精神 (The Four Pillars)
 

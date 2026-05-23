@@ -6,14 +6,14 @@
 
 本ファイルは **キット横断の共通規範** の SSOT。ドメイン固有の画面・命名・データは **`workspaces/` 配下または `*_WORKSPACE_RULES.md`** を参照する。
 
-**リポジトリ:** `c:\yk-skill\workspace-ui-kit`  
+**リポジトリ:** `c:\yk-tool\workspace-ui-kit`  
 **リポジトリ内エントリ:** `workspace-ui-kit/CLAUDE.md`（ADR・スキル・採用雛形の既定）
 
 **最終更新:** 2026-05-17
 
-**併用するルール:** `NEXTJS_RULES.md` · `SHADCN_UI_RULES.md` · `TAILWINDCSS_RULES.md` · `DESIGN_RULES.md` · 各ドメイン固有ルール（下記索引）
+**併用するルール:** `../30_web_stack/NEXTJS_RULES.md` · `SHADCN_UI_RULES.md` · `TAILWINDCSS_RULES.md` · 各ドメイン固有ルール（下記索引）。**GAS レポート HTML デザインは含めない**（→ `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`）
 
-**索引:** `RULE_INDEX.md`
+**索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md)
 
 ---
 
@@ -67,7 +67,7 @@
 
 | 項目 | ルール |
 |------|--------|
-| 作業ディレクトリ | **`c:\yk-skill\workspace-ui-kit` のみ**。`yk-memo` 等では `package.json` がなく失敗する |
+| 作業ディレクトリ | **`c:\yk-tool\workspace-ui-kit` のみ**。`yk-memo` 等では `package.json` がなく失敗する |
 | 起動コマンド | 通常 `npm run dev`。Turbopack で不調時は `npm run dev:webpack` |
 | 確認 URL | ターミナルの `Local: http://localhost:xxxx` に合わせる |
 | **`turbopack.root` 禁止** | `next.config.ts` に **`turbopack: { root: __dirname }` 等を書かない**。Next.js 16 の既知バグで CSS の `tailwindcss` 解決が **親ディレクトリ（`C:\yk-skill`）** から行われ、エラー再試行で **RAM 膨張・PC フリーズ** の原因になる（[#90307](https://github.com/vercel/next.js/issues/90307)、[#92978](https://github.com/vercel/next.js/issues/92978)） |

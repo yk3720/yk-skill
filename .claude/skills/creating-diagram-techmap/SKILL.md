@@ -112,9 +112,10 @@ Task({
 
 | 状況 | 参照するルール |
 |------|--------------|
-| PowerShellでHTMLファイルを生成・編集・Base64埋め込みを行う場合 | `c:\yk-skill\rule\POWERSHELL_HTML_RULES.md` |
-| デザイン（色・余白・タイポグラフィ・バッジ）の判断に迷った場合 | `c:\yk-skill\rule\DESIGN_RULES.md` |
-|| このスキル自体（SKILL.md）を改善・更新する場合 | `c:\yk-skill\rule\SKILL_AUTHORING_RULES.md` |
+| PowerShellでHTMLファイルを生成・編集・Base64埋め込みを行う場合 | `c:/yk-skill/rule/50_gas_html_test/POWERSHELL_HTML_RULES.md` |
+| surge 向け HTML の chip デザインに迷った場合 | `c:/yk-skill/rule/50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` |
+| トークン・surge 認証の扱い | `c:/yk-skill/rule/10_meta/SECRETS_HYGIENE_RULES.md` |
+|| このスキル自体（SKILL.md）を改善・更新する場合 | `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` |
 
 ---
 
@@ -222,7 +223,7 @@ Phase 7のレビュー結果を踏まえてHTMLを修正する。
 npx --yes surge output/{スラッグ}.html --domain techmap-[スラッグ].surge.sh
 ```
 
-3. `c:\yk-skill\surge-published-list.md` を更新する:
+3. `c:\yk-skill\metadata\surge-published-list.md` を更新する:
    - **公開一覧テーブル**に新しい行を追加（#・タイトル・ツール種別=Techmap・公開日・URL・ローカルファイル名・ファイルサイズ）
    - **Techmapカテゴリ別まとめ**のテーブルにも行を追加
    - **統計**セクションの「公開コンテンツ総数」「Techmap件数」「最新の公開日」「ローカルファイル合計サイズ」を更新

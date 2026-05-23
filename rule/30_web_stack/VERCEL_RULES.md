@@ -4,7 +4,7 @@
 
 **Vercel** 上に Next.js などをデプロイする・プレビューを使う・ドキュメントを辿る際、公式が提供する機能区分（ホスティング、Functions、AI 周辺など）を混同しないためのメモ。本ファイルは **公式要点とリンクの SSOT** とする。
 
-**ファイルパス（エージェント・スキル参照用）:** `c:\yk-skill\rule\VERCEL_RULES.md`
+**ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/VERCEL_RULES.md`
 
 **最終更新:** 2026-05-13
 
@@ -12,7 +12,9 @@
 
 ## 0. Neon 連携・CLI・ローカル env（実務で詰まりやすい点）
 
-AI-Driven School の **commenting-visual-explainers** 等、Vercel Marketplace 経由で Neon を繋ぐときの再現メモ。**機密はチャットに貼らない。**
+AI-Driven School の **commenting-visual-explainers** 等、Vercel Marketplace 経由で Neon を繋ぐときの再現メモ。
+
+**横断方針:** [`10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) — 機密はチャットに貼らない（原則禁止）。
 
 ### 0-1. `vercel link`（非対話）
 
