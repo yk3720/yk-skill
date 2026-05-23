@@ -31,7 +31,7 @@
 | 5 | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 6 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers/SKILL.md` | nested | — | no | FB バンドル専用 · フォルダ名は legacy |
 | 7 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
-| 8 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | セッション引き継ぎ |
+| 8 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了・再開・確認・整理 |
 | 9 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
 | 10 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
 | 11 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |

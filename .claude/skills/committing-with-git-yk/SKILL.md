@@ -31,7 +31,7 @@ disable-model-invocation: true
 
 | 依頼 | 正しい扱い |
 |------|------------|
-| 引き継ぎ · セッション終了 · 作業を保存 | `handoff-session-work`（**commit 禁止**） |
+| 引き継ぎ · セッション終了 · 作業を保存 · 引き継ぎ内容を確認 · 整理して | `handoff-session-work`（**commit 禁止**） |
 | push · PR 作成のみ | User Rules の `creating-pull-requests` / ユーザー明示まで push しない |
 | `5.Python` の rev 上書き | `revision-protection` — 既存 `*revNNN*` の内容変更は中止 |
 
