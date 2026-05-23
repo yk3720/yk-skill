@@ -201,6 +201,7 @@ c:/yk-memo/
 | slug | HANDOFF | 備考 |
 |------|---------|------|
 | `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート `YK_WORKSPACE_LAYOUT_HANDOFF.md` は stub |
+| `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 ルール · `45_mermaid/MERMAID_RULES.md` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新プロジェクト追加時は本表に 1 行追加する。

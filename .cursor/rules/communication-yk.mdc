@@ -1,0 +1,13 @@
+---
+description: チャット応答の平易さ・大きな作業後の3点サマリ（図解スキルとは別）
+alwaysApply: true
+---
+
+# Communication（YK）
+
+**SSOT:** `c:/yk-skill/rule/10_meta/COMMUNICATION_RULES.md`
+
+- **常時:** 日本語 · タスクに比例した長さ · 専門用語は初出だけ短く解説 · 見出しに読者レベルラベルを付けない
+- **大きな作業の締め:** やったこと / まだやっていないこと / 次の一手（各1行可）。小さな修正のみのターンでは省略
+- **「もう一度」「平易に」明示時:** スキル `re-explaining-in-chat-yk`（章立て SSOT: `references/structure.md`）。図解・surge は図解スキルへ
+- **詳細:** `COMMUNICATION_RULES.md` を Read

@@ -1,0 +1,14 @@
+%% Mermaid ルール適用時の SDD フロー（概要）
+%% SSOT: ../MERMAID_RULES.md §6
+flowchart TD
+  start([開始])
+  refPlan[Ref Plan 出力]
+  editMmd[".mmd 編集"]
+  gate{品質ゲート}
+  done([完了])
+
+  start --> refPlan
+  refPlan --> editMmd
+  editMmd --> gate
+  gate -->|OK| done
+  gate -->|修正| editMmd

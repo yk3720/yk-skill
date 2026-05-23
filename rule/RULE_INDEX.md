@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-23（AGENT_SHELL_RULES · RUN 削減）
+**最終更新:** 2026-05-23（P12: Status 列のエージェント向け定義）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -13,7 +13,7 @@
 | 項目 | 規約 |
 |------|------|
 | **入口** | 本ファイル `rule/RULE_INDEX.md` のみルート直下（移動しない） |
-| **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · `40_python/` · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す） |
+| **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 45 → `45_mermaid`） |
 | **ファイル名** | `{TOPIC}_RULES.md`（番号はファイル名に付けない） |
 | **カタログ No** | 下表の **No 列**が論理順の SSOT。帯番号と優先順位（Governance）は別 |
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
@@ -92,6 +92,28 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 ---
 
+## Status 列（エージェント向け定義）
+
+本表 **Status** 列は、各 `*_RULES.md` の **整備度**（索引メタデータ）を示す。Git ブランチ名や本文中の「下書き」とは別概念。
+
+| Status | 意味 | エージェントの扱い |
+|--------|------|-------------------|
+| **active** | L1 整備済。**当該ドメインで PROGRESSIVE 完遂**（L0 `*-dev-entry.mdc` · L2 スキル · `ROUTER.md` — meta 横断など L0 不要の帯は例外） | 該当作業時に **L1 を Read**。手順・Ref Plan はスキルと entry に従う |
+| **draft** | L1 はあるが **PROGRESSIVE 完遂前**（スキル未作成 · ROUTER が L1 暫定 · entry 未作成 等） | **L1 先頭の注記どおり、構文・安全など MUST は適用**。手順は L1 暫定節 + 既存スキル。`active` への昇格は人間が索引を更新するまで行わない |
+| **deprecated** | 置換先あり。**参照禁止** | 読まない。本表の置換ルールまたは移行スタブを確認 |
+
+**SSOT:** Status の定義は **本節のみ**。各ルールファイル先頭の「ステータス」行は本表と **同期** する（食い違い時は本表を正として L1 を直す）。
+
+**`draft` → `active` 昇格の目安（ドメイン rule）**
+
+1. `10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §10 の新ドメイン手順が完了している  
+2. 本表の当該行を `active` に更新した  
+3. L1 先頭のステータス表記を `active` に合わせる  
+
+例: No 45 `MERMAID_RULES` — 2026-05-23 に P10 完了後 `active`。
+
+---
+
 ## 番号付きカタログ（SSOT）
 
 | No | 帯 | パス | いつ読む | Status |
@@ -102,6 +124,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 13 | 10_meta | `10_meta/AI_DRIVEN_RULES.md` | 講座・行動指針（人間向け原則） | active |
 | 14 | 10_meta | `10_meta/GIT_WORKFLOW_RULES.md` | **Git 操作**（commit / push / メッセージ / 禁止事項） | active |
 | 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・保管場所） | active |
+| 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ・作業後3点サマリ） | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -109,6 +132,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 33 | 30_web_stack | `30_web_stack/TAILWINDCSS_RULES.md` | Tailwind 作業 | active |
 | 34 | 30_web_stack | `30_web_stack/VERCEL_RULES.md` | Vercel / Neon デプロイ | active |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
+| 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
 | 52 | 50_gas_html_test | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` | **GAS 進捗レポート HTML**・surge 図解 HTML の chip デザイン | active |
 | 53 | 50_gas_html_test | `50_gas_html_test/PLAYWRIGHT_RULES.md` | Playwright / E2E | active |
@@ -124,6 +148,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 |
 | 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
+| 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | `creating-mermaid-yk` · ROUTER |
 | 50_gas_html_test | GAS・レポート HTML デザイン・E2E・PS HTML | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |
 
@@ -142,6 +167,18 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 `5.Python` で `.py` を触るときは `python-dev-entry.mdc` が自動適用される。
 
 **他言語スキル新設時:** `10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
+
+---
+
+## 読む順序（Mermaid 図を書くとき）
+
+1. **`45_mermaid/MERMAID_RULES.md`** — L1 SSOT（毎回）
+2. **スキル `creating-mermaid-yk/SKILL.md`** — 手順
+3. **`creating-mermaid-yk/references/ROUTER.md`** — tier / tag
+4. **Ref Plan** — `.mmd` 編集前（ROUTER §7）
+5. **表駆動フローが必要なら** `yk-tool/flowchart-web`（併用 · 代替ではない）
+
+`yk-skill` · `yk-memo` で `.mmd` を触るときは `mermaid-dev-entry.mdc` が自動適用される。
 
 ---
 

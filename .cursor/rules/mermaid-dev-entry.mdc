@@ -1,0 +1,21 @@
+---
+description: .mmd 編集時は MERMAID_RULES・creating-mermaid-yk・ROUTER を入口とする
+globs: "**/*.mmd"
+alwaysApply: false
+---
+
+# Mermaid 開発 — エージェント入口
+
+`.mmd` を編集・作成するとき:
+
+1. `c:/yk-skill/rule/45_mermaid/MERMAID_RULES.md` — L1 SSOT
+2. `c:/yk-skill/.claude/skills/creating-mermaid-yk/SKILL.md` — 手順
+3. `.../creating-mermaid-yk/references/ROUTER.md` — tier / tag
+4. **Ref Plan**（Write/StrReplace 前）→ ROUTER の `load` に列挙したものだけ Read
+   - **Light**: `tier` + `load` の短形式（SKILL Step 0.1）
+   - **Standard 以上**: フル Ref Plan（`tags` · `skip` 含む）
+   - 迷ったら **Standard**
+
+- 表駆動フロー: `c:/yk-tool/flowchart-web/`（Mermaid 出力 Phase 外）
+- 完了報告: `MERMAID_RULES.md` §8 + **読んだ refs**
+- 設計パターン: `c:/yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`

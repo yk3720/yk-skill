@@ -1,6 +1,9 @@
 output/*.html
 deploy-history.log
 
+# Mermaid CLI 生成物（正本は .mmd）
+rule/45_mermaid/diagrams/_out/
+
 # commenting-visual-explainers (Next.js / FBツール) — 秘密情報・ビルド成果物
 .claude/skills/commenting-visual-explainers/node_modules/
 .claude/skills/commenting-visual-explainers/.next/
