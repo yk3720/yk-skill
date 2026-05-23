@@ -1,6 +1,11 @@
 ---
 name: creating-visual-explainers
-description: Generates an illustrated HTML page about any topic and deploys it to surge.sh. Triggered by requests like "図解を作って", "図解を生成して", "このトピックを図解して", or "図解してデプロイして". For FB-comment bundle use creating-visual-explainers-fb (commenting-visual-explainers only).
+description: >
+  形式が「汎用」と確定したときの HTML 図解を surge.sh に公開。読者・テンプレ指定なし。
+  読者・形式が未指定の「図解して」「図解を作って」は先に routing-diagram-yk（質問→委譲）。本スキルは委譲後または汎用明示時のみ。
+  Also for English: illustrated HTML when diagram style is already generic/visual.
+  Routing: 汎用確定→本スキル | 形式未指定→routing-diagram-yk | curiositymap→creating-curiosity-map | techmap→creating-diagram-techmap | FB→creating-visual-explainers-fb。
+  Do NOT use for 形式未指定の単独完結・curiositymap/techmap専用・FB付き。
 ---
 
 # Creating Visual Explainers

@@ -1,8 +1,10 @@
-﻿# スキル作成ルール
+# スキル作成ルール
 ## Cursor Agent Skills — Skill Authoring Rules v2
 
 対象プロダクト: **Cursor IDE（Claude Sonnet エージェント）**  
 参考: [Anthropic Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) / [Agent Skills Overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)
+
+**実行ワークフロー:** スキルの新規作成・更新・改善は `c:/yk-skill/.claude/skills/creating-skills/SKILL.md`（Step 0〜8）。**本ファイルは執筆規範の SSOT**（Step 0 の第 1 必読）。
 
 ---
 

@@ -49,11 +49,11 @@
 
 **同名重複の解消（Phase B1 · 2026-05-23）**
 
-| 旧 name | 新 name | パス（フォルダ名は据え置き） |
-|---------|---------|------------------------------|
-| `creating-visual-explainers`（nested のみ） | `creating-visual-explainers-fb` | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers/SKILL.md` |
+| 旧 name | 新 name | パス |
+|---------|---------|------|
+| `creating-visual-explainers`（nested のみ） | `creating-visual-explainers-fb` | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` |
 
-L1 `creating-visual-explainers` は変更なし。同名 `name` の重複は解消済み。
+L1 `creating-visual-explainers` は変更なし。同名 `name` の重複は解消済み（Phase B2 でフォルダ名も `creating-visual-explainers-fb` に揃え済み · 2026-05-23）。
 
 ---
 

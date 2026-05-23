@@ -1,11 +1,16 @@
-﻿---
+---
 name: reviewing-with-subagents
-description: Runs parallel subagent reviews from multiple explicit lenses (e.g. author vs reader vs auditor, engineer vs UX vs security). Use when the user asks for subagent review, multi-perspective critique, parallel reviewer agents, or debuts multiple reviewers at once. Do NOT use for simple single-pass proofreading without requested depth.
+description: >
+  Runs parallel subagent reviews from multiple explicit lenses (e.g. author vs reader vs auditor, engineer vs UX vs security).
+  Use when the user asks for subagent review, multi-perspective critique, parallel reviewer agents, or 3+ explicit lenses at once.
+  Do NOT use for single-pass code or diff review without multi-lens depth (→ reviewing-code-yk), simple proofreading, or commit/push/PR.
 ---
 
 # サブエージェントによる多視点レビュー
 
 Cursor の **`Task` ツールでサブエージェントを並列起動**してレビューさせる手順（ユーザーが「エージェントを立ち上げてレビュー」と言う場合の想定運用）。
+
+**単一パスのコードレビュー**（差分・PR 前・1 エージェント 1 周）→ `reviewing-code-yk`。
 
 ## 目的
 

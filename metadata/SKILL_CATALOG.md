@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-05-23（`creating-mermaid-yk` 追加）  
+**最終更新:** 2026-05-23（Phase B2 · `creating-visual-explainers-fb` フォルダ名整合）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **14** · nested **3** · sample **1**（計 **18** `SKILL.md`）
+**件数:** L1 **17** · nested **3** · sample **1**（計 **21** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -30,17 +30,20 @@
 | 4 | creating-mermaid-yk | `.claude/skills/creating-mermaid-yk/SKILL.md` | L1 | — | no | Mermaid `.mmd` · `MERMAID_RULES` |
 | 5 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
 | 6 | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
-| 7 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers/SKILL.md` | nested | — | no | FB バンドル専用 · フォルダ名は legacy |
+| 7 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 8 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
 | 9 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了・再開・確認・整理 |
 | 10 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
 | 11 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
-| 12 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |
-| 13 | re-explaining-in-chat-yk | `.claude/skills/re-explaining-in-chat-yk/SKILL.md` | L1 | — | no | チャット再説明 · `COMMUNICATION_RULES` |
-| 14 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
-| 15 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright / E2E |
-| 16 | creating-pythoncode-yk | `.claude/skills/creating-Pythoncode/.claude/skills/creating-Pythoncode-yk/SKILL.md` | nested | — | no | 親: `creating-Pythoncode/`（L1 SKILL なし） |
-| 17 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
+| 12 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | push / GitHub PR（明示のみ） |
+| 13 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |
+| 14 | re-explaining-in-chat-yk | `.claude/skills/re-explaining-in-chat-yk/SKILL.md` | L1 | — | no | チャット再説明 · `COMMUNICATION_RULES` |
+| 15 | reviewing-code-yk | `.claude/skills/reviewing-code-yk/SKILL.md` | L1 | — | no | 単一パスコードレビュー（差分・PR 前） |
+| 16 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
+| 17 | routing-diagram-yk | `.claude/skills/routing-diagram-yk/SKILL.md` | L1 | — | no | 図解形式の受付・質問・委譲（HTML は作らない） |
+| 18 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright / E2E |
+| 19 | creating-pythoncode-yk | `.claude/skills/creating-Pythoncode/.claude/skills/creating-Pythoncode-yk/SKILL.md` | nested | — | no | 親: `creating-Pythoncode/`（L1 SKILL なし） |
+| 20 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 
 ---
 
@@ -48,9 +51,12 @@
 
 | 関連スキル | メモ |
 |------------|------|
-| `creating-visual-explainers`（L1）↔ `creating-visual-explainers-fb`（nested） | Phase B1 で `name` 分離済み。方針: [`2026-05-23_6_visual-explainers-dedup-policy.md`](../../yk-memo/handoffs/workspace-layout/archive/2026/2026-05-23_6_visual-explainers-dedup-policy.md) · フォルダリネーム（B2）は未実施 |
-| `re-explaining-in-chat-yk` ↔ 図解3種 | チャット再説明のみ。`わかりやすく図解` は curiosity-map 等へ（description で分離） |
-| `creating-mermaid-yk` ↔ 図解3種 | `.mmd` / diagram-as-code。HTML surge 図解は visual-explainers 等 |
+| `creating-visual-explainers`（L1）↔ `creating-visual-explainers-fb`（nested） | Phase B1/B2 完了（`name` · フォルダ名一致）。方針: [`2026-05-23_6_visual-explainers-dedup-policy.md`](../../yk-memo/handoffs/workspace-layout/archive/2026/2026-05-23_6_visual-explainers-dedup-policy.md) |
+| `re-explaining-in-chat-yk` ↔ 図解3種 | チャット再説明のみ。図解 HTML は routing-diagram-yk → 各実行スキル |
+| `routing-diagram-yk` ↔ 図解4種 | 形式未指定の受付。実行は curiosity / techmap / visual / fb に委譲 |
+| `reviewing-code-yk` ↔ `reviewing-with-subagents` | 単一パスコードレビュー vs 多視点並列。description の Do NOT で分離 |
+| `committing-with-git-yk` ↔ `pushing-and-pr-yk` | commit vs push/PR · いずれも `explicit_only`（`disable-model-invocation`） |
+| `creating-mermaid-yk` ↔ 図解3種 | `.mmd` / diagram-as-code。HTML surge 図解は routing 経由または各図解スキル |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 

@@ -102,7 +102,7 @@ node --version
 **macOS / Git Bash（Windows）の場合:**
 
 ```bash
-bash .claude/skills/creating-visual-explainers/scripts/deploy-diagram.sh output/{スラッグ}.html [スラッグ]
+bash .claude/skills/creating-visual-explainers-fb/scripts/deploy-diagram.sh output/{スラッグ}.html [スラッグ]
 ```
 
 **Windows（PowerShell）で bash が使えない場合:**

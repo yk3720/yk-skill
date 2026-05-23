@@ -1,6 +1,11 @@
 ---
 name: creating-curiosity-map
-description: 文系の大人が「知識ゼロ」から興味のあるテーマを理解できるHTML図解を生成し、surge.shに公開するスキル。「curiositymapで図解して」「これをcuriositymapにして」「わかりやすく図解して」「文系向けに図解して」「初心者向けに図解して」などに使用する。勉強のとっかかりになる資料を作る。
+description: >
+  文系の大人向け HTML 図解（curiositymap）を生成し surge.sh に公開。日常起点・勉強のとっかかり用。
+  「curiositymapで図解して」「文系向けに図解して」「初心者向けに図解して」で使用。形式未指定の「図解して」は routing-diagram-yk が先に質問。
+  routing-diagram-yk から委譲されたときも本スキルを完走する。
+  Routing: 文系・curiositymap→本スキル | 形式未指定→routing-diagram-yk | techmap→creating-diagram-techmap | 汎用→creating-visual-explainers | FB→creating-visual-explainers-fb。
+  Do NOT use for techmap/技術を図解、形式未指定の単独完結、FB付き、mermaid/flowchart-web。
 ---
 
 # CuriosityMap

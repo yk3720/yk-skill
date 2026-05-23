@@ -2,11 +2,11 @@
 name: handoff-session-work
 description: >
   yk-memo/handoffs のセッション引き継ぎ（終了・再開・確認・整理）。
-  終了: 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」
+  終了: 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」— **整理→archive を先に必須**、その後に新規セッション MD
   再開: 「続きから」「引き継ぎを読んで」「@...SESSION...md」— §4の1件のみ実行
   確認: 「引き継ぎ内容を確認」「handoffsを確認」「引き継ぎの状態を教えて」— フォルダ俯瞰のみ・実行しない
-  整理: 「引き継ぎ整理」「整理して」「archiveして」
-  RULE_IMPROVEMENT_HANDOFF 更新のみには使わない。commit は committing-with-git-yk。
+  整理: 「引き継ぎ整理」「handoffsを整理」「引き継ぎをarchive」「archiveして」（handoffs/引き継ぎの文脈）
+  Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit（→ committing-with-git-yk）。
 ---
 
 # Session Handoff
@@ -19,12 +19,14 @@ description: >
 
 | モード | 発火例 | 副作用 |
 |--------|--------|--------|
-| **終了** | 引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了 | Write · HANDOFF 更新 · **superseded を archive（必須）** |
+| **終了** | 引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了 | **整理→archive 先（必須）** · 新規セッション MD · HANDOFF 更新 |
 | **再開** | 続きから · 引き継ぎを読んで · `@...md` | §4 の **1 件だけ**実行 |
 | **確認** | 引き継ぎ内容を確認 · handoffs を確認 · 一覧 · 状態を教えて | **Read のみ**（移動・削除・§4 実行なし） |
 | **整理** | 整理して · archive して · 片付けて | 移動 · 削除 · README 更新（新規セッション MD は不要なら Write しない） |
 
 曖昧なとき（「引き継ぎを見て」等）は **1 問だけ**: 確認だけ / 続きから作業 / 整理まで。
+
+**スキル選択:** 汎用の「整理して」「片付けて」単独では発火しない（引き継ぎ · handoffs · archive の文脈が必要）。
 
 ## 依存
 
@@ -52,19 +54,29 @@ description: >
 
 [routing.md §引き継ぎ終了](references/routing.md) の終了ゲートに従う。
 
+**鉄則: 整理してから終了。** 新規セッション MD の Write より **先に** Phase A（整理・アーカイブ）を完了する。Phase A を飛ばした終了は **無効**（要整理）。
+
+### Phase A — 整理（必須 · Write より先）
+
 1. [references/routing.md](references/routing.md) を Read
 2. プロジェクト slug が不明ならユーザーに確認
-3. [references/template.md](references/template.md) を Read
-4. セッション MD を **新規 Write**（上書き禁止）
-5. テンプレの全見出しを埋める（空欄・`TBD` 禁止）
-6. `HANDOFF.md` の **「最新セッション」1 行**（と必要なら §6）だけ更新
-7. 触った各 Git ルートで `git status` → セッション MD §2 に記載
-8. **資料整理** — [routing.md §資料整理](references/routing.md)：完了済み・重複の削除または移行
-9. **アーカイブ（必須）** — HANDOFF が指さない **superseded** セッション MD を `archive/{YYYY}/` へ移動（同日の最新以外を含む）。移動一覧を §1-3 に記録
-10. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
-11. ユーザーに保存パスと再開用 `@` 依頼文を提示
+3. `handoffs/{project}/` を Glob — ルート直下のセッション MD（`HANDOFF.md` · `README.md` · `archive/` を除く `*.md`）を列挙
+4. **資料整理** — [routing.md §資料整理](references/routing.md)：完了済み・重複の削除または移行
+5. **アーカイブ（必須）** — 手順 3 で列挙した **ルート直下のセッション MD をすべて** `archive/{YYYY}/` へ移動（削除しない）。0 本ならスキップ可
+6. `archive/{YYYY}/README.md` に移動したファイルを追記（あれば）
+7. **Phase A 完了チェック** — ルート直下のセッション MD が **0 本**であること（移動漏れがあれば 5 に戻る）
 
-**禁止:** `git commit` / `git push` · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
+### Phase B — 記録（整理のあと）
+
+8. [references/template.md](references/template.md) を Read
+9. セッション MD を **新規 Write**（上書き禁止）
+10. テンプレの全見出しを埋める（空欄・`TBD` 禁止）。§1-3 に **Phase A の移動・削除一覧**を記録
+11. `HANDOFF.md` の **「最新セッション」1 行**（と必要なら §6）だけ更新
+12. 触った各 Git ルートで `git status` → セッション MD §2 に記載
+13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
+14. ユーザーに保存パスと再開用 `@` 依頼文を提示
+
+**禁止:** Phase A 前の新規 Write · `git commit` / `git push` · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
 
 ---
 
@@ -102,7 +114,7 @@ description: >
 2. 対象 `{project}` を特定（未指定なら確認モード相当の一覧を出してから 1 プロジェクトに絞る）
 3. **移動・削除候補**を表で提示（移動元 → 行き先）
 4. 曖昧な操作（ファイル削除 · stub 削除 · 90 日超一括）は **ユーザーの OK 後**に実行
-5. **superseded の archive** はユーザーが「整理して」「全部」等と言ったら実行（終了モードで未実施の分を含む）
+5. **superseded の archive** — 「整理して」単独依頼時はここで実行。**終了**では Phase A で必ず先に実施済み（終了モードで Phase A を飛ばした漏れも救済）
 6. HANDOFF · README を更新 · 実施一覧を報告（セッション MD を新規した場合は §1-3 にも記録）
 
 **禁止:** ユーザーの明示なしに `git commit` · 最新セッション MD の削除

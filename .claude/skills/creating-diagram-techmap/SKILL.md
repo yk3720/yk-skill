@@ -1,6 +1,11 @@
 ---
 name: creating-diagram-techmap
-description: 理系エンジニアが「知識ゼロ」から学ぶための技術解説図解を生成するスキル。「techmapで図解して」「これをtechmapにして」「技術を図解して」などに使用する。基礎サマリー→詳細→参考文献URLの連鎖構造で、学習の好奇心を連鎖させる。 
+description: >
+  理系エンジニア向け技術解説 HTML 図解（techmap）を生成し surge.sh に公開。基礎サマリー→詳細→参考文献の連鎖構造。
+  「techmapで図解して」「技術を図解して」で使用。形式未指定の「図解して」は routing-diagram-yk が先に質問。
+  routing-diagram-yk から委譲されたときも本スキルを完走する。
+  Routing: 理系技術・techmap→本スキル | 形式未指定→routing-diagram-yk | 文系→creating-curiosity-map | 汎用→creating-visual-explainers | FB→creating-visual-explainers-fb。
+  Do NOT use for curiositymap/文系向け、形式未指定の単独完結、FB付き、mermaid/flowchart-web。
 ---
 
 # Techmap

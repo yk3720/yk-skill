@@ -80,5 +80,6 @@
 | **本ファイル（yk-skill）** | 方針 SSOT — Governance 段階 5 の横断 rule |
 | **Cursor User Rules** | 実行手順（並列 `git status` / `git diff` · HEREDOC · PR 用 `gh` 等） |
 | **スキル `committing-with-git-yk`** | ユーザー明示時の commit オーケストレーション（マルチリポ · 日本語草案）— `/committing-with-git-yk` |
+| **スキル `pushing-and-pr-yk`** | ユーザー明示時の push / GitHub PR — `/pushing-and-pr-yk`（`disable-model-invocation`） |
 
 矛盾したときは **Governance**（`RULE_INDEX.md`）の優先順位に従う。同順位ならユーザーに確認する。

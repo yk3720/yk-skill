@@ -1,4 +1,8 @@
-# 核心原則
+# 核心原則（補助）
+
+> **執筆規範の SSOT:** `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md`（構造 · フロントマター · description · プログレッシブ開示 · §11 チェックリスト）。**`creating-skills` Step 0 では RULE を先に Read。**
+>
+> 本ファイルは **種類判断 · 洗練 · コード vs プロンプト** の補助。RULE と重複する節は繰り返さずリンクする。
 
 ## 目次
 
@@ -29,10 +33,10 @@
 
 ## 簡潔性 (Concise)
 
-コンテキストウィンドウは共有資源。**本当に必要な情報だけ**を含める。
+詳細・自問の型 → `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` §2-1。
 
 - 冗長な説明より簡潔な例
-- 「このトークンコストに見合う価値があるか？」「Claudeが既に知っていないか？」を問う
+- 補助観点: 種類判断後に「このスキル固有の情報だけ残す」
 
 ---
 
@@ -68,27 +72,9 @@
 
 ## 構造とフロントマター
 
-### ディレクトリ構造
+**SSOT:** `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` §3（ディレクトリ · フロントマター · 命名）· §4（プログレッシブ開示）。
 
-```
-skill-name/
-├── SKILL.md (必須)
-├── scripts/ (任意)
-│   └── *.ts / *.sh
-└── references/ (任意)
-    └── *.md
-```
-
-### フロントマター
-
-```yaml
----
-name: kebab-case（64文字以内、小文字・数字・ハイフンのみ）
-description: 三人称で記述。何をするか＋トリガーフレーズ3つ以上（1024文字以内）
----
-```
-
-descriptionの書き方・良い例・悪い例 → [exemplar.md](exemplar.md)（descriptionの書き方）
+模範例 · description の具体例 → [exemplar.md](exemplar.md)
 
 ---
 
