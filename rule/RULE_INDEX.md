@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-23（スキル台帳パス追加）
+**最終更新:** 2026-05-23（AGENT_SHELL_RULES · RUN 削減）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -77,6 +77,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | Excel 原本 | `c:/yk-document/**/originals/` | Git ignore · 変換は `5.Python` + `exports/` |
 | セッション引き継ぎ MD | `c:/yk-memo/handoffs/{project}/` | スキル `handoff-session-work`（終了·再開·確認·整理）· `references/template.md` · `folder-audit.md` |
 | Git commit（ユーザー明示時） | 各リポの Git ルート | スキル `committing-with-git-yk` · 方針は `GIT_WORKFLOW_RULES.md` |
+| Agent Shell / RUN 承認 | `60_tooling/cursor-permissions/permissions.json` → `~/.cursor/` にデプロイ | `60_tooling/AGENT_SHELL_RULES.md` · `cursor-permissions/README.md` |
 
 ### Cursor マルチルート（目安）
 
@@ -113,6 +114,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 53 | 50_gas_html_test | `50_gas_html_test/PLAYWRIGHT_RULES.md` | Playwright / E2E | active |
 | 54 | 50_gas_html_test | `50_gas_html_test/POWERSHELL_HTML_RULES.md` | 大容量 HTML + PowerShell | active |
 | 61 | 60_tooling | `60_tooling/CURSOR_RULES.md` | Cursor / Windows 実務 | active |
+| 62 | 60_tooling | `60_tooling/AGENT_SHELL_RULES.md` | **Agent Shell / RUN 削減** · Read 優先 · allowlist | active |
 
 **帯の意味（要約）**
 
@@ -159,6 +161,13 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | workspace-ui-kit（Next / shadcn） | `SHADCN_UI` · `TAILWIND` · ドメイン rule |
 | GAS 進捗レポート HTML・surge 図解 HTML（chip・8px グリッド） | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` |
 | 迷ったら | 本表 No 00 → 上表 |
+
+---
+
+## 読む順序（Agent が Shell を使うとき）
+
+1. **`60_tooling/AGENT_SHELL_RULES.md`** — RUN 削減 · Read/Glob 優先 · タスク別例外 D-1〜D-4
+2. **`60_tooling/CURSOR_RULES.md`** — Windows · 権限 · 人間向け Auto-Run 手順（§5 からリンク）
 
 ---
 

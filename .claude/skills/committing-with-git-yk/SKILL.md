@@ -17,7 +17,8 @@ disable-model-invocation: true
 |--------|------|
 | 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
 | secrets | `c:/yk-skill/rule/10_meta/SECRETS_HYGIENE_RULES.md` §2 · エージェント必読チェックリスト |
-| 手順 | **Cursor User Rules**（`committing-changes-with-git`）— 並列 `status`/`diff`/`log` · amend 条件 |
+| 手順 | **Cursor User Rules**（`committing-changes-with-git`）— 調査 · amend 条件 |
+| Shell / RUN | `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md` — 調査は `;` 1 本 · 初回 `all` |
 
 矛盾時は **GIT_WORKFLOW** と User Rules を優先する。
 
@@ -57,12 +58,10 @@ disable-model-invocation: true
 
 ### 2. 調査（並列）
 
-各対象ルートで **User Rules に従い** 並列実行:
+各対象ルートで **User Rules に従い**調査する。**YK 既定は 1 本の Shell に `;` 連結**（[AGENT_SHELL_RULES.md](../../../rule/60_tooling/AGENT_SHELL_RULES.md) · [commit-shell.md](references/commit-shell.md)）。**初回から `required_permissions: ["all"]`**。
 
-```text
-git -C "<ROOT>" status
-git -C "<ROOT>" diff
-git -C "<ROOT>" log -5 --oneline
+```powershell
+git -C "<ROOT>" status; git -C "<ROOT>" diff --stat; git -C "<ROOT>" log -5 --oneline
 ```
 
 ### 3. メッセージ草案（ユーザー確認前）

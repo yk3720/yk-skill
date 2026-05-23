@@ -1,6 +1,6 @@
 # commit 実行（Windows / PowerShell）
 
-**手順 SSOT:** Cursor User Rules `committing-changes-with-git`（並列調査 · amend 条件）
+**手順 SSOT:** Cursor User Rules `committing-changes-with-git`（調査 · amend 条件）· `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`（RUN 最小 · 初回 `all`）
 
 ## 推奨: メッセージファイル + `-F`
 
@@ -53,19 +53,28 @@ git -C $root commit -F $msgFile
 git -C $root commit -m "feat(scope): 日本語の要約" -m "なぜこの変更か（日本語）"
 ```
 
-## 並列調査コマンド（status / diff / log）
+## 調査コマンド（status / diff / log）— RUN 最小
 
-User Rules どおり **1 コマンドずつ**、または **同一 Shell 内では `;` で連結**する。
+**YK 既定:** 対象リポごとに **1 本の Shell** に `;` で連結（**並列 3 本は使わない**）。**初回から `required_permissions: ["all"]`**。
 
 ```powershell
 git -C "c:/yk-memo" status; git -C "c:/yk-memo" diff --stat; git -C "c:/yk-memo" log -5 --oneline
 ```
 
+マルチリポ（例: yk-memo + yk-skill）も **1 本にまとめる**:
+
+```powershell
+git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
+```
+
 - **`&&` は使わない** — Windows PowerShell 5.1（Cursor 既定になりがち）では構文エラー。詳細は `rule/50_gas_html_test/PLAYWRIGHT_RULES.md` §10-1。
+- User Rules の「並列調査」と両立: **並列 Shell 3 本または 1 本連結のどちらか** — YK では **1 本連結を優先**。
 
-## push
+## add / commit / push
 
-ユーザーが **当ターンで push を明示**したときのみ。ネットワークが必要なため、commit と同様 **サンドボックスで失敗したら `all` で再試行**（下表）。
+**初回 Shell から `required_permissions: ["all"]`**（サンドボックス → 失敗 → 再 RUN を避ける）。
+
+push はユーザーが **当ターンで push を明示**したときのみ。commit と **同じターン**なら add → commit → push を **1 本の `;` 連結**してよい。
 
 ## トラブルシュート（Cursor エージェント · Windows）
 
@@ -78,12 +87,19 @@ git -C "c:/yk-memo" status; git -C "c:/yk-memo" diff --stat; git -C "c:/yk-memo"
 | `Permission denied`（`.git/objects/...`）· `failed to insert into database` | Cursor **サンドボックス**が `.git` 書き込みを拒否 | Shell を **`required_permissions: ["all"]`** で再実行（`git_write` のみでは不足することがある） |
 | `Unable to create '.git/index.lock': File exists` | 上記失敗の直後に **壊れた lock** が残った | 他の git プロセスが無いことを確認し、`index.lock` を削除してから **all** で add/commit をやり直す |
 
-**再試行の順序（推奨）**
+**commit 1 リポの Shell 例（RUN 1 回 + Write）**
 
-1. メッセージを **Write** で `<ROOT>/.git/COMMIT_EDITMSG_YK.txt` に出す  
-2. `index.lock` があれば削除  
-3. `git add` → `git commit -F` を **`all` 権限**で実行  
-4. push も同様に **`all`**
+1. **Write** で `<ROOT>/.git/COMMIT_EDITMSG_YK.txt`  
+2. **Shell（`all`）1 本:**
+
+```powershell
+git -C "c:/yk-memo" add <paths...>
+git -C "c:/yk-memo" commit -F "c:/yk-memo/.git/COMMIT_EDITMSG_YK.txt"
+git -C "c:/yk-memo" status
+```
+
+3. push 依頼があれば **続けて 1 本**（または上記に `; git -C ... push` を足す）  
+4. `index.lock` が残っていれば削除してから再実行
 
 ## 禁止・注意
 

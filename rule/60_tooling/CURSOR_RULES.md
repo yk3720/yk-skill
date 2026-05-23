@@ -79,8 +79,20 @@ cursor --open-url -- "http://localhost:3000"
 
 ### 正しいやり方
 
-- ホーム直下へのフォルダ作成・clone・`npm install` などは、**サンドボックス解除またはネットワーク／フル権限**が必要なら、その前提でコマンドを実行する。
-- 失敗したら **権限を広げて再試行**する（一度で諦めない）。
+- **`.git` 書き込み・push・Playwright** などは、初回 Shell から **`required_permissions: ["all"]`** を使う（サンドボックス失敗→再 RUN を避ける）。詳細は **ルール5**。
+- ホーム直下への clone 等でサンドボックスが足りないときも **`all`**。
+- 権限の種類が不明な一般コマンドのみ、失敗後に権限を広げて再試行する。
+
+---
+
+## ルール5：Shell / RUN 承認の削減（横断 SSOT）
+
+**本文は転記しない。** → [`60_tooling/AGENT_SHELL_RULES.md`](AGENT_SHELL_RULES.md)
+
+| 誰 | やること |
+|----|----------|
+| **人間** | Auto-Run = **Allowlist** · `~/.cursor/permissions.json` · §2 チェックリスト |
+| **エージェント** | 確認は Read/Glob · Shell は commit/終了等のみ · 同一ターンは `;` で 1 本 |
 
 ---
 

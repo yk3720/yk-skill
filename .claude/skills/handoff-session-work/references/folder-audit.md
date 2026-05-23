@@ -58,3 +58,14 @@
 - §4 のタスク実行（再開モード）
 - archive 移動 · 削除（整理モード · ユーザー明示後）
 - 「GO」と言って作業に入る（提案は箇条書きのみ）
+- **Shell ツール** — Cursor の RUN 承認は主に Shell で発生する。確認は **Glob + Read** で足りる（例: `handoffs/workspace-layout/HANDOFF.md` を Read、ルートの `*.md` は Glob）
+
+## ユーザー向け（RUN を減らす依頼文）
+
+```text
+引き継ぎを確認して。Shell は使わず Read だけで。
+```
+
+```text
+@handoffs/workspace-layout/HANDOFF.md の確認だけ。実行・整理・git は不要。
+```

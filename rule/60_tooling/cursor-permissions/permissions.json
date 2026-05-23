@@ -1,0 +1,10 @@
+{
+  "terminalAllowlist": [
+    "cd",
+    "python",
+    "git status",
+    "git diff",
+    "git log",
+    "git -C"
+  ]
+}
