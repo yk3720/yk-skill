@@ -66,8 +66,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |------|----------|------|
 | AI 指示・実装 rule の SSOT | `c:/yk-skill/rule/` | 本ファイル所在 |
 | surge 公開図解台帳 | `c:/yk-skill/metadata/surge-published-list.md` | 図解スキルがデプロイ後に更新 |
-| 図解 HTML 正本（ローカル） | **目標** `c:/yk-tool/publish/` · **現** `c:/yk-memo/output/` | 物理移行未実施 · スキル内 `output/` は作業用 |
-| 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` | 例: `commit-report-tool`（旧: `yk-memo/output/commit-report-tool/`） |
+| 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
+| 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
 | 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
 | フローチャート Web | `c:/yk-tool/flowchart-web/` | 移行元: `yk-skill/flowchart-web/` |
 | Playwright E2E | `c:/yk-tool/playwright-test/` | 移行元: `yk-skill/playwright-test/`（2026-05-23） |

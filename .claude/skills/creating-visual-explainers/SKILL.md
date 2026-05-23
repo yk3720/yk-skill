@@ -127,6 +127,17 @@ npx --yes surge output/{スラッグ}.html --domain diagram-[スラッグ].surge
 - **認証エラー / `Login required`** — `npx surge login` を実行してメールアドレスとパスワードを入力する
 - **その他** — エラーの内容を読み、「何が問題で」「次に何をすればいいか」を平易に説明する
 
+#### 正本へコピー（デプロイ成功後）
+
+スキル内 `output/` は作業用（gitignore）。公開済み HTML の SSOT は `c:/yk-tool/publish/`。
+
+```powershell
+Copy-Item -Force "output/{スラッグ}.html" "c:/yk-tool/publish/{スラッグ}.html"
+```
+
+- マルチルート workspace に `yk-tool` が無い場合も絶対パスを使う
+- コピー失敗時はデプロイ成功を優先し、ユーザーに手動コピーを案内する
+
 ### 図解の削除
 
 ユーザーが「この図解を削除して」と依頼した場合:

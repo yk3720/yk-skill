@@ -224,13 +224,22 @@ Phase 7のレビュー結果を踏まえてHTMLを修正する。
 npx --yes surge output/{スラッグ}.html --domain curimap-[スラッグ].surge.sh
 ```
 
-3. `c:\yk-skill\metadata\surge-published-list.md` を更新する:
+3. **正本へコピー**（スキル内 `output/` は作業用 · 公開済み HTML の SSOT は `yk-tool`）:
+
+```powershell
+Copy-Item -Force "output/{スラッグ}.html" "c:/yk-tool/publish/{スラッグ}.html"
+```
+
+- マルチルート workspace に `yk-tool` が無い場合は絶対パス `c:/yk-tool/publish/` を使う
+- コピー失敗時はデプロイ成功を優先し、ユーザーに手動コピーを案内する
+
+4. `c:\yk-skill\metadata\surge-published-list.md` を更新する:
    - **公開一覧テーブル**に新しい行を追加（#・タイトル・ツール種別=CuriosityMap・公開日・URL・ローカルファイル名・ファイルサイズ）
    - **CuriosityMapカテゴリ別まとめ**のテーブルにも行を追加
    - **統計**セクションの「公開コンテンツ総数」「CuriosityMap件数」「最新の公開日」「ローカルファイル合計サイズ」を更新
    - ファイル冒頭の「最終更新」日付を更新
 
-4. 完了報告:
+5. 完了報告:
 
 ```
 完成・公開完了: 【図解タイトル】
