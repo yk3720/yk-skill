@@ -27,6 +27,7 @@
 | [Git](#読む順序git-操作をするとき) | commit / push |
 | [Secrets](#読む順序資格情報トークンを扱うとき) | トークン · `.env` |
 | [GAS / Playwright / HTML](#読む順序gas--playwright--大容量-html) | No 51–54 |
+| [個人アプリ · 企画 · 再開](#読む順序個人アプリ新規企画フォルダ再開) | No 17 · handoffs · AGENTS.md |
 
 ---
 
@@ -200,6 +201,20 @@
 1. [RULE_INDEX — カタログ](RULE_INDEX.md#番号付きカタログssot) で該当 No を特定
 2. **GAS** → No 51 · **E2E** → No 53（GAS は `networkidle`、Sheets は `load` — PLAYWRIGHT 参照）
 3. **大容量 HTML 編集** → No 54（Python 文字列処理が安定する場合は `40_python` も可）
+
+---
+
+## 読む順序（個人アプリ新規 · 企画フォルダ · 再開）
+
+1. **`10_meta/APP_PROJECT_RULES.md`** — 三層モデル · 新規チェックリスト · AGENTS 必須項目
+2. **handoffs** — `c:/yk-memo/handoffs/{slug}/HANDOFF.md` → 最新セッション MD **§4 の 1 件**
+3. **企画 `AGENTS.md`** — 境界 · SSOT マップ · やる/やらない
+4. **Product Spec** — 仕様疑問時のみ（README 読む順序 · データモデル · ADR）
+5. **スタック L1** — 実装開始後 [RULE_INDEX クイック入口](RULE_INDEX.md#タスク別クイック入口)（No 31–35 等）
+6. **新規/整理/AGENTS 整備** — スキル `starting-app-project-yk`
+7. **引き継ぎ終了** — スキル `handoff-session-work`（本 rule に手順全文は載せない）
+
+**実例:** flowchart-web → [AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md) · [handoffs/flowchart-web](c:/yk-memo/handoffs/flowchart-web/HANDOFF.md)
 
 ---
 

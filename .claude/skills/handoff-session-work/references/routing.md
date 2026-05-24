@@ -217,13 +217,28 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 ---
 
+## 企画フォルダとの関係
+
+| 種類 | 置き場 | SSOT |
+|------|--------|------|
+| セッション進捗 · §4 | `handoffs/{slug}/` | 本スキル · セッション MD |
+| 恒久方針 · ロードマップ | `handoffs/{slug}/HANDOFF.md` | HANDOFF §6 |
+| プロダクト仕様 · ADR | `yk-memo/.../{企画フォルダ}/` | 各 MD · `AGENTS.md` SSOT マップ |
+| エージェント憲法 | 企画フォルダ `AGENTS.md` | No 17 `APP_PROJECT_RULES.md` §5 |
+
+**MUST NOT:** 企画フォルダの `再開メモ.md` 等をセッション SSOT として更新する。廃止時は handoffs への **リダイレクト stub** のみ残す。
+
+横断 rule → `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md`
+
+---
+
 ## 既知プロジェクト例
 
 | slug | HANDOFF | 備考 |
 |------|---------|------|
 | `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート `YK_WORKSPACE_LAYOUT_HANDOFF.md` は stub · No 36 `REACT_RULES` |
 | `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 ルール · `45_mermaid/MERMAID_RULES.md` |
-| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · reactflow / mermaid 二系統比較 |
+| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · [AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md) · No 17 実例 |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新プロジェクト追加時は本表に 1 行追加する。

@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-24（P13 §11 · P9 load-manifest 試作）
+**最終更新:** 2026-05-24（No 17 APP_PROJECT · load-manifest 同期）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -53,6 +53,7 @@
 | スキル MD 作成・更新 | 12 | `SKILL_AUTHORING_RULES.md` | — | — |
 | 新ドメイン rule / スキル | 11 | `PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
 | チャット応答（平易さ等） | 16 | `COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
+| 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
 | 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
 
 ---
@@ -160,6 +161,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 14 | 10_meta | `10_meta/GIT_WORKFLOW_RULES.md` | **Git 操作**（commit / push / メッセージ / 禁止事項） | active |
 | 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・保管場所） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ・作業後3点サマリ） | active |
+| 17 | 10_meta | `10_meta/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -181,7 +183,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 | 帯 | 含むもの | 含まないもの |
 |----|----------|--------------|
-| 10_meta | 横断設計・Git · Secrets · スキル執筆・講座原則 | ドメイン実装詳細 |
+| 10_meta | 横断設計·Git · Secrets · **個人アプリプロジェクト** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |

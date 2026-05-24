@@ -2,13 +2,13 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-05-24 試作（L1 22 本 / 本格運用目安 ~25 本超）
+# 状態: 2026-05-24 試作（L1 23 本 / 本格運用目安 ~25 本超）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 22
+rule_count_l1: 23
 
 rules:
   - no: 11
@@ -51,6 +51,13 @@ rules:
     band: 10_meta
     tags: [communication, meta]
     read_when: チャット応答
+    status: active
+
+  - no: 17
+    path: 10_meta/APP_PROJECT_RULES.md
+    band: 10_meta
+    tags: [app-project, meta, handoffs, planning]
+    read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開
     status: active
 
   - no: 21

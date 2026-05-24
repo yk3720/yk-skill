@@ -83,7 +83,7 @@
 | `c:/yk-tool/flowchart-web-reactflow/components/flowchart/` | UI / canvas（reactflow 版） |
 | `c:/yk-tool/flowchart-web-mermaid/lib/flowchart/` | domain / `toMermaid`（**reactflow 版と同期 MUST**） |
 | `c:/yk-tool/flowchart-web-mermaid/components/flowchart/` | UI / Mermaid プレビュー |
-| `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/意思決定記録(ADR).md` | Full · 方式変更 |
+| `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/意思決定記録(ADR).md` | Full · 方式変更 |
 
 ---
 

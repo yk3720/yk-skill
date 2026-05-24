@@ -8,7 +8,7 @@
 **ロード規則 SSOT:** `.../creating-reactflow-yk/references/ROUTER.md`
 
 **参照実装:** [`c:/yk-tool/flowchart-web-reactflow/`](c:/yk-tool/flowchart-web-reactflow/README.md)  
-**企画・ADR:** [`c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/`](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/意思決定記録(ADR).md)（ADR-006 · ADR-010）
+**企画・ADR:** [`c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/意思決定記録(ADR).md`](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/意思決定記録(ADR).md)（ADR-006 · ADR-010）
 
 **横断:** [`../30_web_stack/REACT_RULES.md`](../30_web_stack/REACT_RULES.md)（React 一般 · Hooks） · [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · §5 RSC · §6 flowchart） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
 
