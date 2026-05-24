@@ -9,7 +9,7 @@
 **実装メモ・モック現状:** 同フォルダの `モックアップ実装メモ.md`  
 **シリーズグループ（同一題材の別版・横断表示）:** 同フォルダの `図解シリーズグループ設計メモ.md`（**コード未実装時は UI を出さない**）
 
-**コードベース:** `c:\yk-tool\workspace-ui-kit`（`app/diagram-manager/`、`components/diagram-manager/`）
+**コードベース:** `c:\yk-tool\diagram-manager-web\`（正本 · `app/page.tsx` が図解管理ルート）。`workspace-ui-kit` の `/diagram-manager` は移行案内のみ（2026-05-24）
 
 **最終更新:** 2026-05-17（シリーズグループ仕様 §4-5・§3 追記）
 
