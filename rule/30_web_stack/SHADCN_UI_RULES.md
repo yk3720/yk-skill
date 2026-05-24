@@ -6,7 +6,7 @@
 
 **ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md`
 
-**最終更新:** 2026-05-17
+**最終更新:** 2026-05-24
 
 ---
 
@@ -123,3 +123,38 @@ Sidebar（Pane1） + SidebarInset（Pane2以降）の構成が基本。
 | 正方形要素は `size-N` | `w-N h-N` は使わない |
 | shadcn 部品が使えるなら自前 `div` で代替しない | |
 | 部品の見た目を呼び出し側の `className` で打ち消さない | 部品側に variant を追加する |
+
+---
+
+## 6. flowchart-web 向け追記（Phase 2 表 UI · 未導入可）
+
+**現状:** `flowchart-web-reactflow` は shadcn **未導入**（カスタム CSS + Tailwind v4）。導入は別タスク可。
+
+### 6-1. 導入（既存 Next アプリ）
+
+```bash
+cd c:/yk-tool/flowchart-web-reactflow
+npx shadcn@latest init
+npx shadcn@latest add button table input   # 表 UI・ツールバー想定
+```
+
+- **既存プロジェクト** — [Installation / Next](https://ui.shadcn.com/docs/installation/next) · `components.json` · `@/components/ui/` が SSOT
+- **yk-tool 直下の単体アプリ** — `--monorepo` は **不要**（Turborepo ワークスペースではない）
+- Tailwind v4 — `components.json` の `tailwind` 設定は [Monorepo ドキュメント](https://ui.shadcn.com/docs/monorepo) の v4 注記に従う
+
+### 6-2. workspace-ui-kit との使い分け（1 節固定）
+
+| 項目 | flowchart-web-* | workspace-ui-kit |
+|------|-----------------|------------------|
+| 目的 | 表駆動フローチャート編集 | 図解管理 · 横断 UI キット |
+| shadcn バリアント | **標準 Radix**（導入時） | **Base UI**（`render` prop · `asChild` 不可） |
+| パス | `c:/yk-tool/flowchart-web-reactflow/` | `c:/yk-tool/workspace-ui-kit/` |
+| 相互コピー | ui-kit の Base UI パターンを **無断移植しない** | flowchart 専用ロジックを ui-kit に混ぜない |
+| ルール | 本 §6 + [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) | 本ファイル §5 + [`WORKSPACE_RULES`](../20_web_workspace/WORKSPACE_RULES.md) |
+
+**エージェント:** flowchart で Button 等を追加するときは **§6-1（標準 shadcn）**。ui-kit からコンポーネントを import しない。
+
+### 6-3. 実行スキル
+
+- flowchart / 表 UI → **`creating-shadcn-yk`**
+- 静的 surge 図解 HTML → **`creating-visual-explainers` 系**（shadcn 禁止 · 本スキル Do NOT use）

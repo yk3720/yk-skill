@@ -16,7 +16,7 @@
 | 依頼 | 使うスキル |
 |------|------------|
 | `.mmd` · mermaid で図 | `creating-mermaid-yk` |
-| 表駆動フロー · flowchart-web | `c:/yk-tool/flowchart-web/README.md` |
+| 表駆動フロー · flowchart-web-reactflow | `c:/yk-tool/flowchart-web-reactflow/README.md` |
 | チャットで平易に再説明のみ | `re-explaining-in-chat-yk` |
 
 ## 3. 曖昧 → 本ルーター / 明確 → 子直行

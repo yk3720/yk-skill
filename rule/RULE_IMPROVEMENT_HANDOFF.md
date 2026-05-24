@@ -88,7 +88,7 @@
 | **P8** | 低 | yk-memo 残参照の棚卸し | 図解関連は新パス済み。**他フォルダ**に `rule/PYTHON_RULES.md` 等の旧パスが残っていないか `rg` で確認・更新。 | `c:/yk-memo/**` |
 | **P9** | 予約 | `load-manifest.yaml`（Phase 2） | ルール ~25 本超えたら `RULE_INDEX` 表から機械可読マニフェスト生成を検討。 | `RULE_INDEX.md` Phase 2 節 |
 | **P10** | 高 | Mermaid PROGRESSIVE 完遂 | `creating-mermaid-yk` · `references/ROUTER.md` · `mermaid-dev-entry.mdc` · `MERMAID_RULES` §9→ROUTER 移行 · `RULE_INDEX` status `active` 判定 | `45_mermaid/` · `.claude/skills/` |
-| **P11** | 中 | 図モダリティ決定の横断リンク | `MERMAID_RULES` §1.5 · `flowchart-web/README.md` 逆リンク | `45_mermaid` · `yk-tool/flowchart-web` |
+| **P11** | 中 | 図モダリティ決定の横断リンク | `MERMAID_RULES` §1.5 · `flowchart-web-reactflow/README.md` 逆リンク | `45_mermaid` · `yk-tool/flowchart-web-reactflow` |
 | **P12** | 低 | RULE_INDEX Status 定義 | `draft` / `active` のエージェント向け意味を索引に短節追加 | `RULE_INDEX.md` |
 | **P13** | 低 | Mermaid 実装フィードバック | 初回 `.mmd` 作業で §11 落とし穴を追記 | `MERMAID_RULES.md` §11 |
 
@@ -96,7 +96,7 @@
 
 - ルール全文の **再矛盾チェック**（帯移行後の横断読み）
 - **サブエージェント多視点レビュー**の再実施（大きな変更後）
-- `flowchart-web/` 等、今回スコープ外リポジトリのルールリンク
+- `flowchart-web-reactflow/` 等、今回スコープ外リポジトリのルールリンク
 
 ---
 

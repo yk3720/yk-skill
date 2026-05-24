@@ -16,6 +16,6 @@ alwaysApply: false
    - **Standard 以上**: フル Ref Plan（`tags` · `skip` 含む）
    - 迷ったら **Standard**
 
-- 表駆動フロー: `c:/yk-tool/flowchart-web/`（Mermaid 出力 Phase 外）
+- **Mermaid 3分岐:** `.mmd` → 本入口 · 表→React Flow → `creating-reactflow-yk` · 表→Mermaid プレビュー → `flowchart-web-mermaid` + `creating-reactflow-yk`（**本スキル非使用**）
 - 完了報告: `MERMAID_RULES.md` §8 + **読んだ refs**
 - 設計パターン: `c:/yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`

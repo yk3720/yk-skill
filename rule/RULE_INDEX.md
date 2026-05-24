@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-23（P12: Status 列のエージェント向け定義）
+**最終更新:** 2026-05-24（flowchart-web-mermaid · Mermaid 3分岐）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -13,7 +13,7 @@
 | 項目 | 規約 |
 |------|------|
 | **入口** | 本ファイル `rule/RULE_INDEX.md` のみルート直下（移動しない） |
-| **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 45 → `45_mermaid`） |
+| **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · **`35_reactflow/`** · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 35 → `35_reactflow` · No 45 → `45_mermaid`） |
 | **ファイル名** | `{TOPIC}_RULES.md`（番号はファイル名に付けない） |
 | **カタログ No** | 下表の **No 列**が論理順の SSOT。帯番号と優先順位（Governance）は別 |
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
@@ -70,7 +70,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
 | 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
 | 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
-| フローチャート Web | `c:/yk-tool/flowchart-web/` | 移行元: `yk-skill/flowchart-web/` |
+| フローチャート Web（React Flow） | `c:/yk-tool/flowchart-web-reactflow/` | ADR-010 · 表 → React Flow |
+| フローチャート Web（Mermaid 比較） | `c:/yk-tool/flowchart-web-mermaid/` | ADR-010 · 表 → Mermaid プレビュー |
 | Playwright E2E | `c:/yk-tool/playwright-test/` | 移行元: `yk-skill/playwright-test/`（2026-05-23） |
 | Python デスクトップツール | `c:/1.cursor/5.Python/` | 新規本番は必要分のみ **新フォルダへ移出** · `revision-protection` 適用 |
 | 企画・背景（参考のみ） | `c:/yk-memo/` | Governance 段階 7 — 実装の正解ではない |
@@ -84,7 +85,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | タスク | 載せるルート |
 |--------|-------------|
 | 図解生成・デプロイ | `yk-skill` + `yk-tool` |
-| ui-kit / flowchart-web | `yk-tool` + `yk-skill` |
+| ui-kit / flowchart-web-reactflow | `yk-tool` + `yk-skill` |
 | Excel 読取・変換 | `yk-document` + `5.Python` |
 | 企画確認のみ | `yk-memo` のみ可 |
 
@@ -131,6 +132,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 32 | 30_web_stack | `30_web_stack/SHADCN_UI_RULES.md` | shadcn / Base UI 作業 | active |
 | 33 | 30_web_stack | `30_web_stack/TAILWINDCSS_RULES.md` | Tailwind 作業 | active |
 | 34 | 30_web_stack | `30_web_stack/VERCEL_RULES.md` | Vercel / Neon デプロイ | active |
+| 35 | 35_reactflow | `35_reactflow/REACTFLOW_RULES.md` | 表駆動フロー · `@xyflow/react` · `flowchart-web-reactflow` | active |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
 | 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
@@ -146,7 +148,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |----|----------|--------------|
 | 10_meta | 横断設計・Git · Secrets · スキル執筆・講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
-| 30_web_stack | Next / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 |
+| 30_web_stack | Next / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
+| 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |
 | 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
 | 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | `creating-mermaid-yk` · ROUTER |
 | 50_gas_html_test | GAS・レポート HTML デザイン・E2E・PS HTML | Next.js UI（→ 30） |
@@ -176,9 +179,37 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 2. **スキル `creating-mermaid-yk/SKILL.md`** — 手順
 3. **`creating-mermaid-yk/references/ROUTER.md`** — tier / tag
 4. **Ref Plan** — `.mmd` 編集前（ROUTER §7）
-5. **表駆動フローが必要なら** `yk-tool/flowchart-web`（併用 · 代替ではない）
+5. **表駆動フローが必要なら** → 下記「flowchart-web-reactflow」節（Mermaid 比較版は ADR-010 · 併用 · 代替ではない）
 
 `yk-skill` · `yk-memo` で `.mmd` を触るときは `mermaid-dev-entry.mdc` が自動適用される。
+
+---
+
+## 読む順序（flowchart-web-reactflow / React Flow を触るとき）
+
+1. **`35_reactflow/REACTFLOW_RULES.md`** — L1 SSOT（毎回）
+2. **スキル `creating-reactflow-yk/SKILL.md`** — 手順
+3. **`creating-reactflow-yk/references/ROUTER.md`** — tier / tag · Ref Plan
+4. **Ref Plan** — コード編集前（ROUTER §7）
+5. **Next.js シェル** — `30_web_stack/NEXTJS_RULES.md` §5 · `creating-nextjs-yk`
+6. **shadcn 表 UI** — `SHADCN_UI_RULES.md` §6 · `creating-shadcn-yk`（未導入時はスキップ）
+7. **参照実装** — `c:/yk-tool/flowchart-web-reactflow/`
+8. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5
+
+**誤ルーティング禁止:** No 35 は `creating-mermaid-yk` · surge 図解スキルで代替しない。
+
+---
+
+## 読む順序（flowchart-web-mermaid / 表 → Mermaid プレビュー）
+
+1. **`35_reactflow/REACTFLOW_RULES.md`** — L1 SSOT（§3-6 `toMermaid` · §4-1 Mermaid プレビュー）
+2. **スキル `creating-reactflow-yk/SKILL.md`** — 手順（**`creating-mermaid-yk` 非使用**）
+3. **`creating-reactflow-yk/references/ROUTER.md`** — tag `mermaid-preview` 等
+4. **Next.js シェル** — `NEXTJS_RULES.md` §5 · `creating-nextjs-yk`
+5. **参照実装** — `c:/yk-tool/flowchart-web-mermaid/`（`toMermaid.ts` · `MermaidPreview.tsx`）
+6. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5-1（`.mmd` 執筆は No 45 へ）
+
+**開発ポート:** **3001**（reactflow 版 3000 と並行）。
 
 ---
 
