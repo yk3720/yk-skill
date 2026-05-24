@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-05-24（`creating-react-yk` 新設 · Web スタックスキル追記）  
+**最終更新:** 2026-05-24（`creating-vercel-yk` 新設 · Web スタック Vercel 整備）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **21** · nested **3** · sample **1**（計 **25** `SKILL.md`）
+**件数:** L1 **22** · nested **3** · sample **1**（計 **26** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -32,6 +32,7 @@
 | 6 | creating-react-yk | `.claude/skills/creating-react-yk/SKILL.md` | L1 | — | no | React Client · `REACT_RULES` No 36 |
 | 7 | creating-reactflow-yk | `.claude/skills/creating-reactflow-yk/SKILL.md` | L1 | — | no | 表駆動 · `@xyflow/react` No 35 |
 | 8 | creating-shadcn-yk | `.claude/skills/creating-shadcn-yk/SKILL.md` | L1 | — | no | shadcn init/add |
+| 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
 | 10 | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |

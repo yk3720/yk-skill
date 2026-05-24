@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-24（No 36 REACT · No 31 NEXTJS ROUTER/§0-9 整備）
+**最終更新:** 2026-05-24（No 34 VERCEL 同型整備 · creating-vercel-yk · vercel-dev-entry）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -209,7 +209,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 4. **Ref Plan** — コード編集前（ROUTER §7）
 5. **Next.js シェル** — `30_web_stack/NEXTJS_RULES.md` §5 + §6 · `creating-nextjs-yk`
 6. **Client React 一般** — `REACT_RULES.md` · `creating-react-yk`（`components/flowchart` の Hooks）
-7. **shadcn 表 UI** — `SHADCN_UI_RULES.md` §13 · `creating-shadcn-yk`（未導入時はスキップ）
+7. **shadcn 表 UI** — 下記「shadcn/ui を触るとき」§ · §13 · `init-radix`（未導入時は init が次の 1 件）
 8. **参照実装** — `c:/yk-tool/flowchart-web-reactflow/`
 9. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5
 
@@ -227,6 +227,36 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 6. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5-1（`.mmd` 執筆は No 45 へ）
 
 **開発ポート:** **3001**（reactflow 版 3000 と並行）。
+
+---
+
+## 読む順序（shadcn/ui を触るとき）
+
+1. **`30_web_stack/SHADCN_UI_RULES.md`** — L1 SSOT（**§2 で flowchart §13 / ui-kit §12 / surge 禁止を確定**）
+2. **スキル `creating-shadcn-yk/SKILL.md`** — init/add 手順
+3. **`creating-shadcn-yk/references/ROUTER.md`** — tier / tag · Ref Plan
+4. **Ref Plan** — `components/ui` 編集 · CLI 前（ROUTER §7）
+5. **ドメイン floor** — flowchart → `REACTFLOW_RULES` · §13 / ui-kit → `WORKSPACE_RULES` · §12
+6. **併用** — `TAILWINDCSS_RULES`（v4）· `NEXTJS_RULES` §5（`"use client"`）
+7. **L0** — `shadcn-dev-entry.mdc`（汎用）· flowchart → `reactflow-dev-entry` 優先 · ui-kit → `workspace-dev-entry` 優先
+
+**誤ルーティング禁止:** surge 図解 · `lib/flowchart/` · ui-kit 既存への `init -b radix` · flowchart への `render` / ui-kit への `asChild`。
+
+---
+
+## 読む順序（Vercel / デプロイを触るとき）
+
+1. **`30_web_stack/VERCEL_RULES.md`** — L1 SSOT（**§2 で surge / FB 初回 / 汎用 deploy を確定**）
+2. **スキル `creating-vercel-yk/SKILL.md`** — link/env/deploy 方針 · Shell 停止条件
+3. **`creating-vercel-yk/references/ROUTER.md`** — tier / tag · Ref Plan
+4. **Ref Plan** — `vercel` CLI 前（ROUTER §7）
+5. **横断** — `SECRETS_HYGIENE_RULES`（env 値）· `GIT_WORKFLOW_RULES`（commit 明示時）
+6. **併用** — `NEXTJS_RULES` §5（`app/` 同時編集）· Neon 初回 → **`setup-fb-tool`**（nested）
+7. **L0** — `vercel-dev-entry.mdc` · `app/**` のみ → `nextjs-dev-entry` 優先
+
+**誤ルーティング禁止:** surge 図解 HTML の Vercel ホスト · FB 初回を `creating-vercel-yk` のみで完結 · 未明示の `vercel --prod` · Python `.env` を No 34 で扱う。
+
+**D（性能）:** React/Next **性能**は `yk-tool/workspace-ui-kit/.claude/skills/vercel-react-best-practices` を **ui-kit 正本のまま**とし、yk-skill は `creating-react-yk` ROUTER tag `performance` 経由で参照する。**Vercel デプロイ**は `VERCEL_RULES`（No 34）のみ。
 
 ---
 

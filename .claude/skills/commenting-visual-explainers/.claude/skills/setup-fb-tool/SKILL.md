@@ -4,6 +4,7 @@ description: >
   図解コメントツール（FB）の初回セットアップを対話的にガイド。Vercel/Neon 設定と図解 HTML への widget 埋め込み。
   「FBツールをセットアップして」「フィードバック機能を設定して」「FBツールを使えるようにして」で使用。
   Do NOT use for 汎用の「セットアップして」、Node/開発環境の一般セットアップ、FB 以外のツール・リポの設定。
+  FB 初回完了後の env/再デプロイ → creating-vercel-yk（Neon 手順 SSOT は VERCEL_RULES §0）。
 ---
 
 # Setup FB Tool

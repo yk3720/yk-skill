@@ -1,0 +1,24 @@
+---
+description: Vercel（vercel.json · .vercel · link/env/deploy）は VERCEL_RULES・creating-vercel-yk・ROUTER を入口とする
+globs:
+  - "**/vercel.json"
+  - "**/.vercel/**"
+alwaysApply: false
+---
+
+# Vercel — エージェント入口
+
+**優先:** `app/**` のみの編集 → **`nextjs-dev-entry.mdc`**（本入口は不要）。`components/ui/**` → **`shadcn-dev-entry`** / **`reactflow-dev-entry`** 優先。
+
+`vercel.json` または `.vercel/**` を触る · `vercel link` / `vercel env` / deploy 方針を扱うとき:
+
+1. `c:/yk-skill/rule/30_web_stack/VERCEL_RULES.md` — L1 SSOT（**§2 分岐先**）
+2. `c:/yk-skill/.claude/skills/creating-vercel-yk/SKILL.md` — 手順 · Shell 停止条件
+3. `.../creating-vercel-yk/references/ROUTER.md` — tier / tag
+4. **Ref Plan**（CLI 前）→ ROUTER §7
+
+- **FB 初回**（「FBツールをセットアップ」）→ **`setup-fb-tool`**（本入口は補助）
+- `app/` · RSC → `creating-nextjs-yk` · `NEXTJS_RULES` §5
+- surge 静的図解 → 図解スキル（**Vercel 禁止**）
+- 機密 · env 値 → `SECRETS_HYGIENE_RULES`
+- 完了報告: L1 §15 + **読んだ refs**

@@ -10,7 +10,7 @@
 
 **ファイルパス:** `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md`  
 **索引:** [`RULE_INDEX.md`](../RULE_INDEX.md) No 32  
-**最終更新:** 2026-05-24（公式調査 + サブエージェントレビュー反映）
+**最終更新:** 2026-05-24（Web 調査 + 3視点レビュー · ROUTER · shadcn-dev-entry）
 
 **横断:** [`REACT_RULES.md`](REACT_RULES.md) · [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC） · [`TAILWINDCSS_RULES.md`](TAILWINDCSS_RULES.md)（v4） · flowchart 時 [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)
 
@@ -58,7 +58,13 @@
 
 **実行スキル:** `creating-shadcn-yk` · **禁止:** 静的 surge 図解 HTML（`creating-visual-explainers` 系）
 
-**L0 入口:** flowchart 編集時は [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc)（shadcn → 本ファイル **§13**）
+**L0 入口:**
+
+| パス | entry |
+|------|-------|
+| `flowchart-web-*/components/ui/**` | [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc) → 本ファイル **§13** |
+| `workspace-ui-kit/components/ui/**` | [`workspace-dev-entry.mdc`](../../../yk-tool/workspace-ui-kit/.cursor/rules/workspace-dev-entry.mdc) → **§12** |
+| その他 `components/ui/**` · `components.json` | [`shadcn-dev-entry.mdc`](../../.cursor/rules/shadcn-dev-entry.mdc) |
 
 ---
 
@@ -103,7 +109,7 @@ npx shadcn@latest init -t next --monorepo
 
 ```bash
 cd c:/yk-tool/flowchart-web-reactflow
-npx shadcn@latest init -b radix
+npx shadcn@latest init -t next -b radix -y -d   # 非対話（preset Nova + Radix）
 npx shadcn@latest add button table input scroll-area
 ```
 
@@ -148,6 +154,8 @@ import { Button } from "@/components/ui/button"
 | `npx shadcn@latest add <name>` | コンポーネント追加 |
 | `npx shadcn@latest add -c apps/web` | モノレポ cwd |
 | `npx shadcn@latest add --dry-run` | プレビュー |
+| `npx shadcn@latest add --diff` | 上書き前 diff（ui-kit **推奨必須**） |
+| `npx shadcn@latest info` / `info --json` | 設定・フレームワーク確認 |
 | `npx shadcn@latest docs [component]` | ドキュメント表示 |
 | `npx shadcn@latest view button` | レジストリ確認 |
 | `npx shadcn@latest search @shadcn -q "table"` | 検索 |
@@ -273,7 +281,8 @@ npx shadcn@latest add button dialog table field
 ### 12-3. 運用
 
 - 既存 ui-kit: **`init` や `-b` の再実行禁止** — `npx shadcn@latest add ...` のみ
-- 上書き: `--overwrite` はユーザー明示まで使わない
+- 上書き: **`add --diff` で確認** → `--overwrite` はユーザー明示まで使わない
+- ローカル `workspace-ui-kit/.claude/skills/shadcn/` は registry 検索補助。**Base UI / re-init 禁止の正本は本 §12 + `creating-shadcn-yk`**
 
 併読: `WORKSPACE_RULES.md` · ui-kit 同梱 `base-vs-radix.md`
 
@@ -281,7 +290,7 @@ npx shadcn@latest add button dialog table field
 
 ## 13. flowchart-web（Radix · 標準 shadcn）
 
-**現状:** shadcn **未導入**（カスタム CSS + Tailwind v4）。ui-kit から **コピー禁止**。
+**現状:** shadcn **導入済**（2026-05-24 · `radix-nova` · `button` 初回 add · 既存 UI は段階的に shadcn 化）。ui-kit から **コピー禁止**。
 
 ### 13-1. 初回導入チェックリスト
 
@@ -293,7 +302,7 @@ npx shadcn@latest add button dialog table field
 
 ```bash
 cd c:/yk-tool/flowchart-web-reactflow
-npx shadcn@latest init -b radix
+npx shadcn@latest init -t next -b radix -y -d   # 非対話（preset Nova + Radix）
 npx shadcn@latest add button table input scroll-area
 ```
 

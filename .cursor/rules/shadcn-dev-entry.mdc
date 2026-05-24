@@ -1,0 +1,29 @@
+---
+description: shadcn/ui（components/ui · components.json）編集時は SHADCN_UI_RULES・creating-shadcn-yk・ROUTER を入口とする
+globs:
+  - "**/components/ui/**/*.{ts,tsx}"
+  - "**/components.json"
+alwaysApply: false
+---
+
+# shadcn/ui — エージェント入口
+
+**優先（ドメイン L0 が先）:**
+
+- `flowchart-web-*/components/ui/**` → **`reactflow-dev-entry.mdc` 先** → 本入口（shadcn §13）
+- `workspace-ui-kit/components/ui/**` → **`workspace-dev-entry.mdc` 先** → 本入口（§12 · add のみ）
+- `app/**` のみの編集 → **`nextjs-dev-entry.mdc`**（本入口は不要）
+
+`components/ui/**` または `components.json` を編集・init/add するとき:
+
+1. `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md` — L1 SSOT（**§2 分岐先**）
+2. `c:/yk-skill/.claude/skills/creating-shadcn-yk/SKILL.md` — 手順
+3. `.../creating-shadcn-yk/references/ROUTER.md` — tier / tag
+4. **Ref Plan**（Write/StrReplace / CLI 前）→ ROUTER §7
+
+- Hooks · ui 以外の `components/**` → `creating-react-yk` · `REACT_RULES`
+- `app/` · RSC → `creating-nextjs-yk` · `NEXTJS_RULES` §5
+- `lib/flowchart/` · `@xyflow/react` → `creating-reactflow-yk`（本入口非使用）
+- surge 静的 HTML → 図解スキル（**shadcn 禁止**）
+- theming（`globals.css`）→ Ref Plan tag `theme-css` · L1 §8-2
+- 完了報告: L1 §15 + **読んだ refs**
