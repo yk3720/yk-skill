@@ -39,7 +39,7 @@
 | **表 → Mermaid プレビュー**（`flowchart-web-mermaid` · `toMermaid.ts`） | **本帯** · `creating-reactflow-yk` | `creating-mermaid-yk` |
 | **表 → React Flow**（`flowchart-web-reactflow`） | **本帯** · `creating-reactflow-yk` | `creating-mermaid-yk` |
 
-surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（[`RULE_INDEX`](../RULE_INDEX.md) flowchart 読む順序）。**3 分岐詳細:** [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5-1。
+surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（[`RULE_ROUTING_PLAYBOOK.md`](../RULE_ROUTING_PLAYBOOK.md) flowchart 読む順序）。**3 分岐詳細:** [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5-1。
 
 **React 一般（Hooks · 純粋性）:** `components/flowchart/**` の Client ロジック → [`REACT_RULES.md`](../30_web_stack/REACT_RULES.md) · `creating-react-yk`（**RF API は本 §4**）。
 
@@ -289,5 +289,5 @@ validateTable(table)
 |--------|----------|
 | [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) §図モダリティ | 本ファイル |
 | [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5 · §1.5-1 | 本ファイル |
-| [`RULE_INDEX.md`](../RULE_INDEX.md) flowchart 読む順序 | No 35 |
+| [`RULE_ROUTING_PLAYBOOK.md`](../RULE_ROUTING_PLAYBOOK.md) flowchart 読む順序 | No 35 |
 | `creating-mermaid-yk` | 表駆動は **Do NOT use** → 本帯 |

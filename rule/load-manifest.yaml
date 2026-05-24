@@ -1,0 +1,174 @@
+# yk-skill/rule — load-manifest（Phase 2 試作）
+#
+# 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
+# SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
+# 状態: 2026-05-24 試作（L1 22 本 / 本格運用目安 ~25 本超）
+# 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
+
+version: 1
+generated_from: RULE_INDEX.md
+rule_count_l1: 22
+
+rules:
+  - no: 11
+    path: 10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md
+    band: 10_meta
+    tags: [meta, progressive, routing]
+    read_when: 新ドメインスキル・ルーティング設計
+    status: active
+
+  - no: 12
+    path: 10_meta/SKILL_AUTHORING_RULES.md
+    band: 10_meta
+    tags: [meta, skill]
+    read_when: スキル作成・更新
+    status: active
+
+  - no: 13
+    path: 10_meta/AI_DRIVEN_RULES.md
+    band: 10_meta
+    tags: [meta, human]
+    read_when: 講座・行動指針（エージェントは通常 Read しない）
+    status: active
+
+  - no: 14
+    path: 10_meta/GIT_WORKFLOW_RULES.md
+    band: 10_meta
+    tags: [git, meta]
+    read_when: Git 操作（commit / push）
+    status: active
+
+  - no: 15
+    path: 10_meta/SECRETS_HYGIENE_RULES.md
+    band: 10_meta
+    tags: [secrets, meta]
+    read_when: トークン・.env・秘密情報
+    status: active
+
+  - no: 16
+    path: 10_meta/COMMUNICATION_RULES.md
+    band: 10_meta
+    tags: [communication, meta]
+    read_when: チャット応答
+    status: active
+
+  - no: 21
+    path: 20_web_workspace/WORKSPACE_RULES.md
+    band: 20_web_workspace
+    tags: [workspace, ui-kit]
+    read_when: workspace-ui-kit 横断
+    status: active
+
+  - no: 22
+    path: 20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md
+    band: 20_web_workspace
+    tags: [workspace, diagram-manager]
+    read_when: /diagram-manager 作業
+    status: active
+
+  - no: 31
+    path: 30_web_stack/NEXTJS_RULES.md
+    band: 30_web_stack
+    tags: [nextjs, web]
+    read_when: Next.js 作業
+    status: active
+
+  - no: 32
+    path: 30_web_stack/SHADCN_UI_RULES.md
+    band: 30_web_stack
+    tags: [shadcn, web]
+    read_when: shadcn / components/ui
+    status: active
+
+  - no: 33
+    path: 30_web_stack/TAILWINDCSS_RULES.md
+    band: 30_web_stack
+    tags: [tailwind, web]
+    read_when: Tailwind 作業
+    status: active
+
+  - no: 34
+    path: 30_web_stack/VERCEL_RULES.md
+    band: 30_web_stack
+    tags: [vercel, deploy]
+    read_when: Vercel / Neon デプロイ
+    status: active
+
+  - no: 35
+    path: 35_reactflow/REACTFLOW_RULES.md
+    band: 35_reactflow
+    tags: [reactflow, flowchart]
+    read_when: 表駆動フロー · @xyflow/react
+    status: active
+
+  - no: 36
+    path: 30_web_stack/REACT_RULES.md
+    band: 30_web_stack
+    tags: [react, web]
+    read_when: React コンポーネント · Hooks
+    status: active
+
+  - no: 41
+    path: 40_python/PYTHON_RULES.md
+    band: 40_python
+    tags: [python]
+    read_when: Python ツール（毎回 L1）
+    status: active
+
+  - no: 45
+    path: 45_mermaid/MERMAID_RULES.md
+    band: 45_mermaid
+    tags: [mermaid, diagram]
+    read_when: Mermaid DSL · .mmd
+    status: active
+
+  - no: 51
+    path: 50_gas_html_test/GAS_RULES.md
+    band: 50_gas_html_test
+    tags: [gas]
+    read_when: GAS Web アプリ
+    status: active
+
+  - no: 52
+    path: 50_gas_html_test/GAS_REPORT_DESIGN_RULES.md
+    band: 50_gas_html_test
+    tags: [gas, html, surge]
+    read_when: GAS レポート HTML · surge 図解 chip
+    status: active
+
+  - no: 53
+    path: 50_gas_html_test/PLAYWRIGHT_RULES.md
+    band: 50_gas_html_test
+    tags: [playwright, e2e]
+    read_when: Playwright E2E
+    status: active
+
+  - no: 54
+    path: 50_gas_html_test/POWERSHELL_HTML_RULES.md
+    band: 50_gas_html_test
+    tags: [powershell, html]
+    read_when: 大容量 HTML + PowerShell
+    status: active
+
+  - no: 61
+    path: 60_tooling/CURSOR_RULES.md
+    band: 60_tooling
+    tags: [cursor, tooling]
+    read_when: Cursor / Windows 実務
+    status: active
+
+  - no: 62
+    path: 60_tooling/AGENT_SHELL_RULES.md
+    band: 60_tooling
+    tags: [agent-shell, tooling]
+    read_when: Agent Shell / RUN 削減
+    status: active
+
+# 索引・プレイブック（L1 ではないが入口）
+meta_entries:
+  - id: index
+    path: RULE_INDEX.md
+    role: catalog_governance
+  - id: playbook
+    path: RULE_ROUTING_PLAYBOOK.md
+    role: read_order_how

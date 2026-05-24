@@ -4,7 +4,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| **状態** | Phase 2 進行中（2026-05-23 — P1〜P7 完了） |
+| **状態** | Phase 1 完了 · **Phase 2 待機**（2026-05-24 — 索引 P0 整備 · P10/P12 完了反映） |
 | **リポジトリ** | `c:/yk-skill`（主）· 参照更新済み: `5.Python` · `yk-memo` 一部 · `workspace-ui-kit` |
 | **入口 SSOT** | `c:/yk-skill/rule/RULE_INDEX.md` |
 | **対話の経緯** | ルール矛盾チェック → Web調査 → 多視点レビュー → 対話で1件ずつ決定 → 実装 |
@@ -14,7 +14,7 @@
 
 ## 再開手順（エージェント用）
 
-1. **Read** `c:/yk-skill/rule/RULE_INDEX.md`（Governance・カタログ・読む順序）
+1. **Read** `c:/yk-skill/rule/RULE_INDEX.md`（**[クイック入口](RULE_INDEX.md#タスク別クイック入口)** → Governance・カタログ）→ 手順が要るときのみ `RULE_ROUTING_PLAYBOOK.md`
 2. **Read** 本ファイル（未着手バックログ）
 3. ユーザーに **次の1件** を確認するか、下表 **推奨順の先頭** から着手する
 4. 各項目は **対話で1件ずつ** 方針確定 → 実装 → 本ファイルの該当行を `done` に更新
@@ -47,10 +47,19 @@
 | **P5** | `workspace-dev-entry.mdc` | `workspace-ui-kit/.cursor/rules/` · glob `app`/`components`/`lib` · `RULE_INDEX` · `CLAUDE.md` |
 | **P6** | 移行スタブ削除 | 再スキャン後 17 スタブ削除 · `RULE_INDEX` 更新 |
 | **P7** | `Rules_1.md` Superseded バナー | 目立つボックス · `入口.md` 導線強化 |
+| **P10** | Mermaid PROGRESSIVE 完遂 | `creating-mermaid-yk` · `mermaid-dev-entry.mdc` · `MERMAID_RULES` · INDEX status `active` |
+| **P12** | RULE_INDEX Status 定義 | `RULE_INDEX.md` § Status 列（エージェント向け） |
+| **I1** | RULE_INDEX P0 整備 | 目次 · クイック入口 · 誤ルーティング早見表 · カタログ No 昇順 · No 13/50 帯注記 |
+| **I2** | 読む順序の外出し | `RULE_ROUTING_PLAYBOOK.md` 新設 · INDEX はリンクのみ · REACTFLOW 参照更新 |
+| **P8** | yk-memo 旧パス棚卸し | 講座4件: `DESIGN_RULES` 廃止 · 帯パス · `RULE_ROUTING_PLAYBOOK` 追記 |
+| **I3** | リポジトリマップ後置 | INDEX 先頭付近に要約 · 詳細マップは末尾 |
+| **P11** | 図モダリティ横断リンク | `MERMAID_RULES` §1.5 ↔ reactflow/mermaid README · アンカー · INDEX/PLAYBOOK |
+| **P13** | Mermaid §11 フィードバック | 構文表 + エージェント運用（Ref Plan · 方式境界 · mmdc/Shell） |
+| **P9** | load-manifest 試作 | `rule/load-manifest.yaml` 22 本 · INDEX Phase 2 節更新 |
 
 ### 採用済みアーキテクチャ決定（再議論しない）
 
-- **入口:** `rule/` 直下は `RULE_INDEX.md` · `RULE_IMPROVEMENT_HANDOFF.md` のみ（**移行スタブは 2026-05-23 削除済み**）。SSOT は帯フォルダ内
+- **入口:** `rule/` 直下は `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md`（**移行スタブは 2026-05-23 削除済み**）。索引＝WHAT/WHEN · プレイブック＝HOW · L1 SSOT は帯フォルダ内
 - **命名:** ファイル名 `{TOPIC}_RULES.md`（番号なし）。論理順は `RULE_INDEX` の **No 列**
 - **帯:** 10刻み（`10_meta` … `60_tooling`）。Phase 2 予約: ~25本超で `load-manifest.yaml`
 - **企画 vs 実装:** 実装 SSOT は `yk-skill/rule`（Governance 段階7で yk-memo は参考のみ）
@@ -64,14 +73,15 @@
 
 | 帯 | パス |
 |----|------|
-| 入口 | `rule/RULE_INDEX.md` |
-| 10_meta | `10_meta/PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` |
-| 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` · `DIAGRAM_MANAGER_WORKSPACE_RULES.md` |
-| 30_web_stack | `30_web_stack/NEXTJS` · `SHADCN_UI` · `TAILWINDCSS` · `VERCEL` |
-| 40_python | `40_python/PYTHON_RULES.md` |
-| 45_mermaid | `45_mermaid/MERMAID_RULES.md`（`draft`） |
-| 50_gas_html_test | `GAS` · `GAS_REPORT_DESIGN` · `PLAYWRIGHT` · `POWERSHELL_HTML` |
-| 60_tooling | `60_tooling/CURSOR_RULES.md` |
+| 入口 | `rule/RULE_INDEX.md` · `rule/RULE_ROUTING_PLAYBOOK.md` |
+| 10_meta | `PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` · `COMMUNICATION` |
+| 20_web_workspace | `WORKSPACE_RULES.md` · `DIAGRAM_MANAGER_WORKSPACE_RULES.md` |
+| 30_web_stack | `NEXTJS` · `SHADCN_UI` · `TAILWINDCSS` · `VERCEL` · `REACT` |
+| 35_reactflow | `REACTFLOW_RULES.md` |
+| 40_python | `PYTHON_RULES.md` |
+| 45_mermaid | `MERMAID_RULES.md`（`active`） |
+| 50_gas_html_test | `GAS` · `GAS_REPORT_DESIGN` · `PLAYWRIGHT` · `POWERSHELL_HTML`（物理名レガシー · No 51–54） |
+| 60_tooling | `CURSOR_RULES.md` · `AGENT_SHELL_RULES.md` |
 
 ### P6 スタブ削除（2026-05-23 実施）
 
@@ -81,16 +91,11 @@
 
 ## 未着手バックログ
 
-**優先:** P8。着手前にユーザー確認を推奨（対話形式の継続）。
+**優先:** 下記「周辺」または新規ルール追加時の manifest 同期。着手前にユーザー確認を推奨（対話形式の継続）。
 
 | ID | 優先 | タイトル | 概要・受け入れ基準 | 主に触るファイル |
 |----|------|----------|-------------------|------------------|
-| **P8** | 低 | yk-memo 残参照の棚卸し | 図解関連は新パス済み。**他フォルダ**に `rule/PYTHON_RULES.md` 等の旧パスが残っていないか `rg` で確認・更新。 | `c:/yk-memo/**` |
-| **P9** | 予約 | `load-manifest.yaml`（Phase 2） | ルール ~25 本超えたら `RULE_INDEX` 表から機械可読マニフェスト生成を検討。 | `RULE_INDEX.md` Phase 2 節 |
-| **P10** | 高 | Mermaid PROGRESSIVE 完遂 | `creating-mermaid-yk` · `references/ROUTER.md` · `mermaid-dev-entry.mdc` · `MERMAID_RULES` §9→ROUTER 移行 · `RULE_INDEX` status `active` 判定 | `45_mermaid/` · `.claude/skills/` |
-| **P11** | 中 | 図モダリティ決定の横断リンク | `MERMAID_RULES` §1.5 · `flowchart-web-reactflow/README.md` 逆リンク | `45_mermaid` · `yk-tool/flowchart-web-reactflow` |
-| **P12** | 低 | RULE_INDEX Status 定義 | `draft` / `active` のエージェント向け意味を索引に短節追加 | `RULE_INDEX.md` |
-| **P13** | 低 | Mermaid 実装フィードバック | 初回 `.mmd` 作業で §11 落とし穴を追記 | `MERMAID_RULES.md` §11 |
+| **P9b** | 予約 | manifest 本格運用 | L1 ~25 本超 · `route_refs.py` / CI 連携（PROGRESSIVE §7） | `load-manifest.yaml` |
 
 ### 当初レビューで言及・未タスク化した周辺
 
@@ -135,4 +140,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-05-23（P7 完了）
+**最終更新:** 2026-05-24（P13 · P9 試作完了 · バックログは周辺タスクのみ）

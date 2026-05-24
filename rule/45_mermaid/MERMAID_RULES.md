@@ -20,7 +20,7 @@
 
 **L0 入口:** `yk-skill` · `yk-memo` の `.cursor/rules/mermaid-dev-entry.mdc`（glob `**/*.mmd`）
 
-**最終更新:** 2026-05-24（Mermaid 3分岐 · flowchart-web-mermaid 実装反映）  
+**最終更新:** 2026-05-24（P13 §11 実装フィードバック追記）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md)
 
 ---
@@ -54,7 +54,13 @@
 
 ### 1.5 方式選択（図モダリティ — YK 横断 SSOT）
 
-**逆リンク:** [`c:/yk-tool/flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) §図モダリティ
+**本節が方式選択の SSOT。** 表駆動アプリ側の入口は各 README の「図モダリティ」節。
+
+**逆リンク（実装 README）**
+
+- [`flowchart-web-reactflow/README.md` §図モダリティ](c:/yk-tool/flowchart-web-reactflow/README.md#図モダリティyk-横断)
+- [`flowchart-web-mermaid/README.md` §図モダリティ](c:/yk-tool/flowchart-web-mermaid/README.md#図モダリティyk-横断)
+- 索引: [`RULE_INDEX.md`](../RULE_INDEX.md#誤ルーティング早見表) · 手順: [`RULE_ROUTING_PLAYBOOK.md`](../RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-reactflow--react-flow-を触るとき)
 
 | やりたいこと | 選ぶもの | SSOT · 入口 |
 |--------------|----------|-------------|
@@ -236,16 +242,29 @@ Linux CI で Chromium が落ちる場合は `puppeteer-config.json` で `--no-sa
 
 ## 11. 既知の落とし穴（調査メモ — 追記用）
 
+### 構文・レンダリング
+
 | 現象 | 対策 |
 |------|------|
-| エラー行がずれる | 直前行の括弧・クォート・`end` を確認 |
+| エラー行がずれる | 直前行の括弧・クォート・`end` を確認（§3） |
 | subgraph の向きがおかしい | 外へのエッジがあると **親 direction を継承** — レイアウトを組み替える |
-| `Cannot set properties of undefined (setting 'rank')` | subgraph 内の **孤立ノード**・**subgraph を端点にしたエッジ**・不適切なクォートを疑う |
+| `Cannot set properties of undefined (setting 'rank')` | subgraph 内の **孤立ノード**・**subgraph を端点にしたエッジ**・ラベル **`end` 未クォート**を疑う |
 | パラメータが効かない | タイポは **黙って無視**される — frontmatter を Live Editor で確認 |
-| XSS | `strict` + 入力源の信頼境界。詳細は §5 |
-| Cursor Agent で `npx mmdc` が `EPERM` / spawn 失敗 | サンドボックス制限 — **`all` 権限で再実行** または [Live Editor](https://mermaid.live/) で代替確認（2026-05-23 初回試作） |
+| `%%` コメント内に `%%{` / `}%%` / 未エスケープ `{}` | パーサが壊れる — コメントを短くするか `%%` 行を避ける（§3） |
+| frontmatter ありで図種が出ない | 閉じ `---` の**次行**が `flowchart TD` 等であること（§3） |
+| XSS | `strict` + 入力源の信頼境界。`securityLevel` は `.mmd` から変えられない（§5） |
 
-**運用:** 実装で新しい落とし穴を見つけたら **§11 に 1 行追加**（L1）。詳細化は将来 `references/` へ。
+### エージェント運用（初回試作・横断整理 2026-05-23〜24）
+
+| 現象 | 対策 |
+|------|------|
+| Cursor Agent で `npx mmdc` が `EPERM` / spawn 失敗 | サンドボックス制限 — ユーザー明示 **test** 時のみ Shell · 通常は [Live Editor](https://mermaid.live/) で確認し完了報告に 1 行（`AGENT_SHELL_RULES.md`） |
+| Ref Plan なしで `.mmd` を編集 | §6 Step 0.1 · `creating-mermaid-yk` Step 0.1 — **Write/StrReplace 前**に Ref Plan |
+| 表駆動 `flowchart-web-*` に `creating-mermaid-yk` を使う | 方式境界は §1.5 — 表は **`creating-reactflow-yk`**（mermaid 版プレビューも同スキル） |
+| `.mmd` と ` ```mermaid ` フェンスの二重 SSOT | リポ正本は **`.mmd` 1 箇所**。MD 埋め込みはコピー or 生成元を明記（§2） |
+| 品質ゲート未記載で完了報告 | §8 — **読んだ refs** + mmdc/Live のどちらで確認したか 1 行 |
+
+**運用:** 実装で新しい落とし穴を見つけたら **§11 に 1 行追加**（L1）。詳細化は将来 `references/` へ。追記時は「再現 · 期待 · 実際」を §12 に 3 行メモしてから表に昇格。
 
 ---
 
