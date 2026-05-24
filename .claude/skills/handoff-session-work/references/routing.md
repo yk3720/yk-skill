@@ -221,7 +221,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 | slug | HANDOFF | 備考 |
 |------|---------|------|
-| `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート `YK_WORKSPACE_LAYOUT_HANDOFF.md` は stub |
+| `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート `YK_WORKSPACE_LAYOUT_HANDOFF.md` は stub · No 36 `REACT_RULES` |
 | `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 ルール · `45_mermaid/MERMAID_RULES.md` |
 | `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · reactflow / mermaid 二系統比較 |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |

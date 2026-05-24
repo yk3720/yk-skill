@@ -1,0 +1,22 @@
+---
+description: Next.js App Router（app/）編集時は NEXTJS_RULES・creating-nextjs-yk・ROUTER を入口とする
+globs: "**/app/**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# Next.js App Router — エージェント入口
+
+**優先:** `flowchart-web-*/app/**` は **`reactflow-dev-entry.mdc` を先に**（本ファイルは Next シェル追記）。`components/**` のみの編集では本入口は不要 → `creating-react-yk`。
+
+`app/` 配下の TS/TSX（および Route Handler）を編集するとき:
+
+1. `c:/yk-skill/rule/30_web_stack/NEXTJS_RULES.md` — L1 SSOT
+2. `c:/yk-skill/.claude/skills/creating-nextjs-yk/SKILL.md` — 手順
+3. `.../creating-nextjs-yk/references/ROUTER.md` — tier / tag
+4. **Ref Plan**（Write/StrReplace 前）→ ROUTER §7
+
+- `components/**` の Hooks · イベント → `creating-react-yk` · `REACT_RULES` + `NEXTJS_RULES` §5
+- `flowchart-web-*/app/**` → **`reactflow-dev-entry.mdc` 優先** + L1 §6
+- `workspace-ui-kit/app/**` → `workspace-dev-entry.mdc` + ROUTER tag `ui-kit-shell`
+- `lib/flowchart/` · `@xyflow/react` → `creating-reactflow-yk`（本入口非使用）
+- 完了報告: `NEXTJS_RULES.md` §9 + **読んだ refs**

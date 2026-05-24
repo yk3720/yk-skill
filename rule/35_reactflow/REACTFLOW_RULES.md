@@ -10,9 +10,9 @@
 **参照実装:** [`c:/yk-tool/flowchart-web-reactflow/`](c:/yk-tool/flowchart-web-reactflow/README.md)  
 **企画・ADR:** [`c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/`](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/意思決定記録(ADR).md)（ADR-006 · ADR-010）
 
-**横断:** [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · Client Component） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
+**横断:** [`../30_web_stack/REACT_RULES.md`](../30_web_stack/REACT_RULES.md)（React 一般 · Hooks） · [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · §5 RSC · §6 flowchart） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
 
-**最終更新:** 2026-05-24（flowchart-web-mermaid · toMermaid · Mermaid 3分岐）  
+**最終更新:** 2026-05-24（§4 公式索引 · v12 要約 · Common Errors MUST 化 · ROUTER 連携）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 35
 
 **L0 入口:** `yk-skill` · `yk-tool` · `yk-memo` — `.cursor/rules/reactflow-dev-entry.mdc`（`flowchart-web-*/**` 配下の flowchart コード）
@@ -39,11 +39,13 @@
 | **表 → Mermaid プレビュー**（`flowchart-web-mermaid` · `toMermaid.ts`） | **本帯** · `creating-reactflow-yk` | `creating-mermaid-yk` |
 | **表 → React Flow**（`flowchart-web-reactflow`） | **本帯** · `creating-reactflow-yk` | `creating-mermaid-yk` |
 
-surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（[`RULE_INDEX`](../RULE_INDEX.md) flowchart 読む順序）。
+surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（[`RULE_INDEX`](../RULE_INDEX.md) flowchart 読む順序）。**3 分岐詳細:** [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5-1。
 
-**Next.js シェル:** `app/` · `"use client"` 境界 → [`NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md) §5 · `creating-nextjs-yk`（flowchart パス明示）。
+**React 一般（Hooks · 純粋性）:** `components/flowchart/**` の Client ロジック → [`REACT_RULES.md`](../30_web_stack/REACT_RULES.md) · `creating-react-yk`（**RF API は本 §4**）。
 
-**shadcn / 表 UI:** 現状 flowchart は **shadcn 未導入**（カスタム CSS）。表・ツールバーに shadcn を入れるときのみ [`SHADCN_UI_RULES.md`](../30_web_stack/SHADCN_UI_RULES.md) §6 · `creating-shadcn-yk`。**`workspace-ui-kit` の Base UI（`render` prop）を flowchart に無断コピーしない。**
+**Next.js シェル:** `app/` · RSC 境界 → [`NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md) §5 · flowchart パス → **§6** · `creating-nextjs-yk`。
+
+**shadcn / 表 UI:** 現状 flowchart は **shadcn 未導入**（カスタム CSS）。表・ツールバーに shadcn を入れるときのみ [`SHADCN_UI_RULES.md`](../30_web_stack/SHADCN_UI_RULES.md) §13 · `creating-shadcn-yk`。**`workspace-ui-kit` の Base UI（`render` prop）を flowchart に無断コピーしない。**
 
 ---
 
@@ -91,7 +93,7 @@ surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（
 | **ドメイン** | `lib/flowchart/` | **React 非依存**。表パース · 検証 · レイアウト · エッジ生成 |
 | **アダプタ（RF）** | `lib/flowchart/toReactFlow.ts` | `PlacedNode` + `FlowEdge` → `@xyflow/react` |
 | **アダプタ（Mermaid）** | `lib/flowchart/toMermaid.ts` | 同上 → Mermaid `flowchart TD` 文字列（**座標は使わない**） |
-| **UI** | `components/flowchart/` | `"use client"` · プレビュー（RF または Mermaid）· 表 UI |
+| **UI** | `components/flowchart/` | Client 層（`"use client"` 詳細は NEXTJS §6 · Hooks は REACT_RULES）· プレビュー · 表 UI |
 
 **禁止:** `parseTable` / `layoutGrid` / `buildEdges` に JSX や `useReactFlow` を置く。逆に `components/flowchart` に列定義ロジックを複製しない。
 
@@ -103,7 +105,6 @@ validateTable(table)
   → measureRowHeights(rowMap, layout)
   → layoutGrid(rowMap, rowHeights, layout) → { placed, bounds }
   → buildEdges(nodes, placed) → FlowEdge[]
-  → buildEdges(nodes, placed) → FlowEdge[]
   → toReactFlow(...)  または  toMermaid(...)   // アプリ別アダプタ
 ```
 
@@ -113,18 +114,20 @@ validateTable(table)
 
 ### 3-5. シグナル → 触る層（Ref Plan 用）
 
-| 症状・依頼 | 層 | floor（Read 優先） |
-|------------|-----|-------------------|
-| 列・接続先・バリデーション | ドメイン | `parseTable.ts` · `validate.ts` · `tableColumns.ts` |
-| 行高・Level 座標・分岐位置 | レイアウト | `layoutGrid.ts` · `measureHeights.ts` · `layoutPresets.ts` |
-| Yes/No エッジ・肘/直線 | エッジ | `buildEdges.ts` · `types.ts` |
-| テーマ色・RF Node/Edge 形 | アダプタ RF | `toReactFlow.ts` · `themes.ts` |
-| Mermaid DSL 生成 · 形状記法 | アダプタ Mermaid | `toMermaid.ts` |
-| ブラウザ Mermaid 描画 | Mermaid UI | `MermaidPreview.tsx` · tag `mermaid-preview` |
-| ズーム · fitView · 操作ロック | Canvas UI | `FlowCanvas.tsx` · `flowTypes.ts` |
-| PNG/SVG 出力 | エクスポート | `exportPng.ts` · `exportSvg.ts` |
-| 表 UI · stale · 生成ボタン | エディタ UI | `FlowchartEditor.tsx` · `FlowTableEditor.tsx` |
-| `app/page` · ルートのみ | Next シェル | `app/page.tsx` · [`NEXTJS_RULES`](../30_web_stack/NEXTJS_RULES.md) §5 |
+**手順:** ROUTER §4 で **tag** 決定 → 本表で **層** 確定 → **ファイル floor の正本は ROUTER §3**（本表は L1 要約）。
+
+| 症状・依頼 | tag | 層 | floor（Read 優先 · 詳細は ROUTER §3） |
+|------------|-----|-----|--------------------------------------|
+| 列・接続先・バリデーション | `table-ui` | ドメイン | `parseTable.ts` · `validate.ts` · `tableColumns.ts` |
+| 行高 · Level 座標 · 分岐位置 | `layout` | レイアウト | `layoutGrid.ts` · `measureHeights.ts` · `layoutPresets.ts` |
+| Yes/No エッジ · 肘/直線 | `edges` | エッジ | `buildEdges.ts` · `types.ts` |
+| テーマ色 · RF Node/Edge 形 | `canvas` | アダプタ RF | `toReactFlow.ts` · `themes.ts` |
+| Mermaid DSL 生成 · 形状記法 | `mermaid-preview` | アダプタ Mermaid | `toMermaid.ts` |
+| ブラウザ Mermaid 描画 | `mermaid-preview` | Mermaid UI | `MermaidPreview.tsx` |
+| 真っ白 · 高さ 0 · fitView · 操作ロック | `canvas` | Canvas UI | `FlowCanvas.tsx` · `FlowchartEditor.tsx` · `flowTypes.ts` |
+| PNG/SVG 出力 | `export` | エクスポート | `exportPng.ts` · `exportSvg.ts` |
+| 表 UI · stale · 生成ボタン | `table-ui` | エディタ UI | `FlowchartEditor.tsx` · `FlowTableEditor.tsx` |
+| `app/page` · ルートのみ | `next-shell` | Next シェル | `app/page.tsx` · [`NEXTJS_RULES`](../30_web_stack/NEXTJS_RULES.md) §6 |
 
 ### 3-3. 型の正本
 
@@ -164,27 +167,65 @@ validateTable(table)
 
 ## 4. React Flow（@xyflow/react）— MUST
 
+**汎用 React → [`REACT_RULES.md`](../30_web_stack/REACT_RULES.md)。本 § は @xyflow/react の YK 不変条件のみ。**
+
+**L1 §4 は YK 不変条件（表駆動 · 操作ロック · エクスポート経路）のみ。** props 網羅列挙 · 追加公式 URL は ROUTER §3 の該当 tag に **Learn / Troubleshooting 1 ページまで**（Ref Plan `load` 必須）。
+
+**Canvas 変更の default template:** `FlowCanvas.tsx` · `flowTypes.ts` · `toReactFlow.ts`（Examples の UI シェルではない）。
+
+### 4-0. 公式参照 — エージェント索引
+
+| 区分 | 扱い |
+|------|------|
+| **L1 記載（毎回 Read 不要）** | §4-1 MUST 表 · §4-2 v12 要約 · 参照実装パターン |
+| **Ref Plan `load` で Read 可** | [Quick Start](https://reactflow.dev/learn) · [Common Errors](https://reactflow.dev/learn/troubleshooting/common-errors) · [Migrate to v12](https://reactflow.dev/learn/troubleshooting/migrate-to-v12) · [Custom Nodes](https://reactflow.dev/learn/customization/custom-nodes) · [Custom Edges](https://reactflow.dev/learn/customization/custom-edges) · tag 固有は ROUTER §3 |
+| **禁止** | `/examples/*` から **UI シェル全体**をコピー · `useNodesState` + `onConnect` で表を正本化 · ドメインパイプライン bypass |
+
+### 4-1. React Flow MUST（表駆動不変条件）
+
 | 項目 | 規則 |
 |------|------|
-| パッケージ | **`@xyflow/react`**（v12 系 · 参照実装 `^12.10.x`）。`@xyflow/react` + `dist/style.css`（Tailwind v4 併用時は [公式 Quick Start](https://reactflow.dev/learn) の import 順に従う） |
-| カスタムノード/エッジ | `flowShape` / `labeled` — **`flowTypes.ts` でモジュールスコープ定義**（レンダー毎の新規 `nodeTypes` オブジェクト禁止 · [Common Errors](https://reactflow.dev/learn/troubleshooting/common-errors)） |
+| パッケージ | **`@xyflow/react`**（v12 系 · 参照実装 `^12.10.x`）。v11 `reactflow` パッケージ禁止 |
+| CSS | **`import '@xyflow/react/dist/style.css'` を MUST**（Client 入口 · 参照: `FlowCanvas.tsx`）。Tailwind v4 で global に置く場合は `@import "tailwindcss"` の**後**（[Quick Start](https://reactflow.dev/learn)） |
+| 親コンテナ | `<ReactFlow>` の**直接親**に `width`/`height`（Tailwind なら `w-full h-full min-h-[420px]` 等）を MUST。`h-full` は親チェーンも Read（`FlowchartEditor.tsx` ラッパー） |
+| カスタムノード/エッジ | **`flowTypes.ts` で `flowNodeTypes` / `flowEdgeTypes` をモジュールスコープ定義**（`nodeTypes` / `edgeTypes` ともレンダー毎新規オブジェクト禁止 · [Common Errors](https://reactflow.dev/learn/troubleshooting/common-errors)）。`memo()` 推奨（`FlowShapeNode` · `LabeledEdge`） |
+| カスタムエッジ実装 | `BaseEdge` + `getStraightPath` / `getBezierPath` 等 · `EdgeLabelRenderer` · 型 `labeled`（`edges/LabeledEdge.tsx`） |
+| ノード寸法（v12） | **`toReactFlow` が layout 由来の `width`/`height` を設定**（固定寸法）。`node.measured.*` は RF 内部計測 — 表駆動では触らない |
 | ノード単位 | `toReactFlow` で各 Node に `draggable: false` · `selectable: false` · `connectable: false` |
-| 操作（グローバル） | **`nodesDraggable: false`** · **`nodesConnectable: false`** · **`elementsSelectable: false`** · **`edgesReconnectable: false`** |
-| Provider | `ReactFlowProvider` でラップ。**`useReactFlow` を使う子は Provider 内**（Next.js `dynamic()` 利用時も明示 Provider 推奨） |
-| エクスポート | `data-flowchart-export-root` でルート特定 → **`.react-flow__viewport`** を `html-to-image`（`toPng` / `toSvg`）で取得 · Controls は `filter` で除外（`exportPng.ts` · `exportSvg.ts`） |
-| fitView | 生成後 `fitView({ padding: 0.2, duration:  200 })`。**PNG/SVG 前**は imperative `fitView` → **~300ms 待機**後キャプチャ（`FlowchartEditor.tsx`） |
-
-**`readOnly` prop:** v12 では個別 interaction props で代替（公式 [Discussion #3254](https://github.com/xyflow/xyflow/discussions/3254)）。上表の組み合わせを SSOT とする。
+| 操作（グローバル） | 公式デフォルトは `nodesDraggable` / `nodesConnectable` / `elementsSelectable` / `edgesReconnectable` すべて **`true`**。表駆動は **四つとも `false` を MUST**（`FlowCanvas.tsx`）。`readOnly` prop は v12 で廃止 — 上記が SSOT |
+| Provider | **`ReactFlowProvider` でラップ MUST**。**`useReactFlow` は Provider の子のみ**（Provider 自身の中では不可 · Common Errors） |
+| 状態 | nodes/edges は **`generateFlowchart` → `toReactFlow` 派生**。`useNodesState` + `onConnect` を表更新の主経路にしない |
+| fitView | `<ReactFlow fitView />`（初回）+ 生成後 `fitView({ padding: 0.2, duration: 200 })`（`useEffect` / export 前 imperative · `FlowCanvas.tsx`）。**PNG/SVG 前**は imperative `fitView` → **~300ms 待機**（`FlowchartEditor.tsx`） |
+| 閲覧操作 | **`panOnDrag` · `zoomOnScroll` は許容**（ADR-010）。`Controls showInteractive={false}` |
+| エクスポート | `data-flowchart-export-root` → **`.react-flow__viewport`** を `html-to-image`（`toPng` / `toSvg`）· Controls は `filter` で除外（`exportPng.ts` · `exportSvg.ts`） |
+| 安定参照 | `defaultEdgeOptions` 等も **`useMemo` またはモジュール外**（参照: `FlowCanvas.tsx`） |
 
 **禁止（flowchart-web 系）**
 
 - ドラッグでレイアウトを正本として保存する設計
-- `onConnect` で表を書き換える主経路
-- 公式 Examples のコピペで **ドメイン・レイアウトパイプラインをバイパス**する
+- `onConnect` / `onReconnect` で表を書き換える主経路
+- **`flowTypes.ts` 外で `nodeTypes` / `edgeTypes` オブジェクトを生成**
+- **Provider 外で `useReactFlow`**
+- **`@xyflow/react/dist/style.css` 未 import**
+- 公式 Examples から **UI シェル全体**をコピペし **ドメイン · レイアウトパイプラインをバイパス**（単一 API 確認は §4-0 · Ref Plan 必須）
+- v11 API: `onEdgeUpdate` · `edgesUpdatable` · `readOnly`（→ §4-2）
 
-**許容:** 既存 `FlowCanvas.tsx` / `toReactFlow.ts` パターンの拡張 · ズーム · パン · stale UX。新規 RF API は ROUTER tag `canvas` で公式 1 ページまで（Ref Plan 必須）。
+**許容:** 既存 `FlowCanvas.tsx` / `toReactFlow.ts` パターンの拡張 · stale UX。**新規 RF API** は ROUTER tag `canvas` で公式 Learn / Troubleshooting **1 ページまで**（Ref Plan 必須）。
 
-### 4-1. Mermaid プレビュー（`flowchart-web-mermaid`）— MUST
+**イベントハンドラ追加時:** `onNodesChange` / `onEdgesChange` / `onConnect` 等は **`useCallback` またはモジュール外**（Common Errors · 無限 re-render 防止）。
+
+### 4-2. v12 — YK で触る項目のみ
+
+| 項目 | YK の扱い |
+|------|-----------|
+| パッケージ名 | `@xyflow/react` + named import `{ ReactFlow }` |
+| `readOnly` 廃止 | §4-1 の interaction props 四 `false` が SSOT |
+| `onEdgeUpdate` → `onReconnect` | 触らない（`edgesReconnectable: false` 固定 · `onReconnect` 不要） |
+| `node.width`/`height` vs `measured` | `toReactFlow` / layoutGrid が `width`/`height` を設定。`measured` は読み取り専用 |
+| 状態更新 | nodes/edges 更新は **イミュータブル**（スプレッド）。ミューテーション禁止（Migrate to v12） |
+| Examples の `useNodesState` | 表駆動では **静的 props 渡し**が主経路 |
+
+### 4-3. Mermaid プレビュー（`flowchart-web-mermaid`）— MUST
 
 | 項目 | 規則 |
 |------|------|
@@ -192,7 +233,7 @@ validateTable(table)
 | 初期化 | `securityLevel: "strict"` · `startOnLoad: false`（`MermaidPreview.tsx`） |
 | 入力 | `toMermaid()` の **文字列**（`.mmd` ファイルを Read しない） |
 | エクスポート | **描画済み SVG** から PNG/SVG（`exportMermaid.ts`）— RF 版の `html-to-image` + viewport とは別経路 |
-| 開発ポート | **3001**（reactflow 版 **3000** と並行） |
+| 開発ポート | [`NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md) §6-1（reactflow **3000** · mermaid **3001**） |
 
 **検証:** `mmdc` / `.mmd` CI ゲートは **No 45 専用**。表プレビューアプリでは `npm run test` + 手動プレビュー。
 
@@ -233,8 +274,8 @@ validateTable(table)
 
 | 用途 | パス |
 |------|------|
-| React Flow 版 | `c:/yk-tool/flowchart-web-reactflow/` · dev **:3000** |
-| Mermaid 比較版 | `c:/yk-tool/flowchart-web-mermaid/` · dev **:3001** |
+| React Flow 版 | `c:/yk-tool/flowchart-web-reactflow/` · dev ポート → [`NEXTJS_RULES`](../30_web_stack/NEXTJS_RULES.md) §6-1 |
+| Mermaid 比較版 | `c:/yk-tool/flowchart-web-mermaid/` · 同上 |
 | ツール台帳 | `catalog.yaml`（`flowchart-web-reactflow` · `flowchart-web-mermaid`） |
 | ルール・スキル | `c:/yk-skill/rule/35_reactflow/` · `creating-reactflow-yk` |
 
@@ -247,6 +288,6 @@ validateTable(table)
 | 参照元 | リンク先 |
 |--------|----------|
 | [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) §図モダリティ | 本ファイル |
-| [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5 | 本ファイル |
+| [`MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5 · §1.5-1 | 本ファイル |
 | [`RULE_INDEX.md`](../RULE_INDEX.md) flowchart 読む順序 | No 35 |
 | `creating-mermaid-yk` | 表駆動は **Do NOT use** → 本帯 |

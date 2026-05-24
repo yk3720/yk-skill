@@ -1,6 +1,6 @@
 ---
 name: creating-reactflow-yk
-description: 表駆動フローチャート（@xyflow/react）の作成・更新。発火例「flowchart-web」「表駆動フロー」「layoutGrid」「toReactFlow」。Do NOT use for .mmd/Mermaid（creating-mermaid-yk）· surge図解HTML · workspace-ui-kit。
+description: 表駆動フローチャート（@xyflow/react）の作成・更新。発火例「flowchart-web」「表駆動フロー」「layoutGrid」「toReactFlow」。Do NOT use for 汎用Reactコンポーネント（creating-react-yk）· .mmd/Mermaid（creating-mermaid-yk）· surge図解HTML · workspace-ui-kit。
 ---
 
 # Creating React Flow（YK · 表駆動）
@@ -25,9 +25,9 @@ description: 表駆動フローチャート（@xyflow/react）の作成・更新
 
 | Step | 内容 |
 |------|------|
-| 1 | 症状・層を固定（L1 §3-5 シグナル表 · ROUTER tag） |
+| 1 | 症状・層を固定（ROUTER §4 → L1 §3-5 · tag） |
 | 2 | 正本は表 — Canvas 手修正を主経路にしない |
-| 3 | 実装（domain → adapter → UI の順） |
+| 3 | 実装（domain → adapter → UI の順 · Canvas は `FlowCanvas` パターン拡張） |
 | 4 | §6 品質ゲート |
 | 5 | §7 完了報告 + **読んだ refs** |
 
@@ -39,7 +39,8 @@ description: 表駆動フローチャート（@xyflow/react）の作成・更新
 |--------------|----------|
 | 表 · CSV → React Flow · PNG/SVG | **本スキル + REACTFLOW_RULES** |
 | テキスト SSOT（`.mmd`） | `creating-mermaid-yk` |
-| Next シェル（`app/`） | `creating-nextjs-yk` · `NEXTJS_RULES` §5 |
+| Next シェル（`app/`） | `creating-nextjs-yk` · `NEXTJS_RULES` §6 |
+| Client Hooks（`components/flowchart`） | `creating-react-yk` · `REACT_RULES` |
 | shadcn 表 UI | `creating-shadcn-yk`（未導入時は触らない） |
 | surge 図解 HTML | `creating-visual-explainers` 等 |
 

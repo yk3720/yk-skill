@@ -13,7 +13,8 @@ alwaysApply: false
 3. `.../creating-reactflow-yk/references/ROUTER.md` — tier / tag
 4. **Ref Plan**（Write/StrReplace 前）→ ROUTER §7
 
-- Next シェル（`app/` のみ）→ `creating-nextjs-yk` · `NEXTJS_RULES` §5
-- shadcn 導入・表 UI 部品 → `creating-shadcn-yk` · `SHADCN_UI_RULES` §6
+- Next シェル（`app/` のみ）→ `creating-nextjs-yk` · `NEXTJS_RULES` §5（RSC）· §6（flowchart）
+- `components/flowchart` の React 一般 → `creating-react-yk` · `REACT_RULES`
+- shadcn 導入・表 UI 部品 → `creating-shadcn-yk` · `SHADCN_UI_RULES` §13
 - `.mmd` → `creating-mermaid-yk`（本入口非使用）
 - 完了報告: `REACTFLOW_RULES.md` §6〜§7 + **読んだ refs**

@@ -1,160 +1,344 @@
-# shadcn/ui 参照ルール
+# shadcn/ui 開発ルール
 
 ## このルールが必要な背景
 
-**shadcn/ui** は「npm の黒箱コンポーネント」と設計思想が異なり、CLI でソースを取り込む **Open Code** モデルである。誤解すると依存関係やカスタマイズ方針の説明がずれる。本ファイルは **公式要点とリンクの SSOT** とする。
+**shadcn/ui** は npm の黒箱コンポーネントライブラリではなく、**CLI でソースをプロジェクトに取り込む Open Code モデル**である。MUI や Chakra のように `import { Button } from "@mui/material"` だけでは運用できず、`components.json` · テーマトークン · `npx shadcn@latest add` の理解が必要。
 
-**ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md`
+本ファイルは **公式ドキュメントに基づく SSOT**（思想・禁止・YK 分岐・品質ゲート）。**init / add の実行コマンド SSOT は `creating-shadcn-yk` スキル**。
 
-**最終更新:** 2026-05-24
+**用語:** 本文の `shadcn` は **shadcn/ui** の略。CLI パッケージ `@shadcn` は別物。
+
+**ファイルパス:** `c:/yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md`  
+**索引:** [`RULE_INDEX.md`](../RULE_INDEX.md) No 32  
+**最終更新:** 2026-05-24（公式調査 + サブエージェントレビュー反映）
+
+**横断:** [`REACT_RULES.md`](REACT_RULES.md) · [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC） · [`TAILWINDCSS_RULES.md`](TAILWINDCSS_RULES.md)（v4） · flowchart 時 [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)
 
 ---
 
 ## 1. 概要（一言）
 
-**デザインされたアクセシブルなコンポーネント群と、それを配布するための仕組み。** 公式は **「コンポーネントライブラリではない」「自分のコンポーネントライブラリの作り方」** と明言している。**npm にブラックボックスで依存するのではなく、ソースを自分のリポジトリに取り込んで編集できる（Open Code）。**
+**CLI で UI コンポーネントのソースを自分のリポジトリに取り込み、Tailwind トークンと合成 API（Radix の `asChild` または Base UI の `render`）で組み立てる UI キットの作り方。**
 
 ---
 
-## 2. 公式ドキュメントで押さえること
+## 2. YK プロジェクト分岐（最優先）
 
-### 2-1. 原則（Introduction）
+**対象が未確定なら、§2 より先にここで止める。**
 
-- **Open Code:** コンポーネントの**実コードが手元に残る**。見た目・挙動をそのまま編集できる。LLM が読んで改善もしやすい。
-- **Composition:** 共通の合成しやすいインターフェースで揃えられ、API がコンポーネントごとにバラバラになりにくい。
-- **Distribution:** フラットファイルのスキーマと **CLI** でコンポーネントを配布・インストール。クロスフレームワーク対応の説明がある。
-- **Beautiful Defaults:** 初期スタイルがそろっており、そのまま最低限きれいに見える。
-- **AI-Ready:** オープンなコードと一貫した API で、モデルが読み・生成しやすい。
+| 判定（cwd / パス / シグナル） | 適用節 | プリミティブ | init の base |
+|------------------------------|--------|--------------|--------------|
+| `flowchart-web-reactflow` · `flowchart-web-mermaid` | **§13** | Radix · **`asChild`** | `-b radix` |
+| `workspace-ui-kit` | **§12** | Base UI · **`render`** | 既存は **re-init 禁止** · 新規のみ `-b base` |
+| `@workspace/ui` import あり（将来の Turborepo） | **§11** モノレポ | 各 workspace の `components.json` に従う | `--monorepo` |
+| surge 静的 HTML 図解 | **§14 禁止** | — | shadcn 使わない |
 
-### 2-2. Next.js での使い方（Installation / Next）
+**Radix vs Base UI（混同防止）**
 
-大きく 3 パターンがドキュメント化されている。
+| 項目 | flowchart-web-* | workspace-ui-kit |
+|------|-----------------|------------------|
+| shadcn ベース | **Radix（標準）** | **Base UI** |
+| リンクをボタン見た目 | `<Button asChild><Link /></Button>` | `<Button render={<a />} nativeButton={false}>…</Button>` |
+| 相互コピー | **禁止** | **禁止** |
 
-1. **shadcn/create** … [create 画面](https://ui.shadcn.com/create?template=next) でプリセットを組み、`npx shadcn@latest init --preset [CODE] --template next` のようなコマンドを生成。
-2. **CLI で新規** … `npx shadcn@latest init -t next`（モノレポなら `--monorepo`）。
-3. **既存プロジェクト** … `npx create-next-app@latest` で作成（推奨デフォルトで Tailwind・App Router・`@/*` エイリアスなど）、必要なら Tailwind と `tsconfig` の `paths` を確認後、`npx shadcn@latest init`、`npx shadcn@latest add button` など。
+**§ 番号の正本は本ファイル。** 他文書に「§5=ui-kit / §6=flowchart」とある場合は **§12 / §13** を指す（2026-05-24 再編）。
 
-コンポーネント追加後の import 例（公式）:
+---
+
+## 3. エージェント向け — いつ何を読むか
+
+| 段階 | 読むもの | タイミング |
+|------|----------|------------|
+| L1 | **本ファイル** | 毎回・最初（§2 で分岐確定後） |
+| L2 | `creating-shadcn-yk/SKILL.md` | **init / add 実行時**（コマンド SSOT） |
+| 併用 | `REACT_RULES.md` | Hooks · 純粋性 |
+| 併用 | `NEXTJS_RULES.md` §5 | App Router · `"use client"` |
+| 併用 | `TAILWINDCSS_RULES.md` | v4 · `@import "tailwindcss"` |
+| ドメイン | §12 ui-kit · §13 flowchart | §2 表のとおり |
+
+**実行スキル:** `creating-shadcn-yk` · **禁止:** 静的 surge 図解 HTML（`creating-visual-explainers` 系）
+
+**L0 入口:** flowchart 編集時は [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc)（shadcn → 本ファイル **§13**）
+
+---
+
+## 4. 設計思想（公式 5 原則）
+
+| 原則 | 意味 | エージェントが守ること |
+|------|------|------------------------|
+| **Open Code** | コンポーネントの**実ソース**がリポジトリに残る | ラップでごまかさず `components/ui/*` を直接編集してよい |
+| **Composition** | 共通の合成インターフェース | コンポーネントごとに別 API を増やさない |
+| **Distribution** | フラットスキーマ + **CLI** で配布 | `npx shadcn@latest add` が正規経路 |
+| **Beautiful Defaults** | 初期スタイルが揃っている | まず variant / トークンで調整 |
+| **AI-Ready** | オープンコードで LLM が読める | 追加時は公式例と `components/ui` の実装を Read |
+
+**公式の明言:** 「コンポーネントライブラリではない」「自分のコンポーネントライブラリの作り方」。
+
+> **§2 以降（一般論）:** プロジェクト未確定なら先に §2。flowchart / ui-kit 固有は §12–§13。
+
+---
+
+## 5. インストール経路（Next.js · 公式順）
+
+### 5-1. 新規 — shadcn/create
+
+1. [shadcn/create](https://ui.shadcn.com/create?template=next) でスタイル・色・フォント等を選ぶ  
+2. `npx shadcn@latest init --preset [CODE] --template next`  
+3. `npx shadcn@latest add card` 等  
+
+### 5-2. 新規 — CLI
+
+```bash
+# Radix（flowchart 等）
+npx shadcn@latest init -t next -b radix
+
+# Base UI（ui-kit 新規のみ）
+npx shadcn@latest init -t next -b base
+
+# モノレポ新規のみ
+npx shadcn@latest init -t next --monorepo
+```
+
+### 5-3. 既存 Next（YK flowchart 初回導入）
+
+```bash
+cd c:/yk-tool/flowchart-web-reactflow
+npx shadcn@latest init -b radix
+npx shadcn@latest add button table input scroll-area
+```
+
+**前提:** Tailwind 導入済み · `@/*` エイリアス · `components.json` は CLI 利用時必須。
 
 ```tsx
 import { Button } from "@/components/ui/button"
 ```
 
-**`@/components/ui/`** 配下から import する形が公式例として載っている。
+---
+
+## 6. `components.json`（CLI の正本）
+
+| キー | 意味 | 注意 |
+|------|------|------|
+| `$schema` | `https://ui.shadcn.com/schema.json` | 推奨 |
+| `style` | 例: `new-york` · `radix-nova` · **`base-nova`**（ui-kit） | **init 後は変更不可** |
+| `iconLibrary` | 例: `lucide` | モノレポでは workspace 間で**一致** |
+| `tailwind.css` | 例: `app/globals.css` | v4 では `config` は空 |
+| `tailwind.config` | v3 用 · **v4 は `""`** | |
+| `tailwind.baseColor` | neutral, zinc 等 | init 後変更不可 |
+| `tailwind.cssVariables` | `true` 推奨 | `false` は再インストールが必要 |
+| `rsc` | `true` → add 時に `"use client"` 付与 | Next App Router は **true** |
+| `tsx` | TypeScript | YK は **true** |
+| `rtl` | RTL レイアウト | |
+| `aliases.components` | 例: `@/components` | |
+| `aliases.ui` | 例: `@/components/ui` | import SSOT |
+| `aliases.utils` | 例: `@/lib/utils` | `cn` |
+| `aliases.lib` · `aliases.hooks` | 例: `@/lib` · `@/hooks` | |
+| `registries` | `@acme/...` 名前空間 | 社内配布 |
+
+詳細: [components.json](https://ui.shadcn.com/docs/components-json)
 
 ---
 
-## 3. 参照 URL（公式）
+## 7. CLI コマンド（よく使うもの）
 
-| 説明 | URL |
-|------|-----|
-| Introduction | https://ui.shadcn.com/docs |
-| Next.js インストール | https://ui.shadcn.com/docs/installation/next |
-| shadcn/create（テンプレ next） | https://ui.shadcn.com/create?template=next |
+| コマンド | 用途 |
+|----------|------|
+| `npx shadcn@latest init` | 設定・依存・CSS 変数 |
+| `npx shadcn@latest init -b radix` / `-b base` | プリミティブ選択 |
+| `npx shadcn@latest add <name>` | コンポーネント追加 |
+| `npx shadcn@latest add -c apps/web` | モノレポ cwd |
+| `npx shadcn@latest add --dry-run` | プレビュー |
+| `npx shadcn@latest docs [component]` | ドキュメント表示 |
+| `npx shadcn@latest view button` | レジストリ確認 |
+| `npx shadcn@latest search @shadcn -q "table"` | 検索 |
+| `npx shadcn@latest apply <preset>` | テーマ/フォント適用 |
+| `npx shadcn@latest migrate radix` | `@radix-ui/react-*` → `radix-ui` |
+| `npx shadcn@latest migrate icons` / `rtl` | アイコン・RTL 移行 |
+| `npx shadcn@latest preset resolve <url>` | プリセット解決 |
+| `npx shadcn@latest info` | 設定確認 |
+
+**init 主要オプション:** `-t next` · `--monorepo` · `--css-variables` · `--pointer` · `--rtl` · `-y` · `-f`
+
+詳細: [CLI](https://ui.shadcn.com/docs/cli)
 
 ---
 
-## 4. エージェント向けメモ
+## 8. テーマとスタイリング
 
-- **「ライブラリを import するだけ」ではなく「コードがプロジェクトにコピーされる」** と説明できると、AI やチームへの指示もブレにくい。
-- スタイルの土台は **Tailwind** が前提になりやすい（Next の公式流儀とも相性がよい）。詳細は `c:/yk-skill/rule/30_web_stack/TAILWINDCSS_RULES.md` を参照。
+### 8-1. CSS 変数（推奨）
+
+- `tailwind.cssVariables: true`
+- `bg-background` · `text-primary` 等の**セマンティックトークン**
+- 新規 UI で `bg-zinc-950` 等の生色は避ける
+
+### 8-2. Tailwind v4 必須行（globals.css）
+
+Tailwind 詳細は [`TAILWINDCSS_RULES.md`](TAILWINDCSS_RULES.md) を正本とし、shadcn 導入時は最低限次を含める:
+
+```css
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+```
+
+- `components.json` の `tailwind.config` は **`""`**
+- v4 ボタン既定は `cursor: default` — `init --pointer` または base レイヤで調整
+
+### 8-3. ダークモード（Next）
+
+`next-themes` · `ThemeProvider`（`"use client"`）· `<html suppressHydrationWarning>` · `attribute="class"`  
+→ [Dark Mode / Next](https://ui.shadcn.com/docs/dark-mode/next)
 
 ---
 
-## 5. workspace-ui-kit 実践メモ（2026-05-17 追記）
+## 9. コンポーネントの使い方
 
-`c:\yk-tool\workspace-ui-kit` は shadcn/ui の **base**（Base UI）バリアントを使用している。標準の shadcn/ui とは一部 API が異なるため注意が必要。
+```bash
+npx shadcn@latest add button dialog table field
+```
 
-### 5-1. `asChild` は使わない → `render` を使う
+- 配置: `aliases.ui`（通常 `@/components/ui/`）
+- 見た目: variant / トークン / ソース編集（呼び出し側 `className` で打ち消さない）
 
-このプロジェクトでは shadcn の **Base UI** を採用しているため、`asChild` prop は動作しない（DOM に素通りして React 警告が出る）。代わりに **`render` prop** を使う。
+**Radix（標準 · flowchart）— `asChild`:**
 
 ```tsx
-// ❌ 標準 shadcn/ui の書き方（このプロジェクトでは使えない）
 <Button asChild>
-  <a href="https://example.com">開く</a>
+  <Link href="/login">Login</Link>
+</Button>
+```
+
+**Base UI（ui-kit）— `render`:** §12 を参照。`asChild` は**使わない**。
+
+- フォーム: [Forms](https://ui.shadcn.com/docs/forms)（RHF / TanStack Form 等）
+- flowchart 既存カスタム CSS: **一括置換せず**段階的に shadcn 化
+
+---
+
+## 10. Next.js / RSC（shadcn 固有のみ）
+
+| 項目 | 規則 |
+|------|------|
+| `rsc: true` | `add` で Client 部品に `"use client"` を付与 |
+| インタラクティブ UI | Server / Client 分離 |
+
+**RSC の一般論・データ取得境界:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5 を併読（本節で再掲しない）。
+
+---
+
+## 11. 単体アプリ vs モノレポ（YK）
+
+| 種別 | 例 | shadcn |
+|------|-----|--------|
+| **単体** | `flowchart-web-*` · **`workspace-ui-kit`**（ルート単体 Next） | `init` / `add` のみ · **`--monorepo` 不要** |
+| **モノレポ** | 将来の Turborepo 雛形 | `init --monorepo` · 各 workspace に `components.json` |
+
+モノレポ要件（公式）: `style` · `baseColor` · **`iconLibrary`** を workspace 間で揃える · v4 は `tailwind.config` を空に。
+
+詳細: [Monorepo](https://ui.shadcn.com/docs/monorepo)
+
+---
+
+## 12. workspace-ui-kit（Base UI）
+
+`c:/yk-tool/workspace-ui-kit` — **単体 Next アプリ**（`style: "base-nova"` · `@base-ui/react`）。Turborepo ではない。
+
+### 12-1. `render` + `nativeButton`
+
+```tsx
+// ❌ asChild（本プロジェクト不可）
+<Button asChild><a href="...">開く</a></Button>
+
+// ✅ リンクをボタン見た目に
+<Button render={<a href="/docs" />} nativeButton={false}>
+  Read the docs
 </Button>
 
-// ✅ workspace-ui-kit の正しい書き方
-<Button render={<a href="https://example.com">開く</a>} />
+// ✅ Dialog 等の Trigger
+<DialogTrigger render={<Button variant="outline" />}>設定を開く</DialogTrigger>
 ```
 
-`TooltipTrigger` / `DialogTrigger` などの Trigger 系も同様に `render` を使う：
+`<a>` / `<span>` を `render` する場合は **`nativeButton={false}` 必須**（ラベルは `Button` の children）。
 
-```tsx
-<TooltipTrigger
-  render={
-    <Button variant="ghost" size="icon-sm">
-      <Settings />
-    </Button>
-  }
-/>
-```
-
-### 5-2. SidebarProvider を使う 3 ペイン構成パターン
-
-Sidebar（Pane1） + SidebarInset（Pane2以降）の構成が基本。
-
-```tsx
-<SidebarProvider defaultOpen className="h-screen w-full overflow-hidden">
-  <Sidebar collapsible="icon">   {/* Pane 1 */}
-    ...
-  </Sidebar>
-  <SidebarInset className="flex min-w-0 flex-col">
-    <header>...</header>          {/* グローバルヘッダー */}
-    <div className="flex min-h-0 flex-1">
-      {/* Pane 2 */}
-      {/* Pane 3 */}
-    </div>
-  </SidebarInset>
-</SidebarProvider>
-```
-
-- `h-screen overflow-hidden` を SidebarProvider に付けてビューポート固定
-- 各ペインで `min-h-0` を付けないと `ScrollArea` が伸びきらないことがある
-- Pane1 の折りたたみトグルは `Pane1Toggle` コンポーネントを再利用できる
-
-### 5-3. コーディングルール（CLAUDE.md より抜粋）
+### 12-2. レイアウト規約（§8 トークン規約に加え）
 
 | ルール | 理由 |
 |--------|------|
-| 子要素の間隔は親で `flex flex-col gap-*` | `space-y-*` は使わない |
-| 色は役割トークンで指定（`bg-primary` 等） | `bg-blue-500` のような色番号は使わない |
-| 正方形要素は `size-N` | `w-N h-N` は使わない |
-| shadcn 部品が使えるなら自前 `div` で代替しない | |
-| 部品の見た目を呼び出し側の `className` で打ち消さない | 部品側に variant を追加する |
+| `flex flex-col gap-*` | `space-y-*` 禁止 |
+| 役割トークンのみ | `bg-blue-500` 禁止 |
+| `size-N` | `w-N h-N` 禁止 |
+| shadcn 部品を優先 | 自前 `div` 代替禁止 |
+
+### 12-3. 運用
+
+- 既存 ui-kit: **`init` や `-b` の再実行禁止** — `npx shadcn@latest add ...` のみ
+- 上書き: `--overwrite` はユーザー明示まで使わない
+
+併読: `WORKSPACE_RULES.md` · ui-kit 同梱 `base-vs-radix.md`
 
 ---
 
-## 6. flowchart-web 向け追記（Phase 2 表 UI · 未導入可）
+## 13. flowchart-web（Radix · 標準 shadcn）
 
-**現状:** `flowchart-web-reactflow` は shadcn **未導入**（カスタム CSS + Tailwind v4）。導入は別タスク可。
+**現状:** shadcn **未導入**（カスタム CSS + Tailwind v4）。ui-kit から **コピー禁止**。
 
-### 6-1. 導入（既存 Next アプリ）
+### 13-1. 初回導入チェックリスト
+
+1. §2 で **flowchart** であることを確認  
+2. `npx shadcn@latest init -b radix`（`creating-shadcn-yk` と併用）  
+3. `app/globals.css` に §8-2 の v4 必須行（`@custom-variant dark` 含む）  
+4. 最初の 1 コンポーネントだけ `add`（例: `button`）して既存 UI と共存確認  
+5. [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) を併読 — 表編集ロジックは `lib/flowchart/` が SSOT  
 
 ```bash
 cd c:/yk-tool/flowchart-web-reactflow
-npx shadcn@latest init
-npx shadcn@latest add button table input   # 表 UI・ツールバー想定
+npx shadcn@latest init -b radix
+npx shadcn@latest add button table input scroll-area
 ```
 
-- **既存プロジェクト** — [Installation / Next](https://ui.shadcn.com/docs/installation/next) · `components.json` · `@/components/ui/` が SSOT
-- **yk-tool 直下の単体アプリ** — `--monorepo` は **不要**（Turborepo ワークスペースではない）
-- Tailwind v4 — `components.json` の `tailwind` 設定は [Monorepo ドキュメント](https://ui.shadcn.com/docs/monorepo) の v4 注記に従う
+---
 
-### 6-2. workspace-ui-kit との使い分け（1 節固定）
+## 14. 禁止・境界
 
-| 項目 | flowchart-web-* | workspace-ui-kit |
-|------|-----------------|------------------|
-| 目的 | 表駆動フローチャート編集 | 図解管理 · 横断 UI キット |
-| shadcn バリアント | **標準 Radix**（導入時） | **Base UI**（`render` prop · `asChild` 不可） |
-| パス | `c:/yk-tool/flowchart-web-reactflow/` | `c:/yk-tool/workspace-ui-kit/` |
-| 相互コピー | ui-kit の Base UI パターンを **無断移植しない** | flowchart 専用ロジックを ui-kit に混ぜない |
-| ルール | 本 §6 + [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) | 本ファイル §5 + [`WORKSPACE_RULES`](../20_web_workspace/WORKSPACE_RULES.md) |
+| 禁止 | 理由 |
+|------|------|
+| surge 静的 HTML に shadcn / Tailwind ビルド | 図解スキル系 |
+| ui-kit ↔ flowchart の `components/ui` 相互コピー | API が異なる |
+| `node_modules` 内の編集 | Open Code は自リポの `components/ui` |
+| init 後の `style` / `baseColor` / `cssVariables` の安易な変更 | 再 add が必要 |
+| flowchart で `render` / ui-kit で `asChild` | §2 違反 |
+| ui-kit 既存に `init -b radix` 等の re-init | Base UI を壊す |
 
-**エージェント:** flowchart で Button 等を追加するときは **§6-1（標準 shadcn）**。ui-kit からコンポーネントを import しない。
+---
 
-### 6-3. 実行スキル
+## 15. 品質ゲート（変更時）
 
-- flowchart / 表 UI → **`creating-shadcn-yk`**
-- 静的 surge 図解 HTML → **`creating-visual-explainers` 系**（shadcn 禁止 · 本スキル Do NOT use）
+- [ ] §2 で対象プロジェクト（Radix / Base UI）を確定した
+- [ ] `components.json` と `tsconfig` / `imports` のエイリアス一致
+- [ ] 追加は `npx shadcn@latest add` 経由
+- [ ] Client 境界が必要なファイルに `"use client"`
+- [ ] テーマはトークン / variant（打ち消し class を増やしていない）
+- [ ] v4: `@custom-variant dark` を `globals.css` に含めた
+
+**完了報告:** 触った公式 URL · init/add コマンド · §12 or §13 のどちらか — 各 1 行。
+
+---
+
+## 16. 参照 URL（公式）
+
+調査日: 2026-05-24。詳細手順は各 URL を Read。
+
+| トピック | URL |
+|----------|-----|
+| Introduction | https://ui.shadcn.com/docs |
+| Installation / Next | https://ui.shadcn.com/docs/installation/next |
+| Components | https://ui.shadcn.com/docs/components |
+| components.json | https://ui.shadcn.com/docs/components-json |
+| CLI | https://ui.shadcn.com/docs/cli |
+| Theming | https://ui.shadcn.com/docs/theming |
+| Dark Mode / Next | https://ui.shadcn.com/docs/dark-mode/next |
+| Forms | https://ui.shadcn.com/docs/forms |
+| Monorepo | https://ui.shadcn.com/docs/monorepo |
+| shadcn/create | https://ui.shadcn.com/create |
+| Schema | https://ui.shadcn.com/schema.json |

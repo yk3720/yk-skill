@@ -59,7 +59,7 @@
 
 ## 4. 技術メモ — MUST（キット共通）
 
-- **shadcn Base UI:** カスタムトリガーは `asChild` ではなく `render`。→ `SHADCN_UI_RULES.md` §5
+- **shadcn Base UI:** カスタムトリガーは `asChild` ではなく `render`。→ `SHADCN_UI_RULES.md` §12
 - **Pane1 折りたたみ:** `components/workspace/Pane1Toggle.tsx` を Sidebar 系で再利用可。
 - **オフライン build:** Google Fonts 取得で `npm run build` が落ちる環境あり。開発は `npm run dev`、型のみ `npx tsc --noEmit`。
 
