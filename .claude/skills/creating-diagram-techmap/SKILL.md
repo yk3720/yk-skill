@@ -3,7 +3,7 @@ name: creating-diagram-techmap
 description: >
   理系エンジニア向け技術解説 HTML 図解（techmap）を生成し surge.sh に公開。基礎サマリー→詳細→参考文献の連鎖構造。
   「techmapで図解して」「技術を図解して」、routing-diagram-yk からの委譲時に使用。
-  Do NOT use for curiositymap/文系向け、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
+  Do NOT use for curiositymap/文系向け、proposalmap/社内周知、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
 ---
 
 # Techmap

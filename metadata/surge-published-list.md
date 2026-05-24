@@ -1,6 +1,6 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年5月23日（publish パス表記を移行後に合わせて更新）  
+**最終更新**: 2026年5月24日（ProposalMap 初回公開を追加）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
 **HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
 **作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
@@ -26,6 +26,7 @@
 | 13 | Anthropic Skills 作成ベストプラクティス | Techmap | 2026/05/02 | [techmap-skill-authoring.surge.sh](https://techmap-skill-authoring.surge.sh) | `skill-authoring-rules.html` | 59.6KB |
 | 14 | AIの3つの壁 — アテンション・コンテキスト・オートリグレッション（技術者向け） | Techmap | 2026/05/17 | [techmap-ai-three-walls.surge.sh](https://techmap-ai-three-walls.surge.sh) | `ai-three-walls.html` | 56.2KB |
 | 15 | AIの3つの越えられない壁 — ChatGPTはなぜ嘘をつくのか（一般向け） | CuriosityMap | 2026/05/17 | [curimap-ai-three-walls.surge.sh](https://curimap-ai-three-walls.surge.sh) | `curimap-ai-three-walls.html` | 44.9KB |
+| 16 | フローチャート Web アプリ — 社内周知 | ProposalMap | 2026/05/24 | [promap-flowchart-web.surge.sh](https://promap-flowchart-web.surge.sh) | `promap-flowchart-web.html` | 13.5KB |
 
 ---
 
@@ -55,6 +56,12 @@
 | ヘレニスティック占星術 | [curimap-hellenistic-astrology.surge.sh](https://curimap-hellenistic-astrology.surge.sh) | 2026/04/08 |
 | AIの3つの越えられない壁（一般向け） | [curimap-ai-three-walls.surge.sh](https://curimap-ai-three-walls.surge.sh) | 2026/05/17 |
 
+### ProposalMap（社内提案図解・周知用）
+
+| タイトル | URL | 公開日 |
+|---------|-----|--------|
+| フローチャート Web アプリ — 社内周知 | [promap-flowchart-web.surge.sh](https://promap-flowchart-web.surge.sh) | 2026/05/24 |
+
 ### その他（ツール・ダッシュボード）
 
 | タイトル | URL | 公開日 |
@@ -67,12 +74,13 @@
 
 | 項目 | 値 |
 |------|---|
-| 公開コンテンツ総数 | 15件 |
+| 公開コンテンツ総数 | 16件 |
 | Techmap | 12件 |
 | CuriosityMap | 2件 |
+| ProposalMap | 1件 |
 | その他（ツール） | 1件 |
 | 最初の公開日 | 2026/03/28 |
-| 最新の公開日 | 2026/05/17 |
+| 最新の公開日 | 2026/05/24 |
 | ローカルファイル合計サイズ | 約 694KB |
 
 ---
@@ -82,6 +90,7 @@
 - URLは `{tool}-{slug}.surge.sh` の形式で統一されています
 - Techmap：`techmap-{slug}.surge.sh`
 - CuriosityMap：`curimap-{slug}.surge.sh`
+- ProposalMap：`promap-{slug}.surge.sh`
 - 公開済み HTML の正本は `c:\yk-tool\publish\`（2026-05-23 移行完了。旧 `c:\yk-memo\output\` は Git 上削除済み · 実体は `yk-tool` へ）
 - このリストは `c:\yk-skill\metadata\surge-published-list.md` で管理（各スキルがデプロイ後に更新）
 - 図解管理 UI（`workspace-ui-kit/data/figures.ts`）は本台帳と **手動同期**（`url` · 公開日 · 種別）。UI 専用の `topicId` / タグ / メモは `figures.ts` のみ

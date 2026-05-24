@@ -2,7 +2,7 @@
 name: routing-diagram-yk
 description: >
   HTML 図解（surge）の受付・形式選択のみ。読者・形式が未指定の「図解して」「図解を作って」「このテーマを図解して」で使用。
-  明示キーワード（curiositymap/techmap/文系/技術/FB付き）時は子スキルへ直行し本スキルは使わない。
+  明示キーワード（curiositymap/techmap/proposalmap/文系/技術/FB付き）時は子スキルへ直行し本スキルは使わない。
   Do NOT use for 図解の本文生成・mermaid/flowchart-web・チャット再説明（re-explaining-in-chat-yk）。
 ---
 
@@ -19,6 +19,7 @@ description: >
 | curiositymap · 文系向け · 初心者向け（図解文脈） | `creating-curiosity-map` |
 | techmap · 技術を図解 | `creating-diagram-techmap` |
 | FB付き · コメント付き図解 · フィードバック付き · コメント収集 | `creating-visual-explainers-fb` |
+| proposalmap · 提案書形式 · 企画書形式 · 社内提案 · 社内周知 | `creating-proposalmap-yk` |
 | 両方 · 文系と技術 · curiositymap と techmap | **Step 2「両方」**（下記） |
 
 詳細・パス一覧 → [references/ROUTER.md](references/ROUTER.md)
@@ -37,6 +38,7 @@ description: >
 | visual | 汎用（読者指定なし） | 形式が決まらないときの既定 |
 | both | **文系＋技術の両方** | 同テーマを2種類の資料にしたいとき |
 | fb | FBコメント付き図解 | フィードバック収集付き公開 |
+| proposalmap | 社内提案図解（周知用） | 非専門の社内関係者へ「作ろうとしているもの」を伝える |
 
 **推奨の付け方:** ユーザーが読者を書いていなければ「文系＋技術の両方」または「汎用」のどちらかを理由付きで提案する。
 

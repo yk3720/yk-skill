@@ -3,7 +3,7 @@ name: creating-curiosity-map
 description: >
   文系の大人向け HTML 図解（curiositymap）を生成し surge.sh に公開。日常起点・勉強のとっかかり用。
   「curiositymapで図解して」「文系向けに図解して」「初心者向けに図解して」、routing-diagram-yk からの委譲時に使用。
-  Do NOT use for techmap/技術を図解、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
+  Do NOT use for techmap/技術を図解、proposalmap/社内周知、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
 ---
 
 # CuriosityMap

@@ -9,6 +9,7 @@
 | curiositymap | `c:/yk-skill/.claude/skills/creating-curiosity-map/SKILL.md` |
 | techmap | `c:/yk-skill/.claude/skills/creating-diagram-techmap/SKILL.md` |
 | 汎用 visual | `c:/yk-skill/.claude/skills/creating-visual-explainers/SKILL.md` |
+| proposalmap | `c:/yk-skill/.claude/skills/creating-proposalmap-yk/SKILL.md` |
 | FB付き | `c:/yk-skill/.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` |
 
 ## 2. 使わないもの（境界）
@@ -26,6 +27,7 @@
 | 「〇〇を図解して」（形式なし） | **routing-diagram-yk** → Step 1 質問 |
 | 「〇〇を curiositymap で図解」 | curiosity **直行**（本ルーター不要） |
 | 「〇〇を techmap で」 | techmap **直行** |
+| 「〇〇を proposalmap で」 / 提案書形式 / 企画書形式 / 社内周知 | proposalmap **直行** |
 | 「〇〇を文系と技術の両方で」 | **両方モード**（質問省略可） |
 | 「図解を作って」（形式なし） | **routing-diagram-yk** |
 
@@ -63,6 +65,7 @@
 | visual | 汎用（読者指定なし） |
 | both | 文系＋技術の両方（URL 2 本） |
 | fb | FBコメント付き図解 |
+| proposalmap | 社内提案図解（周知用）— 非専門の社内関係者へ「作ろうとしているもの」 |
 
 ## 6. visual との役割分担
 

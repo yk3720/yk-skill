@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-05-24（`creating-pythoncode-yk` L1 昇格 · 監査反映）  
+**最終更新:** 2026-05-24（`creating-proposalmap-yk` 新設）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **24** · nested **2** · sample **1**（計 **27** `SKILL.md`）
+**件数:** L1 **25** · nested **2** · sample **1**（計 **28** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -34,7 +34,8 @@
 | 8 | creating-shadcn-yk | `.claude/skills/creating-shadcn-yk/SKILL.md` | L1 | — | no | shadcn init/add |
 | 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
-| 10 | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
+| 10 | creating-proposalmap-yk | `.claude/skills/creating-proposalmap-yk/SKILL.md` | L1 | — | no | 社内提案図解 proposalmap · surge |
+| 10b | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
 | 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了・再開・確認・整理 |

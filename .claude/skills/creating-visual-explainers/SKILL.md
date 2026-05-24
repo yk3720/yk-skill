@@ -4,7 +4,7 @@ description: >
   形式が「汎用」と確定したときの HTML 図解を surge.sh に公開。読者・テンプレ指定なし。
   発火例「汎用で図解」「visual で図解」、routing-diagram-yk 委譲後の汎用実行。
   Also for English: generic/visual illustrated HTML when style is already chosen.
-  Do NOT use for 形式未指定の「図解して」単独・curiositymap/techmap/FB付き（→ routing-diagram-yk または各実行スキル）。
+  Do NOT use for 形式未指定の「図解して」単独・curiositymap/techmap/proposalmap/FB付き（→ routing-diagram-yk または各実行スキル）。
 ---
 
 # Creating Visual Explainers
