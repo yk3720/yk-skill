@@ -17,10 +17,10 @@ disable-model-invocation: true
 |--------|------|
 | 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
 | secrets | `c:/yk-skill/rule/10_meta/SECRETS_HYGIENE_RULES.md` §2 · エージェント必読チェックリスト |
-| 手順 | **Cursor User Rules**（`committing-changes-with-git`）— 調査 · amend 条件 |
-| Shell / RUN | `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md` — 調査は `;` 1 本 · 初回 `all` |
+| 手順 | **Cursor User Rules**（`committing-changes-with-git`）— amend 条件等（**commit 前調査の Shell は下記を優先**） |
+| Shell / RUN | `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md` — 調査は `;` 1 本 · 初回 `all`（User Rules の並列 3 本より優先） |
 
-矛盾時は **GIT_WORKFLOW** と User Rules を優先する。
+矛盾時は **GIT_WORKFLOW** > **AGENT_SHELL / commit-shell** > User Rules の実行形式。
 
 ## 依存（必要時 Read）
 

@@ -103,6 +103,8 @@
 | **6** | **Ref Plan で列挙した references のみ** | ロード規則の SSOT は各スキルの `ROUTER.md` |
 | **7** | **企画・メモ（人間向け）** | `yk-memo` 等 — スコープ・背景の参考。**実装の正解ではない** |
 
+**L0 `.mdc` と L1:** alwaysApply / glob の `.mdc` は**入口要約**。手順・禁止の SSOT は L1 rule。`.mdc` と L1 が食い違うときは **L1 を正として `.mdc` を更新**（段階 2 の要約が段階 5 の L1 より古くならない）。
+
 **企画メモ vs 実装 rule:** 実装・AI 指示の SSOT は **`yk-skill/rule` の該当 `*_WORKSPACE_RULES.md`（およびコード内の型・定数）** が勝つ。`yk-memo` と食い違う場合は **rule または ADR を更新してから**実装に反映する。
 
 Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKSPACE_RULES.md` §1。
@@ -120,6 +122,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | `c:/yk-memo` | 企画 · 講座 · `handoffs/`（Governance 段階 7 — 実装の正解ではない） |
 | `c:/yk-document` | Excel 原本（Git 外）· `exports/` |
 | `c:/1.cursor/5.Python` | Python デスクトップ（別リポ · rev 積層保護） |
+
+**ui-kit / flowchart:** `workspace-ui-kit` 作業は **`yk-tool` をワークスペースに含める**（`workspace-dev-entry.mdc` は `yk-tool/workspace-ui-kit/.cursor/rules/` のみ）。
 
 ---
 
@@ -182,7 +186,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |
 | 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
-| 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | `creating-mermaid-yk` · ROUTER |
+| 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | L1 本文に手順全文は含めない（→ L2 `creating-mermaid-yk` + `ROUTER.md`） |
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |
 

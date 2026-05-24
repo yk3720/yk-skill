@@ -99,8 +99,8 @@
 
 ### 当初レビューで言及・未タスク化した周辺
 
-- ルール全文の **再矛盾チェック**（帯移行後の横断読み）
-- **サブエージェント多視点レビュー**の再実施（大きな変更後）
+- ~~ルール全文の **再矛盾チェック**~~ — **2026-05-24 実施済**（Python L1 昇格 · reactflow L0 同期 · 図解 description · パス統一 等）
+- ~~**サブエージェント多視点レビュー**の再実施~~ — **2026-05-24 実施済**（監査ターン）
 - `flowchart-web-reactflow/` 等、今回スコープ外リポジトリのルールリンク
 
 ---
@@ -108,12 +108,12 @@
 ## Python 作業時のクイック参照（変更なし）
 
 1. `40_python/PYTHON_RULES.md`
-2. `creating-Pythoncode-yk/SKILL.md`
+2. `creating-pythoncode-yk/SKILL.md`
 3. `references/ROUTER.md`
 4. Ref Plan → 列挙 refs のみ Read（Light / Standard は G5 参照）
 5. `5.Python` では `python-dev-entry.mdc`（glob `**/*.py`）
 
-スキルパス: `c:/yk-skill/.claude/skills/creating-Pythoncode/.claude/skills/creating-Pythoncode-yk/`
+スキルパス: `c:/yk-skill/.claude/skills/creating-pythoncode-yk/`
 
 ---
 

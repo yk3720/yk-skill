@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-05-24（`creating-vercel-yk` 新設 · Web スタック Vercel 整備）  
+**最終更新:** 2026-05-24（`creating-pythoncode-yk` L1 昇格 · 監査反映）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **22** · nested **3** · sample **1**（計 **26** `SKILL.md`）
+**件数:** L1 **23** · nested **2** · sample **1**（計 **26** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -47,7 +47,7 @@
 | 20 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
 | 21 | routing-diagram-yk | `.claude/skills/routing-diagram-yk/SKILL.md` | L1 | — | no | 図解形式の受付・質問・委譲（HTML は作らない） |
 | 22 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright / E2E |
-| 23 | creating-pythoncode-yk | `.claude/skills/creating-Pythoncode/.claude/skills/creating-Pythoncode-yk/SKILL.md` | nested | — | no | 親: `creating-Pythoncode/`（L1 SKILL なし） |
+| 23 | creating-pythoncode-yk | `.claude/skills/creating-pythoncode-yk/SKILL.md` | L1 | — | no | `paths: **/*.py` · PYTHON_RULES |
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 
 ---

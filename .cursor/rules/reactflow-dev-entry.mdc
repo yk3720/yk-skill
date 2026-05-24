@@ -6,6 +6,8 @@ alwaysApply: false
 
 # React Flow / 表駆動フロー — エージェント入口
 
+**正本:** 本ファイル。`yk-memo` · `yk-tool` の同名 `.mdc` は同期コピー（更新時は本ファイルを先に直す）。
+
 `flowchart-web-reactflow` · `flowchart-web-mermaid` 配下の TS/TSX を編集するとき:
 
 1. `c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md` — L1 SSOT

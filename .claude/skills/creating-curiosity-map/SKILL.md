@@ -2,13 +2,15 @@
 name: creating-curiosity-map
 description: >
   文系の大人向け HTML 図解（curiositymap）を生成し surge.sh に公開。日常起点・勉強のとっかかり用。
-  「curiositymapで図解して」「文系向けに図解して」「初心者向けに図解して」で使用。形式未指定の「図解して」は routing-diagram-yk が先に質問。
-  routing-diagram-yk から委譲されたときも本スキルを完走する。
-  Routing: 文系・curiositymap→本スキル | 形式未指定→routing-diagram-yk | techmap→creating-diagram-techmap | 汎用→creating-visual-explainers | FB→creating-visual-explainers-fb。
-  Do NOT use for techmap/技術を図解、形式未指定の単独完結、FB付き、mermaid/flowchart-web。
+  「curiositymapで図解して」「文系向けに図解して」「初心者向けに図解して」、routing-diagram-yk からの委譲時に使用。
+  Do NOT use for techmap/技術を図解、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
 ---
 
 # CuriosityMap
+
+## 目次
+
+- [対象読者](#対象読者) · [ワークフロー](#ワークフロー) · [デプロイ](#デプロイ) — 詳細手順は本文各節
 
 文系の大人が「今日初めてこのテーマを調べた」状態から、本質を自分の言葉で語れるようになるHTMLを生成し、surge.shに公開する。
 
@@ -238,7 +240,7 @@ Copy-Item -Force "output/{スラッグ}.html" "c:/yk-tool/publish/{スラッグ}
 - マルチルート workspace に `yk-tool` が無い場合は絶対パス `c:/yk-tool/publish/` を使う
 - コピー失敗時はデプロイ成功を優先し、ユーザーに手動コピーを案内する
 
-4. `c:\yk-skill\metadata\surge-published-list.md` を更新する:
+4. `c:/yk-skill/metadata/surge-published-list.md` を更新する:
    - **公開一覧テーブル**に新しい行を追加（#・タイトル・ツール種別=CuriosityMap・公開日・URL・ローカルファイル名・ファイルサイズ）
    - **CuriosityMapカテゴリ別まとめ**のテーブルにも行を追加
    - **統計**セクションの「公開コンテンツ総数」「CuriosityMap件数」「最新の公開日」「ローカルファイル合計サイズ」を更新

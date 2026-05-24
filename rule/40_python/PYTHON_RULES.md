@@ -2,9 +2,9 @@
 ## YK Python ツール開発 — Design & Development Rules v1
 
 **SSOT（本ファイル）:** `yk-skill/rule/40_python/PYTHON_RULES.md`  
-**実行手順・ゲート:** スキル `creating-pythoncode-yk`（`.claude/skills/creating-Pythoncode/.claude/skills/creating-Pythoncode-yk/SKILL.md`）  
+**実行手順・ゲート:** スキル `creating-pythoncode-yk`（`.claude/skills/creating-pythoncode-yk/SKILL.md`）  
 **詳細ナレッジ・テンプレ全文:** 上記スキルの `references/`  
-**人間向けアーカイブ（rev 積層）:** `c:\1.cursor\5.Python\0.ルール・操作方法\`（入口: 同フォルダ `入口.md`）
+**人間向けアーカイブ（rev 積層）:** `c:/1.cursor/5.Python/0.ルール・操作方法/`（入口: 同フォルダ `入口.md`）
 
 **5.Python ワークスペース:** `.cursor/rules/python-dev-entry.mdc`（`**.py` 編集時に自動適用）
 

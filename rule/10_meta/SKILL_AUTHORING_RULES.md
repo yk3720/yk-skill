@@ -88,6 +88,7 @@ anthropic-helper       ❌ 予約語使用
   - ❌ `I can help you process Excel files`
 - 「**何をするか**」と「**いつ使うか**（トリガーキーワード）」の両方を含める
 - 可能なら「**使わない条件（負のトリガー）**」も短く書く（誤発火防止）
+- **英語トリガー**が必要なときは description に短い英語句を足してよい（例: `Also for English: ...`）。本文は日本語でも可
 
 ```yaml
 description: Extract text and tables from PDF files, fill forms, merge documents.

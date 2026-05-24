@@ -29,6 +29,7 @@
 | **tier** | パス規則 | 下表 |
 | **canonical** | 人間 + 規則 | 下表 |
 | **explicit_only** | YAML | `disable-model-invocation: true` なら `yes`、なければ `no` |
+| **paths** | YAML（任意） | `paths` があるときのみ記載（例: `**/*.py`）。無ければ `—` |
 | **notes** | 人間（最小） | 重複 · 親スキル · 要整理のみ。空欄可 |
 
 ### tier

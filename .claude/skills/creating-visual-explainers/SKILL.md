@@ -2,10 +2,9 @@
 name: creating-visual-explainers
 description: >
   形式が「汎用」と確定したときの HTML 図解を surge.sh に公開。読者・テンプレ指定なし。
-  読者・形式が未指定の「図解して」「図解を作って」は先に routing-diagram-yk（質問→委譲）。本スキルは委譲後または汎用明示時のみ。
-  Also for English: illustrated HTML when diagram style is already generic/visual.
-  Routing: 汎用確定→本スキル | 形式未指定→routing-diagram-yk | curiositymap→creating-curiosity-map | techmap→creating-diagram-techmap | FB→creating-visual-explainers-fb。
-  Do NOT use for 形式未指定の単独完結・curiositymap/techmap専用・FB付き。
+  発火例「汎用で図解」「visual で図解」、routing-diagram-yk 委譲後の汎用実行。
+  Also for English: generic/visual illustrated HTML when style is already chosen.
+  Do NOT use for 形式未指定の「図解して」単独・curiositymap/techmap/FB付き（→ routing-diagram-yk または各実行スキル）。
 ---
 
 # Creating Visual Explainers
@@ -19,7 +18,11 @@ description: >
 
 ## ワークフロー
 
-### Step 0: 前提確認
+### Step 0: ルーティングゲート（必須）
+
+形式が未確定（ユーザーが curiositymap / techmap / 汎用 / FB のいずれかを明示していない）ときは、**本スキルで HTML を作らない**。`routing-diagram-yk/SKILL.md` を Read し、その手順で形式を決めてから再入場する。
+
+### Step 0.1: 前提確認
 
 `references/base.html` が存在するか確認する。
 
@@ -156,7 +159,7 @@ Copy-Item -Force "output/{スラッグ}.html" "c:/yk-tool/publish/{スラッグ}
 
 #### 公開に成功した場合
 
-`c:\yk-skill\metadata\surge-published-list.md` を更新する:
+`c:/yk-skill/metadata/surge-published-list.md` を更新する:
 - **公開一覧テーブル**に新しい行を追加（#・タイトル・ツール種別=その他・公開日・URL・ローカルファイル名・ファイルサイズ）
 - **統計**セクションの「公開コンテンツ総数」「最新の公開日」「ローカルファイル合計サイズ」を更新
 - ファイル冒頭の「最終更新」日付を更新

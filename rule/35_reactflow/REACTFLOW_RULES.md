@@ -15,7 +15,7 @@
 **最終更新:** 2026-05-24（§4 公式索引 · v12 要約 · Common Errors MUST 化 · ROUTER 連携）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 35
 
-**L0 入口:** `yk-skill` · `yk-tool` · `yk-memo` — `.cursor/rules/reactflow-dev-entry.mdc`（`flowchart-web-*/**` 配下の flowchart コード）
+**L0 入口:** 正本 `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（glob `flowchart-web-*/**`）。同期コピー: `yk-memo/.cursor/rules/` · `yk-tool/.cursor/rules/`。`yk-tool` 単体 WS でも flowchart 編集時に L0 が効く。
 
 ---
 

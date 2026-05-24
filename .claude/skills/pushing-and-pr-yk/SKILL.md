@@ -17,7 +17,7 @@ disable-model-invocation: true
 |--------|------|
 | 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
 | commit | `committing-with-git-yk`（push/PR の前に未コミットなら先に依頼を促す） |
-| PR 実行手順 | Cursor User Rules **`creating-pull-requests`**（`gh pr create` 等） |
+| PR 実行手順 | [pr-push-shell.md](references/pr-push-shell.md) + User Rules（amend/force 禁止等の方針のみ） |
 | Shell / RUN | `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md` — `;` 1 本 · 初回 `all` |
 | push 実行 | [references/pr-push-shell.md](references/pr-push-shell.md) |
 
@@ -59,9 +59,9 @@ disable-model-invocation: true
 
 [repo-routing.md](../committing-with-git-yk/references/repo-routing.md) を Read。複数ルートなら **リポごとに** push/PR する。
 
-### 2. 事前調査（並列 · 1 本の Shell）
+### 2. 事前調査（1 本の Shell · `;` 連結）
 
-[pr-push-shell.md](references/pr-push-shell.md) の調査コマンド。初回 **`required_permissions: ["all"]`**。
+[pr-push-shell.md](references/pr-push-shell.md) の調査コマンド（`AGENT_SHELL_RULES` §3-3）。初回 **`required_permissions: ["all"]`**。
 
 - 未コミット変更あり → **push/PR を止め**、commit するか確認（`committing-with-git-yk`）
 - リモート未設定 · 追跡ブランチなし → ユーザーに確認
@@ -75,7 +75,7 @@ disable-model-invocation: true
 
 ### 4. PR（モードに pr が含まれるとき）
 
-**User Rules `creating-pull-requests` をそのまま適用**（本スキルに手順を再掲しない）:
+**[pr-push-shell.md](references/pr-push-shell.md)** と User Rules（PR 本文・`gh` 形式）に従う。事前調査の Shell は §2 と同様 **1 本連結**:
 
 1. 並列調査（status · diff · tracking · log · `git diff base...HEAD`）
 2. 必要ならブランチ作成 · `git push -u origin HEAD`

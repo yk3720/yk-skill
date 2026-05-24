@@ -15,7 +15,7 @@ paths: "**/*.py"
 3. **[references/ROUTER.md](references/ROUTER.md)** — tier / tag / 読むファイルの決定（**ロード規則の SSOT**）
 4. **`references/`** — **Ref Plan（Step 0.1）に列挙したファイルのみ** Read（全件禁止）
 
-人間向け rev アーカイブ: `c:\1.cursor\5.Python\0.ルール・操作方法\`（都度・必要時のみ）
+人間向け rev アーカイブ: `c:/1.cursor/5.Python/0.ルール・操作方法/`（都度・必要時のみ）
 
 ---
 

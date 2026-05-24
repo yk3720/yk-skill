@@ -1,6 +1,8 @@
 ---
 name: creating-skills
-description: スキルを作成・更新・改善するスキル。「スキルを作って」「このスキルを改善して」「スキルを更新して」など依頼された際やスキルを更新する際に使用する。 
+description: >
+  スキルを作成・更新・改善する。発火例「スキルを作って」「スキルを改善して」。
+  Do NOT use for 台帳だけの再生成（managing-skills-yk）、rule/L1 の新設のみ（PROGRESSIVE + RULE_INDEX）。
 ---
 
 # Skill Creator

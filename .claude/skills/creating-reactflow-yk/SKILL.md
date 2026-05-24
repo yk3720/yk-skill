@@ -46,7 +46,7 @@ description: 表駆動フローチャート（@xyflow/react）の作成・更新
 
 ## L0 入口
 
-`yk-skill` · `yk-tool` · `yk-memo` — `.cursor/rules/reactflow-dev-entry.mdc`
+L0 正本: `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（`yk-memo` · `yk-tool` に同期コピー）
 
 ---
 

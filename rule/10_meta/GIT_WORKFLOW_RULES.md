@@ -78,7 +78,7 @@
 | レイヤ | 役割 |
 |--------|------|
 | **本ファイル（yk-skill）** | 方針 SSOT — Governance 段階 5 の横断 rule |
-| **Cursor User Rules** | 実行手順（並列 `git status` / `git diff` · HEREDOC · PR 用 `gh` 等） |
+| **Cursor User Rules** | 実行手順（HEREDOC · PR 用 `gh` 等）— **YK マルチルートでは commit 前調査は `AGENT_SHELL_RULES` §3-3（1 本 `;` 連結）を優先**（User Rules の並列 3 本 Shell は未適用） |
 | **スキル `committing-with-git-yk`** | ユーザー明示時の commit オーケストレーション（マルチリポ · 日本語草案）— `/committing-with-git-yk` |
 | **スキル `pushing-and-pr-yk`** | ユーザー明示時の push / GitHub PR — `/pushing-and-pr-yk`（`disable-model-invocation`） |
 

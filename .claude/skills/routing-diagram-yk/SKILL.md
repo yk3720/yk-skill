@@ -18,14 +18,17 @@ description: >
 |--------------|------------|
 | curiositymap · 文系向け · 初心者向け（図解文脈） | `creating-curiosity-map` |
 | techmap · 技術を図解 | `creating-diagram-techmap` |
-| FB付き · コメント付き図解 | `creating-visual-explainers-fb` |
+| FB付き · コメント付き図解 · フィードバック付き · コメント収集 | `creating-visual-explainers-fb` |
 | 両方 · 文系と技術 · curiositymap と techmap | **Step 2「両方」**（下記） |
 
 詳細・パス一覧 → [references/ROUTER.md](references/ROUTER.md)
 
 ## Step 1: 形式を1問で決める（曖昧時のみ）
 
-上記直行に当てはまらないとき、**AskQuestion を1回**使う（まとめて質問しない）。
+上記直行に当てはまらないとき、形式を **1 問だけ** 決める。
+
+- **AskQuestion が使えるとき:** AskQuestion を 1 回（まとめて質問しない）
+- **使えないとき:** チャットで下表の選択肢を提示し、ユーザーの返答を待つ（ROUTER §5 のテンプレ可）
 
 | id（例） | ラベル | おすすめ |
 |----------|--------|----------|

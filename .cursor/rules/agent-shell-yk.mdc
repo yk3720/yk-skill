@@ -10,4 +10,4 @@ alwaysApply: true
 - **確認・調査・引き継ぎ俯瞰:** Shell 禁止。Glob / Read / Grep のみ。
 - **Shell を使うのは:** ユーザーが commit / push / test / 引き継ぎ終了 を**当ターンで明示**したときのみ。
 - **同一ターン:** 複数 git コマンドは `;` で **1 本の Shell**（`&&` 不可）。`.git` 書き込み・push は初回から **`required_permissions: ["all"]`**。
-- **引き継ぎ確認:** スキル `handoff-session-work` 確認モード（Shell 禁止）を優先。
+- **引き継ぎ確認:** スキル `handoff-session-work` 確認モード（Shell 禁止）を優先。依頼例は `AGENT_SHELL_RULES.md` §5

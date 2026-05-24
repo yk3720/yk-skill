@@ -2,13 +2,15 @@
 name: creating-diagram-techmap
 description: >
   理系エンジニア向け技術解説 HTML 図解（techmap）を生成し surge.sh に公開。基礎サマリー→詳細→参考文献の連鎖構造。
-  「techmapで図解して」「技術を図解して」で使用。形式未指定の「図解して」は routing-diagram-yk が先に質問。
-  routing-diagram-yk から委譲されたときも本スキルを完走する。
-  Routing: 理系技術・techmap→本スキル | 形式未指定→routing-diagram-yk | 文系→creating-curiosity-map | 汎用→creating-visual-explainers | FB→creating-visual-explainers-fb。
-  Do NOT use for curiositymap/文系向け、形式未指定の単独完結、FB付き、mermaid/flowchart-web。
+  「techmapで図解して」「技術を図解して」、routing-diagram-yk からの委譲時に使用。
+  Do NOT use for curiositymap/文系向け、形式未指定の単独完結、汎用 visual、FB付き、mermaid/flowchart-web。
 ---
 
 # Techmap
+
+## 目次
+
+- [対象読者](#対象読者) · [ワークフロー](#ワークフロー) · [デプロイ](#デプロイ) — 詳細手順は本文各節
 
 実務経験を持つ理系エンジニアが「今日初めてこの技術を調べた」状態から本質を掴めるHTMLを生成し、surge.shに公開する。
 
@@ -237,7 +239,7 @@ Copy-Item -Force "output/{スラッグ}.html" "c:/yk-tool/publish/{スラッグ}
 - マルチルート workspace に `yk-tool` が無い場合は絶対パス `c:/yk-tool/publish/` を使う
 - コピー失敗時はデプロイ成功を優先し、ユーザーに手動コピーを案内する
 
-4. `c:\yk-skill\metadata\surge-published-list.md` を更新する:
+4. `c:/yk-skill/metadata/surge-published-list.md` を更新する:
    - **公開一覧テーブル**に新しい行を追加（#・タイトル・ツール種別=Techmap・公開日・URL・ローカルファイル名・ファイルサイズ）
    - **Techmapカテゴリ別まとめ**のテーブルにも行を追加
    - **統計**セクションの「公開コンテンツ総数」「Techmap件数」「最新の公開日」「ローカルファイル合計サイズ」を更新
