@@ -1,6 +1,6 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年5月24日（ProposalMap 初回公開を追加）  
+**最終更新**: 2026年5月28日（Agents Window Techmap・CuriosityMap を追加）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
 **HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
 **作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
@@ -27,6 +27,8 @@
 | 14 | AIの3つの壁 — アテンション・コンテキスト・オートリグレッション（技術者向け） | Techmap | 2026/05/17 | [techmap-ai-three-walls.surge.sh](https://techmap-ai-three-walls.surge.sh) | `ai-three-walls.html` | 56.2KB |
 | 15 | AIの3つの越えられない壁 — ChatGPTはなぜ嘘をつくのか（一般向け） | CuriosityMap | 2026/05/17 | [curimap-ai-three-walls.surge.sh](https://curimap-ai-three-walls.surge.sh) | `curimap-ai-three-walls.html` | 44.9KB |
 | 16 | フローチャート Web アプリ — 社内周知 | ProposalMap | 2026/05/24 | [promap-flowchart-web.surge.sh](https://promap-flowchart-web.surge.sh) | `promap-flowchart-web.html` | 13.5KB |
+|| 17 | Cursor Agents Window — エージェント中心開発の実践ガイド | Techmap | 2026/05/28 | [techmap-cursor-agents-window.surge.sh](https://techmap-cursor-agents-window.surge.sh) | `cursor-agents-window-techmap.html` | 44.0KB |
+|| 18 | AI が自動でコードを書く時代 — Cursor Agents Window とは | CuriosityMap | 2026/05/28 | [curimap-cursor-agents-window.surge.sh](https://curimap-cursor-agents-window.surge.sh) | `curimap-cursor-agents-window.html` | 34.4KB |
 
 ---
 
@@ -55,6 +57,7 @@
 |---------|-----|--------|
 | ヘレニスティック占星術 | [curimap-hellenistic-astrology.surge.sh](https://curimap-hellenistic-astrology.surge.sh) | 2026/04/08 |
 | AIの3つの越えられない壁（一般向け） | [curimap-ai-three-walls.surge.sh](https://curimap-ai-three-walls.surge.sh) | 2026/05/17 |
+|| AI が自動でコードを書く時代（一般向け） | [curimap-cursor-agents-window.surge.sh](https://curimap-cursor-agents-window.surge.sh) | 2026/05/28 |
 
 ### ProposalMap（社内提案図解・周知用）
 
@@ -74,14 +77,14 @@
 
 | 項目 | 値 |
 |------|---|
-| 公開コンテンツ総数 | 16件 |
-| Techmap | 12件 |
-| CuriosityMap | 2件 |
+| 公開コンテンツ総数 | 18件 |
+| Techmap | 13件 |
+| CuriosityMap | 3件 |
 | ProposalMap | 1件 |
 | その他（ツール） | 1件 |
 | 最初の公開日 | 2026/03/28 |
-| 最新の公開日 | 2026/05/24 |
-| ローカルファイル合計サイズ | 約 694KB |
+| 最新の公開日 | 2026/05/28 |
+| ローカルファイル合計サイズ | 約 772KB |
 
 ---
 

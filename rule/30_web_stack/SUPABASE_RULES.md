@@ -1,0 +1,319 @@
+# Supabase 参照ルール
+
+## このルールが必要な背景
+
+Supabase（PostgreSQL + Auth + RLS）を Next.js / Server Actions と組み合わせる際、セキュリティポリシーの書き方・初回ログインの落とし穴・ローカル開発フローを揃えておくと手戻りを減らせる。本ファイルは **YK 横断 MUST と Supabase パターンの SSOT**。
+
+**ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/SUPABASE_RULES.md`
+
+**ステータス:** `draft`（RULE_INDEX No.37）— RLS・接続方針・env の MUST は適用。L0 entry / L2 スキル未整備のため手順詳細は §5 + `SUPABASE_SETUP.md`。`active` 化条件: `supabase-dev-entry.mdc` 作成 + RULE_INDEX 更新。
+
+**実装スタック:** `flowchart-web-reactflow`（ADR-013 DB-1）· [`NEXTJS_RULES.md`](NEXTJS_RULES.md) · [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)
+
+**最終更新:** 2026-05-29（調査・3視点レビュー反映）
+
+---
+
+## 0. エージェント向け — いつ何を読むか
+
+### 読む深さ
+
+| モード | 条件 | 読む節 |
+|--------|------|--------|
+| **Light** | env 確認・AUTH_DISABLED 質問のみ | §0 + §4 + §7 |
+| **Standard** | RLS / Auth / Server Actions を変更するとき | 本ファイル全文 + マイグレーション正本 |
+| **Deep** | スキーマ変更・新テーブル追加 | Standard + ADR-013（§1 が要約 SSOT · 決定理由のみ ADR 参照）|
+
+**質問のみ・Read のみ** → §0 + 該当節のみ。全文 Read 不要。
+
+### 本ファイルで扱わない（委譲 SSOT）
+
+| 関心 | SSOT |
+|------|------|
+| `app/` のルーティング・Server Components・Route Handler | [`NEXTJS_RULES.md`](NEXTJS_RULES.md) |
+| payload / `module_id` / 表駆動保存・`lib/flowchart/` | [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) + `flowDocuments` アクション |
+| OAuth UI の Client 境界・LoginForm コンポーネント | [`REACT_RULES.md`](REACT_RULES.md) |
+| `.env` / トークン漏洩・キーローテーション | `10_meta/SECRETS_HYGIENE_RULES.md` |
+| 初回セットアップ画面操作（スクショ級） | `c:/yk-tool/flowchart-web-reactflow/docs/SUPABASE_SETUP.md` |
+
+### 誤ルーティング禁止
+
+| 触るもの | 使う | 使わない |
+|----------|------|----------|
+| `app/auth/**` · RLS 変更 | **本ファイル** + `NEXTJS_RULES` | `REACTFLOW_RULES` のみ |
+| OAuth プロバイダー設定のみ | §5–§6 + `SUPABASE_SETUP.md` | 本ファイル全文 |
+| `lib/flowchart/actions/flowDocuments.ts` | `REACTFLOW_RULES` + §3 概要 | 本ファイルに実装手順を書かない |
+
+---
+
+## 1. プロジェクト構成（ADR-013 方針）
+
+| 項目 | 方針 |
+|------|------|
+| **環境** | 本番 / 開発（プレビュー）で **2 プロジェクト**（Preview が本番 DB を汚さない） |
+| **接続** | **Server Actions メイン + RLS 保険**（サービスロールを Client に渡さない） |
+| **役割** | `editor` / `viewer`（`profiles` テーブルのメール許可リストで管理） |
+| **Auth** | Google · Azure（Microsoft）· 開発時は Email Magic Link も可（§6） |
+
+**認可の正:** RLS + Server Actions の二重チェック。ページ保護はアプリ層（`getAuthState()`）で明示。新 Route 追加時は必ず未認証テストを行う。
+
+### 実装マップ（flowchart-web-reactflow）
+
+| 関心 | 正本パス |
+|------|----------|
+| Supabase クライアント（server / client / middleware） | `lib/supabase/{server,client,middleware,env}.ts` |
+| Auth セッション取得 | `lib/auth/session.ts`（`getAuthState` · `getAuthContext`） |
+| Cloud 保存・読込 Server Actions | `lib/flowchart/actions/flowDocuments.ts` |
+| ログイン UI | `components/auth/LoginForm.tsx` |
+| コールバック | `app/auth/callback/route.ts` |
+| セッションリフレッシュ（proxy） | `middleware.ts` → `lib/supabase/middleware.ts` |
+
+---
+
+## 2. テーブル設計（DB-1）
+
+```sql
+-- 許可リスト（email = primary key · 管理者が事前投入・authenticated INSERT ポリシーは意図的に無し）
+public.profiles (
+  email      text        primary key,
+  role       text        not null check (role in ('editor', 'viewer')),
+  user_id    uuid        unique references auth.users(id) on delete set null,
+  created_at timestamptz not null default now()
+)
+
+-- フローチャート保存
+public.flow_documents (
+  module_id  text        primary key,
+  title      text,
+  payload    jsonb       not null,
+  updated_at timestamptz not null default now(),
+  updated_by uuid        references auth.users(id) on delete set null
+)
+```
+
+**マイグレーション正本:** `c:/yk-tool/flowchart-web-reactflow/supabase/migrations/`
+
+| ファイル | 内容 |
+|----------|------|
+| `001_db1_schema.sql` | テーブル・RLS 初期 |
+| `002_fix_profiles_role_protection.sql` | profiles の role 自己昇格防止（column-level GRANT） |
+
+---
+
+## 3. RLS ポリシー — 落とし穴と正しいパターン
+
+**このセクションのスコープ:** `profiles` テーブルの MUST パターンと共通アンチパターン。`flow_documents` の RLS 全文はマイグレーション正本 `001_db1_schema.sql` §37–84 を参照。
+
+### RLS アンチパターン（禁止）
+
+| アンチパターン | 問題 | 修正 |
+|----------------|------|------|
+| `USING (true)` に `TO` 句なし | `anon` 含む全員に公開 | 必ず `TO authenticated` を付ける |
+| `UPDATE` ポリシーに `WITH CHECK` なし | `role='editor'` 等に自己書換え可能 | `WITH CHECK` で変更後の値を制約する |
+| `auth.uid()` を直接 using/check に書く | 行ごとに再評価・低速 | 必ず `(select auth.uid())` でラップ |
+| `auth.jwt() ->> 'user_metadata'` で認可 | ユーザー自己書換え可能なフィールド | `auth.jwt() ->> 'email'` または `auth.users.email` を使う |
+| SELECT のみテストして INSERT/UPDATE/DELETE を省略 | 書き込み側の穴が見えない | 全 CRUD を別ユーザー JWT で検証する |
+
+### ⚠ 落とし穴: profiles SELECT を user_id 一致のみにしない
+
+```sql
+-- ❌ 悪い例: 初回ログイン時に user_id = NULL のため自分の行が取れない
+create policy "profiles_select_own" on public.profiles for select
+  to authenticated
+  using ((select auth.uid()) = user_id);
+```
+
+**現象:** 初回ログイン → `profiles` が見つからない → `{ kind: "pending" }` → 「アクセス権がありません」
+
+```sql
+-- ✅ 正しい例: email OR user_id の両方で照合
+create policy "profiles_select_own" on public.profiles for select
+  to authenticated
+  using (
+    lower(email) = lower(auth.jwt() ->> 'email')
+    OR (select auth.uid()) = user_id
+  );
+```
+
+**理由:** `user_id` は初回ログイン時に NULL。`auth.jwt() ->> 'email'` はトークンから取れるためこちらで先に照合できる。
+
+### profiles UPDATE（user_id の自動紐づけ）と role 保護
+
+```sql
+-- user_id の自動紐づけ（メール一致のみ許可）
+create policy "profiles_update_link_self"
+  on public.profiles for update
+  to authenticated
+  using (lower(email) = lower(auth.jwt() ->> 'email'))
+  with check (user_id = (select auth.uid()));
+
+-- ⚠ 上記ポリシーは role 列の自己書換えを防げない
+-- → migration 002 の column-level GRANT で user_id 列のみに更新を制限する
+-- REVOKE UPDATE ON public.profiles FROM authenticated;
+-- GRANT UPDATE (user_id) ON public.profiles TO authenticated;
+```
+
+### flow_documents と初回ログイン順序
+
+`flow_documents` の RLS は `profiles.user_id = (select auth.uid())` の EXISTS に依存。**初回ログインで `user_id` が紐づく前は flow_documents へのアクセスが全て拒否される**。実装 `lib/auth/session.ts` の `getAuthState()` は profiles SELECT（email 照合）→ user_id UPDATE → `allowed` 返却の順序を保証しているため、Server Actions 経由では自動解決する。直接 PostgREST を呼ぶ場合はこの順序を意識すること。
+
+---
+
+## 4. 環境変数
+
+```env
+# .env.local（git に含めない）
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+
+# 新規プロジェクト（推奨）
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+# または legacy（2026 年末まで動作）
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+
+# ローカルで Supabase なしで UI だけ動かす（本番では絶対に設定しない → §7）
+# AUTH_DISABLED=1
+```
+
+**取得場所:** Supabase ダッシュボード → Settings → API Keys（Publishable タブ）
+
+### ⛔ 禁止事項
+
+| 禁止 | 理由 |
+|------|------|
+| `SUPABASE_SERVICE_ROLE_KEY` を `NEXT_PUBLIC_` で始める | RLS を全バイパスするキーがブラウザに露出 |
+| service_role クライアントを Client Components / `use client` で使う | 同上 |
+| service_role は Server Actions の通常フローに使う | RLS 無効化 → 権限チェックがすべて素通り |
+| `.env.local` を git commit する | キー漏洩 |
+
+service_role は**マイグレーション・バッチ・管理スクリプトのみ**に限定する。
+
+---
+
+## 5. ローカル開発フロー
+
+1. Supabase ダッシュボードで**開発用プロジェクト**を作成（本番と必ず分ける）
+2. SQL Editor でマイグレーション実行（`001_db1_schema.sql` → `002_fix_profiles_role_protection.sql`）
+3. **Authentication → URL Configuration** で Redirect URLs に追加:
+   - `http://localhost:3000/auth/callback`
+   - Site URL も `http://localhost:3000` に設定
+4. Table Editor → `profiles` に自分のメールを `editor` で追加（role は手動のみ — INSERT ポリシーなし）
+5. Authentication → Sign In / Providers でプロバイダーを有効化
+6. `.env.local` に URL / Publishable Key を設定
+7. `npm run dev` → ログイン確認（`app/auth/callback/route.ts` が `exchangeCodeForSession` でセッション確立）
+
+**セットアップ詳細（画面操作）:** `c:/yk-tool/flowchart-web-reactflow/docs/SUPABASE_SETUP.md`
+
+---
+
+## 6. 開発時ログイン（Magic Link）
+
+Google / Microsoft OAuth の設定が済む前に動作確認したい場合、**Email Magic Link** を開発用フォールバックとして使用できる。
+
+```tsx
+// Supabase Email OTP（Magic Link）
+const { error } = await supabase.auth.signInWithOtp({
+  email,
+  options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` },
+});
+```
+
+### ⚠ セキュリティ注意
+
+| 環境 | 対応 |
+|------|------|
+| **開発プロジェクト** | Email プロバイダー有効 + Magic Link UI 表示 → OK |
+| **本番プロジェクト** | Email プロバイダーを**ダッシュボードで無効化**する（UI 非表示だけでは不十分） |
+
+**理由:** Email が有効なまま UI を隠しても、API を直接呼べば任意メールに OTP が送れる。`profiles` に登録済みのメールを持つ攻撃者が `user_id` を紐づけ、全 `flow_documents` を閲覧できる。本番は Google / Azure（許可された組織アカウントのみ）に絞ること。
+
+---
+
+## 7. AUTH_DISABLED モード
+
+```ts
+// lib/supabase/env.ts
+export function isAuthDisabled(): boolean {
+  if (process.env.AUTH_DISABLED === "1") return true;
+  return !process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+}
+```
+
+`AUTH_DISABLED=1` または `NEXT_PUBLIC_SUPABASE_URL` 未設定で `dev@local / editor` で自動ログイン（認証・RLS をすべてバイパス）。
+
+### ⛔ 本番 MUST NOT
+
+| チェック | 内容 |
+|----------|------|
+| `AUTH_DISABLED=1` が Vercel 本番 env に無いこと | 全 API が editor 扱いになる |
+| `NEXT_PUBLIC_SUPABASE_URL` が本番 / Preview env に設定されていること | 未設定でも AUTH_DISABLED 扱いになる |
+| Production と Preview で Supabase プロジェクトを分けていること | Preview が本番 DB を汚さない |
+
+`.env.local` に URL を設定した後は**サーバーを再起動**すること（環境変数は起動時のみ読み込まれる）。
+
+---
+
+## 8. Next.js SSR 連携（@supabase/ssr）
+
+Supabase Auth を Next.js App Router で使う場合、`@supabase/ssr` の 3 クライアントが必須。
+
+| クライアント | パス | 用途 |
+|--------------|------|------|
+| browser | `lib/supabase/client.ts` | `"use client"` コンポーネント内（OAuth ボタン等） |
+| server | `lib/supabase/server.ts` | Server Components · Server Actions · Route Handler |
+| middleware | `lib/supabase/middleware.ts` | proxy.ts（Next.js 16）でセッションリフレッシュ |
+
+### セッションリフレッシュ（proxy.ts / middleware.ts）
+
+Server Components はクッキーを書けないため、**セッションリフレッシュは必ず proxy.ts（または middleware.ts）で行う**。proxy.ts を経由しないルートではトークン期限切れが起きる。
+
+```ts
+// middleware.ts（実装: lib/supabase/middleware.ts の updateSession を呼ぶ）
+export async function middleware(request: NextRequest) {
+  return await updateSession(request);
+}
+export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"] };
+```
+
+### サーバー側 Auth 検証
+
+| API | 用途 | 注意 |
+|-----|------|------|
+| `getUser()` | Server Actions / Route Handler での本人確認 | Auth サーバーに問い合わせ → 失効・停止ユーザーも検知 |
+| `getClaims()` | proxy.ts でのセッションリフレッシュ確認 | JWT をローカル検証（高速）· ユーザー停止は検知しない |
+| `getSession()` | **使わない** | キャッシュ読み・サーバー検証なし → 信頼できない |
+
+**MUST:** Server Actions で認証が必要な処理は必ず `getUser()` を先に呼ぶ（middleware は直接呼び出しでバイパスされうる）。
+
+### auth/callback Route Handler
+
+Magic Link / OAuth はコールバックで `exchangeCodeForSession(code)` が必要。
+
+```ts
+// app/auth/callback/route.ts
+const code = searchParams.get("code");
+const next = searchParams.get("next") ?? "/";
+// next は同一オリジンのパスのみ許可（"//" で始まるプロトコル相対 URL を防ぐ）
+const safePath = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+if (code) {
+  await supabase.auth.exchangeCodeForSession(code);
+  return NextResponse.redirect(`${origin}${safePath}`);
+}
+```
+
+---
+
+## 9. 本番デプロイ前チェックリスト
+
+| # | チェック |
+|---|---------|
+| DB | `profiles` · `flow_documents` に RLS が有効（ALTER TABLE ENABLE ROW LEVEL SECURITY） |
+| DB | 全テーブルに SELECT / INSERT / UPDATE / DELETE ポリシーがある（または意図的に無し） |
+| DB | `USING(true)` に `TO authenticated` が付いている |
+| DB | `UPDATE` ポリシーに `WITH CHECK` がある |
+| DB | column-level GRANT で `profiles.role` の自己書換えを防いでいる（migration 002） |
+| Auth | Email プロバイダーを本番で**無効化**している（Google/Azure のみ） |
+| Auth | Redirect URLs に本番・Preview の `/auth/callback` が登録されている |
+| Env | `AUTH_DISABLED` が本番 env に無いこと |
+| Env | `NEXT_PUBLIC_SUPABASE_URL` が本番 / Preview env に設定されていること |
+| Env | service_role キーが `NEXT_PUBLIC_` で始まっていないこと |
+| 監査 | Supabase ダッシュボード → **Security Advisor** で定期確認（マイグレーション後・月次） |

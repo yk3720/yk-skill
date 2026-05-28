@@ -40,6 +40,7 @@
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-reactflow--react-flow-を触るとき) | `reactflow-dev-entry` |
 | flowchart · 表 → Mermaid プレビュー | 35 | 同上 | [flowchart mmd](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | `reactflow-dev-entry` |
 | React 一般 · Hooks（flowchart 外） | 36 | `30_web_stack/REACT_RULES.md` | [React](RULE_ROUTING_PLAYBOOK.md#読む順序react-client-コンポーネントを触るとき) | — |
+| Supabase · RLS · Auth · DB | 37 | `30_web_stack/SUPABASE_RULES.md` | L1 直接 | — |
 | Next.js `app/` | 31 | `30_web_stack/NEXTJS_RULES.md` | [React](RULE_ROUTING_PLAYBOOK.md#読む順序react-client-コンポーネントを触るとき) | `nextjs-dev-entry`（`app/**` 優先） |
 | shadcn / `components/ui` | 32 | `30_web_stack/SHADCN_UI_RULES.md` | [shadcn](RULE_ROUTING_PLAYBOOK.md#読む順序shadcnui-を触るとき) | `shadcn-dev-entry` |
 | Tailwind | 33 | `30_web_stack/TAILWINDCSS_RULES.md` | [PLAYBOOK](RULE_ROUTING_PLAYBOOK.md) · L1 | — |
@@ -170,6 +171,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 34 | 30_web_stack | `30_web_stack/VERCEL_RULES.md` | Vercel / Neon デプロイ | active |
 | 35 | 35_reactflow | `35_reactflow/REACTFLOW_RULES.md` | 表駆動フロー · `@xyflow/react` · `flowchart-web-reactflow` | active |
 | 36 | 30_web_stack | `30_web_stack/REACT_RULES.md` | React コンポーネント · Hooks · Client UI | active |
+| 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | draft |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
 | 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
