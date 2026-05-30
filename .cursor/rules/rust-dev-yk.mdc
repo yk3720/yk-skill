@@ -1,0 +1,144 @@
+---
+description: Rust 開発時の規約（所有権・エラーハンドリング・ツールチェーン・主要クレート）
+globs: "**/*.rs,**/Cargo.toml"
+alwaysApply: false
+---
+
+# Rust — 開発規約
+
+**公式ドキュメント:** https://doc.rust-lang.org/book/ | https://doc.rust-lang.org/stable/std/
+
+## Edition・バージョン
+
+- **Rust 2024 Edition** を使用（`edition = "2024"` in Cargo.toml）
+- ツールチェーン管理: `rustup` 一択。stable チャンネルを基本とする
+- 最新安定版: Rust 1.94+ (2026年3月)
+
+## 所有権・借用の基本ルール
+
+| 参照 | 記法 | 同時に持てる数 | 用途 |
+|---|---|---|---|
+| 不変参照 | `&T` | 複数可 | 読み取り専用 |
+| 可変参照 | `&mut T` | 1つのみ | 書き込み |
+| 所有権移動 | `T` | — | 呼び出し先が責任を持つ |
+
+```rust
+// ❌ BAD: 所有権移動後に使用
+let s = String::from("hello");
+let s2 = s;
+println!("{}", s); // compile error: value moved
+
+// ✅ GOOD: 参照渡し or clone
+fn greet(name: &str) { println!("Hello, {name}"); }
+greet(&s2);
+```
+
+- 初期段階は `.clone()` を許容し、ボトルネック確認後に最適化する
+- `Rc`/`Arc` で共有所有が必要な場合は `Weak` で循環参照を防止
+- async/await 内でのムーブは `Arc<Mutex<T>>` か `move` クロージャを使う
+
+## エラーハンドリング
+
+```rust
+// ライブラリ層: thiserror で型安全なエラーを定義
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+pub enum AppError {
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+    #[error("Parse failed: {msg}")]
+    Parse { msg: String },
+}
+
+// アプリケーション層: anyhow でエラーを集約
+use anyhow::{Context, Result};
+
+fn load_config(path: &str) -> Result<Config> {
+    let text = std::fs::read_to_string(path)
+        .with_context(|| format!("Failed to read {path}"))?;
+    Ok(toml::from_str(&text)?)
+}
+```
+
+- `unwrap()` / `expect()` は **テストコードのみ** 許可。プロダクションは `?` で伝播
+- ライブラリ → `thiserror`、アプリ → `anyhow`
+
+## 主要クレート（用途別）
+
+| 用途 | クレート |
+|---|---|
+| シリアライズ | `serde` + `serde_json` / `serde_toml` |
+| 非同期ランタイム | `tokio` |
+| HTTP クライアント | `reqwest` |
+| HTTP サーバー | `axum` |
+| CLI | `clap` |
+| ライブラリエラー | `thiserror` |
+| アプリエラー | `anyhow` |
+| ログ | `tracing` + `tracing-subscriber` |
+| テストスナップショット | `insta` |
+
+## Cargo 主要コマンド
+
+| コマンド | 用途 |
+|---|---|
+| `cargo new <name>` | バイナリ新規作成 |
+| `cargo new --lib <name>` | ライブラリ新規作成 |
+| `cargo run` | 実行 |
+| `cargo build --release` | プロダクションビルド |
+| `cargo check` | 型チェックのみ（高速） |
+| `cargo test` | テスト実行 |
+| `cargo fmt` | フォーマット（必須） |
+| `cargo clippy` | Linter（必須） |
+| `cargo doc --open` | ドキュメント生成・表示 |
+| `cargo add <crate>` | 依存クレート追加 |
+| `cargo audit` | セキュリティ脆弱性チェック |
+
+## プロジェクト構造
+
+```
+src/
+  main.rs       # バイナリ: エントリポイント（最小限に）
+  lib.rs        # ライブラリ: ビジネスロジックはここ
+  error.rs      # エラー型定義
+  config.rs     # 設定
+Cargo.toml
+Cargo.lock      # バイナリはコミット対象、ライブラリは .gitignore
+```
+
+- モジュール分割は `mod.rs` より **ファイル名 = モジュール名** スタイルを推奨（`src/config.rs`）
+- 最初は単一クレートで進め、マクロや明確な境界が必要になった段階でワークスペースに分割
+
+## ツールセット（必須）
+
+- **rust-analyzer**: VSCode 拡張（型推論・借用チェック警告をリアルタイム表示）
+- **rustfmt**: `cargo fmt` でコミット前に必ず整形
+- **Clippy**: `cargo clippy -- -W clippy::pedantic` でイディオマティックなコードを維持
+
+## 非同期 (async/await) の注意点
+
+```rust
+// ❌ BAD: async コンテキストでブロッキング処理
+async fn read_file(path: &str) -> String {
+    std::fs::read_to_string(path).unwrap() // ランタイムをブロック
+}
+
+// ✅ GOOD: spawn_blocking でオフロード
+async fn read_file(path: &str) -> anyhow::Result<String> {
+    let path = path.to_owned();
+    tokio::task::spawn_blocking(move || std::fs::read_to_string(path))
+        .await?
+        .map_err(Into::into)
+}
+```
+
+- ブロッキング IO / CPU バウンド処理は必ず `spawn_blocking` に移す
+- 非同期関数をまたぐ参照はライフタイムが複雑化するため `Arc` + `clone` を優先
+
+## コーディング規約
+
+- インデント: スペース4つ（タブ禁止）
+- 行の最大幅: 100文字
+- コメント: `//` を使用、`/* */` は最小限に
+- 公開 API には `///` ドキュメントコメントを必ず付ける
+- `unsafe` は明確な理由とコメントがある場合のみ許可

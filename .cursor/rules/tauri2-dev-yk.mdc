@@ -1,0 +1,149 @@
+---
+description: Tauri 2 デスクトップ/モバイルアプリ開発時の規約（アーキテクチャ・セキュリティ・IPC・ワークフロー）
+globs: "src-tauri/**,**/tauri.conf.json,**/capabilities/**"
+alwaysApply: false
+---
+
+# Tauri 2 — 開発規約
+
+**公式ドキュメント:** https://v2.tauri.app/
+
+## 前提ツール
+
+| 必須 | 内容 |
+|---|---|
+| Rust (rustup) | `curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf \| sh` |
+| Node.js LTS | フロントエンドツールチェーン |
+| Windows | C++ Build Tools + Edge WebView2 Runtime |
+| macOS | Xcode または Xcode Command Line Tools |
+| Linux | `libwebkit2gtk-4.1-dev` 他（ディストロ依存） |
+| Android | Android Studio + SDK + NDK + `rustup target add` |
+| iOS | Xcode + CocoaPods + `rustup target add` |
+
+## プロジェクト構造
+
+```
+src-tauri/
+  src/
+    main.rs        # エントリポイント（最小限に）
+    lib.rs         # コマンド登録・ビルダー
+  capabilities/   # パーミッション定義（必須）
+  tauri.conf.json # 設定ハブ
+  Cargo.toml
+```
+
+## IPC パターン（Commands / Events）
+
+```rust
+// src-tauri/src/lib.rs
+#[tauri::command]
+fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+
+pub fn run() {
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![greet])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+```
+
+```typescript
+// フロントエンド
+import { invoke } from '@tauri-apps/api/core';
+const msg = await invoke<string>('greet', { name: 'World' });
+```
+
+- **Command**: フロントエンド → Rust（双方向、JSON-RPC）
+- **Event**: fire-and-forget（双方向、`emit` / `listen`）
+- 引数・戻り値はすべて JSON シリアライズ可能な型に限定
+
+## セキュリティ（必須ルール）
+
+```json
+// src-tauri/capabilities/main.json
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-capability",
+  "description": "Main window capabilities",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "fs:allow-read-text-file"
+  ]
+}
+```
+
+- `capabilities/` で **ウィンドウ単位** に権限を定義する（ワイルドカード `*` 禁止）
+- CSP を明示的に設定: `"csp": "default-src 'self'; script-src 'self'"`
+- **最小権限原則**: 使うプラグインの必要なパーミッションのみ追加
+- Rustコマンド内で **入力を必ずバリデーション**（フロントエンドを信頼しない）
+- `cargo audit` / `npm audit` を定期実行
+
+## tauri.conf.json 主要キー
+
+```json
+{
+  "productName": "my-app",
+  "version": "0.1.0",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "app": {
+    "security": {
+      "csp": "default-src 'self'"
+    },
+    "windows": [{ "title": "My App", "width": 1200, "height": 800 }]
+  },
+  "bundle": { "active": true, "targets": "all" }
+}
+```
+
+## 主要コマンド
+
+| コマンド | 用途 |
+|---|---|
+| `npm create tauri-app@latest` | 新規プロジェクト作成 |
+| `npm run tauri dev` | 開発サーバー起動 |
+| `npm run tauri build` | プロダクションビルド |
+| `npx tauri add <plugin>` | 公式プラグイン追加 |
+| `npm run tauri android dev` | Android 実機デバッグ |
+| `npm run tauri ios dev` | iOS 実機デバッグ |
+| `npx tauri migrate` | v1→v2 マイグレーション |
+
+## モバイル対応（Tauri 2 固有）
+
+```typescript
+// vite.config.ts — モバイル実機デバッグ対応
+const host = process.env.TAURI_DEV_HOST;
+export default defineConfig({
+  server: {
+    host: host || false,
+    port: 5173,
+    strictPort: true,
+    hmr: host ? { protocol: 'ws', host, port: 5174 } : undefined,
+  },
+});
+```
+
+- `TAURI_DEV_HOST` が設定されている場合のみモバイル向け設定を有効化
+- Android/iOS ターゲット追加: `rustup target add aarch64-linux-android ...`
+
+## 公式プラグイン一覧（抜粋）
+
+`fs` / `dialog` / `http` / `shell` / `notification` / `store` / `sql` / `updater` / `log` / `clipboard-manager` / `global-shortcut` / `deep-link`
+
+追加: `npx tauri add fs` のように実行。Cargo.toml と capabilities の両方が自動更新される。
+
+## ビルド最適化（Cargo.toml）
+
+```toml
+[profile.release]
+codegen-units = 1
+lto = "fat"
+opt-level = "z"
+panic = "abort"
+strip = true
+```
