@@ -104,7 +104,29 @@ c:/yk-memo/
 1. **正:** `handoffs/{project}/HANDOFF.md` の「最新セッション」リンク
 2. **フォールバック:** `handoffs/{project}/` を日付降順 glob（HANDOFF 未整備時のみ）
 
-再開時は **セッション MD §4 の 1 件だけ**実行。
+再開時は **セッション MD §4 の 1 件だけ**実行。`{project}/README.md` の「再開」説明も **§4 正** とする（§6 は要約 · 待機時のみ）。
+
+### 待機（ルートセッション 0 本）
+
+| 条件 | 再開モードの動き |
+|------|------------------|
+| ルート直下のセッション MD が **0 本** | Glob で確認 |
+| HANDOFF 先頭表の **状態** に **待機**、または §6 に「待機」「新規作業の指定がなければ待機」 | **§4 を実行しない**。HANDOFF §6 の「次の 1 件」を 1 行報告して停止 |
+| 上記以外 | 最新セッション MD の §4 の 1 件を実行 |
+
+archive 内の最新セッション §4 が「完了（履歴）」でも、待機なら再実行しない。
+
+---
+
+## 横断索引（`handoffs/README.md`）
+
+| 項目 | 内容 |
+|------|------|
+| **役割** | 確認 **Tier-0** の人間向け索引（派生 · ライブ状態の正は各 `{project}/HANDOFF.md` 先頭表） |
+| **更新** | **終了** Phase B · **整理**で当該 project を触ったとき — 当該 slug の **1 行**（状態 · 最新ファイル · ルート MD 本数 · 次の 1 手） |
+| **禁止** | セッション MD 本文のコピー · 毎回の全表再執筆（触った行のみ） |
+
+**Tier-0 の機械確認:** [folder-audit.md](folder-audit.md) の **I0**（Glob `handoffs/*/HANDOFF.md` と README 表の slug 一致）。
 
 ---
 
@@ -146,7 +168,8 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 6. `HANDOFF.md` の「最新セッション」1 行（+ 必要なら §6 のみ）更新
 7. 触った各 Git ルートで `git status` → セッション MD §2 に記載
 8. `{project}/README.md` の「最新セッション」を HANDOFF と一致
-9. Phase A の移動・削除一覧をセッション MD §1-3 に記録 · ユーザーへパスと再開 `@` 文を提示
+9. `handoffs/README.md` の当該 slug 行を更新（§横断索引）
+10. Phase A の移動・削除一覧をセッション MD §1-3 に記録 · ユーザーへパスと再開 `@` 文を提示
 
 ### 終了ゲートを満たさない操作
 
@@ -232,13 +255,16 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 ---
 
-## 既知プロジェクト例
+## 既知プロジェクト例（slug 形式のみ）
 
-| slug | HANDOFF | 備考 |
-|------|---------|------|
-| `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート `YK_WORKSPACE_LAYOUT_HANDOFF.md` は stub · No 36 `REACT_RULES` |
-| `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 ルール · `45_mermaid/MERMAID_RULES.md` |
-| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · [AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md) · No 17 実例 |
+**ライブ状態（最新 · 次の 1 手）の正本:** `c:/yk-memo/handoffs/README.md`（終了/整理で同期）· 各 `HANDOFF.md` 先頭表。
+
+| slug | HANDOFF パス | 備考 |
+|------|--------------|------|
+| `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート stub · No 36 `REACT_RULES` |
+| `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 · 待機時は §6 のみ |
+| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · No 17 実例 |
+| `tauri-practice` | `handoffs/tauri-practice/HANDOFF.md` | 学習スパイク · `yk-application/tauri-practice` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
-新プロジェクト追加時は本表に 1 行追加する。
+新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。

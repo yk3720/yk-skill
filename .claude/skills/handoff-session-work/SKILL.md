@@ -4,7 +4,7 @@ description: >
   yk-memo/handoffs のセッション引き継ぎ（終了・再開・確認・整理）。
   終了: 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」— **整理→archive を先に必須**、その後に新規セッション MD
   再開: 「続きから」「引き継ぎを読んで」「@...SESSION...md」— §4の1件のみ実行
-  確認: 「引き継ぎ内容を確認」「handoffsを確認」「引き継ぎの状態を教えて」— フォルダ俯瞰のみ・実行しない
+  確認: 「引き継ぎ内容を確認」「handoffsを確認」「引き継ぎの状態を教えて」— Tier-0 索引→指定時 Tier-1 詳細・実行しない
   整理: 「引き継ぎ整理」「handoffsを整理」「引き継ぎをarchive」「archiveして」（handoffs/引き継ぎの文脈）
   Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit（→ committing-with-git-yk）。
 ---
@@ -21,7 +21,7 @@ description: >
 |--------|--------|--------|
 | **終了** | 引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了 | **整理→archive 先（必須）** · 新規セッション MD · HANDOFF 更新 |
 | **再開** | 続きから · 引き継ぎを読んで · `@...md` | §4 の **1 件だけ**実行 |
-| **確認** | 引き継ぎ内容を確認 · handoffs を確認 · 一覧 · 状態を教えて | **Read のみ**（移動・削除・§4 実行なし） |
+| **確認** | 引き継ぎ内容を確認 · handoffs を確認 · 一覧 · 状態を教えて | **Tier-0 索引**（全体）/ **Tier-1 詳細**（プロジェクト指定）· Read のみ |
 | **整理** | 整理して · archive して · 片付けて | 移動 · 削除 · README 更新（新規セッション MD は不要なら Write しない） |
 
 曖昧なとき（「引き継ぎを見て」等）は **1 問だけ**: 確認だけ / 続きから作業 / 整理まで。
@@ -74,7 +74,8 @@ description: >
 11. `HANDOFF.md` の **「最新セッション」1 行**（と必要なら §6）だけ更新
 12. 触った各 Git ルートで `git status` → セッション MD §2 に記載
 13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
-14. ユーザーに保存パスと再開用 `@` 依頼文を提示
+14. `handoffs/README.md` の当該 slug **1 行**を更新（状態 · 最新ファイル · ルート MD 本数 · 次の 1 手）— [routing.md §横断索引](references/routing.md)
+15. ユーザーに保存パスと再開用 `@` 依頼文を提示
 
 **禁止:** Phase A 前の新規 Write · `git commit` / `git push` · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
 
@@ -82,23 +83,25 @@ description: >
 
 ## 再開（Read · Execute）
 
-1. `handoffs/{project}/HANDOFF.md` の「最新セッション」リンクを Read（正本 → [routing.md §最新セッション](references/routing.md)）
-2. セッション MD の **「次回の最初の 1 件」** だけを実行（HANDOFF §6 ロードマップ全体には広げない）
-3. 「一つずつ」「順番に」のときは **1 タスクで止め**、次に進む前に確認
+1. **プロジェクト slug** — ユーザー指定 · `@` パス · 単一進行中ならその slug。複数進行中または不明なら [folder-audit.md Tier-0](references/folder-audit.md) で索引を出し **1 問**（Glob + 各 HANDOFF 先頭表のみ · 根 README は補助）
+2. [routing.md §待機](references/routing.md) — ルート直下セッション **0 本** かつ HANDOFF 先頭表に **待機** → §4 は実行せず §6 の 1 行を報告して停止
+3. `HANDOFF.md` — **先頭表のみ** Read（`| **最新セッション** |` · `| **状態** |`）。ユーザーが `@HANDOFF` 全文を指定したときのみ全文
+4. 最新セッション MD — **§4 のみ**（Grep `## 4.` 〜 次の `## 5.` 手前、または Read の `offset/limit`）。`@セッション` 指定時は当該 MD の §4 のみ（HANDOFF 省略可）
+5. §4 の **1 件だけ**実行（HANDOFF §6 ロードマップ全体には広げない）
+6. 「一つずつ」「順番に」のときは **1 タスクで止め**、次に進む前に確認
 
-**禁止:** archive · 削除 · 新規セッション Write · 確認モードの代行
+**禁止:** archive · 削除 · 新規セッション Write · 確認モードの代行 · 再開時の HANDOFF 全文 + セッション全文の常時 Read
 
 ---
 
 ## 確認（Read のみ）
 
-[references/folder-audit.md](references/folder-audit.md) に従う。
+[references/folder-audit.md](references/folder-audit.md) の **Tier** に従う。
 
-1. 対象を特定: `handoffs/` 全体、または `handoffs/{project}/`（ユーザー指定 · `@` パス）
-2. 列挙: HANDOFF · ルート直下のセッション MD · `archive/` · README
-3. 整合: HANDOFF「最新」= `{project}/README.md`「最新」= ルートに残す 1 本
-4. [folder-audit.md](references/folder-audit.md) の報告テンプレで出力
-5. 末尾に **提案のみ**（実行しない）: 続きから / 整理して / このまま終了
+1. **Tier を決める** — 全体・未指定 → **Tier-0**。プロジェクト指定 · 「詳しく」「整合」→ **Tier-1**
+2. Tier-0: Glob `handoffs/*/HANDOFF.md` · 各 HANDOFF **先頭表のみ** · [folder-audit.md](references/folder-audit.md) Tier-0 テンプレ
+3. Tier-1: 当該 `{project}/` で H1〜T2 · Tier-1 テンプレ（T1 は §4 中心でよい）
+4. 末尾に **提案のみ**（実行しない）: 続きから（slug 指定）/ Tier-1 詳細 / 整理して
 
 **RUN を減らす:** 本モードでは **Shell を使わない**（`git status` · `ls` · `Get-ChildItem` 等は出さない）。一覧は **Glob**、本文は **Read**（必要なら **Grep**）のみ。Git の未 commit 有無はユーザーが聞いたときだけ答える（そのときも Shell は 1 本にまとめるか、Read で足りる範囲に留める）。
 
@@ -111,11 +114,11 @@ description: >
 新規セッション MD が不要なら Write しない。[routing.md §資料整理](references/routing.md) · [§アーカイブ](references/routing.md) に従う。
 
 1. [references/routing.md](references/routing.md) を Read
-2. 対象 `{project}` を特定（未指定なら確認モード相当の一覧を出してから 1 プロジェクトに絞る）
+2. 対象 `{project}` を特定（未指定なら [folder-audit.md Tier-0](references/folder-audit.md) の索引を出してから 1 プロジェクトに絞る）
 3. **移動・削除候補**を表で提示（移動元 → 行き先）
 4. 曖昧な操作（ファイル削除 · stub 削除 · 90 日超一括）は **ユーザーの OK 後**に実行
 5. **superseded の archive** — 「整理して」単独依頼時はここで実行。**終了**では Phase A で必ず先に実施済み（終了モードで Phase A を飛ばした漏れも救済）
-6. HANDOFF · README を更新 · 実施一覧を報告（セッション MD を新規した場合は §1-3 にも記録）
+6. HANDOFF · `{project}/README.md` · 触った場合は `handoffs/README.md` 当該行を更新 · 実施一覧を報告（セッション MD を新規した場合は §1-3 にも記録）
 
 **禁止:** ユーザーの明示なしに `git commit` · 最新セッション MD の削除
 

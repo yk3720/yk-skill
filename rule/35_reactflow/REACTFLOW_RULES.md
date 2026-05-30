@@ -12,7 +12,7 @@
 
 **横断:** [`../30_web_stack/REACT_RULES.md`](../30_web_stack/REACT_RULES.md)（React 一般 · Hooks） · [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · §5 RSC · §6 flowchart） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
 
-**最終更新:** 2026-05-24（§4 公式索引 · v12 要約 · Common Errors MUST 化 · ROUTER 連携）  
+**最終更新:** 2026-05-30（§5.6 実用版 UX · 2026-05 ブラッシュアップ反映）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 35
 
 **L0 入口:** 正本 `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（glob `flowchart-web-*/**`）。同期コピー: `yk-memo/.cursor/rules/` · `yk-tool/.cursor/rules/`。`yk-tool` 単体 WS でも flowchart 編集時に L0 が効く。
@@ -192,6 +192,7 @@ validateTable(table)
 | カスタムエッジ実装 | `BaseEdge` + `getStraightPath` / `getBezierPath` 等 · `EdgeLabelRenderer` · 型 `labeled`（`edges/LabeledEdge.tsx`） |
 | ノード寸法（v12） | **`toReactFlow` が layout 由来の `width`/`height` を設定**（固定寸法）。`node.measured.*` は RF 内部計測 — 表駆動では触らない |
 | ノード単位 | `toReactFlow` で各 Node に `draggable: false` · `selectable: false` · `connectable: false` |
+| **複数行ラベル（Text1–3）** | `parseTable` が `\n` 結合 · **`FlowShapeNode` は `flex-col`**（行方向 `flex` 禁止）· 行高は `measureHeights` の `textLineCount`（§5.6-4） |
 | 操作（グローバル） | 公式デフォルトは `nodesDraggable` / `nodesConnectable` / `elementsSelectable` / `edgesReconnectable` すべて **`true`**。表駆動は **四つとも `false` を MUST**（`FlowCanvas.tsx`）。`readOnly` prop は v12 で廃止 — 上記が SSOT |
 | Provider | **`ReactFlowProvider` でラップ MUST**。**`useReactFlow` は Provider の子のみ**（Provider 自身の中では不可 · Common Errors） |
 | 状態 | nodes/edges は **`generateFlowchart` → `toReactFlow` 派生**。`useNodesState` + `onConnect` を表更新の主経路にしない |
@@ -247,6 +248,63 @@ validateTable(table)
 | ドキュメント JSON | `FlowchartDocument`（`version: 1`） |
 
 `lib/flowchart/document.ts` · `draftStorage.ts` を SSOT。キー変更は ADR + マイグレーション必須。
+
+### 5.5 UI 整理 — コードをきれいに保つ（優先度: 高）
+
+実用版 UX ブラッシュアップで **ユーザー向け機能を外すとき**、UI 非表示だけにしない。
+
+| やる | やらない |
+|------|----------|
+| state · 型 · 保存項目 · 専用モジュールを**同時に削除** | dead code（`themeId` state 等）を残す |
+| エンジン定数は 1 本化（`DEFAULT_LAYOUT` · `flowColors.ts`） | 選べなくした preset / theme ファイルを orphan のまま残す |
+| 旧 payload フィールドは**読込時破棄** | 互換のため二重管理を永久化 |
+
+**ルール（実装リポ）:** `flowchart-web-reactflow/.cursor/rules/ui-simplification-yk.mdc`
+
+### 5.6 実用版 UX（2026-05 ブラッシュアップ）
+
+**対象:** `flowchart-web-reactflow` のエディタ UI · 3 ペイン · 表→再生成の日常操作。企画: [相談_2026-05-30_Web版ブラッシュアップ方針.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/01_product/相談_2026-05-30_Web版ブラッシュアップ方針.md)。
+
+**エージェント向けチェックリスト:** `flowchart-web-reactflow/.cursor/rules/flowchart-practical-ux-yk.mdc`
+
+#### 5.6-1 ナビ階層 · 永続化キー
+
+| 項目 | 規則 |
+|------|------|
+| 階層 | **装置（Nav 最上段 `<select>`）→ ユニット → 動作 → 表｜図** |
+| 選択単位 | 動作 1 件 = フロー 1 本（`moduleId`） |
+| 保存キー SSOT | `moduleDraftKey(deviceId, moduleId)` → **`${deviceId}:${moduleId}`**（`lib/flowchart/moduleHierarchy.ts`） |
+| 読込 | `resolveModuleDraftKey` — **press-01** の旧キー（`supply-feed` 等・装置 prefix なし）へフォールバック可 |
+| 装置切替 | 編集中モジュールを退避 → 動作選択クリア → 新装置のユニット一覧 |
+| ヘッダー | 装置名は Nav に集約。エディタヘッダーは **選択中フロー文脈**（例: `供給ユニット · 供給動作`）のみ |
+
+#### 5.6-2 ツールバー（AppHeader）
+
+| 常時表示 | その他メニュー（`EditorMoreMenu`） |
+|----------|-------------------------------------|
+| **再生成**（主操作 · stale 時は視覚強調） | PNG · SVG |
+| 表を保存 · 表を読込（editor のみ） | オフライン用に保存（モジュール選択時） |
+| | サンプル表 · 下書き削除（非 workspace） |
+
+- ボタン追加前に **「常時か / その他か」** を決める（§5.5 と併用）。
+- JSON 編集タブは **出さない**（保存形式としての JSON は `document.ts` · 表を保存/読込）。
+
+#### 5.6-3 見た目の固定（ユーザー向け選択なし）
+
+| 項目 | SSOT |
+|------|------|
+| レイアウト寸法 | `DEFAULT_LAYOUT`（`types.ts`）— サイズ preset なし |
+| 矢印・ラベル色 | `flowColors.ts` — テーマ切替なし |
+
+#### 5.6-4 警告（`validationMeta.ts`）
+
+| 種別 | 挙動 |
+|------|------|
+| **警告** | 生成 **継続** · 琥珀バナー · 行クリックでジャンプ |
+| **エラー** | 生成 **停止**（ADR-002） |
+
+- バナー説明 SSOT: `WARNING_BANNER_HINT`（「図はこのまま生成されます…」）。
+- 文言は **列名**（接続先(下) 等）と **直し方** をセット。判断ノードは Yes=下 · No=右 を案内してよい。
 
 ---
 
