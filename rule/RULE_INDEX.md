@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-24（No 17 APP_PROJECT · load-manifest 同期）
+**最終更新:** 2026-05-30（No 18 YK_APPLICATION 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -55,6 +55,7 @@
 | 新ドメイン rule / スキル | 11 | `PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
 | チャット応答（平易さ等） | 16 | `COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
 | 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
+| 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
 
 ---
@@ -83,7 +84,7 @@
 | **入口** | `rule/RULE_INDEX.md`（索引）· `rule/RULE_ROUTING_PLAYBOOK.md`（読む順序）— ルート直下（移動しない） |
 | **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · **`35_reactflow/`** · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 35 → `35_reactflow` · No 45 → `45_mermaid`）。**例外:** `50_gas_html_test` は物理名レガシー（カタログ No は **51–54**）— 意味は [帯の意味](#帯の意味要約) |
 | **ファイル名** | `{TOPIC}_RULES.md`（番号はファイル名に付けない） |
-| **カタログ No** | 下表の **No 列**が論理順の SSOT。帯番号と優先順位（Governance）は別 |
+| **カタログ No** | 下表の **No 列**が論理順の SSOT. 帯番号と優先順位（Governance）は別 |
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
 | **ルート直下** | `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md` · `load-manifest.yaml`（Phase 2 試作）— 移行スタブ削除済み |
 
@@ -123,6 +124,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | `c:/yk-tool` | 成果物 · `publish/` · `workspace-ui-kit/` · `flowchart-web-*` |
 | `c:/yk-memo` | 企画 · 講座 · `handoffs/`（Governance 段階 7 — 実装の正解ではない） |
 | `c:/yk-document` | Excel 原本（Git 外）· `exports/` |
+| `c:/yk-application` | 完成間近のアプリ（個別リポジトリ管理用） |
 | `c:/1.cursor/5.Python` | Python デスクトップ（別リポ · rev 積層保護） |
 
 **ui-kit / flowchart:** `workspace-ui-kit` 作業は **`yk-tool` をワークスペースに含める**（`workspace-dev-entry.mdc` は `yk-tool/workspace-ui-kit/.cursor/rules/` のみ）。
@@ -163,6 +165,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・保管場所） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ・作業後3点サマリ） | active |
 | 17 | 10_meta | `10_meta/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
+| 18 | 10_meta | `10_meta/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -194,7 +197,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |
 
-**パス:** 上表の `帯/{NAME}_RULES.md` が SSOT。旧 `rule/{NAME}_RULES.md` フラットパスは廃止（2026-05-23）。
+**パス:** 上表の `帯/{NAME}_RULES.md` が SSOT. 旧 `rule/{NAME}_RULES.md` フラットパスは廃止（2026-05-23）。
 
 ---
 
@@ -218,7 +221,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 3. **本表に行を追加**（No · path · いつ読む · status）
 4. **[RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)** に読む順序節を追加 · クイック入口表のリンクを同期
 5. 既存 rule / スキルから **絶対パス `c:/yk-skill/rule/{帯}/{FILE}`** でリンク（`SKILL_AUTHORING` §12 準拠）
-6. 旧来のフラット名が必要なら **スタブのみ**（本文コピー禁止）
+6. 旧来の フラット名が必要なら **スタブのみ**（本文コピー禁止）
 7. **[`load-manifest.yaml`](load-manifest.yaml)** に `rules` 行を追加（Phase 2 試作 — INDEX と同期）
 
 ---
@@ -237,6 +240,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | `c:/yk-skill` | スキル · `rule/` · 公開台帳 `metadata/` | あり |
 | `c:/yk-tool` | 成果物・アプリ（`publish/` · `apps/` · ui-kit 等） | あり（新規） |
 | `c:/yk-document` | 業務データ（Excel 原本 Git 外 · `exports/` · `_index/`） | あり（新規） |
+| `c:/yk-application` | 完成間近のアプリ（個別リポジトリ管理用） | なし（各アプリが Git） |
 | `c:/1.cursor/5.Python` | Python 実装（**別リポ・実験混在・一括整理しない**） | あり |
 | `c:/yk-local`（任意） | `.env` · トークン · フル PII — 各リポから参照のみ | なし |
 
@@ -257,7 +261,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 企画・背景（参考のみ） | `c:/yk-memo/` | Governance 段階 7 — 実装の正解ではない |
 | Excel 原本 | `c:/yk-document/**/originals/` | Git ignore · 変換は `5.Python` + `exports/` |
 | セッション引き継ぎ MD | `c:/yk-memo/handoffs/{project}/` | スキル `handoff-session-work`（終了·再開·確認·整理）· `references/template.md` · `folder-audit.md` |
-| Git commit（ユーザー明示時） | 各リポの Git ルート | スキル `committing-with-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
+| Git commit（ユーザー明示時） | 各リポ의 Git ルート | スキル `committing-with-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
 | Agent Shell / RUN 承認 | `60_tooling/cursor-permissions/permissions.json` → `~/.cursor/` にデプロイ | `60_tooling/AGENT_SHELL_RULES.md` · `cursor-permissions/README.md` |
 
 ### Cursor マルチルート（目安）

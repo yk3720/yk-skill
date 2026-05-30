@@ -137,13 +137,49 @@ export default defineConfig({
 
 追加: `npx tauri add fs` のように実行。Cargo.toml と capabilities の両方が自動更新される。
 
-## ビルド最適化（Cargo.toml）
+## Windows 開発トラブルシューティング
 
-```toml
-[profile.release]
-codegen-units = 1
-lto = "fat"
-opt-level = "z"
-panic = "abort"
-strip = true
+Windows 環境特有のビルドエラーや Deep Link の不具合に対する解決策。
+
+| 症状 | 原因 | 解決策 |
+|------|------|--------|
+| `linker link.exe not found` | MSVC リンカ不足 | Visual Studio Build Tools で「C++ によるデスクトップ開発」をインストール |
+| アプリ起動時にブロックされる | Windows Defender / AppLocker | 設定でプロジェクトフォルダを除外対象に追加するか、実行許可を与える |
+| フォルダ移動後にビルドエラー | キャッシュのパス不整合 | `src-tauri` 内で `cargo clean` を実行してから再ビルド |
+| ファイル削除・上書き失敗 (Error 5) | プロセスがファイルをロック | `taskkill /f /im {app-name}.exe` で残存プロセスを終了 |
+| Deep Link が反応しない | レジストリ未登録 | アプリを管理者権限で一度起動するか、手動で `HKCU:\Software\Classes\` にプロトコルを登録 |
+
+### Deep Link 手動登録 (PowerShell)
+Tauri の自動登録が失敗する場合、以下で強制登録が可能。
+```powershell
+$path = "C:\path\to\app.exe"
+$key = "HKCU:\Software\Classes\{scheme}"
+if (!(Test-Path $key)) { New-Item -Path $key -Force }
+Set-ItemProperty -Path $key -Name "(default)" -Value "URL:{scheme} Protocol"
+Set-ItemProperty -Value "" -Path $key -Name "URL Protocol"
+$cmdKey = "$key\shell\open\command"
+if (!(Test-Path $cmdKey)) { New-Item -Path $cmdKey -Force }
+Set-ItemProperty -Path $cmdKey -Name "(default)" -Value "`"$path`" `"%1`""
 ```
+
+## プラグイン設定 (Tauri 2)
+
+### Single Instance (二重起動防止)
+Deep Link を確実に受け取るために必須。
+1. `npx tauri add single-instance`
+2. `Cargo.toml` で `deep-link` 機能を有効化（**重要**）:
+   ```toml
+   [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+   tauri-plugin-single-instance = { version = "2", features = ["deep-link"] }
+   ```
+3. `lib.rs` で `tauri_plugin_single_instance::init` を登録し、必要に応じてメインウィンドウへフォーカスを当てる。
+   ```rust
+   .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+       let _ = app.get_webview_window("main").map(|w| w.set_focus());
+   }))
+   ```
+
+## 推奨スタック
+- **Frontend**: React + shadcn/ui + Tailwind CSS (v4)
+- **Rationale**: Web版（flowchart-web）とのコード共通化、および洗練された UI の迅速な構築のため。
+- **Path Aliases**: `tsconfig.json` と `vite.config.ts` で `@/*` エイリアスを設定し、shadcn/ui の標準的なインポート形式を維持すること。
