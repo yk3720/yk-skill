@@ -1,0 +1,12 @@
+---
+description: UI確認はPlaywright優先・手動ブラウザ反復を避ける（エージェント向け）
+alwaysApply: true
+---
+
+# Playwright Agent（YK）
+
+**SSOT:** `c:/yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md`（§12）
+
+- **UI の見え方・重なり:** スクショ依頼の反復より E2E（§12-3）。手順はスキル `using-playwright`
+- **層:** Vitest（ロジック）→ Playwright（描画・操作）→ `toHaveScreenshot`（必要時のみ）
+- **Shell:** `AGENT_SHELL_RULES` §3-2（test 明示 **または** spec 追加の完了判定）· `all` 権限

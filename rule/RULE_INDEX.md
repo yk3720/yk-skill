@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-30（No 18 YK_APPLICATION 追加）
+**最終更新:** 2026-05-31（No 19 VISUAL_DESIGN 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -48,7 +48,7 @@
 | workspace-ui-kit | 21 | `20_web_workspace/WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | `yk-tool/workspace-ui-kit` · `workspace-dev-entry` |
 | `/diagram-manager` | 22 | `DIAGRAM_MANAGER_WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | 同上 |
 | GAS Web アプリ | 51 | `50_gas_html_test/GAS_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
-| Playwright E2E | 53 | `50_gas_html_test/PLAYWRIGHT_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
+| Playwright E2E | 53 | `50_gas_html_test/PLAYWRIGHT_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | `playwright-agent-yk`（always）· `using-playwright` |
 | surge 図解 · GAS レポート HTML（chip） | 52 | `GAS_REPORT_DESIGN_RULES.md` | [ui-kit デザイン](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | — |
 | 大容量 HTML + PowerShell | 54 | `POWERSHELL_HTML_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
 | スキル MD 作成・更新 | 12 | `SKILL_AUTHORING_RULES.md` | — | — |
@@ -56,6 +56,7 @@
 | チャット応答（平易さ等） | 16 | `COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
 | 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
 | 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
+| UI · 図の線の太さ・統一感 | 19 | `10_meta/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
 | 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
 
 ---
@@ -68,6 +69,7 @@
 | 汎用 React / Hooks · `components/**`（flowchart 外） | No **36** · `creating-react-yk` | No 35 のみで代替 |
 | `.mmd` 執筆 · diagram-as-code | No **45** · `creating-mermaid-yk` | No 35 のプレビュー手順で `.mmd` 執筆を代替 |
 | flowchart · 表 → Mermaid **プレビュー** | No **35** · `creating-reactflow-yk` | **`creating-mermaid-yk`** |
+| UI レイアウト・重なり · E2E spec | No **53** §12 · `using-playwright` | 手動スクショ反復 · 単体ロジックのみ Vitest で足りるのに E2E のみ |
 | shadcn init / add | No **32** · `creating-shadcn-yk` | surge · `lib/flowchart/` · ui-kit 既存への `init -b radix` |
 | Vercel / Neon **デプロイ** | No **34** · `creating-vercel-yk` | surge ホスト · FB 初回のみで vercel スキル完結 · 未明示 `--prod` |
 | ui-kit の Next / shadcn UI | SHADCN · TAILWIND · WORKSPACE | **GAS_REPORT_DESIGN**（静的 HTML chip は No 52） |
@@ -166,6 +168,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ・作業後3点サマリ） | active |
 | 17 | 10_meta | `10_meta/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
 | 18 | 10_meta | `10_meta/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
+| 19 | 10_meta | `10_meta/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -188,7 +191,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 | 帯 | 含むもの | 含まないもの |
 |----|----------|--------------|
-| 10_meta | 横断設計·Git · Secrets · **個人アプリプロジェクト** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
+| 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |

@@ -60,6 +60,13 @@ rules:
     read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開
     status: active
 
+  - no: 19
+    path: 10_meta/VISUAL_DESIGN_RULES.md
+    band: 10_meta
+    tags: [visual-design, meta, ui, stroke]
+    read_when: UI · 図 · 枠線 · ストロークの統一
+    status: active
+
   - no: 21
     path: 20_web_workspace/WORKSPACE_RULES.md
     band: 20_web_workspace
@@ -148,7 +155,7 @@ rules:
     path: 50_gas_html_test/PLAYWRIGHT_RULES.md
     band: 50_gas_html_test
     tags: [playwright, e2e]
-    read_when: Playwright E2E
+    read_when: Playwright E2E · UI レイアウト検証（§12）· 手動ブラウザ反復の代替
     status: active
 
   - no: 54

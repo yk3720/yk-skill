@@ -81,7 +81,8 @@
 
 ユーザーが **当ターンで明示**したときのみ:
 
-- `commit` / `push` / PR 作成 / テスト実行
+- `commit` / `push` / PR 作成 / テスト実行（`test` · `E2E` · `確認して` 等の明示）
+- **UI 修正で E2E spec を追加した同一ターン** — `PLAYWRIGHT_RULES.md` §12 の完了判定として `npm run test:e2e` 等を実行（スクショ依頼の反復より spec を green にする）
 - 引き継ぎ **終了**（Phase B: `git status` · Phase C: `committing-with-git-yk` / `pushing-and-pr-yk` どおり add/commit/push）
 - clone · `npm install` 等、実行が必須の作業
 
@@ -115,7 +116,7 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 | **D-1** | 引き継ぎ **確認**（`handoff-session-work` 確認モード） | **禁止** — Glob + Read のみ |
 | **D-2** | 引き継ぎ **終了** | Phase B: 触ったルートの `git status`（1 本 `;` 連結可）· Phase C: commit/push（子スキル · 初回 `all`） |
 | **D-3** | **commit**（`committing-with-git-yk`） | 可 — 調査は §3-3、commit は Write + `-F`、初回 `all` |
-| **D-4** | Playwright（`using-playwright`） | 可 — スキルどおり `all` |
+| **D-4** | Playwright（`using-playwright` · `PLAYWRIGHT_RULES` §12） | 可 — 上記 §3-2（test 明示 **または** spec 追加の完了判定）· `all` |
 
 ---
 

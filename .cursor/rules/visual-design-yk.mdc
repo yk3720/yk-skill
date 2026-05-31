@@ -1,0 +1,12 @@
+---
+description: ビジュアル共通 — 線の太さは基本統一（全プロジェクト）· 強調は例外
+alwaysApply: true
+---
+
+# Visual Design（YK）
+
+**SSOT:** `c:/yk-skill/rule/10_meta/VISUAL_DESIGN_RULES.md`
+
+- **基本:** 同一画面・同一図では枠線・ストロークの太さを**統一**（例: 2px）。定数・CSS 変数で 1 か所 SSOT
+- **例外:** 警告・選択中など**強調**したい要素だけ太さ・色を変えてよい
+- **詳細:** UI/図を実装・修正するとき、または太さ方針に迷ったときのみ `VISUAL_DESIGN_RULES.md` を Read

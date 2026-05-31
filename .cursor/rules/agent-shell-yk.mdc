@@ -8,6 +8,6 @@ alwaysApply: true
 **SSOT:** `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`
 
 - **確認・調査・引き継ぎ俯瞰:** Shell 禁止。Glob / Read / Grep のみ。
-- **Shell を使うのは:** ユーザーが commit / push / test / 引き継ぎ終了 を**当ターンで明示**したときのみ（引き継ぎ終了は Phase C で commit+push まで含む）。
+- **Shell を使うのは:** ユーザーが commit / push / test（E2E 含む）/ 引き継ぎ終了 を**当ターンで明示**したとき、または **UI 修正で E2E spec を足した同一ターン**（`PLAYWRIGHT_RULES` §12 の完了判定）のみ。
 - **同一ターン:** 複数 git コマンドは `;` で **1 本の Shell**（`&&` 不可）。`.git` 書き込み・push は初回から **`required_permissions: ["all"]`**。
-- **引き継ぎ確認:** スキル `handoff-session-work` 確認モード（Shell 禁止）を優先。依頼例は `AGENT_SHELL_RULES.md` §5
+- **引き継ぎ確認:** スキル `handoff-session-work` 確認モード（Shell 禁止）を優先。

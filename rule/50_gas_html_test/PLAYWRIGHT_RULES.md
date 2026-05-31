@@ -1,6 +1,8 @@
 # Playwright 設計ルール
 ## E2E テスト・ブラウザ自動化 — Design & Development Rules v2
 
+**ステータス:** active（横断 always · `playwright-agent-yk.mdc` · L2 `using-playwright` · ROUTER なし）
+
 作成日：2026-05-03（v2 更新）  
 **配置:** `c:\yk-tool\playwright-test\`（@playwright/test v1.59.1 / TypeScript / Chromium / Windows）— [RULE_INDEX](../RULE_INDEX.md) リポジトリマップ参照
 
@@ -16,6 +18,7 @@
 - [ ] Google Sheets の `goto` には `waitUntil: 'networkidle'` を使っていない（`'load'` を使う）
 - [ ] スプレッドシートへの書き込みテストを並列実行していない（データ競合の恐れ）
 - [ ] `page.waitForTimeout()` は使わず、locator/assertion ベースの待機を使っている
+- [ ] UI の見え方・重なりをユーザーに手動確認させる前に、再現可能な Playwright 検証を検討した（→ §12）
 
 ---
 
@@ -389,3 +392,100 @@ cd c:\yk-tool\playwright-test; npx playwright test
 | `トークン '&&' は...有効なステートメント区切りではありません` | **Windows PowerShell 5.1** では `&&` 非対応 | コマンド連結は `;` を使うか **`pwsh`（7+）** に切り替える（`10-1` 参照） |
 | `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
 | `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |
+
+---
+
+## 12. エージェント運用 — UI 確認は Playwright 優先
+
+**目的:** エージェントが「ブラウザで何度もリロードしてスクショ依頼」を繰り返すより、**再現可能な Playwright 検証**で完了判定する。
+
+### 12-1. いつ Playwright を使うか（優先順）
+
+| 確認したいこと | 第一選択 | 補足 |
+|----------------|----------|------|
+| 純ロジック（座標計算・分岐） | Vitest 等の単体テスト | DOM 不要 |
+| 表示・クリック・文言・件数 | Playwright + `getByRole` / `getByText` | 公式 Best Practices に沿う |
+| レイアウト（重なり・左右関係） | Playwright + `boundingBox` / `page.evaluate` | 下記 §12-3 |
+| ピクセル単位の見た目全体 | `toHaveScreenshot` | OS・フォント差に弱い。必要時のみ |
+| GAS iframe / Sheets | 本ファイル §4 · §7 | 既存パターン |
+
+**原則:** ユーザーに「画面を見てください」を繰り返す前に、**同じ手順を spec に固定**し `npm run test:e2e`（またはプロジェクトの script）を実行する。失敗時は [Trace Viewer](https://playwright.dev/docs/trace-viewer)（§12-5）で原因を特定する。
+
+### 12-2. 手動ブラウザ反復を避ける理由（調査要約）
+
+- Playwright の **web-first アサーション**は自動リトライ付きで、固定 `waitForTimeout` より安定（[Best Practices](https://playwright.dev/docs/best-practices)）。
+- テストは **ユーザーが見える出力**（role・label・text）に寄せ、CSS クラス依存を減らす（[Locators](https://playwright.dev/docs/locators)）。
+- **テスト分離**（コンテキスト・認証 state）で「前のテストの影響」を排除（同上）。
+- エージェントの手動確認は再現性・CI 共有・回帰検知に不利。**一度書いた spec は以降の修正でも使い回せる**。
+
+### 12-3. レイアウト・重なりの検証パターン
+
+1. **契約属性** — `data-testid` または `data-*`（例: `data-edge-label-branch`）。§1 の CSS クラスは最終手段。
+2. **2要素の相対位置** — まず `locator.boundingBox()`（null チェック後に gap 比較）。
+3. **複数 path / ライブラリ DOM** — `page.evaluate` + `getBoundingClientRect()`。**対象縦線が見つかったか**（`matchedVertical` 等）を必ず検証し、見つからなければ失敗。
+4. **安定待ち** — 幾何の単発 `expect` はリトライなし。`await expect(...).toBeVisible()` の後、`expect(async () => { ... }).toPass()` または `expect.poll` で evaluate。
+5. **スクリーンショット** — 要素単位の `toHaveScreenshot`（[Visual comparisons](https://playwright.dev/docs/test-snapshots)）。全体スクショは最終手段。`animations: 'disabled'` · `mask` · `maxDiffPixelRatio` を検討。
+
+```typescript
+// 2要素（契約属性があるとき）
+const labelBox = await page.locator('[data-edge-label-branch="yes"]').boundingBox();
+expect(labelBox).not.toBeNull();
+// edgeBox も同様 · labelBox!.left >= edgeBox!.right + MIN_GAP_PX
+
+// 複数 path（flowchart 例 — canonical: flowchart-web-reactflow/e2e/edge-label-placement.spec.ts）
+await expect(async () => {
+  const result = await page.evaluate(() => {
+    const label = document.querySelector('[data-edge-label-branch="yes"]');
+    if (!label) return { ok: false as const, reason: "no-yes-label" };
+    const lb = label.getBoundingClientRect();
+    let matchedVertical = false;
+    for (const path of document.querySelectorAll(
+      ".react-flow__edge path.react-flow__edge-path",
+    )) {
+      const pb = path.getBoundingClientRect();
+      if (pb.height <= pb.width * 3 || pb.width >= 14) continue;
+      if (lb.bottom <= pb.top + 2 || lb.top >= pb.bottom - 2) continue;
+      matchedVertical = true;
+      if (lb.left < pb.right + 2) {
+        return { ok: false as const, reason: "yes-left-of-vertical-gap" };
+      }
+    }
+    if (!matchedVertical) {
+      return { ok: false as const, reason: "no-vertical-edge-aligned-with-yes" };
+    }
+    return { ok: true as const };
+  });
+  expect(result.ok, JSON.stringify(result)).toBe(true);
+}).toPass({ timeout: 10_000 });
+```
+
+→ React Flow の表駆動 E2E ゲート: [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §6
+
+### 12-4. プロジェクト配置
+
+| リポジトリ | テスト置き場 | 起動例 |
+|------------|--------------|--------|
+| `c:/yk-tool/playwright-test/` | `tests/*.spec.ts` | `cd ...; npx playwright test` |
+| `flowchart-web-reactflow` | `e2e/*.spec.ts` | `npm run test:e2e` · ラベルのみ `npm run test:e2e:labels` · E2E は **:3001** + `AUTH_DISABLED=1`（日常 dev :3000 と別）· [`docs/LOCAL_DEV.md`](../../../yk-tool/flowchart-web-reactflow/docs/LOCAL_DEV.md) |
+| その他 Next アプリ | `e2e/*.spec.ts` | 各 `docs/LOCAL_DEV.md` |
+
+**エージェント:** Shell は [`AGENT_SHELL_RULES.md`](../60_tooling/AGENT_SHELL_RULES.md) §3-2（test / E2E / 確認して の明示、**または** UI 修正で spec を追加した同一ターン）。Cursor からは `required_permissions: ["all"]`。
+
+### 12-5. 実装時チェックリスト
+
+- [ ] 再現手順（サンプル読込・再生成など）を spec に含めた
+- [ ] 幾何 assert の前に web-first で準備完了（文言・件数・契約属性の visible）
+- [ ] 認証が要るアプリは `AUTH_DISABLED` / `storageState` を config で明示した
+- [ ] Trace が**実際に残る**設定（`on-first-retry` は **`retries >= 1` が前提**。`retries: 0` なら `retain-on-failure` または `trace: 'on'`）
+- [ ] ユーザーへの依頼は「spec を直して green にする」に寄せ、スクショ依頼は最終手段
+
+### 12-6. flowchart-web — レイアウト E2E の落とし穴（2026-05）
+
+| 落とし穴 | 対策 |
+|----------|------|
+| **サンプル読込だけ E2E** し、**モジュール選択**を試さない | 実利用は左ナビのモジュール復元が多い → spec に **モジュールクリック → 生成完了 → halo** を含める（`REACTFLOW_RULES` §5.6-4） |
+| コード修正後 **`:3000` の dev だけ**見る | E2E は `build` + `:3001` `next start`。手元確認は dev 再起動 + ハードリロード |
+| `edge.label` 残存で白 pill が線上に見える | `toReactFlow` は `data.edgeLabel` のみ · `.react-flow__edge-text` が 0 件であることを assert |
+| 幾何のみ pass で **halo スタイル未検証** | `[data-edge-label-branch]` が `bg-transparent` かを併用 |
+
+→ 実装 SSOT: [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-4

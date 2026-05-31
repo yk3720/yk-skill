@@ -28,6 +28,7 @@
 | [Secrets](#読む順序資格情報トークンを扱うとき) | トークン · `.env` |
 | [GAS / Playwright / HTML](#読む順序gas--playwright--大容量-html) | No 51–54 |
 | [個人アプリ · 企画 · 再開](#読む順序個人アプリ新規企画フォルダ再開) | No 17 · handoffs · AGENTS.md |
+| [ビジュアル共通](#読む順序ビジュアル線の太さ統一) | No 19 · 線の太さ · always |
 
 ---
 
@@ -199,7 +200,7 @@
 ## 読む順序（GAS / Playwright / 大容量 HTML）
 
 1. [RULE_INDEX — カタログ](RULE_INDEX.md#番号付きカタログssot) で該当 No を特定
-2. **GAS** → No 51 · **E2E** → No 53（GAS は `networkidle`、Sheets は `load` — PLAYWRIGHT 参照）
+2. **GAS** → No 51 · **E2E / UI レイアウト** → No 53 **§12** → スキル `using-playwright`（GAS/Sheets 詳細は §1–11 · iframe は `networkidle` 禁止）
 3. **大容量 HTML 編集** → No 54（Python 文字列処理が安定する場合は `40_python` も可）
 
 ---
@@ -215,6 +216,14 @@
 7. **引き継ぎ終了** — スキル `handoff-session-work`（本 rule に手順全文は載せない）
 
 **実例:** flowchart-web → [AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md) · [handoffs/flowchart-web](c:/yk-memo/handoffs/flowchart-web/HANDOFF.md)
+
+---
+
+## 読む順序（ビジュアル · 線の太さ統一）
+
+1. **常時** — L0 `visual-design-yk.mdc`（`alwaysApply`）の要約で足りることが多い
+2. **UI · 図の枠・ストロークを実装/変更するとき** — L1 [`10_meta/VISUAL_DESIGN_RULES.md`](10_meta/VISUAL_DESIGN_RULES.md) §2
+3. **ドメイン拡張** — flowchart: REACTFLOW §5.6-3 · `flowColors.ts` / GAS・surge chip: `GAS_REPORT_DESIGN_RULES.md`（横断 §2 を参照）
 
 ---
 

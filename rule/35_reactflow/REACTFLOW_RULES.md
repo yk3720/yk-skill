@@ -295,8 +295,25 @@ validateTable(table)
 |------|------|
 | レイアウト寸法 | `DEFAULT_LAYOUT`（`types.ts`）— サイズ preset なし |
 | 矢印・ラベル色 | `flowColors.ts` — テーマ切替なし |
+| ノード枠の太さ・色 | `FLOW_NODE_FRAME_WIDTH` / `FLOW_NODE_DIAMOND_STROKE_WIDTH`（**2px** · 菱形は `miter`）· [`VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) §2 |
+| Yes/No ラベル | `edgeLabelPlacement.ts` — **halo**（透明＋白縁文字）· 線の右 `FLOW_EDGE_LABEL_GAP`（`edge.data.branch` + `direction`） |
 
-#### 5.6-4 警告（`validationMeta.ts`）
+#### 5.6-4 プレビュー edges の鮮度（落とし穴 · 2026-05）
+
+| 禁止 | 理由 |
+|------|------|
+| **保存済み `snapshot.edges` を `toReactFlow` なしでそのまま表示** | 旧形式（`edge.label` + 白 pill・線上）が残る。モジュール選択時に再発しやすい |
+| **`toReactFlow` で `edge.label` / `labelBgStyle` を付与** | `BaseEdge` が SVG ラベルを二重描画する。文言は **`data.edgeLabel` のみ** · `labelShowBg={false}` |
+
+| 必須 | 実装 |
+|------|------|
+| 表からの再生成後だけ edges を state に載せる | `runGenerate` → `toReactFlow` |
+| モジュール復元時 | `initialSnapshot` 読込後に **`runGenerate(committedJson \|\| jsonText)`**（`FlowchartEditor`） |
+| 古い snapshot 互換 | `LabeledEdge` で `edgeLabel` + Yes/No から `branch` / `direction` を推定 |
+
+**確認:** サンプル読込だけでなく **モジュール選択中**（左ナビ）でも Yes/No が halo・線の右であること。E2E は `e2e/edge-label-placement.spec.ts`（§6）。No の縦脚幾何はエルボー形状のため **halo スタイル**を優先し、Yes の縦線右オフセットを幾何 assert の代表とする。
+
+#### 5.6-5 警告（`validationMeta.ts`）
 
 | 種別 | 挙動 |
 |------|------|
@@ -316,9 +333,9 @@ validateTable(table)
 |--------|----------------|
 | ユニット | `npm run test`（`lib/flowchart/*.test.ts`） |
 | 型・ビルド | `npm run build` |
-| E2E | `npm run test:e2e`（Playwright — [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md)） |
+| E2E | `npm run build` のあと `npm run test:e2e`（`:3001`）· レイアウトのみ `test:e2e:labels` — [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md) **§12** |
 
-**Shell:** `AGENT_SHELL_RULES` — ユーザーが当ターンで `test` / `build` を明示したときのみ実行。
+**Shell:** `AGENT_SHELL_RULES` — `test` / `build` 明示、または E2E spec 追加の完了判定ターン。
 
 **Shell 禁止ターンの代替:** 触った `lib/flowchart` の既存 `*.test.ts` を Read し、変更がテスト対象と整合するかを 1 行で記載。ビルドは未実行と明記。
 
