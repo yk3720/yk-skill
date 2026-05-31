@@ -92,14 +92,44 @@ public.flow_documents (
 )
 ```
 
-**マイグレーション正本:** `c:/yk-tool/flowchart-web-reactflow/supabase/migrations/`
+**マイグレーション正本:** `c:/yk-tool/flowchart-web-reactflow/supabase/migrations/`  
+**DB-2 適用手順（Dashboard）:** `c:/yk-tool/flowchart-web-reactflow/docs/DB2_MIGRATION_RUNBOOK.md`
 
 | ファイル | 内容 |
 |----------|------|
-| `001_db1_schema.sql` | テーブル・RLS 初期 |
+| `001_db1_schema.sql` | テーブル · RLS 初期 |
 | `002_fix_profiles_role_protection.sql` | profiles の role 自己昇格防止（column-level GRANT） |
+| `003_db2_schema.sql` | 装置 4 表 + RLS（DELETE ポリシーなし） |
+| `004_flow_documents_module_fk.sql` | デモ seed · `module_id` text→uuid · `admin_delete_equipment()` |
+| `verify_db2.sql` | 適用後検証（読取のみ） |
 
----
+**DB-2 適用（MUST）**
+
+- **順序:** 003 → 004（dev のみ · 本番は別途）
+- **手段:** Supabase Dashboard SQL Editor（全文貼付 · Run）。004 は破壊的警告あり
+- **004 前:** `flow_documents` の text `module_id` を確認 — `spike%` 削除 · `supply-feed` と `press-01:supply-feed` の重複解消（Runbook §2.3–2.4）
+- **004 後:** `flow_documents.module_id` が **uuid** であること。アプリ uuid 化は **別タスク**
+- **失敗時:** トランザクション全体がロールバックされることが多い — 列確認してから再 Run。004 を部分実行した状態では **004 全文の再 Run 禁止**（Runbook 参照）
+
+**DB-1 スキーマ（004 適用前 · 参考）**
+
+```sql
+-- フローチャート保存（DB-1）
+public.flow_documents (
+  module_id  text        primary key,
+  ...
+)
+```
+
+**DB-2 スキーマ（004 適用後 · 参考）**
+
+```sql
+public.flow_documents (
+  module_id  uuid        primary key references public.modules(id),
+  ...
+)
+-- 装置: equipment_codes → devices → units → modules
+```
 
 ## 3. RLS ポリシー — 落とし穴と正しいパターン
 

@@ -6,7 +6,31 @@
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-web 企画 + AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md)
 
-**最終更新:** 2026-05-24
+**最終更新:** 2026-05-31
+
+---
+
+## 13. 企画ドキュメント種別（経緯 · 合意 · 2026-05-31）
+
+**実例:** [flowchart-web decision-log](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/decision-log.md)
+
+| 種別 | パターン | 正本 | 載せる内容 |
+|------|----------|------|------------|
+| **経緯索引** | `04_decisions/decision-log.md` | 企画 | タイムライン · リンク · 1 行要約のみ（本文コピー禁止） |
+| **ADR** | `04_decisions/意思決定記録(ADR).md` または `ADR-NNN-*.md` | 企画 | Accepted 技術・プロダクト決定 |
+| **grill-me** | `01_product/grill-me_{YYYY-MM-DD}_{論題}.md` | 企画 | 対話 Q&A · 未決 · 優先順位（`相談_*` は同義 · 新規は `grill-me_` 推奨） |
+| **調査** | `01_product/調査_{テーマ}.md` | 企画 | 調査結果 · 比較（決定前） |
+| **計画** | `01_product/計画_{YYYY-MM-DD}_{論題}.md` | 企画 | 相談→実装の分解 · §4 候補 |
+| **セッション** | `handoffs/{slug}/*.md` | handoffs | §4 = 次の 1 件 · 作業記録 |
+
+**昇格ルール（MUST）**
+
+1. grill-me で **Accepted** → ADR + decision-log 1 行  
+2. grill-me で **未決** → grill-me §4 のみ（ADR に書かない）  
+3. セッション終了 → decision-log 1 行 · handoff §1 要約（ADR 全文コピー禁止）  
+4. **戦略 vs 戦術** — 方針合意（grill-me）と §4 実行タスクがズレても正常。decision-log で両方リンクする  
+
+**報告用:** 最終報告は `00_theme/報告書_*`（将来）← decision-log から要約転記。詳細は ADR · grill-me · handoffs へ委譲。
 
 ---
 
@@ -106,7 +130,7 @@ AGENTS.md → コード（yk-tool 等）
 ├── 01_product/            # 概要 · MVP · 完成定義 · アクティブ UX 調査
 ├── 02_spec/               # データモデル · 画面 · 技術方針 · 列の意味
 ├── 03_plan/               # フェーズ計画
-├── 04_decisions/          # ADR
+├── 04_decisions/          # ADR · decision-log（経緯索引）
 └── 99_archive/
     ├── research/          # 立ち上げ期調査（再開時は読まない）
     └── evidence/          # 手動確認スナップショット
@@ -117,7 +141,7 @@ AGENTS.md → コード（yk-tool 等）
 **移行:** フラット 18 ファイル → 上記へ。実例: [flowchart-web 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/)。
 
 **読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → `AGENTS.md`（ルート）。  
-**読む順序（仕様疑問時）:** `02_spec/データモデル.md` · `04_decisions/ADR` · `01_product/完成チェックリスト.md`。
+**読む順序（仕様疑問時）:** `02_spec/データモデル.md` · `04_decisions/ADR` · `04_decisions/decision-log.md`（経緯） · `01_product/完成チェックリスト.md`。
 
 ---
 
@@ -195,8 +219,9 @@ AGENTS.md → コード（yk-tool 等）
 | 企画 | `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/` |
 | handoffs | `c:/yk-memo/handoffs/flowchart-web/HANDOFF.md` |
 | コード | `c:/yk-tool/flowchart-web-reactflow/` · `flowchart-web-mermaid/` |
-| §4（当時） | M003 両アプリ目視比較 |
-| スタック | No 35 REACTFLOW · No 31 NEXTJS · No 32 SHADCN |
+| 経緯索引 | `04_decisions/decision-log.md` |
+| §4（2026-05-31 時点） | DB-2 dev 003+004 適用済 · 次: アプリ uuid 化 |
+| スタック | No 35 REACTFLOW · No 31 NEXTJS · No 37 SUPABASE |
 
 Phase 1 整理（handoffs 一本化 · AGENTS 新設）完了後に本 rule を起草。
 
