@@ -38,7 +38,7 @@
 | 10b | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
-| 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了・再開・確認・整理 |
+| 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了（commit+push 含む）・再開・確認・整理 |
 | 14 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
 | 15 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
 | 16 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | push / GitHub PR（明示のみ） |

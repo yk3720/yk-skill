@@ -2,11 +2,11 @@
 name: handoff-session-work
 description: >
   yk-memo/handoffs のセッション引き継ぎ（終了・再開・確認・整理）。
-  終了: 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」— **整理→archive を先に必須**、その後に新規セッション MD
+  終了: 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」— **整理→archive 先（必須）** → 新規セッション MD → **commit+push（Phase C · 子スキル委譲）**
   再開: 「続きから」「引き継ぎを読んで」「@...SESSION...md」— §4の1件のみ実行
   確認: 「引き継ぎ内容を確認」「handoffsを確認」「引き継ぎの状態を教えて」— Tier-0 索引→指定時 Tier-1 詳細・実行しない
   整理: 「引き継ぎ整理」「handoffsを整理」「引き継ぎをarchive」「archiveして」（handoffs/引き継ぎの文脈）
-  Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit（→ committing-with-git-yk）。
+  Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit/push のみ（→ committing-with-git-yk / pushing-and-pr-yk）。
 ---
 
 # Session Handoff
@@ -19,7 +19,7 @@ description: >
 
 | モード | 発火例 | 副作用 |
 |--------|--------|--------|
-| **終了** | 引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了 | **整理→archive 先（必須）** · 新規セッション MD · HANDOFF 更新 |
+| **終了** | 引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了 | **整理→archive 先（必須）** · 新規セッション MD · HANDOFF 更新 · **commit+push（Phase C）** |
 | **再開** | 続きから · 引き継ぎを読んで · `@...md` | §4 の **1 件だけ**実行 |
 | **確認** | 引き継ぎ内容を確認 · handoffs を確認 · 一覧 · 状態を教えて | **Tier-0 索引**（全体）/ **Tier-1 詳細**（プロジェクト指定）· Read のみ |
 | **整理** | 整理して · archive して · 片付けて | 移動 · 削除 · README 更新（新規セッション MD は不要なら Write しない） |
@@ -35,8 +35,10 @@ description: >
 | 配置・命名・終了ゲート・アーカイブ | [references/routing.md](references/routing.md) |
 | セッション MD 見出し | [references/template.md](references/template.md) |
 | 確認モードのチェックリスト | [references/folder-audit.md](references/folder-audit.md) |
-| Git | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
-| commit | `committing-with-git-yk`（ユーザー明示まで本スキルは commit しない） |
+| Git 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
+| 終了時 commit | `committing-with-git-yk`（**終了モード Phase C** で Read して実行） |
+| 終了時 push | `pushing-and-pr-yk`（**終了モード Phase C** · push のみ） |
+| Phase C 手順 | [references/git-save.md](references/git-save.md) |
 | スキル台帳更新 | `managing-skills-yk`（本スキルとは別） |
 
 ## 使わない場面
@@ -46,7 +48,8 @@ description: >
 | `RULE_IMPROVEMENT_HANDOFF.md` の更新だけ | そのファイルの手順（本スキル非使用） |
 | rule 構造の P1〜P7 バックログ | 同上 · 別トラック |
 | 122KB 級の単一 HANDOFF を毎回上書き | 禁止 — セッション MD を新規 Write |
-| ユーザーが **コミットして** と明示 | `committing-with-git-yk` |
+| **コミットして** / **push して** のみ（引き継ぎ終了なし） | `committing-with-git-yk` / `pushing-and-pr-yk` |
+| 引き継ぎ終了で **PR まで** | 終了モード完了後に PR 明示、または `pushing-and-pr-yk` |
 
 ---
 
@@ -75,9 +78,17 @@ description: >
 12. 触った各 Git ルートで `git status` → セッション MD §2 に記載
 13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
 14. `handoffs/README.md` の当該 slug **1 行**を更新（状態 · 最新ファイル · ルート MD 本数 · 次の 1 手）— [routing.md §横断索引](references/routing.md)
-15. ユーザーに保存パスと再開用 `@` 依頼文を提示
 
-**禁止:** Phase A 前の新規 Write · `git commit` / `git push` · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
+### Phase C — Git 保存（記録のあと · 必須）
+
+[routing.md §引き継ぎ終了](references/routing.md) · [git-save.md](references/git-save.md) に従う。
+
+16. **`committing-with-git-yk` を Read** — 触った各 Git ルートで子スキル手順どおり commit（終了依頼 = 当ターンの commit 明示）
+17. **`pushing-and-pr-yk` を Read** — commit 済みルートを push（**PR は含めない**）
+18. セッション MD の先頭表 `commit` 行と §2 を **Post-C** で更新（hash · push 結果）
+19. ユーザーに保存パス · 再開用 `@` 依頼文 · **リポごとの commit / push 結果**を提示
+
+**禁止:** Phase A 前の新規 Write · Phase B 前の `git commit` / `git push` · 確認/整理モードでの commit/push · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
 
 ---
 
@@ -120,7 +131,7 @@ description: >
 5. **superseded の archive** — 「整理して」単独依頼時はここで実行。**終了**では Phase A で必ず先に実施済み（終了モードで Phase A を飛ばした漏れも救済）
 6. HANDOFF · `{project}/README.md` · 触った場合は `handoffs/README.md` 当該行を更新 · 実施一覧を報告（セッション MD を新規した場合は §1-3 にも記録）
 
-**禁止:** ユーザーの明示なしに `git commit` · 最新セッション MD の削除
+**禁止:** `git commit` / `git push`（整理モード）· 最新セッション MD の削除
 
 ---
 

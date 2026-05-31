@@ -82,7 +82,7 @@
 ユーザーが **当ターンで明示**したときのみ:
 
 - `commit` / `push` / PR 作成 / テスト実行
-- 引き継ぎ **終了**（触った Git ルートの `git status` のみ）
+- 引き継ぎ **終了**（Phase B: `git status` · Phase C: `committing-with-git-yk` / `pushing-and-pr-yk` どおり add/commit/push）
 - clone · `npm install` 等、実行が必須の作業
 
 ### 3-3. 1 RUN にまとめる
@@ -113,7 +113,7 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 | ID | タスク | Shell |
 |----|--------|-------|
 | **D-1** | 引き継ぎ **確認**（`handoff-session-work` 確認モード） | **禁止** — Glob + Read のみ |
-| **D-2** | 引き継ぎ **終了** | 触ったルートの `git status` のみ（1 本にまとめてよい） |
+| **D-2** | 引き継ぎ **終了** | Phase B: 触ったルートの `git status`（1 本 `;` 連結可）· Phase C: commit/push（子スキル · 初回 `all`） |
 | **D-3** | **commit**（`committing-with-git-yk`） | 可 — 調査は §3-3、commit は Write + `-F`、初回 `all` |
 | **D-4** | Playwright（`using-playwright`） | 可 — スキルどおり `all` |
 

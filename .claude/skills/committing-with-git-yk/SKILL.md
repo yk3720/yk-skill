@@ -2,8 +2,9 @@
 name: committing-with-git-yk
 description: >
   YK ワークスペース向け git commit。ユーザーが「コミットして」「commit して」
-  「日本語でコミット」と明示したときのみ。マルチリポ判定・日本語メッセージ草案・
-  secrets ゲート。push は別依頼。引き継ぎ保存・セッション終了では使わない。
+  「日本語でコミット」と明示したとき、または handoff-session-work 終了モード Phase C。
+  マルチリポ判定・日本語メッセージ草案・secrets ゲート。push は pushing-and-pr-yk。
+  引き継ぎ確認・整理では使わない。
 disable-model-invocation: true
 ---
 
@@ -32,16 +33,19 @@ disable-model-invocation: true
 
 | 依頼 | 正しい扱い |
 |------|------------|
-| 引き継ぎ · セッション終了 · 作業を保存 · 引き継ぎ内容を確認 · 整理して | `handoff-session-work`（**commit 禁止**） |
-| push · PR 作成 | `pushing-and-pr-yk`（当ターンで明示時のみ） |
+| 引き継ぎ **終了**（引き継ぎして等） | `handoff-session-work` が Phase C で **本スキルを Read して実行** |
+| 引き継ぎ **確認** · **整理** · handoffs 俯瞰 | `handoff-session-work`（**commit 禁止**） |
+| push · PR 作成 | `pushing-and-pr-yk`（当ターンで明示、または引き継ぎ終了 Phase C の push） |
 | `5.Python` の rev 上書き | `revision-protection` — 既存 `*revNNN*` の内容変更は中止 |
 
 ## 開始ゲート（すべて満たすまで実行しない）
 
 1. **Agent モード**（書き込み・シェル実行可）
-2. ユーザー発話に **commit 意図**がある（例: コミットして / commit して / 日本語でコミット）
-3. HANDOFF の「次は commit」**だけ**では不十分 — 当ターンの明示が必要
+2. 次のいずれか — **commit 意図**（コミットして / commit して / 日本語でコミット）**または** `handoff-session-work` **終了モード Phase C** の実行中
+3. HANDOFF の「次は commit」**だけ**では不十分（終了依頼・当ターンの commit 明示のいずれかが必要）
 4. 対象リポが特定できる（不明なら [repo-routing.md](references/repo-routing.md) に従い確認）
+
+**引き継ぎ終了から呼ばれたとき:** メッセージ草案はセッション MD §1 を材料にする。同ターン内に修正指示がなければ add / commit へ進む（[handoff-session-work/references/git-save.md](../handoff-session-work/references/git-save.md)）。
 
 ## やらないこと
 

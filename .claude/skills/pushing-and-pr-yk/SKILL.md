@@ -1,8 +1,8 @@
 ---
 name: pushing-and-pr-yk
 description: >
-  YK 向け git push と GitHub PR 作成。ユーザーが「push して」「プッシュして」「PRを作って」「プルリクを出して」と当ターンで明示したときのみ。
-  commit は別スキル（committing-with-git-yk）。引き継ぎ終了では使わない。
+  YK 向け git push と GitHub PR 作成。ユーザーが「push して」「プッシュして」「PRを作って」「プルリクを出して」と明示したとき、または handoff-session-work 終了モード Phase C（push のみ）。
+  commit は committing-with-git-yk。引き継ぎ確認・整理では使わない。
   Do NOT use for コミットしてのみ、force push to main/master（警告して中止）、git config 変更、未コミットのまま push 提案のみ。
 disable-model-invocation: true
 ---
@@ -36,14 +36,15 @@ disable-model-invocation: true
 | 依頼 | 正しい扱い |
 |------|------------|
 | コミットして · commit して | `committing-with-git-yk` |
-| 引き継ぎ · セッション終了 · handoffs 確認 | `handoff-session-work`（**push/PR 禁止**） |
+| 引き継ぎ **終了**（引き継ぎして等） | `handoff-session-work` Phase C が **push モードで本スキルを Read して実行**（PR は含めない） |
+| 引き継ぎ **確認** · **整理** | `handoff-session-work`（**push/PR 禁止**） |
 | コードレビューのみ | `reviewing-code-yk` |
 
 ## 開始ゲート（すべて満たすまで実行しない）
 
 1. **Agent モード**
-2. ユーザー発話に **push または PR 意図**がある
-3. HANDOFF の「次は push」**だけ**では不十分 — 当ターンの明示が必要
+2. 次のいずれか — **push または PR 意図**（push して / PR を作って 等）**または** `handoff-session-work` **終了モード Phase C**（**push のみ** · PR はユーザーが別途明示したとき）
+3. HANDOFF の「次は push」**だけ**では不十分（終了依頼・当ターンの push/PR 明示のいずれかが必要）
 4. 対象リポが特定できる → [../committing-with-git-yk/references/repo-routing.md](../committing-with-git-yk/references/repo-routing.md)
 
 ## やらないこと
