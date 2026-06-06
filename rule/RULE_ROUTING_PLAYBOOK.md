@@ -200,7 +200,7 @@
 ## 読む順序（GAS / Playwright / 大容量 HTML）
 
 1. [RULE_INDEX — カタログ](RULE_INDEX.md#番号付きカタログssot) で該当 No を特定
-2. **GAS** → No 51 · **E2E / UI レイアウト** → No 53 **§12** → スキル `using-playwright`（GAS/Sheets 詳細は §1–11 · iframe は `networkidle` 禁止）
+2. **GAS** → No 51 · **E2E 設計** → No 53 **§13** → `designing-playwright-tests-yk` · **E2E / UI レイアウト実行** → No 53 **§12** → `using-playwright`（GAS/Sheets 詳細は §1–11 · iframe は `networkidle` 禁止）
 3. **大容量 HTML 編集** → No 54（Python 文字列処理が安定する場合は `40_python` も可）
 
 ---

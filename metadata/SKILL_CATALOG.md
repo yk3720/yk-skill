@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-05-24（`creating-proposalmap-yk` 新設）  
+**最終更新:** 2026-06-06（`designing-playwright-tests-yk` 新設）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **25** · nested **2** · sample **1**（計 **28** `SKILL.md`）
+**件数:** L1 **26** · nested **2** · sample **1**（計 **29** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -34,6 +34,7 @@
 | 8 | creating-shadcn-yk | `.claude/skills/creating-shadcn-yk/SKILL.md` | L1 | — | no | shadcn init/add |
 | 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
+| 9b | designing-playwright-tests-yk | `.claude/skills/designing-playwright-tests-yk/SKILL.md` | L1 | — | no | E2E 設計 · `PLAYWRIGHT_RULES` §13 |
 | 10 | creating-proposalmap-yk | `.claude/skills/creating-proposalmap-yk/SKILL.md` | L1 | — | no | 社内提案図解 proposalmap · surge |
 | 10b | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
@@ -47,7 +48,7 @@
 | 19 | reviewing-code-yk | `.claude/skills/reviewing-code-yk/SKILL.md` | L1 | — | no | 単一パスコードレビュー（差分・PR 前） |
 | 20 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
 | 21 | routing-diagram-yk | `.claude/skills/routing-diagram-yk/SKILL.md` | L1 | — | no | 図解形式の受付・質問・委譲（HTML は作らない） |
-| 22 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright / E2E |
+| 22 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright spec 執筆 · 実行 |
 | 23 | creating-pythoncode-yk | `.claude/skills/creating-pythoncode-yk/SKILL.md` | L1 | — | no | `paths: **/*.py` · PYTHON_RULES |
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 | 25 | starting-app-project-yk | `.claude/skills/starting-app-project-yk/SKILL.md` | L1 | — | no | 個人アプリ企画 · handoffs 一本化 · AGENTS.md |
@@ -61,6 +62,7 @@
 | `creating-visual-explainers`（L1）↔ `creating-visual-explainers-fb`（nested） | Phase B1/B2 完了（`name` · フォルダ名一致）。方針: [`2026-05-23_6_visual-explainers-dedup-policy.md`](../../yk-memo/handoffs/workspace-layout/archive/2026/2026-05-23_6_visual-explainers-dedup-policy.md) |
 | `re-explaining-in-chat-yk` ↔ 図解3種 | チャット再説明のみ。図解 HTML は routing-diagram-yk → 各実行スキル |
 | `routing-diagram-yk` ↔ 図解4種 | 形式未指定の受付。実行は curiosity / techmap / visual / fb に委譲 |
+| `designing-playwright-tests-yk` ↔ `using-playwright` | E2E 設計（§13） vs spec 執筆・実行（§12）。description の Do NOT で分離 |
 | `reviewing-code-yk` ↔ `reviewing-with-subagents` | 単一パスコードレビュー vs 多視点並列。description の Do NOT で分離 |
 | `committing-with-git-yk` ↔ `pushing-and-pr-yk` | commit vs push/PR · いずれも `explicit_only`（`disable-model-invocation`） |
 | `creating-react-yk` ↔ `creating-reactflow-yk` | React 一般 vs 表駆動 `@xyflow/react`。description の Do NOT で分離 |

@@ -296,6 +296,7 @@ validateTable(table)
 | レイアウト寸法 | `DEFAULT_LAYOUT`（`types.ts`）— サイズ preset なし |
 | 矢印・ラベル色 | `flowColors.ts` — テーマ切替なし |
 | ノード枠の太さ・色 | `FLOW_NODE_FRAME_WIDTH` / `FLOW_NODE_DIAMOND_STROKE_WIDTH`（**2px** · 菱形は `miter`）· [`VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) §2 |
+| **斜め図形（入出力・手動入力）** | `FlowShapeNode` — **SVG `polygon` stroke**（菱形と同様）。**`clip-path` + CSS border は禁止**（角が途切れる） |
 | Yes/No ラベル | `edgeLabelPlacement.ts` — **halo**（透明＋白縁文字）· 線の右 `FLOW_EDGE_LABEL_GAP`（`edge.data.branch` + `direction`） |
 
 #### 5.6-4 プレビュー edges の鮮度（落とし穴 · 2026-05）
@@ -327,11 +328,22 @@ validateTable(table)
 
 | 項目 | SSOT |
 |------|------|
-| **自動機フローの使い分け** | 企画 `02_spec/フローチャート記述ルール.md`（図形5種 · 色4種 · 二重コーディング） |
-| **列ヘルプ（表 UI ?）** | `tableColumns.ts` — `SHAPE_TYPE_COLUMN_HELP` · `COLOR_COLUMN_HELP` |
+| **作者向け記述（図形 · 色 · ループ）** | 企画 `02_spec/フローチャート記述ルール.md`（§4 ループ · 図形5種 · 色4種） |
+| **列ヘルプ（表 UI ?）** | `tableColumns.ts` — `SHAPE_TYPE_COLUMN_HELP` · `COLOR_COLUMN_HELP` · `CONNECT_RIGHT_HELP` |
 | **プレビュー凡例** | `flowColors.ts` — `COLOR_HINT_LEGEND_ITEMS`（`FlowColorLegend`） |
 
 - **図形・色の種類追加**は同 SSOT §1 の結論に従う（当面は維持 · 将来候補=サブルーチン記号）。
+
+#### 5.6-7 図形描画 · ループ配線（2026-06）
+
+| 項目 | SSOT · 方針 |
+|------|-------------|
+| **菱形** | SVG `polygon` · `FLOW_NODE_DIAMOND_STROKE_WIDTH` |
+| **入出力（平行四辺形）· 手動入力（台形）** | 同上 — `SlantedPolygonShape` · **`globals.css` の clip-path 禁止** |
+| **ループエッジ** | `buildEdges.ts` — 戻り先 `rowIndex < source` で `isLoop` · `route: elbow` |
+| **表の書き方（作者）** | 企画 `02_spec/フローチャート記述ルール.md` **§4**（No → 右列1行 → 接続先(下) で戻す） |
+| **列ヘルプ** | `tableColumns.ts` — `CONNECT_RIGHT_HELP` |
+| **E2E** | `e2e/curry-loop.spec.ts`（ループ矢印 · 斜め図形 SVG）· `fixtures/sample-curry.json` |
 
 ---
 

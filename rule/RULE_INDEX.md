@@ -48,7 +48,7 @@
 | workspace-ui-kit | 21 | `20_web_workspace/WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | `yk-tool/workspace-ui-kit` · `workspace-dev-entry` |
 | `/diagram-manager` | 22 | `DIAGRAM_MANAGER_WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | 同上 |
 | GAS Web アプリ | 51 | `50_gas_html_test/GAS_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
-| Playwright E2E | 53 | `50_gas_html_test/PLAYWRIGHT_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | `playwright-agent-yk`（always）· `using-playwright` |
+| Playwright E2E | 53 | `50_gas_html_test/PLAYWRIGHT_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | `playwright-agent-yk`（always）· `designing-playwright-tests-yk`（§13 設計）· `using-playwright`（実行） |
 | surge 図解 · GAS レポート HTML（chip） | 52 | `GAS_REPORT_DESIGN_RULES.md` | [ui-kit デザイン](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | — |
 | 大容量 HTML + PowerShell | 54 | `POWERSHELL_HTML_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
 | スキル MD 作成・更新 | 12 | `SKILL_AUTHORING_RULES.md` | — | — |
@@ -69,7 +69,7 @@
 | 汎用 React / Hooks · `components/**`（flowchart 外） | No **36** · `creating-react-yk` | No 35 のみで代替 |
 | `.mmd` 執筆 · diagram-as-code | No **45** · `creating-mermaid-yk` | No 35 のプレビュー手順で `.mmd` 執筆を代替 |
 | flowchart · 表 → Mermaid **プレビュー** | No **35** · `creating-reactflow-yk` | **`creating-mermaid-yk`** |
-| UI レイアウト・重なり · E2E spec | No **53** §12 · `using-playwright` | 手動スクショ反復 · 単体ロジックのみ Vitest で足りるのに E2E のみ |
+| UI レイアウト・重なり · E2E spec | No **53** §12 · `using-playwright` | 手動スクショ反復 · 単体ロジックのみ Vitest で足りるのに E2E のみ · spec 前設計なし（→ §13 · `designing-playwright-tests-yk`） |
 | shadcn init / add | No **32** · `creating-shadcn-yk` | surge · `lib/flowchart/` · ui-kit 既存への `init -b radix` |
 | Vercel / Neon **デプロイ** | No **34** · `creating-vercel-yk` | surge ホスト · FB 初回のみで vercel スキル完結 · 未明示 `--prod` |
 | ui-kit の Next / shadcn UI | SHADCN · TAILWIND · WORKSPACE | **GAS_REPORT_DESIGN**（静的 HTML chip は No 52） |
