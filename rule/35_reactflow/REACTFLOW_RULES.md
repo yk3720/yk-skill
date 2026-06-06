@@ -323,6 +323,16 @@ validateTable(table)
 - バナー説明 SSOT: `WARNING_BANNER_HINT`（「図はこのまま生成されます…」）。
 - 文言は **列名**（接続先(下) 等）と **直し方** をセット。判断ノードは Yes=下 · No=右 を案内してよい。
 
+#### 5.6-6 作者向け記述（図形 · 色）
+
+| 項目 | SSOT |
+|------|------|
+| **自動機フローの使い分け** | 企画 `02_spec/フローチャート記述ルール.md`（図形5種 · 色4種 · 二重コーディング） |
+| **列ヘルプ（表 UI ?）** | `tableColumns.ts` — `SHAPE_TYPE_COLUMN_HELP` · `COLOR_COLUMN_HELP` |
+| **プレビュー凡例** | `flowColors.ts` — `COLOR_HINT_LEGEND_ITEMS`（`FlowColorLegend`） |
+
+- **図形・色の種類追加**は同 SSOT §1 の結論に従う（当面は維持 · 将来候補=サブルーチン記号）。
+
 ---
 
 ## 6. 品質ゲート
