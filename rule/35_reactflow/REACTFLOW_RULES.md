@@ -198,7 +198,7 @@ validateTable(table)
 | 状態 | nodes/edges は **`generateFlowchart` → `toReactFlow` 派生**。`useNodesState` + `onConnect` を表更新の主経路にしない |
 | fitView | `<ReactFlow fitView />`（初回）+ 生成後 `fitView({ padding: 0.2, duration: 200 })`（`useEffect` / export 前 imperative · `FlowCanvas.tsx`）。**PNG/SVG 前**は imperative `fitView` → **~300ms 待機**（`FlowchartEditor.tsx`） |
 | 閲覧操作 | **`panOnDrag` · `zoomOnScroll` は許容**（ADR-010）。`Controls showInteractive={false}` |
-| エクスポート | `data-flowchart-export-root` → **`.react-flow__viewport`** を `html-to-image`（`toPng` / `toSvg`）· Controls は `filter` で除外（`exportPng.ts` · `exportSvg.ts`） |
+| エクスポート | `data-flowchart-export-root` → **`.react-flow__viewport`** を `html-to-image`（`toPng` / `toSvg`）· **`exportImageFilter.ts`** で Controls · プレビュー専用 UI（`.flow-node-id` 等）を除外（`exportPng.ts` · `exportSvg.ts`） |
 | 安定参照 | `defaultEdgeOptions` 等も **`useMemo` またはモジュール外**（参照: `FlowCanvas.tsx`） |
 
 **禁止（flowchart-web 系）**
@@ -334,16 +334,18 @@ validateTable(table)
 
 - **図形・色の種類追加**は同 SSOT §1 の結論に従う（当面は維持 · 将来候補=サブルーチン記号）。
 
-#### 5.6-7 図形描画 · ループ配線（2026-06）
+#### 5.6-7 図形描画 · エッジ配線（2026-06）
 
 | 項目 | SSOT · 方針 |
 |------|-------------|
 | **菱形** | SVG `polygon` · `FLOW_NODE_DIAMOND_STROKE_WIDTH` |
 | **入出力（平行四辺形）· 手動入力（台形）** | 同上 — `SlantedPolygonShape` · **`globals.css` の clip-path 禁止** |
-| **ループエッジ** | `buildEdges.ts` — 戻り先 `rowIndex < source` で `isLoop` · `route: elbow` |
+| **順方向エッジ（接続先(下)）** | `buildEdges.ts` — `tierDiff > 0`（先が下段）→ `sourceSide=bottom` · `targetSide=top`（合流も top 入口）。**`levelDiff` 単独で left 入口にしない** |
+| **ループエッジ** | 同上 — 戻り先 `rowIndex < source` で `isLoop` · `route: elbow` · 左/右入口 |
+| **プレビュー ID バッジ** | `FlowShapeNode` — 表 ID を左上表示。**PNG/SVG に含めない**（`exportImageFilter` · class `flow-node-id` · §4 エクスポート） |
 | **表の書き方（作者）** | 企画 `02_spec/フローチャート記述ルール.md` **§4**（No → 右列1行 → 接続先(下) で戻す） |
 | **列ヘルプ** | `tableColumns.ts` — `CONNECT_RIGHT_HELP` |
-| **E2E** | `e2e/curry-loop.spec.ts`（ループ矢印 · 斜め図形 SVG）· `fixtures/sample-curry.json` |
+| **E2E** | `e2e/curry-loop.spec.ts`（ループ · 斜め図形 · ID バッジ）· `fixtures/sample-curry.json` · `generate.test.ts`（順方向配線） |
 
 ---
 
