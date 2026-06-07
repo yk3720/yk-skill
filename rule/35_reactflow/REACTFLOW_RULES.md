@@ -284,10 +284,26 @@ validateTable(table)
 |----------|-------------------------------------|
 | **再生成**（主操作 · stale 時は視覚強調） | PNG · SVG |
 | 表を保存 · 表を読込（editor のみ） | オフライン用に保存（モジュール選択時） |
+| | **装置取込 → import.json を取込…**（editor · workspace · `005` RPC 要） |
 | | サンプル表 · 下書き削除（非 workspace） |
 
 - ボタン追加前に **「常時か / その他か」** を決める（§5.5 と併用）。
 - JSON 編集タブは **出さない**（保存形式としての JSON は `document.ts` · 表を保存/読込）。
+
+#### 5.6-2b 装置一括取込（Excel パイプライン · ADR-014 · 2026-06）
+
+| 項目 | 規則 |
+|------|------|
+| **作者入力** | 1 xlsx = 1 装置 · 構成 1 シート + ユニット数フローシート · 動作表は**横並び** · 各動作 = Excel **テーブル** |
+| **正規化 SSOT** | **Python** `flowchart-web-reactflow/tools/excel_normalize/` → `import.json`（Power Query 任意 · VBA 禁止） |
+| **Web 入口** | その他 → **import.json を取込…**（`EditorMoreMenu` · editor · workspace） |
+| **DB** | RPC **`import_equipment_bundle`**（`005_import_equipment_bundle.sql`）— 4 表 + `flow_documents` · 1 トランザクション |
+| **再取込** | upsert のみ · 構成行削除の **prune なし** |
+| **設計 SSOT** | [Excel取込_正規化パイプライン.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/02_spec/Excel取込_正規化パイプライン.md) |
+
+- **Web は入力用 xlsx を読まない**（横並び分割は Python 側）。
+- テーブル名規約 v0.1: **`{ユニット短名}_{動作名}`**（例: `供給_取出`）— ブック全体で一意。
+- dev DB: Runbook `docs/DB2_MIGRATION_RUNBOOK.md` — **004 後に 005**。
 
 #### 5.6-3 見た目の固定（ユーザー向け選択なし）
 
@@ -297,6 +313,7 @@ validateTable(table)
 | 矢印・ラベル色 | `flowColors.ts` — テーマ切替なし |
 | ノード枠の太さ・色 | `FLOW_NODE_FRAME_WIDTH` / `FLOW_NODE_DIAMOND_STROKE_WIDTH`（**2px** · 菱形は `miter`）· [`VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) §2 |
 | **斜め図形（入出力・手動入力）** | `FlowShapeNode` — **SVG `polygon` stroke**（菱形と同様）。**`clip-path` + CSS border は禁止**（角が途切れる） |
+| **10 列表 · 色列** | 最右列「色」— 狭い中央ペインでは**表コンテナ横スクロール**で表示（列自体は省略しない） |
 | Yes/No ラベル | `edgeLabelPlacement.ts` — **halo**（透明＋白縁文字）· 線の右 `FLOW_EDGE_LABEL_GAP`（`edge.data.branch` + `direction`） |
 
 #### 5.6-4 プレビュー edges の鮮度（落とし穴 · 2026-05）
