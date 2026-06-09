@@ -8,7 +8,7 @@
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 23
+rule_count_l1: 24
 
 rules:
   - no: 11
@@ -177,6 +177,13 @@ rules:
     band: 60_tooling
     tags: [agent-shell, tooling]
     read_when: Agent Shell / RUN 削減
+    status: active
+
+  - no: 63
+    path: 60_tooling/QUALITY_GATE_RULES.md
+    band: 60_tooling
+    tags: [quality-gate, lint, hook, ci]
+    read_when: 品質ゲート · lint/hook/CI 導入・hook 失敗時
     status: active
 
 # 索引・プレイブック（L1 ではないが入口）

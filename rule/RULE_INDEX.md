@@ -35,6 +35,7 @@
 | commit / push（ユーザー明示時） | 14 | `10_meta/GIT_WORKFLOW_RULES.md` | [Git](RULE_ROUTING_PLAYBOOK.md#読む順序git-操作をするとき) | — |
 | トークン · `.env` · 秘密情報 | 15 | `10_meta/SECRETS_HYGIENE_RULES.md` | [Secrets](RULE_ROUTING_PLAYBOOK.md#読む順序資格情報トークンを扱うとき) | — |
 | 調査のみ · Shell 抑制 | 62 | `60_tooling/AGENT_SHELL_RULES.md` | [Shell](RULE_ROUTING_PLAYBOOK.md#読む順序agent-が-shell-を使うとき) | `yk-skill` · `agent-shell-yk`（always） |
+| 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
 | Python `.py` | 41 | `40_python/PYTHON_RULES.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-reactflow--react-flow-を触るとき) | `reactflow-dev-entry` |
@@ -186,6 +187,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 54 | 50_gas_html_test | `50_gas_html_test/POWERSHELL_HTML_RULES.md` | 大容量 HTML + PowerShell | active |
 | 61 | 60_tooling | `60_tooling/CURSOR_RULES.md` | Cursor / Windows 実務 | active |
 | 62 | 60_tooling | `60_tooling/AGENT_SHELL_RULES.md` | **Agent Shell / RUN 削減** · Read 優先 · allowlist | active |
+| 63 | 60_tooling | `60_tooling/QUALITY_GATE_RULES.md` | **品質ゲート** · lint/hook/CI · hook 失敗時のエージェント行動 | active |
 
 **帯の意味（要約）**
 

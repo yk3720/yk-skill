@@ -2,7 +2,7 @@
 ## 横断 Git SSOT — 方針のみ（実行手順は Cursor User Rules）
 
 **用途:** 全リポジトリ共通の **Git 方針**（いつ・何を・どう履歴に残すか）。  
-**関連:** `40_python/PYTHON_RULES.md` §9（Python / rev 積層）· 各ドメイン rule のセキュリティ節  
+**関連:** `40_python/PYTHON_RULES.md` §9（Python / rev 積層）· `60_tooling/QUALITY_GATE_RULES.md`（Git hook / CI）· 各ドメイン rule のセキュリティ節  
 **実行手順:** Cursor **User Rules**（`git status` / `git diff` / HEREDOC 等）— 本ファイルは **方針 SSOT** のみ
 
 **最終更新:** 2026-05-23
@@ -52,7 +52,8 @@
 | **feature ブランチ** | PR 作成時は User Rules の手順に従う。命名はリポジトリ慣習に合わせる |
 | **`git push --force`** | **`main` / `master` へは禁止**。他ブランチもユーザー明示時のみ。実行前に警告 |
 | **`git reset --hard`** | ユーザー明示時のみ |
-| **`git commit --amend`** | User Rules の条件をすべて満たすときのみ（hook 失敗時は amend せず新規コミット） |
+| **`git commit --amend`** | User Rules の条件をすべて満たすときのみ（**hook 失敗時は amend せず新規コミット** → [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md) §5） |
+| **`git commit --no-verify`** | **禁止**（品質ゲート回避）→ 同上 §5 |
 | **`git rebase -i` 等** | 対話必須のためエージェントは使わない |
 | **`git config` 変更** | **禁止**（ユーザーが直接変更する） |
 
@@ -71,6 +72,7 @@
 | **Playwright テスト** | `auth/session.json` 等 → `50_gas_html_test/PLAYWRIGHT_RULES.md` §5 |
 | **GAS** | Script Properties にトークン → `50_gas_html_test/GAS_RULES.md` |
 | **Vercel / Neon** | `.env.local` の Sensitive 変数 → `30_web_stack/VERCEL_RULES.md` |
+| **`yk-tool/flowchart-web-reactflow`** | husky / lint-staged / pre-commit（commit）· typecheck + test（push）→ [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md) |
 
 ---
 

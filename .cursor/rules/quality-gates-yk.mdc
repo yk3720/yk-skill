@@ -1,0 +1,17 @@
+---
+description: 品質ゲート（lint/hook/CI）— 編集時・コミット時・デプロイ時の3層
+globs: "**/flowchart-web-reactflow/**/*"
+alwaysApply: false
+---
+
+# Quality Gates（YK）
+
+**SSOT:** `c:/yk-skill/rule/60_tooling/QUALITY_GATE_RULES.md`
+
+- **3層:** `.vscode/settings.json`（編集時）→ husky/pre-commit（コミット時）→ GitHub Actions + Vercel（CI/デプロイ）
+- **hook 失敗:** 自己修正して再 commit。`--no-verify` 禁止。amend は commit スキルどおり。
+- **pre-commit:** eslint + prettier（TS）· `check-merge-conflict` · `detect-private-key` · ruff（Python）
+- **Push Protection:** GitHub 設定（§7）— ローカル hook の回避策
+- **pre-push / CI:** typecheck + vitest + excel:test
+- **E2E:** pre-commit に入れない。UI 変更 + spec 追加時は同一ターンで `test:e2e`（`PLAYWRIGHT_RULES` §12）
+- **commit Shell:** 初回 `all`（`AGENT_SHELL_RULES`）

@@ -370,10 +370,12 @@ validateTable(table)
 
 **品質方針:** §6 ゲート未通過（または Shell 禁止時の代替確認なし）の完了報告は **禁止**。
 
+**機械ゲート（commit / push / CI）:** [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md) — husky · lint-staged · pre-push の `typecheck` + `test` + `excel:test`。本 §6 は **エージェントが意図的に実行する検証** の SSOT。
+
 | ゲート | コマンド / 手段 |
 |--------|----------------|
 | ユニット | `npm run test`（`lib/flowchart/*.test.ts`） |
-| 型・ビルド | `npm run build` |
+| 型 | `npm run typecheck`（日常）· リリース前は `npm run build` も推奨 |
 | E2E | `npm run build` のあと `npm run test:e2e`（`:3001`）· レイアウトのみ `test:e2e:labels` — [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md) **§12** |
 
 **Shell:** `AGENT_SHELL_RULES` — `test` / `build` 明示、または E2E spec 追加の完了判定ターン。

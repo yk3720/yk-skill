@@ -2,7 +2,7 @@
 ## 横断 Secrets SSOT — チェックリスト + 禁止パターン（実装手順は各ドメイン rule）
 
 **用途:** 資格情報・トークン・セッションの **保管・共有・コミット** に関する横断方針。  
-**関連:** [`GIT_WORKFLOW_RULES.md`](GIT_WORKFLOW_RULES.md) §2（コミット禁止）· 各ドメイン rule のセキュリティ節  
+**関連:** [`GIT_WORKFLOW_RULES.md`](GIT_WORKFLOW_RULES.md) §2（コミット禁止）· [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md)（`detect-private-key` hook · Push Protection）· 各ドメイン rule のセキュリティ節  
 **Git 操作:** コミット / push のタイミング → `GIT_WORKFLOW_RULES.md`
 
 **最終更新:** 2026-05-23
@@ -19,6 +19,7 @@
 - [ ] GAS のトークンを **ソースコードに直書きしていない**（Script Properties）
 - [ ] Vercel Sensitive 変数を **`********` のままコピーしていない**
 - [ ] surge / FB 等の認証情報を **リポジトリに保存していない**
+- [ ] `flowchart-web-reactflow` では pre-commit の **`detect-private-key`** が通る（機械チェック — 詳細は `QUALITY_GATE_RULES` §3）
 
 ---
 
