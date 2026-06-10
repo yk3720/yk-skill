@@ -492,6 +492,18 @@ await expect(async () => {
 
 → 実装 SSOT: [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-4
 
+### 12-7. Server Action E2E スタブ（2026-06）
+
+`PLAYWRIGHT_E2E=1` 等で Server Action の RPC をスキップするスタブを使うとき:
+
+| MUST | 理由 |
+|------|------|
+| スタブ分岐は **`requireEditor()` 等の認可チェックの後** | 認可前スタブは本番誤設定で未認証バイパスになる |
+| スタブは **Playwright `webServer.env` のみ**で有効化（例: `IMPORT_E2E_STUB=1`） | 通常 dev / 本番バンドルに含めない |
+| 実 DB 取込の検証は **Runbook 手動**（E2E は UI 配線まで） | CI コスト · 認証分離 |
+
+正本: `importEquipmentBundle.ts` · `playwright.config.ts` · [`SUPABASE_RULES.md`](../30_web_stack/SUPABASE_RULES.md) §8-2
+
 ---
 
 ## 13. テスト戦略 — 何を Playwright でテストするか（索引）

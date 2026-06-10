@@ -278,6 +278,19 @@ validateTable(table)
 | 装置切替 | 編集中モジュールを退避 → 動作選択クリア → 新装置のユニット一覧 |
 | ヘッダー | 装置名は Nav に集約。エディタヘッダーは **選択中フロー文脈**（例: `供給ユニット · 供給動作`）のみ |
 
+#### 5.6-1a モジュール読込の非同期（レース防止 · 2026-06）
+
+左ナビで動作を切り替えると **クラウド / IndexedDB / localStorage** から非同期読込が走る。完了が遅れたり順序が入れ替わると、**別モジュールの内容で上書き**・**サンプル読込後に勝手に切り替わる**症状になる。
+
+| MUST | 実装（`FlowchartWorkspace.tsx`） |
+|------|----------------------------------|
+| モジュール選択時に **`initialSnapshot` を即 `null`** | `resetModuleLoadState()` — 前モジュールの snapshot をエディタに渡さない |
+| 読込リクエストに **世代 ID（`loadGenerationRef`）** を付与 | 選択のたびに `++` し、古い `loadModule` 完了は **state 更新しない** |
+| 読込完了時は **世代が一致するときだけ** `setInitialSnapshot` · `setLoadKey` | `if (generation !== loadGenerationRef.current) return` |
+| 装置切替時も世代を進める | 進行中の `loadModule` を無効化 |
+
+**確認（手動または E2E）:** モジュール A 選択 → サンプル読込 → すぐモジュール B — 表示が A/B で意図せず入れ替わらないこと。E2E は `e2e/edge-label-placement.spec.ts`（モジュール選択中サンプル）を参照。
+
 #### 5.6-2 ツールバー（AppHeader）
 
 | 常時表示 | その他メニュー（`EditorMoreMenu`） |
