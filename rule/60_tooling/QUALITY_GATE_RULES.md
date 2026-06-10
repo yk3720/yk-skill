@@ -5,7 +5,7 @@
 
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **63** · L0: `quality-gates-yk.mdc`
 
-**最終更新:** 2026-06-09（pre-commit cwd 修正 · トラブルシュート追記）
+**最終更新:** 2026-06-10（CI に build · mypy 追加）
 
 ---
 
@@ -50,6 +50,7 @@
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run test` | Vitest |
 | `npm run test:e2e` | Playwright（CI では PR 時のみ拡張可） |
+| `npm run excel:mypy` | excel_normalize の mypy |
 
 ### Git hooks
 
@@ -118,8 +119,9 @@ pip install -e "tools/excel_normalize[dev]"
 
 - **SSOT:** `yk-tool/.github/workflows/flowchart-web-reactflow-ci.yml`
 - **`HUSKY=0`:** CI では Git hook をスキップし、同じ検査をコマンドで直接実行（二重実行防止）
-- push/PR で `flowchart-web-reactflow/**` 変更時に lint · format · typecheck · vitest · pre-commit（セキュリティ + ruff）· pytest を実行
-- Vercel build はデプロイ最終ゲート
+- push/PR で `flowchart-web-reactflow/**` 変更時に lint · format · typecheck · vitest · ruff · **mypy** · pre-commit（セキュリティ + ruff）· pytest · **`npm run build`**（`AUTH_DISABLED=1`）を実行
+- pre-commit は **git ルート**から `--config flowchart-web-reactflow/.pre-commit-config.yaml`（モノレポ path 整合）
+- Vercel build はデプロイ最終ゲート（CI build は早期検出）
 
 ---
 
@@ -141,7 +143,6 @@ pip install -e "tools/excel_normalize[dev]"
 |------|------|----------|
 | Cursor `beforeShellExecution` | `git commit --no-verify` 拒否 | AI が hook 回避を試みる場合 |
 | `detect-secrets` / Gitleaks | より精度の高い秘密検出 | 誤検知 baseline の運用が必要になったとき |
-| CI `npm run build` | Next ビルドの早期検出 | CI 時間とのトレードオフを許容するとき |
-| CI `mypy` | Python 型チェック | `PYTHON_RULES` 完全準拠を CI で担保するとき |
+| CI Playwright 全件 | PR 時の UI 回帰 | CI 時間増を許容するとき |
 | Dependabot / Renovate | hook 依存の自動更新 | 複数人開発・長期運用時 |
 
