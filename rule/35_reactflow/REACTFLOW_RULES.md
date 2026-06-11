@@ -282,14 +282,36 @@ validateTable(table)
 
 左ナビで動作を切り替えると **クラウド / IndexedDB / localStorage** から非同期読込が走る。完了が遅れたり順序が入れ替わると、**別モジュールの内容で上書き**・**サンプル読込後に勝手に切り替わる**症状になる。
 
-| MUST | 実装（`FlowchartWorkspace.tsx`） |
-|------|----------------------------------|
+| MUST | 実装（`FlowchartWorkspace.tsx` · `FlowchartEditor.tsx`） |
+|------|--------------------------------------------------------|
 | モジュール選択時に **`initialSnapshot` を即 `null`** | `resetModuleLoadState()` — 前モジュールの snapshot をエディタに渡さない |
 | 読込リクエストに **世代 ID（`loadGenerationRef`）** を付与 | 選択のたびに `++` し、古い `loadModule` 完了は **state 更新しない** |
-| 読込完了時は **世代が一致するときだけ** `setInitialSnapshot` · `setLoadKey` | `if (generation !== loadGenerationRef.current) return` |
+| 読込完了時は **世代が一致するときだけ** `setInitialSnapshot` · `setLoadKey` | `isModuleLoadStale(generation)` — **`getOfflineModuleCache` の await 後も再チェック** |
 | 装置切替時も世代を進める | 進行中の `loadModule` を無効化 |
+| **同一モジュール選択中にユーザーが内容を上書きしたら世代を進める** | `invalidatePendingModuleLoad()` — サンプル · 表編集 · CSV · JSON 取込 · 再生成。`userContentOverrideRef` を立てる · `initialSnapshot` を `null` に戻す。`setLoadKey` は**進めない** |
+| 無効化後は **読込中バナーを下ろす** | `setLoadingModule(false)` |
+| 遅延 `loadModule` は **override 中は適用しない** | `userContentOverrideRef` · `skipSnapshotHydrationRef`（`FlowchartEditor` の useEffect 水合わせスキップ） |
+| キャンセル時は **IndexedDB へ古い cloud を書き戻さない** | `loadModuleDraft(..., { isCancelled })` — cloud 取得後・`putOfflineModuleCache` 前にチェック |
+| **フロー自動保存で `revalidatePath("/")` しない** | `saveFlowDocument` — 保存完了後の Router refresh が遅延巻き戻しの一因になりうる |
 
-**確認（手動または E2E）:** モジュール A 選択 → サンプル読込 → すぐモジュール B — 表示が A/B で意図せず入れ替わらないこと。E2E は `e2e/edge-label-placement.spec.ts`（モジュール選択中サンプル）を参照。
+**確認（手動または E2E）:**
+
+1. モジュール A 選択 → サンプル読込 → **数秒待っても** サンプル表示が保存内容に戻らないこと（パターン A · 本番 cloud 遅延で顕在化しやすい）
+2. モジュール A 選択 → サンプル読込 → すぐモジュール B — 表示が A/B で意図せず入れ替わらないこと
+
+E2E: `e2e/edge-label-placement.spec.ts`（モジュール選択中サンプル · 巻き戻し防止）
+
+#### 5.6-1b サンプル／雛形と自動保存（2026-06）
+
+| MUST | 実装 |
+|------|------|
+| **サンプル（例）はプレビューのみ**（`persist: false`） | `onPreviewSample` → `runGenerate(..., { persist: false })` |
+| **モジュールに保存するのは明示操作のみ** | 「モジュールに適用」· 雛形適用 · 表 JSON 取込 · 再生成 |
+| **編集済みモジュールへの破壊的適用は確認** | `isModuleContentDirty`（`moduleContentDirty.ts`）— `userTouched` · `committedJson` · `initialSnapshot` |
+| **プレビュー中は復元点を保持** | `prePreviewRestoreRef` — 「プレビューを終了」で復元 |
+| **空モジュール**（dirty でない） | 雛形は無確認適用可 · サンプルはプレビュー → 任意で適用 |
+
+**確認（手動または E2E）:** 表編集後に「例を見る」→ プレビュー終了で元の表が残る · 編集後に雛形適用で確認ダイアログ
 
 #### 5.6-2 ツールバー（AppHeader）
 
