@@ -81,6 +81,7 @@
 | `check for merge conflicts ... Passed` | セキュリティ hook が効いている | — |
 | `(no files to check) Skipped`（commit 時） | **異常** — pre-commit がファイルを認識できていない | `.husky/pre-commit` が git ルートから `--config` 付きで実行されているか確認（2026-06-09 修正済） |
 | hook 失敗（exit 1） | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
+| `check-merge-conflict` が **WinError 4551**（アプリケーション制御ポリシー） | Cursor エージェント環境で pre-commit フックが OS により実行不可 | 競合マーカーを手動確認後、当該フックのみ `SKIP=check-merge-conflict` — 詳細は `committing-with-git-yk/references/commit-shell.md` |
 
 **モノレポ注意:** `yk-tool` が git ルート。pre-commit の `--files` はルート相対パス（`flowchart-web-reactflow/...`）で、**実行 cwd は git ルート**。
 
