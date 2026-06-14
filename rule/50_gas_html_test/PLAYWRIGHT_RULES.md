@@ -489,6 +489,7 @@ await expect(async () => {
 | コード修正後 **`:3000` の dev だけ**見る | E2E は `build` + `:3001` `next start`。手元確認は dev 再起動 + ハードリロード |
 | `edge.label` 残存で白 pill が線上に見える | `toReactFlow` は `data.edgeLabel` のみ · `.react-flow__edge-text` が 0 件であることを assert |
 | 幾何のみ pass で **halo スタイル未検証** | `[data-edge-label-branch]` が `bg-transparent` かを併用 |
+| JSON 読込 E2E で status だけ「生成完了」· **ノード 0** | モジュール未選択時 `showEditorPanes` が false → canvas 非表示。`executeImportText` 後に samplePreview を維持するか spec でモジュール選択 |
 
 → 実装 SSOT: [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-4
 
@@ -498,8 +499,10 @@ await expect(async () => {
 
 | MUST | 理由 |
 |------|------|
-| スタブ分岐は **`requireEditor()` 等の認可チェックの後** | 認可前スタブは本番誤設定で未認証バイパスになる |
-| スタブは **Playwright `webServer.env` のみ**で有効化（例: `IMPORT_E2E_STUB=1`） | 通常 dev / 本番バンドルに含めない |
+| E2E スタブは **`PLAYWRIGHT_E2E=1` かつ専用 env（例 `IMPORT_E2E_STUB=1`）の両方**でのみ有効 | 本番 env 単体では発動しない |
+| E2E スタブは **`isAuthDisabled()` 等の早期 return より前** | CI は `AUTH_DISABLED=1` のため、後段ガードが stub を潰す（2026-06 CI #9） |
+| **本番経路**の RPC は **`requireEditor()` の後** | 認可前の DB 操作禁止 |
+| スタブは **Playwright `webServer.env`（または CI job env）のみ**で有効化 | 通常 dev / 本番バンドルに含めない |
 | 実 DB 取込の検証は **Runbook 手動**（E2E は UI 配線まで） | CI コスト · 認証分離 |
 
 正本: `importEquipmentBundle.ts` · `playwright.config.ts` · [`SUPABASE_RULES.md`](../30_web_stack/SUPABASE_RULES.md) §8-2

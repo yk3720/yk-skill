@@ -120,7 +120,9 @@ pip install -e "tools/excel_normalize[dev]"
 
 - **SSOT:** `yk-tool/.github/workflows/flowchart-web-reactflow-ci.yml`
 - **`HUSKY=0`:** CI では Git hook をスキップし、同じ検査をコマンドで直接実行（二重実行防止）
-- push/PR で `flowchart-web-reactflow/**` 変更時に lint · format · typecheck · vitest · ruff · **mypy** · pre-commit（セキュリティ + ruff）· pytest · **`npm run build`**（`AUTH_DISABLED=1`）を実行
+- push/PR で `flowchart-web-reactflow/**` 変更時に **2 ジョブ**（`quality` · `Playwright E2E` · 並列）:
+  - **quality:** lint · format · typecheck · vitest · ruff · **mypy** · pre-commit（セキュリティ + ruff）· pytest · **`npm run build`**（`AUTH_DISABLED=1`）
+  - **e2e:** `npm run build` → **`npm run test:e2e`**（`AUTH_DISABLED=1` · `IMPORT_E2E_STUB=1` · `PLAYWRIGHT_E2E=1` · 既存 28 spec）
 - pre-commit は **git ルート**から `--config flowchart-web-reactflow/.pre-commit-config.yaml`（モノレポ path 整合）
 - Vercel build はデプロイ最終ゲート（CI build は早期検出）
 
@@ -144,6 +146,6 @@ pip install -e "tools/excel_normalize[dev]"
 |------|------|----------|
 | Cursor `beforeShellExecution` | `git commit --no-verify` 拒否 | AI が hook 回避を試みる場合 |
 | `detect-secrets` / Gitleaks | より精度の高い秘密検出 | 誤検知 baseline の運用が必要になったとき |
-| CI Playwright 全件 | PR 時の UI 回帰 | CI 時間増を許容するとき |
+| CI Playwright 追加 spec | 新機能の UI 回帰 | `designing-playwright-tests-yk` で載せる/載せないを決めたあと |
 | Dependabot / Renovate | hook 依存の自動更新 | 複数人開発・長期運用時 |
 
