@@ -133,7 +133,7 @@ public.flow_documents (
 
 ## 3. RLS ポリシー — 落とし穴と正しいパターン
 
-**このセクションのスコープ:** `profiles` テーブルの MUST パターンと共通アンチパターン。`flow_documents` の RLS 全文はマイグレーション正本 `001_db1_schema.sql` §37–84 を参照。
+**このセクションのスコープ:** `profiles` テーブルの MUST パターンと共通アンチパターン · `flow_documents` の運用方針（§3 共同編集表）。RLS SQL 全文はマイグレーション正本（`001` · `016` 等）を参照。
 
 ### RLS アンチパターン（禁止）
 
@@ -187,6 +187,20 @@ create policy "profiles_update_link_self"
 ### flow_documents と初回ログイン順序
 
 `flow_documents` の RLS は `profiles.user_id = (select auth.uid())` の EXISTS に依存。**初回ログインで `user_id` が紐づく前は flow_documents へのアクセスが全て拒否される**。実装 `lib/auth/session.ts` の `getAuthState()` は profiles SELECT（email 照合）→ user_id UPDATE → `allowed` 返却の順序を保証しているため、Server Actions 経由では自動解決する。直接 PostgREST を呼ぶ場合はこの順序を意識すること。
+
+### flow_documents — 共同編集と削除の分離（016 · 2026-06-15）
+
+**方針:** フロー**中身の編集**（クラウド保存 · import 再取込）は **全 editor/admin**。**削除系**（動作削除 · 雛形リセット · 装置/ユニット削除）は従来どおり **所有者チェーン + admin** のみ。
+
+| 操作 | 誰ができる | マイグレーション |
+|------|------------|------------------|
+| フロー中身の保存 · import 上書き | 全 `editor` / `admin` | `016_flow_documents_collaborative_edit.sql` |
+| フロー雛形リセット | `admin` · flow 作成者 | `011` |
+| モジュール（動作）削除 | `admin` · 装置/ユニット登録者チェーン | `013` |
+| 装置 · ユニット削除 | `admin` · 各 `created_by` | `010` · `008` |
+
+- **`015` は `016` で上書き** — 015 未適用なら 016 のみ Run でよい（Runbook §12-2b）。
+- SQL 全文 · 本番確認手順: [`DB2_MIGRATION_RUNBOOK.md`](../../../yk-tool/flowchart-web-reactflow/docs/DB2_MIGRATION_RUNBOOK.md) §12-2c · handoffs [`HANDOFF.md`](../../../yk-memo/handoffs/flowchart-web/HANDOFF.md) §6 権限表。
 
 ---
 

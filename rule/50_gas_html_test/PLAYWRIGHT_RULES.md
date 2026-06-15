@@ -500,12 +500,14 @@ await expect(async () => {
 | MUST | 理由 |
 |------|------|
 | E2E スタブは **`PLAYWRIGHT_E2E=1` かつ専用 env（例 `IMPORT_E2E_STUB=1`）の両方**でのみ有効 | 本番 env 単体では発動しない |
+| **`VERCEL_ENV=production` ではスタブを常に無効** | 本番バンドルにスタブ経路が残っても発動しない（`lib/supabase/e2eStub.ts` · `isPlaywrightActionStubEnabled`） |
 | E2E スタブは **`isAuthDisabled()` 等の早期 return より前** | CI は `AUTH_DISABLED=1` のため、後段ガードが stub を潰す（2026-06 CI #9） |
 | **本番経路**の RPC は **`requireEditor()` の後** | 認可前の DB 操作禁止 |
 | スタブは **Playwright `webServer.env`（または CI job env）のみ**で有効化 | 通常 dev / 本番バンドルに含めない |
 | 実 DB 取込の検証は **Runbook 手動**（E2E は UI 配線まで） | CI コスト · 認証分離 |
+| **削除系 E2E** は action 成功だけでなく **UI 反映**まで assert | 例: 動作削除 — 成功バナー **+** 左ナビから当該動作が消える（`e2e/module-delete.spec.ts` · `REACTFLOW_RULES` §5.6-1c） |
 
-正本: `importEquipmentBundle.ts` · `playwright.config.ts` · [`SUPABASE_RULES.md`](../30_web_stack/SUPABASE_RULES.md) §8-2
+正本: `importEquipmentBundle.ts` · `deleteModule.ts` · `e2eStub.ts` · `playwright.config.ts` · [`SUPABASE_RULES.md`](../30_web_stack/SUPABASE_RULES.md) §8-2
 
 ---
 
