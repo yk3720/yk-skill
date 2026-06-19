@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-05-31（No 19 VISUAL_DESIGN 追加）
+**最終更新:** 2026-06-19（No 20 USABILITY_HEURISTICS 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -58,6 +58,7 @@
 | 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
 | 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | UI · 図の線の太さ・統一感 | 19 | `10_meta/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
+| UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `10_meta/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
 | 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
 
 ---
@@ -170,6 +171,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 17 | 10_meta | `10_meta/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
 | 18 | 10_meta | `10_meta/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
 | 19 | 10_meta | `10_meta/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
+| 20 | 10_meta | `10_meta/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |

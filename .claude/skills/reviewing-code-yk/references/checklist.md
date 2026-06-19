@@ -10,6 +10,7 @@
 | セキュリティ | 入力検証 · 秘密のハードコード · 権限 | 脅威モデル全文 |
 | 保守性 | 読みやすさ · 重複 · 公開 API の破壊 | 理想アーキテクチャの全面提案 |
 | テスト | 変更に対するテストの有無・不足 | カバレッジ 100% 要求 |
+| UX（UI 差分が主） | [`USABILITY_HEURISTICS_RULES.md`](c:/yk-skill/rule/10_meta/USABILITY_HEURISTICS_RULES.md) §2 または §3 | 全画面の網羅評価 |
 
 ## 重大度
 
