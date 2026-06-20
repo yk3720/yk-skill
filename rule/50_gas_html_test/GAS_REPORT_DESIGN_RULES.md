@@ -245,7 +245,7 @@ font-family: system-ui, 'YuGothic', 'Yu Gothic', 'Meiryo', 'Hiragino Kaku Gothic
 
 ## 6. アクセシビリティ拡張ルール
 
-### フォーカス可視性（WCAG 2.4.7 / 2.2 Focus Visible）
+### フォーカス可視性（WCAG 2.4.7 Focus Visible）
 
 **インタラクティブ要素（ボタン・フィルター・リンク）には `:focus-visible` で明示的なフォーカスリングを設ける。**
 

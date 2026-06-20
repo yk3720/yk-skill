@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-19（No 20 USABILITY_HEURISTICS 追加）
+**最終更新:** 2026-06-20（No 24 A11Y_RULES 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -59,6 +59,8 @@
 | 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | UI · 図の線の太さ・統一感 | 19 | `10_meta/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
 | UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `10_meta/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
+| アクセシビリティ · WCAG 2.2 | 24 | `10_meta/A11Y_RULES.md` | a11y 実装 · レビュー · チェックリスト | — |
+| アクセシビリティ · 導入計画 | 23 | `10_meta/A11Y_ROADMAP.md` | Phase 判断 · CI 段階 · 工数 | — |
 | 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
 
 ---
@@ -75,6 +77,8 @@
 | shadcn init / add | No **32** · `creating-shadcn-yk` | surge · `lib/flowchart/` · ui-kit 既存への `init -b radix` |
 | Vercel / Neon **デプロイ** | No **34** · `creating-vercel-yk` | surge ホスト · FB 初回のみで vercel スキル完結 · 未明示 `--prod` |
 | ui-kit の Next / shadcn UI | SHADCN · TAILWIND · WORKSPACE | **GAS_REPORT_DESIGN**（静的 HTML chip は No 52） |
+| React / ui-kit / flowchart の a11y | No **24** · `A11Y_RULES` | No **52** GAS_REPORT のみ（React chrome には読まない） |
+| アクセシビリティ Phase · CI 段階 | No **23** · `A11Y_ROADMAP` | 本ファイルでチェックリストを再定義しない |
 | React/Next **性能**チューニング | ui-kit `vercel-react-best-practices` · ROUTER tag `performance` | `VERCEL_RULES` に性能全文を転記 |
 
 各ドメインの詳細手順は [RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)（**必要時のみ Read**）。
@@ -172,6 +176,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 18 | 10_meta | `10_meta/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
 | 19 | 10_meta | `10_meta/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
 | 20 | 10_meta | `10_meta/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
+| 23 | 10_meta | `10_meta/A11Y_ROADMAP.md` | **a11y 導入ロードマップ** — WCAG 2.2 AA 段階導入 · Phase 0–5 | active |
+| 24 | 10_meta | `10_meta/A11Y_RULES.md` | **a11y 横断 SSOT** — WCAG 2.2 AA チェックリスト · ツール · スコープ | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
