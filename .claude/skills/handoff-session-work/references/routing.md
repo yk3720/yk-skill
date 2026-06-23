@@ -23,7 +23,8 @@
 
 | ルート | 引き継ぎでの役割 |
 |--------|------------------|
-| `c:/yk-memo` | `handoffs/`（セッション + プロジェクト HANDOFF） |
+| `c:/yk-memo` | `handoffs/`（セッション + プロジェクト HANDOFF）· 講座テーマ（`00_テーマ/`）· 企画 stub |
+| `c:/yk-application` | 独立 Git アプリ — **`specs/` + `AGENTS.md`**（Product Spec 正本 · 触った場合 Phase C） |
 | `c:/yk-skill` | 本スキル · `rule/`（リンクのみ · 全文コピー禁止） |
 | `c:/yk-tool` | 成果物リポ（触った場合 `git status` に含める） |
 | `c:/yk-document` | データリポ（同上） |
@@ -250,18 +251,27 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 ---
 
-## 企画フォルダとの関係
+## Product Spec · 企画フォルダとの関係
+
+引き継ぎスキルが扱うのは **セッション層**のみ。Product Spec の正本はプロジェクト種別で分かれる。
 
 | 種類 | 置き場 | SSOT |
 |------|--------|------|
 | セッション進捗 · §4 | `handoffs/{slug}/` | 本スキル · セッション MD |
 | 恒久方針 · ロードマップ | `handoffs/{slug}/HANDOFF.md` | HANDOFF §6 |
-| プロダクト仕様 · ADR | `yk-memo/.../{企画フォルダ}/` | 各 MD · `AGENTS.md` SSOT マップ |
-| エージェント憲法 | 企画フォルダ `AGENTS.md` | No 17 `APP_PROJECT_RULES.md` §5 |
+| **Product Spec · ADR**（独立リポ · 推奨） | `yk-application/{app}/specs/` | 6 種フォルダ · `specs/README.md` |
+| **エージェント憲法**（独立リポ · 推奨） | `yk-application/{app}/AGENTS.md` | `APP_PROJECT_RULES` §5 |
+| Product Spec（yk-memo 企画のみ） | `yk-memo/.../{企画フォルダ}/` の 6 種 | `PROJECT_DOCUMENT_RULES` §3 |
+| エージェント憲法（yk-memo 企画のみ） | `05_開発ガイドライン/エージェント憲法.md` | 同上 |
+| 講座・提出 · 履歴 | `yk-memo/.../00_テーマ/` · `99_アーカイブ/` | 引き継ぎ対象外 |
 
-**MUST NOT:** 企画フォルダの `再開メモ.md` 等をセッション SSOT として更新する。廃止時は handoffs への **リダイレクト stub** のみ残す。
+**再開時の 3 ファイル（独立リポ）:** `HANDOFF.md` → 最新セッション §4 → **`{app}/AGENTS.md`**（Product Spec は §4 実行時または仕様疑問時のみ `specs/` を Read）。
 
-横断 rule → `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md`
+**MUST NOT:** handoffs に Product Spec 全文をコピーする（パスリンクのみ）。  
+**MUST NOT:** `specs/` と yk-memo 企画 6 種の **二重正本**を維持する（移行後は yk-memo 側は stub のみ）。  
+**MUST NOT:** 企画フォルダの `再開メモ.md` 等をセッション SSOT として更新する。
+
+横断 rule → `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` · `PROJECT_DOCUMENT_RULES.md` §3.1
 
 ---
 
@@ -273,7 +283,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 |------|--------------|------|
 | `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート stub · No 36 `REACT_RULES` |
 | `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 · 待機時は §6 のみ |
-| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | ADR-010 · No 17 実例 |
+| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | spec-in-repo · `flowchart-studio/specs/` + `AGENTS.md` |
 | `tauri-practice` | `handoffs/tauri-practice/HANDOFF.md` | 学習スパイク · `yk-application/tauri-practice` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 

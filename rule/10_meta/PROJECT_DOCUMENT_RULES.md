@@ -4,7 +4,7 @@
 **用途:** 個人アプリの **企画フォルダ内ドキュメント種別 · フォルダ構成 · 正本の置き場** の SSOT。  
 **ステータス:** active（L1 · 2026-06-23 グリル確定）  
 **関連:** `10_meta/APP_PROJECT_RULES.md`（ライフサイクル · handoffs · 再開）· `RULE_INDEX.md` No 25  
-**実例（移行前）:** [flowchart-web 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/) — 旧 `01_product/` 等
+**実例:** [flowchart-studio specs](c:/yk-application/flowchart-studio/specs/) — 2026-06-23 **spec-in-repo** 移行完了
 
 **最終更新:** 2026-06-23（§11–§12 残グリル確定）
 
@@ -61,17 +61,47 @@
 
 **handoffs**（`yk-memo/handoffs/{slug}/`）は企画フォルダ外の **別枠** — セッション SSOT。本 rule の 6 種には含めない。
 
+### 3.1 独立リポ（yk-application）— spec-in-repo（推奨 · 2026-06-23）
+
+本線アプリ（独立 Git）では **Product Spec を実装リポに同居**させる。業界慣行（SDD / GitHub Spec Kit 型）に合わせた正本。
+
+```text
+c:/yk-application/{app}/
+├── AGENTS.md                 # エージェント憲法（ルート固定 · Cursor 標準）
+├── specs/                    # Product Spec 正本（6 種フォルダ）
+│   ├── 01_要求定義/
+│   ├── 02_機能設計/
+│   ├── 03_技術仕様/
+│   ├── 04_リポジトリ構造/
+│   ├── 05_開発ガイドライン/   # decision-log 等（憲法本文は AGENTS.md）
+│   └── 06_ユビキタス言語/
+├── docs/                     # 運用隣接（LOCAL_DEV · Runbook 等）— specs と混在しない
+└── （アプリコード）
+```
+
+| 項目 | 決定 |
+|------|------|
+| Product Spec 正本 | `{app}/specs/` の 6 種 |
+| 憲法正本 | ルート **`AGENTS.md`** |
+| handoffs | 従来どおり `yk-memo/handoffs/{slug}/` |
+| yk-memo 企画フォルダ | **stub**（リダイレクト README）+ `00_テーマ/` · `99_アーカイブ/` のみ残す |
+
+**MUST NOT:** `specs/` と yk-memo 企画フォルダの **二重正本**を維持する。移行完了後は yk-memo 側は stub のみ。
+
+**パイロット:** [flowchart-studio](c:/yk-application/flowchart-studio/specs/)
+
 ---
 
 ## 4. エージェント憲法（旧 AGENTS.md）
 
 | 項目 | 決定 |
 |------|------|
-| 正本 | `05_開発ガイドライン/エージェント憲法.md` |
-| ルート `AGENTS.md` | **廃止**（6 種体系との一貫性） |
-| 再開時の読む順序 | handoffs HANDOFF → 最新 §4 → **エージェント憲法**（3 ファイル） |
+| 正本（独立リポ） | ルート **`AGENTS.md`** — `specs/` への索引を含む |
+| 正本（yk-memo 企画のみ） | `05_開発ガイドライン/エージェント憲法.md` |
+| ルート `AGENTS.md`（yk-memo 企画） | **廃止** — stub のみ |
+| 再開時の読む順序 | handoffs HANDOFF → 最新 §4 → **AGENTS.md**（3 ファイル） |
 
-**移行中の例外:** 物理移行が未完了のプロジェクト（例: flowchart-web）は、完了まで現行ルート `AGENTS.md` を参照してよい。移行完了後は stub または削除。
+**移行中の例外:** yk-memo 企画に 6 種が残るプロジェクトは、独立リポ移行完了まで現行パスを参照してよい。移行完了後は stub のみ。
 
 憲法の必須項目 → `APP_PROJECT_RULES.md` §5（内容は本ファイルで再定義しない）。
 
@@ -166,15 +196,16 @@
 
 ### 10.1 Spec Kit 工程 → YK 正本
 
-| 工程 | YK 正本 | DoD |
-|------|---------|-----|
-| Constitution | `05_開発ガイドライン/エージェント憲法.md` | `APP_PROJECT_RULES` §5 必須項目 |
-| Specify | `01_要求定義/` | **AC 表**（§10.2） |
-| Plan | `02_機能設計/` + `03_技術仕様/` + ADR | フェーズ計画 · Accepted ADR |
+| 工程 | YK 正本（独立リポ） | DoD |
+|------|---------------------|-----|
+| Constitution | ルート **`AGENTS.md`** | `APP_PROJECT_RULES` §5 必須項目 |
+| Specify | `specs/01_要求定義/` | **AC 表**（§10.2） |
+| Plan | `specs/02_機能設計/` + `specs/03_技術仕様/` + ADR | フェーズ計画 · Accepted ADR |
 | Tasks | handoffs 最新 **§4** | チェックリスト（`AC-N` 番号は使わない） |
-| Implement | `yk-tool/` 等 | Vitest → Playwright（`PLAYWRIGHT_RULES`） |
+| Implement | 同一リポのコード | Vitest → Playwright（`PLAYWRIGHT_RULES`） |
 
-**MUST NOT:** Spec Kit の `specs/` · `.specify/` を並行 SSOT として追加する。
+**MUST NOT:** Spec Kit CLI の `.specify/` を **並行 SSOT**として追加する（YK は Markdown + handoffs で足りる）。  
+**MUST NOT:** `specs/` と yk-memo 企画 6 種の **二重正本**。
 
 ### 10.2 受け入れ条件（AC）3 層
 
@@ -184,7 +215,7 @@
 | 技術ゲート | `G-1` 等（任意） | `03_技術仕様/` または ADR 1 節 | DB · API 等 |
 | セッション DoD | チェックボックス | handoffs セッション MD **§4** | 今回 1 件の実行完了 |
 
-**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart `MVP定義.md`](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/01_要求定義/MVP定義.md)。
+**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart `MVP定義.md`](c:/yk-application/flowchart-studio/specs/01_要求定義/MVP定義.md)。
 
 **MUST:** `AC-N` 番号は **マイルストーン層のみ**。§4 に `AC-3 を満たす` と書かない。  
 **MUST:** MVP+（完了条件外）は AC 表の別表に「完了条件外」と明記。
@@ -230,7 +261,7 @@
 
 **MUST NOT:** 同一役割を `概要.md` と `プロジェクト概要.md` のように **別名で二重作成**する。
 
-実例 → [flowchart-web 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/) §13。
+実例 → [flowchart-studio specs](c:/yk-application/flowchart-studio/specs/) §13。
 
 ---
 
@@ -294,11 +325,12 @@
 
 ---
 
-## 15. 実例（flowchart-web · 移行済）
+## 15. 実例（flowchart-studio · spec-in-repo · 2026-06-23）
 
 | 項目 | 値 |
 |------|-----|
 | slug | `flowchart-web` |
-| 企画 | `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/` |
-| 構成 | 6 種 + 別枠 — **2026-06-23 移行完了** |
-| 憲法 | `05_開発ガイドライン/エージェント憲法.md`（ルート `AGENTS.md` は stub） |
+| Product Spec | `c:/yk-application/flowchart-studio/specs/` |
+| 憲法 | `c:/yk-application/flowchart-studio/AGENTS.md` |
+| handoffs | `c:/yk-memo/handoffs/flowchart-web/` |
+| yk-memo 企画 | stub + `00_テーマ/` · `99_アーカイブ/` |

@@ -215,7 +215,7 @@
 6. **新規/整理/AGENTS 整備** — スキル `starting-app-project-yk`
 7. **引き継ぎ終了** — スキル `handoff-session-work`（本 rule に手順全文は載せない）
 
-**実例:** flowchart-web → [AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md) · [handoffs/flowchart-web](c:/yk-memo/handoffs/flowchart-web/HANDOFF.md)
+**実例:** flowchart-web → [AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [specs/](c:/yk-application/flowchart-studio/specs/) · [handoffs/flowchart-web](c:/yk-memo/handoffs/flowchart-web/HANDOFF.md)
 
 ---
 
