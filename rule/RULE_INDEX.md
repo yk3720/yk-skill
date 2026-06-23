@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-20（No 24 A11Y_RULES 追加）
+**最終更新:** 2026-06-23（No 25 PROJECT_DOCUMENT_RULES 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -56,6 +56,7 @@
 | 新ドメイン rule / スキル | 11 | `PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
 | チャット応答（平易さ等） | 16 | `COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
 | 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
+| 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `10_meta/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
 | 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | UI · 図の線の太さ・統一感 | 19 | `10_meta/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
 | UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `10_meta/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
@@ -178,6 +179,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 20 | 10_meta | `10_meta/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
 | 23 | 10_meta | `10_meta/A11Y_ROADMAP.md` | **a11y 導入ロードマップ** — WCAG 2.2 AA 段階導入 · Phase 0–5 | active |
 | 24 | 10_meta | `10_meta/A11Y_RULES.md` | **a11y 横断 SSOT** — WCAG 2.2 AA チェックリスト · ツール · スコープ | active |
+| 25 | 10_meta | `10_meta/PROJECT_DOCUMENT_RULES.md` | **企画フォルダ 6 種** — 要求定義〜ユビキタス言語 · 吸収 · 移行 · 仕様↔コード | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -201,7 +203,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 | 帯 | 含むもの | 含まないもの |
 |----|----------|--------------|
-| 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
+| 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · **企画ドキュメント 6 種** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |

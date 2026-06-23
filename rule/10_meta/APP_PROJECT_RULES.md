@@ -3,10 +3,10 @@
 
 **用途:** 個人開発 × AI 支援で **新規アプリを始める · 企画フォルダを整える · 再開する** ときの横断 SSOT。  
 **ステータス:** active（L1 · スキル `starting-app-project-yk` v1 — 実例 1 件）  
-**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
-**実例:** [flowchart-web 企画 + AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md)
+**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `10_meta/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
+**実例:** [flowchart-web 企画 + エージェント憲法](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/05_開発ガイドライン/エージェント憲法.md)
 
-**最終更新:** 2026-05-31
+**最終更新:** 2026-06-23
 
 ---
 
@@ -117,31 +117,15 @@ AGENTS.md → コード（yk-tool 等）
 
 ---
 
-## 6. 企画フォルダ推奨構成（個人 · 浅い階層）
+## 6. 企画フォルダ推奨構成（個人 · 6 種体系）
 
-**標準（2026-05-24〜）:** 企画が増える前提で **番号付きサブフォルダ**を使う。索引はルート `README.md` のみ。
+**SSOT:** フォルダ名 · 種別定義 · 吸収ルール · 移行手順は **`10_meta/PROJECT_DOCUMENT_RULES.md`（No 25）** を Read。本節はライフサイクル上の要約のみ。
 
-```text
-{企画フォルダ}/
-├── README.md              # 唯一の索引
-├── AGENTS.md              # 憲法（ルート固定）
-├── 新チャット依頼.md       # 薄いラッパ（ルート固定）
-├── 再開メモ.md             # 廃止 stub 可（handoffs へ）
-├── 01_product/            # 概要 · MVP · 完成定義 · アクティブ UX 調査
-├── 02_spec/               # データモデル · 画面 · 技術方針 · 列の意味
-├── 03_plan/               # フェーズ計画
-├── 04_decisions/          # ADR · decision-log（経緯索引）
-└── 99_archive/
-    ├── research/          # 立ち上げ期調査（再開時は読まない）
-    └── evidence/          # 手動確認スナップショット
-```
+**標準（2026-06-23〜）:** 6 種（`01_要求定義/` 〜 `06_ユビキタス言語/`）+ 別枠（`00_テーマ/` · `99_アーカイブ/` · handoffs）。憲法は `05_開発ガイドライン/エージェント憲法.md`。新規は最小 3 種（`01` · `04` · `05/エージェント憲法`）。
 
-**複数プロジェクト:** `yk-memo/00.ai-driven-school/README.md` にプロジェクト一覧 · slug 対応表。
+**移行中:** flowchart-web 等は旧 `01_product/` · ルート `AGENTS.md` のまま可 — 物理移行は rule 確定後（`PROJECT_DOCUMENT_RULES` §8）。
 
-**移行:** フラット 18 ファイル → 上記へ。実例: [flowchart-web 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/)。
-
-**読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → `AGENTS.md`（ルート）。  
-**読む順序（仕様疑問時）:** `02_spec/データモデル.md` · `04_decisions/ADR` · `04_decisions/decision-log.md`（経緯） · `01_product/完成チェックリスト.md`。
+**読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → エージェント憲法（移行完了後は `05_開発ガイドライン/`、未完了はルート `AGENTS.md`）。
 
 ---
 
@@ -189,10 +173,11 @@ AGENTS.md → コード（yk-tool 等）
 ## 9. 実装セッションの読む順序
 
 1. **`10_meta/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時
-2. **handoffs** — 毎セッション §4
-3. **`AGENTS.md`** — 境界
-4. **スタック L1** — `RULE_INDEX` クイック入口（触るドメインのみ）
-5. **Product Spec** — 仕様疑問時のみ
+2. **`10_meta/PROJECT_DOCUMENT_RULES.md`** — 企画フォルダ構成 · 6 種 · 移行時
+3. **handoffs** — 毎セッション §4
+4. **エージェント憲法**（`05_開発ガイドライン/` または移行中はルート `AGENTS.md`）— 境界
+5. **スタック L1** — `RULE_INDEX` クイック入口（触るドメインのみ）
+6. **Product Spec** — 仕様疑問時のみ
 
 詳細手順 → [RULE_ROUTING_PLAYBOOK.md](../RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開)
 
