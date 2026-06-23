@@ -1,34 +1,35 @@
 ---
 name: starting-app-project-yk
 description: >
-  個人アプリの企画パック新設・handoffs 一本化・AGENTS.md 整備。発火例「新しいアプリを始めて」「企画フォルダを作って」「AGENTS.md を作って」「handoffs に移行して」。
+  個人アプリの企画パック新設・handoffs 一本化・エージェント憲法整備。発火例「新しいアプリを始めて」「企画フォルダを作って」「エージェント憲法を作って」「AGENTS.md を作って」「handoffs に移行して」。
   Do NOT use for セッション再開/引き継ぎ終了（→ handoff-session-work）、スタック実装（→ creating-nextjs-yk 等）、commit（→ committing-with-git-yk）、rule L1 新設のみ（→ PROGRESSIVE + RULE_INDEX）。
 ---
 
 # Starting App Project（YK）
 
-個人開発 × AI 向けの **企画パック設置**と **handoffs 一本化**。方針 SSOT は No 17 `APP_PROJECT_RULES.md` — 本スキルは手順のみ。
+個人開発 × AI 向けの **企画パック設置**と **handoffs 一本化**。方針 SSOT は No 17 `APP_PROJECT_RULES.md` · No 25 `PROJECT_DOCUMENT_RULES.md` — 本スキルは手順のみ。
 
-**応答の先頭ラベル:** `[新規]` `[整理]` `[AGENTS]` のいずれか。
+**応答の先頭ラベル:** `[新規]` `[整理]` `[憲法]` のいずれか。
 
 ## モード選択（先に 1 つ）
 
 | モード | 発火例 | 成果物 |
 |--------|--------|--------|
-| **新規** | 新しいアプリ · 企画フォルダを作って · プロジェクトを始めて | slug · HANDOFF · 企画最小セット · AGENTS.md |
+| **新規** | 新しいアプリ · 企画フォルダを作って · プロジェクトを始めて | slug · HANDOFF · 企画最小 3 種 · エージェント憲法 |
 | **整理** | handoffs に移行 · 再開メモを廃止 · Phase 1 整理 | stub · README 読む順序 · 進捗表記統一 |
-| **AGENTS** | AGENTS.md だけ · 憲法を書いて | `AGENTS.md`（+ 必要なら `新チャット依頼.md` 薄型化） |
+| **憲法** | エージェント憲法 · AGENTS.md · 憲法を書いて | `05_開発ガイドライン/エージェント憲法.md`（+ `新チャット依頼.md` 薄型化） |
 
-曖昧なときは **1 問だけ**: 新規 / 既存整理 / AGENTS のみ。
+曖昧なときは **1 問だけ**: 新規 / 既存整理 / 憲法のみ。
 
 ## 依存（Read 順）
 
 | 順 | SSOT |
 |----|------|
 | 1 | `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` |
-| 2 | 本スキル [references/checklist.md](references/checklist.md) |
-| 3 | AGENTS 作成時 → [references/agents-template.md](references/agents-template.md) |
-| 4 | handoffs 初回/整理 → スキル `handoff-session-work` · `references/routing.md` |
+| 2 | `c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md` §7 · §11 · §12 |
+| 3 | 本スキル [references/checklist.md](references/checklist.md) |
+| 4 | 憲法作成時 → [references/agents-template.md](references/agents-template.md) |
+| 5 | handoffs 初回/整理 → スキル `handoff-session-work` · `references/routing.md` |
 
 ## 新規モード
 
@@ -36,10 +37,10 @@ description: >
 2. [checklist.md §新規](references/checklist.md#新規アプリ) に従い Write
 3. `handoffs/{slug}/HANDOFF.md` · `handoffs/README.md` · `routing.md` §既知プロジェクト例 を更新
 4. 企画 `README.md` に再開 3 ファイル · handoffs リンク
-5. **`新チャット依頼.md`** は handoffs + AGENTS の短いラッパのみ
-6. スタックが決まっていれば `RULE_INDEX` クイック入口の No を AGENTS に列挙
+5. **`新チャット依頼.md`** は handoffs + エージェント憲法の短いラッパのみ
+6. スタックが決まっていれば `RULE_INDEX` クイック入口の No を憲法に列挙
 
-**禁止:** 完成チェックリスト全項目の一括作成 · 122KB 級 HANDOFF · 企画にセッション進捗 SSOT
+**禁止:** 完成チェックリスト全項目の一括作成 · 122KB 級 HANDOFF · 企画にセッション進捗 SSOT · ルート `AGENTS.md`（新規）
 
 ## 整理モード
 
@@ -53,10 +54,10 @@ description: >
 
 引き継ぎ **終了/再開** そのもの → `handoff-session-work` に委譲。
 
-## AGENTS モード
+## 憲法モード
 
 1. [agents-template.md](references/agents-template.md) を Read
-2. プロジェクト値で埋めて Write（**500 行未満**）
+2. `05_開発ガイドライン/エージェント憲法.md` にプロジェクト値で Write（**500 行未満**）
 3. slug ↔ 企画パス ↔ コードパスを 1 表に
 
 ## 使わない場面
@@ -66,7 +67,7 @@ description: >
 | 続きから · 引き継ぎして | `handoff-session-work` |
 | Next.js / React Flow 実装 | `creating-nextjs-yk` · `creating-reactflow-yk` 等 |
 | commit / push | `committing-with-git-yk` |
-| No 17 rule 本文の改訂のみ | `APP_PROJECT_RULES.md` 直接 |
+| No 17 / No 25 rule 本文の改訂のみ | 各 `*_RULES.md` 直接 |
 
 ## 制約
 
@@ -75,5 +76,5 @@ description: >
 
 ## 参照
 
-- 実例: [flowchart-web AGENTS.md](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md)
+- 実例: [flowchart-web エージェント憲法](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/05_開発ガイドライン/エージェント憲法.md)
 - プレイブック: `RULE_ROUTING_PLAYBOOK.md` §個人アプリ
