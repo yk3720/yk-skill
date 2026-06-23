@@ -98,7 +98,7 @@
 
 ```markdown
 ## Ref Plan
-- §2 対象: flowchart-web-reactflow | flowchart-web-mermaid | workspace-ui-kit | （surge なら中止）
+- §2 対象: flowchart-studio | flowchart-web-mermaid | workspace-ui-kit | （surge なら中止）
 - tier: Standard（理由を1行）
 - tags: add-component, flowchart-web
 - load: SHADCN_UI_RULES L1 · components.json · （ROUTER §3 の公式 1 本）

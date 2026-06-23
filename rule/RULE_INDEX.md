@@ -38,7 +38,7 @@
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
 | Python `.py` | 41 | `40_python/PYTHON_RULES.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
-| `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-reactflow--react-flow-を触るとき) | `reactflow-dev-entry` |
+| `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
 | flowchart · 表 → Mermaid プレビュー | 35 | 同上 | [flowchart mmd](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | `reactflow-dev-entry` |
 | React 一般 · Hooks（flowchart 外） | 36 | `30_web_stack/REACT_RULES.md` | [React](RULE_ROUTING_PLAYBOOK.md#読む順序react-client-コンポーネントを触るとき) | — |
 | Supabase · RLS · Auth · DB | 37 | `30_web_stack/SUPABASE_RULES.md` | L1 直接 | — |
@@ -70,7 +70,7 @@
 
 | やりたいこと | 使う | 使わない |
 |--------------|------|----------|
-| `@xyflow/react` · 表駆動フロー · `flowchart-web-reactflow` | No **35** · `creating-reactflow-yk` | No 36 のみ · `creating-mermaid-yk` · surge 図解スキル |
+| `@xyflow/react` · 表駆動フロー · `flowchart-studio` | No **35** · `creating-reactflow-yk` | No 36 のみ · `creating-mermaid-yk` · surge 図解スキル |
 | 汎用 React / Hooks · `components/**`（flowchart 外） | No **36** · `creating-react-yk` | No 35 のみで代替 |
 | `.mmd` 執筆 · diagram-as-code | No **45** · `creating-mermaid-yk` | No 35 のプレビュー手順で `.mmd` 執筆を代替 |
 | flowchart · 表 → Mermaid **プレビュー** | No **35** · `creating-reactflow-yk` | **`creating-mermaid-yk`** |
@@ -186,7 +186,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 32 | 30_web_stack | `30_web_stack/SHADCN_UI_RULES.md` | shadcn / Base UI 作業 | active |
 | 33 | 30_web_stack | `30_web_stack/TAILWINDCSS_RULES.md` | Tailwind 作業 | active |
 | 34 | 30_web_stack | `30_web_stack/VERCEL_RULES.md` | Vercel / Neon デプロイ | active |
-| 35 | 35_reactflow | `35_reactflow/REACTFLOW_RULES.md` | 表駆動フロー · `@xyflow/react` · `flowchart-web-reactflow` | active |
+| 35 | 35_reactflow | `35_reactflow/REACTFLOW_RULES.md` | 表駆動フロー · `@xyflow/react` · `flowchart-studio` | active |
 | 36 | 30_web_stack | `30_web_stack/REACT_RULES.md` | React コンポーネント · Hooks · Client UI | active |
 | 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | draft |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
@@ -269,7 +269,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
 | 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
 | 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
-| フローチャート Web（React Flow） | `c:/yk-tool/flowchart-web-reactflow/` | ADR-010 · 表 → React Flow |
+| フローチャート Web（React Flow） | `c:/yk-application/flowchart-studio/` | ADR-010 · 表 → React Flow |
 | フローチャート Web（Mermaid 比較） | `c:/yk-tool/flowchart-web-mermaid/` | ADR-010 · 表 → Mermaid プレビュー |
 | Playwright E2E | `c:/yk-tool/playwright-test/` | 移行元: `yk-skill/playwright-test/`（2026-05-23） |
 | Python デスクトップツール | `c:/1.cursor/5.Python/` | 新規本番は必要分のみ **新フォルダへ移出** · `revision-protection` 適用 |
@@ -284,7 +284,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | タスク | 載せるルート |
 |--------|-------------|
 | 図解生成・デプロイ | `yk-skill` + `yk-tool` |
-| ui-kit / flowchart-web-reactflow | `yk-tool` + `yk-skill` |
+| ui-kit / flowchart-studio | `yk-tool` + `yk-skill` |
 | Excel 読取・変換 | `yk-document` + `5.Python` |
 | 企画確認のみ | `yk-memo` のみ可 |
 

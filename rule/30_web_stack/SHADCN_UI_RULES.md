@@ -28,7 +28,7 @@
 
 | 判定（cwd / パス / シグナル） | 適用節 | プリミティブ | init の base |
 |------------------------------|--------|--------------|--------------|
-| `flowchart-web-reactflow` · `flowchart-web-mermaid` | **§13** | Radix · **`asChild`** | `-b radix` |
+| `flowchart-studio` · `flowchart-web-mermaid` | **§13** | Radix · **`asChild`** | `-b radix` |
 | `workspace-ui-kit` | **§12** | Base UI · **`render`** | 既存は **re-init 禁止** · 新規のみ `-b base` |
 | `@workspace/ui` import あり（将来の Turborepo） | **§11** モノレポ | 各 workspace の `components.json` に従う | `--monorepo` |
 | surge 静的 HTML 図解 | **§14 禁止** | — | shadcn 使わない |
@@ -108,7 +108,7 @@ npx shadcn@latest init -t next --monorepo
 ### 5-3. 既存 Next（YK flowchart 初回導入）
 
 ```bash
-cd c:/yk-tool/flowchart-web-reactflow
+cd c:/yk-application/flowchart-studio
 npx shadcn@latest init -t next -b radix -y -d   # 非対話（preset Nova + Radix）
 npx shadcn@latest add button table input scroll-area
 ```
@@ -301,7 +301,7 @@ npx shadcn@latest add button dialog table field
 5. [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) を併読 — 表編集ロジックは `lib/flowchart/` が SSOT  
 
 ```bash
-cd c:/yk-tool/flowchart-web-reactflow
+cd c:/yk-application/flowchart-studio
 npx shadcn@latest init -t next -b radix -y -d   # 非対話（preset Nova + Radix）
 npx shadcn@latest add button table input scroll-area
 ```

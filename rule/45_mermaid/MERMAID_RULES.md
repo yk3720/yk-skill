@@ -12,7 +12,7 @@
 | 方式 | 場所 | 用途 |
 |------|------|------|
 | **Mermaid DSL（本ルール）** | `.mmd` / Markdown フェンス | テキストで図を版管理・レビュー |
-| **表駆動フロー（React Flow）** | [`c:/yk-tool/flowchart-web-reactflow/`](c:/yk-tool/flowchart-web-reactflow/README.md) | JSON/表 → React Flow（**Mermaid 出力は Phase 外**） |
+| **表駆動フロー（React Flow）** | [`c:/yk-application/flowchart-studio/`](c:/yk-application/flowchart-studio/README.md) | JSON/表 → React Flow（**Mermaid 出力は Phase 外**） |
 | **表駆動フロー（Mermaid 比較）** | [`c:/yk-tool/flowchart-web-mermaid/`](c:/yk-tool/flowchart-web-mermaid/README.md) | 表 → `toMermaid` → ブラウザプレビュー · ADR-010 |
 | **Python フローチャート** | `c:/1.cursor/5.Python/`（MZ 系） | デスクトップ・業務ツール（別ドメイン → `40_python/PYTHON_RULES.md`） |
 
@@ -58,13 +58,13 @@
 
 **逆リンク（実装 README）**
 
-- [`flowchart-web-reactflow/README.md` §図モダリティ](c:/yk-tool/flowchart-web-reactflow/README.md#図モダリティyk-横断)
+- [`flowchart-studio/README.md` §図モダリティ](c:/yk-application/flowchart-studio/README.md#図モダリティyk-横断)
 - [`flowchart-web-mermaid/README.md` §図モダリティ](c:/yk-tool/flowchart-web-mermaid/README.md#図モダリティyk-横断)
-- 索引: [`RULE_INDEX.md`](../RULE_INDEX.md#誤ルーティング早見表) · 手順: [`RULE_ROUTING_PLAYBOOK.md`](../RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-reactflow--react-flow-を触るとき)
+- 索引: [`RULE_INDEX.md`](../RULE_INDEX.md#誤ルーティング早見表) · 手順: [`RULE_ROUTING_PLAYBOOK.md`](../RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき)
 
 | やりたいこと | 選ぶもの | SSOT · 入口 |
 |--------------|----------|-------------|
-| 表・CSV · ブラウザ編集 · PNG/SVG（**React Flow レイアウト**） | **flowchart-web-reactflow** | [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) |
+| 表・CSV · ブラウザ編集 · PNG/SVG（**React Flow レイアウト**） | **flowchart-studio** | [`flowchart-studio/README.md`](c:/yk-application/flowchart-studio/README.md) |
 | 同じ表から **Mermaid プレビュー**（比較） | **flowchart-web-mermaid** | 企画 ADR-010 · [`flowchart-web-mermaid/README.md`](c:/yk-tool/flowchart-web-mermaid/README.md) |
 | テキストで版管理 · Git diff · MD/ADR 埋め込み · レビュー可能な DSL | **Mermaid DSL（本ルール）** | 本ファイル · `.mmd` · `creating-mermaid-yk` · `mermaid-dev-entry.mdc` |
 | デスクトップ業務ツール · Excel 連携 · MZ 系 GUI | **Python** | [`40_python/PYTHON_RULES.md`](../40_python/PYTHON_RULES.md) |
@@ -75,7 +75,7 @@
 2. **Mermaid から flowchart-web へエクスポートが必要か** — **現状 No**（reactflow 版は Mermaid 出力 Phase 外）。比較中は mermaid 版でプレビュー
 3. **surge 図解 HTML か** — 別系統（`creating-visual-explainers` 等）。本節の Mermaid は **diagram-as-code** のみ
 
-**併用:** 同一プロジェクトで「概要は `.mmd`」「実務フロー編集は flowchart-web-reactflow」は可。**同一ノードを二重 SSOT にしない**（正本は企画 ADR · Excel 表）。
+**併用:** 同一プロジェクトで「概要は `.mmd`」「実務フロー編集は flowchart-studio」は可。**同一ノードを二重 SSOT にしない**（正本は企画 ADR · Excel 表）。
 
 ### 1.5-1. Mermaid 3分岐（エージェント向け — 誤ルーティング防止）
 
@@ -83,12 +83,12 @@
 |------|----------------|-------------|--------------|
 | **Mermaid DSL** | `.mmd` · diagram-as-code | **本ファイル** · `creating-mermaid-yk` | No 35 · `flowchart-web-*` |
 | **表 → Mermaid プレビュー** | `flowchart-web-mermaid` · `toMermaid.ts` | [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) · `creating-reactflow-yk` | **本スキル** · `mmdc` |
-| **表 → React Flow** | `flowchart-web-reactflow` · `toReactFlow.ts` | 同上 | **本スキル** |
+| **表 → React Flow** | `flowchart-studio` · `toReactFlow.ts` | 同上 | **本スキル** |
 
 **エージェント:**
 
 - **`.mmd` を触る** → 本ルール + `creating-mermaid-yk`
-- **`flowchart-web-reactflow` または `flowchart-web-mermaid` を触る** → [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) L1 + `creating-reactflow-yk`（本ルール §1.5 は方式境界の参照 · **表プレビューは `creating-mermaid-yk` 非使用**）
+- **`flowchart-studio` または `flowchart-web-mermaid` を触る** → [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) L1 + `creating-reactflow-yk`（本ルール §1.5 は方式境界の参照 · **表プレビューは `creating-mermaid-yk` 非使用**）
 
 ---
 

@@ -72,7 +72,7 @@
 | **Playwright テスト** | `auth/session.json` 等 → `50_gas_html_test/PLAYWRIGHT_RULES.md` §5 |
 | **GAS** | Script Properties にトークン → `50_gas_html_test/GAS_RULES.md` |
 | **Vercel / Neon** | `.env.local` の Sensitive 変数 → `30_web_stack/VERCEL_RULES.md` |
-| **`yk-tool/flowchart-web-reactflow`** | husky / lint-staged / pre-commit（commit）· typecheck + test（push）→ [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md) |
+| **`yk-application/flowchart-studio`** | husky / lint-staged / pre-commit（commit）· typecheck + test（push）→ [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md) |
 
 ---
 

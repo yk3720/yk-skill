@@ -18,7 +18,7 @@
 | [Python](#読む順序python-ツールを触るとき) | `.py` · `5.Python` |
 | [Mermaid](#読む順序mermaid-図を書くとき) | `.mmd` |
 | [React Client](#読む順序react-client-コンポーネントを触るとき) | components · Hooks · `app/` |
-| [flowchart React Flow](#読む順序flowchart-web-reactflow--react-flow-を触るとき) | No 35 |
+| [flowchart React Flow](#読む順序flowchart-studio--react-flow-を触るとき) | No 35 |
 | [flowchart Mermaid プレビュー](#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | 表 → Mermaid プレビュー |
 | [shadcn/ui](#読む順序shadcnui-を触るとき) | `components/ui` |
 | [Vercel / デプロイ](#読む順序vercel--デプロイを触るとき) | deploy |
@@ -68,7 +68,7 @@
 2. **スキル `creating-mermaid-yk/SKILL.md`** — 手順
 3. **`creating-mermaid-yk/references/ROUTER.md`** — tier / tag
 4. **Ref Plan** — `.mmd` 編集前（ROUTER §7）
-5. **表駆動フローが必要なら** → [flowchart React Flow](#読む順序flowchart-web-reactflow--react-flow-を触るとき)（Mermaid 比較版は ADR-010 · 併用 · 代替ではない）
+5. **表駆動フローが必要なら** → [flowchart React Flow](#読む順序flowchart-studio--react-flow-を触るとき)（Mermaid 比較版は ADR-010 · 併用 · 代替ではない）
 
 `yk-skill` · `yk-memo` で `.mmd` を触るときは `mermaid-dev-entry.mdc` が自動適用される。
 
@@ -87,7 +87,7 @@
 
 ---
 
-## 読む順序（flowchart-web-reactflow / React Flow を触るとき）
+## 読む順序（flowchart-studio / React Flow を触るとき）
 
 1. **`35_reactflow/REACTFLOW_RULES.md`** — L1 SSOT（毎回）
 2. **スキル `creating-reactflow-yk/SKILL.md`** — 手順
@@ -96,7 +96,7 @@
 5. **Next.js シェル** — `30_web_stack/NEXTJS_RULES.md` §5 + §6 · `creating-nextjs-yk`
 6. **Client React 一般** — `REACT_RULES.md` · `creating-react-yk`（`components/flowchart` の Hooks）
 7. **shadcn 表 UI** — [shadcn/ui](#読む順序shadcnui-を触るとき) · §13 · `init-radix`（未導入時は init が次の 1 件）
-8. **参照実装** — `c:/yk-tool/flowchart-web-reactflow/`
+8. **参照実装** — `c:/yk-application/flowchart-studio/`
 9. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5
 
 **誤ルーティング:** [RULE_INDEX — 早見表](RULE_INDEX.md#誤ルーティング早見表)。

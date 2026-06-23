@@ -30,7 +30,7 @@
 |------|------|
 | **準拠目標** | WCAG 2.2 Level AA を **設計・レビュー・テストの基準** とする |
 | **対象外** | 公的適合宣言 · 第三者監査 · WCAG 3.0 準拠 |
-| **Phase 1 スコープ** | `workspace-ui-kit` 共通 UI ＋ `flowchart-web-reactflow` **操作 chrome のみ** |
+| **Phase 1 スコープ** | `workspace-ui-kit` 共通 UI ＋ `flowchart-studio` **操作 chrome のみ** |
 | **Phase 1 やらないこと** | React Flow キャンバス本体 · surge 静的図解 · GAS レポート再監査 · 既存画面一括改修 |
 | **却下した案** | B: GAS ルール拡張のみ · C: axe のみ先行 · D: ui-kit のみ（キャンバス除外は A′ に統合） |
 
@@ -114,7 +114,7 @@ Phase 5  キャンバス（別意思決定）
 
 ### 5-1. flowchart（最優先）
 
-**SSOT:** `c:/yk-tool/flowchart-web-reactflow/components/flowchart/flowchartUiClasses.ts`
+**SSOT:** `c:/yk-application/flowchart-studio/components/flowchart/flowchartUiClasses.ts`
 
 | Step | 内容 | WCAG |
 |------|------|------|
@@ -155,7 +155,7 @@ Phase 5  キャンバス（別意思決定）
 
 | 対象 | 内容 |
 |------|------|
-| `flowchart-web-reactflow/package.json` | `@axe-core/playwright`（devDependency） |
+| `flowchart-studio/package.json` | `@axe-core/playwright`（devDependency） |
 | `e2e/helpers/a11y.ts` | AxeBuilder · タグ · gate · exclude SSOT |
 | `e2e/manual-check.spec.ts` | 専用 test **1 本**（`openPreviewWithSample` 安定後） |
 

@@ -160,7 +160,7 @@ UI を **Write / 大きく変える前** または **UI レビュー** で、次
 
 ---
 
-## 4. ドメイン例 — flowchart-web-reactflow
+## 4. ドメイン例 — flowchart-studio
 
 実装 SSOT は各ファイル。本節は**当てはめ例**（評価のたたき台）。
 

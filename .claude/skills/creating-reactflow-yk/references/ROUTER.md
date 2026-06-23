@@ -81,11 +81,11 @@
 
 | パス | いつ load |
 |------|-----------|
-| `c:/yk-tool/flowchart-web-reactflow/lib/flowchart/` | domain / layout / edges 変更（**mermaid 版と同期 MUST**） |
-| `c:/yk-tool/flowchart-web-reactflow/components/flowchart/` | UI / canvas（reactflow 版） |
+| `c:/yk-application/flowchart-studio/lib/flowchart/` | domain / layout / edges 変更（**mermaid 版と同期 MUST**） |
+| `c:/yk-application/flowchart-studio/components/flowchart/` | UI / canvas（reactflow 版） |
 | `c:/yk-tool/flowchart-web-mermaid/lib/flowchart/` | domain / `toMermaid`（**reactflow 版と同期 MUST**） |
 | `c:/yk-tool/flowchart-web-mermaid/components/flowchart/` | UI / Mermaid プレビュー |
-| `c:/yk-tool/flowchart-web-reactflow/docs/design-system.md` | 操作 UI / スタイル変更（**chrome-ui**） |
+| `c:/yk-application/flowchart-studio/docs/design-system.md` | 操作 UI / スタイル変更（**chrome-ui**） |
 | `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/意思決定記録(ADR).md` | Full · 方式変更 |
 
 ---
@@ -106,7 +106,7 @@
 ```markdown
 ## Ref Plan
 - tier: Light（例: themes.ts の色のみ）
-- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md §4, c:/yk-tool/flowchart-web-reactflow/lib/flowchart/themes.ts
+- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md §4, c:/yk-application/flowchart-studio/lib/flowchart/themes.ts
 ```
 
 ### Standard / Full
@@ -115,7 +115,7 @@
 ## Ref Plan
 - tier: Standard（例: 分岐ずれ修正）
 - tags: layout, edges
-- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md, c:/yk-tool/flowchart-web-reactflow/lib/flowchart/layoutGrid.ts, c:/yk-tool/flowchart-web-reactflow/lib/flowchart/buildEdges.ts
+- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md, c:/yk-application/flowchart-studio/lib/flowchart/layoutGrid.ts, c:/yk-application/flowchart-studio/lib/flowchart/buildEdges.ts
 - skip: 公式（参照実装で足りる）
 ```
 

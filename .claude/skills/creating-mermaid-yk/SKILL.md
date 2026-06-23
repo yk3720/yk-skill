@@ -33,12 +33,12 @@ description: Mermaid DSL（.mmd）の作成・更新・検証。発火例「merm
 
 ## 方式境界
 
-**図モダリティ SSOT:** `MERMAID_RULES.md` §1.5 ↔ [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) §図モダリティ
+**図モダリティ SSOT:** `MERMAID_RULES.md` §1.5 ↔ [`flowchart-studio/README.md`](c:/yk-application/flowchart-studio/README.md) §図モダリティ
 
 | やりたいこと | 使うもの |
 |--------------|----------|
 | 表・CSV → Mermaid プレビュー（比較 · ADR-010） | [`flowchart-web-mermaid/README.md`](c:/yk-tool/flowchart-web-mermaid/README.md) · `creating-reactflow-yk`（**本スキル非使用**） |
-| 表・CSV → React Flow · PNG/SVG 即出力 | [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) · `creating-reactflow-yk` |
+| 表・CSV → React Flow · PNG/SVG 即出力 | [`flowchart-studio/README.md`](c:/yk-application/flowchart-studio/README.md) · `creating-reactflow-yk` |
 | テキスト SSOT の図（`.mmd`） | **本スキル + MERMAID_RULES** |
 | Python デスクトップ業務ツール | `creating-pythoncode-yk` |
 | surge 図解 HTML | `creating-visual-explainers` 等（本スキル非使用） |

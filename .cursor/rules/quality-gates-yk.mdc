@@ -1,6 +1,6 @@
 ---
 description: 品質ゲート（lint/hook/CI）— 編集時・コミット時・デプロイ時の3層
-globs: "**/flowchart-web-reactflow/**/*"
+globs: "**/flowchart-studio/**/*"
 alwaysApply: false
 ---
 

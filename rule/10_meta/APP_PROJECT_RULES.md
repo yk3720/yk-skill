@@ -73,7 +73,8 @@ Session Handoff（今回 1 件）
 | ルート | 役割 |
 |--------|------|
 | `c:/yk-memo` | 企画フォルダ · **`handoffs/`** |
-| `c:/yk-tool` | Web/ツール **実装**（別アプリ = 別ディレクトリ） |
+| `c:/yk-tool` | 汎用ツール · 実験アプリ（モノレポ） |
+| `c:/yk-application` | **独立 Git** の本線アプリ（例: `flowchart-studio`）— `YK_APPLICATION_RULES` |
 | `c:/yk-skill` | **本 rule** · スタック rule · スキル |
 | `c:/1.cursor/5.Python` | Python デスクトップ（rev 積層保護） |
 
@@ -211,7 +212,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | slug | `flowchart-web` |
 | 企画 | `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/` |
 | handoffs | `c:/yk-memo/handoffs/flowchart-web/HANDOFF.md` |
-| コード | `c:/yk-tool/flowchart-web-reactflow/` · `flowchart-web-mermaid/` |
+| コード | `c:/yk-application/flowchart-studio/` · `flowchart-web-mermaid/` |
 | 経緯索引 | `04_decisions/decision-log.md` |
 | §4（2026-05-31 時点） | DB-2 dev 003+004 適用済 · 次: アプリ uuid 化 |
 | スタック | No 35 REACTFLOW · No 31 NEXTJS · No 37 SUPABASE |

@@ -26,13 +26,13 @@
 
 | パス | フック |
 |------|--------|
-| `yk-tool/flowchart-web-reactflow` | **要**（Web + Python 混在） |
+| `yk-application/flowchart-studio` | **要**（Web + Python 混在） |
 | `yk-memo` · `yk-skill` | 不要（MD/ルール中心） |
 | その他 `yk-tool/*` | `package.json` / `pyproject.toml` の有無で個別判断 |
 
 ---
 
-## 3. Web（flowchart-web-reactflow）
+## 3. Web（flowchart-studio）
 
 ### ツール
 
@@ -63,7 +63,7 @@
 
 | hook | 目的 | 対象 |
 |------|------|------|
-| `check-merge-conflict` | `<<<<<<<` 等の未解決マーカーを commit 拒否 | ステージされた `flowchart-web-reactflow/**` 全般 |
+| `check-merge-conflict` | `<<<<<<<` 等の未解決マーカーを commit 拒否 | ステージされた `flowchart-studio/**` 全般 |
 | `detect-private-key` | SSH / PEM 秘密鍵の誤 commit 拒否 | 同上 |
 | `ruff-check` + `ruff-format` | Python lint / format | `tools/excel_normalize/**` のみ |
 
@@ -83,12 +83,12 @@
 | hook 失敗（exit 1） | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
 | `check-merge-conflict` が **WinError 4551**（アプリケーション制御ポリシー） | Cursor エージェント環境で pre-commit フックが OS により実行不可 | 競合マーカーを手動確認後、当該フックのみ `SKIP=check-merge-conflict` — 詳細は `committing-with-git-yk/references/commit-shell.md` |
 
-**モノレポ注意:** `yk-tool` が git ルート。pre-commit の `--files` はルート相対パス（`flowchart-web-reactflow/...`）で、**実行 cwd は git ルート**。
+**モノレポ注意:** `yk-tool` が git ルート。pre-commit の `--files` はルート相対パス（`flowchart-studio/...`）で、**実行 cwd は git ルート**。
 
 ### 初期化（新規クローン後）
 
 ```powershell
-cd flowchart-web-reactflow
+cd flowchart-studio
 npm install
 pip install -e "tools/excel_normalize[dev]"
 ```
@@ -118,12 +118,12 @@ pip install -e "tools/excel_normalize[dev]"
 
 ## 6. CI
 
-- **SSOT:** `yk-tool/.github/workflows/flowchart-web-reactflow-ci.yml`
+- **SSOT:** `yk-tool/.github/workflows/flowchart-studio-ci.yml`
 - **`HUSKY=0`:** CI では Git hook をスキップし、同じ検査をコマンドで直接実行（二重実行防止）
-- push/PR で `flowchart-web-reactflow/**` 変更時に **2 ジョブ**（`quality` · `Playwright E2E` · 並列）:
+- push/PR で `flowchart-studio/**` 変更時に **2 ジョブ**（`quality` · `Playwright E2E` · 並列）:
   - **quality:** lint · format · typecheck · vitest · ruff · **mypy** · pre-commit（セキュリティ + ruff）· pytest · **`npm run build`**（`AUTH_DISABLED=1`）
   - **e2e:** `npm run build` → **`npm run test:e2e`**（`AUTH_DISABLED=1` · `IMPORT_E2E_STUB=1` · `PLAYWRIGHT_E2E=1` · 既存 28 spec）
-- pre-commit は **git ルート**から `--config flowchart-web-reactflow/.pre-commit-config.yaml`（モノレポ path 整合）
+- pre-commit は **git ルート**から `--config flowchart-studio/.pre-commit-config.yaml`（モノレポ path 整合）
 - Vercel build はデプロイ最終ゲート（CI build は早期検出）
 
 ---

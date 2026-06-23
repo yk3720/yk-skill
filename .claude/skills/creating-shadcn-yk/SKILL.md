@@ -36,7 +36,7 @@ ROUTER §1 と同じ: §2 確定 → tier/tag → Ref Plan → load → §15 ゲ
 ### flowchart-web-*（初回 · Radix）
 
 ```bash
-cd c:/yk-tool/flowchart-web-reactflow   # または flowchart-web-mermaid
+cd c:/yk-application/flowchart-studio   # または flowchart-web-mermaid
 npx shadcn@latest init -t next -b radix -y -d
 npx shadcn@latest add button --dry-run   # 確認後
 npx shadcn@latest add button

@@ -434,7 +434,7 @@ const labelBox = await page.locator('[data-edge-label-branch="yes"]').boundingBo
 expect(labelBox).not.toBeNull();
 // edgeBox も同様 · labelBox!.left >= edgeBox!.right + MIN_GAP_PX
 
-// 複数 path（flowchart 例 — canonical: flowchart-web-reactflow/e2e/edge-label-placement.spec.ts）
+// 複数 path（flowchart 例 — canonical: flowchart-studio/e2e/edge-label-placement.spec.ts）
 await expect(async () => {
   const result = await page.evaluate(() => {
     const label = document.querySelector('[data-edge-label-branch="yes"]');
@@ -468,7 +468,7 @@ await expect(async () => {
 | リポジトリ | テスト置き場 | 起動例 |
 |------------|--------------|--------|
 | `c:/yk-tool/playwright-test/` | `tests/*.spec.ts` | `cd ...; npx playwright test` |
-| `flowchart-web-reactflow` | `e2e/*.spec.ts` | `npm run test:e2e` · ラベルのみ `npm run test:e2e:labels` · E2E は **:3001** + `AUTH_DISABLED=1`（日常 dev :3000 と別）· [`docs/LOCAL_DEV.md`](../../../yk-tool/flowchart-web-reactflow/docs/LOCAL_DEV.md) |
+| `flowchart-studio` | `e2e/*.spec.ts` | `npm run test:e2e` · ラベルのみ `npm run test:e2e:labels` · E2E は **:3001** + `AUTH_DISABLED=1`（日常 dev :3000 と別）· [`docs/LOCAL_DEV.md`](../../../yk-application/flowchart-studio/docs/LOCAL_DEV.md) |
 | その他 Next アプリ | `e2e/*.spec.ts` | 各 `docs/LOCAL_DEV.md` |
 
 **エージェント:** Shell は [`AGENT_SHELL_RULES.md`](../60_tooling/AGENT_SHELL_RULES.md) §3-2（test / E2E / 確認して の明示、**または** UI 修正で spec を追加した同一ターン）。Cursor からは `required_permissions: ["all"]`。

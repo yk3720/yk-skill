@@ -33,7 +33,7 @@ description: 表駆動フローチャート（@xyflow/react）の作成・更新
 
 ## 方式境界
 
-**図モダリティ SSOT:** `REACTFLOW_RULES.md` §2 ↔ [`flowchart-web-reactflow/README.md`](c:/yk-tool/flowchart-web-reactflow/README.md) §図モダリティ
+**図モダリティ SSOT:** `REACTFLOW_RULES.md` §2 ↔ [`flowchart-studio/README.md`](c:/yk-application/flowchart-studio/README.md) §図モダリティ
 
 | やりたいこと | 使うもの |
 |--------------|----------|
@@ -50,4 +50,4 @@ L0 正本: `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（`yk-memo` · `y
 
 ---
 
-索引: `c:/yk-skill/rule/RULE_INDEX.md` No 35 · 参照実装: `c:/yk-tool/flowchart-web-reactflow/`
+索引: `c:/yk-skill/rule/RULE_INDEX.md` No 35 · 参照実装: `c:/yk-application/flowchart-studio/`

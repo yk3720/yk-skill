@@ -19,7 +19,7 @@
 - [ ] GAS のトークンを **ソースコードに直書きしていない**（Script Properties）
 - [ ] Vercel Sensitive 変数を **`********` のままコピーしていない**
 - [ ] surge / FB 等の認証情報を **リポジトリに保存していない**
-- [ ] `flowchart-web-reactflow` では pre-commit の **`detect-private-key`** が通る（機械チェック — 詳細は `QUALITY_GATE_RULES` §3）
+- [ ] `flowchart-studio` では pre-commit の **`detect-private-key`** が通る（機械チェック — 詳細は `QUALITY_GATE_RULES` §3）
 
 ---
 

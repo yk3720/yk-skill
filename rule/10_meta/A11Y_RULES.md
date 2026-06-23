@@ -13,7 +13,7 @@
 | 線の太さ · 色の役割（要約） | [`VISUAL_DESIGN_RULES.md`](VISUAL_DESIGN_RULES.md) No **19** |
 | UX ヒューリスティック | [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20** |
 | GAS / surge 静的 HTML（chip · コントラスト表） | [`GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md) No **52** §6 |
-| flowchart 操作 chrome（class SSOT） | `c:/yk-tool/flowchart-web-reactflow/components/flowchart/flowchartUiClasses.ts` · [`design-system.md`](c:/yk-tool/flowchart-web-reactflow/docs/design-system.md) レイヤー C |
+| flowchart 操作 chrome（class SSOT） | `c:/yk-application/flowchart-studio/components/flowchart/flowchartUiClasses.ts` · [`design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md) レイヤー C |
 | shadcn / ui-kit 部品 | [`SHADCN_UI_RULES.md`](../30_web_stack/SHADCN_UI_RULES.md) · `workspace-ui-kit/components/ui/` |
 | Playwright · axe · E2E 設計 | [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md) No **53** · [`a11y.md`](../../.claude/skills/designing-playwright-tests-yk/references/a11y.md) |
 
@@ -41,7 +41,7 @@
 | 対象 | 備考 |
 |------|------|
 | `workspace-ui-kit` 共通 UI | shadcn ベース · diagram-manager 等が恩恵 |
-| `flowchart-web-reactflow` **操作 chrome** | ツールバー · ナビ · 表 · ダイアログ · 認証バー |
+| `flowchart-studio` **操作 chrome** | ツールバー · ナビ · 表 · ダイアログ · 認証バー |
 | 新規画面（上記リポジトリ） | §5 チェックリスト全項目 |
 
 ### 2-2. Phase 1 やらないこと
@@ -181,7 +181,7 @@ export const WCAG_AXE_TAGS = [
 ] as const;
 ```
 
-実装 SSOT（Phase 2 以降）: `flowchart-web-reactflow/e2e/helpers/a11y.ts`  
+実装 SSOT（Phase 2 以降）: `flowchart-studio/e2e/helpers/a11y.ts`  
 設計 SSOT: [`a11y.md`](../../.claude/skills/designing-playwright-tests-yk/references/a11y.md)
 
 ### 7-3. axe 実行タイミング（代表）
