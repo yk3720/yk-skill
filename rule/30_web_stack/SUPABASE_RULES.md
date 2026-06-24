@@ -324,6 +324,21 @@ Supabase の無料枠では Magic Link の送信頻度に制限（1時間2通程
 2.  **新規登録**: アプリから `signUp({ email, password })` でユーザー作成。
 3.  **既存ユーザーへの設定**: 既に Magic Link で作成済みのユーザーにパスワードを設定する場合、Dashboard の `Users` から一度削除して登録し直すのが最短。
 
+### 6-3. 試用期の共有アカウント（開発 Supabase のみ）
+
+複数人に Vercel dev URL で触ってもらうとき、**許可リスト + 共有パスワード**が手早い（自己登録 UI は未実装）。
+
+1. **Authentication → Users → Add user** — `@` 付きダミーメール · Auto Confirm ON
+2. **Table Editor → `profiles`** — 同じメール · `editor` または `admin`
+3. 試用者には **パスワードでログイン** を案内（Magic Link は送信制限あり）
+
+| 禁止 | 理由 |
+|------|------|
+| 専用本番 Supabase に共有 admin を置く | 本番データ汚染 · OAuth 一本化方針と矛盾 |
+| `AUTH_DISABLED=1` を Vercel に設定 | 全員無認証 editor · クラウド保存も不整合 |
+
+手順詳細: [`SUPABASE_SETUP.md`](../../../yk-application/flowchart-studio/docs/runbooks/SUPABASE_SETUP.md) §3-1
+
 ### ⚠ セキュリティ注意
 
 | 環境 | 対応 |
