@@ -328,8 +328,8 @@ Supabase の無料枠では Magic Link の送信頻度に制限（1時間2通程
 
 | 環境 | 対応 |
 |------|------|
-| **開発プロジェクト** | Email 有効 + Magic Link / Password UI 表示 → OK |
-| **本番プロジェクト** | Email プロバイダーを**ダッシュボードで無効化**する（Google/Azure のみ） |
+| **開発プロジェクト**（`flowchart-dev` · 現行 Vercel `-dun` も接続中） | Email 有効 + Magic Link / Password UI 表示 → OK |
+| **専用本番 Supabase**（分離後） | Email プロバイダーを**ダッシュボードで無効化**する（Google/Azure のみ） |
 
 **理由:** Email が有効なまま UI を隠しても、API を直接呼べば任意メールに OTP が送れる。`profiles` に登録済みのメールを持つ攻撃者が `user_id` を紐づけ、全 `flow_documents` を閲覧できる。本番は Google / Azure（許可された組織アカウントのみ）に絞ること。
 

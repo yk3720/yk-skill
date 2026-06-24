@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Next.js App Router — エージェント入口
 
-**優先:** `flowchart-web-*/app/**` は **`reactflow-dev-entry.mdc` を先に**（本ファイルは Next シェル追記）。`components/**` のみの編集では本入口は不要 → `creating-react-yk`。
+**優先:** `flowchart-studio/app/**` は **`reactflow-dev-entry.mdc` を先に**（本ファイルは Next シェル追記）。`components/**` のみの編集では本入口は不要 → `creating-react-yk`。
 
 `app/` 配下の TS/TSX（および Route Handler）を編集するとき:
 
@@ -17,7 +17,7 @@ alwaysApply: false
 
 - `components/ui/**` → **`shadcn-dev-entry.mdc`** 優先（init/add · SHADCN §2）
 - `components/**`（ui 以外）の Hooks · イベント → `creating-react-yk` · `REACT_RULES` + `NEXTJS_RULES` §5
-- `flowchart-web-*/app/**` → **`reactflow-dev-entry.mdc` 優先** + L1 §6
+- `flowchart-studio/app/**` → **`reactflow-dev-entry.mdc` 優先** + L1 §6
 - `workspace-ui-kit/app/**` → `workspace-dev-entry.mdc` + ROUTER tag `ui-kit-shell`
 - `lib/flowchart/` · `@xyflow/react` → `creating-reactflow-yk`（本入口非使用）
 - Vercel link / env / deploy / `vercel.json` → **`vercel-dev-entry.mdc`**（本入口は app/ のみ）

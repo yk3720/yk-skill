@@ -35,7 +35,7 @@
 
 **Radix vs Base UI（混同防止）**
 
-| 項目 | flowchart-web-* | workspace-ui-kit |
+| 項目 | flowchart-studio | workspace-ui-kit |
 |------|-----------------|------------------|
 | shadcn ベース | **Radix（標準）** | **Base UI** |
 | リンクをボタン見た目 | `<Button asChild><Link /></Button>` | `<Button render={<a />} nativeButton={false}>…</Button>` |
@@ -62,7 +62,7 @@
 
 | パス | entry |
 |------|-------|
-| `flowchart-web-*/components/ui/**` | [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc) → 本ファイル **§13** |
+| `flowchart-studio/components/ui/**` | [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc) → 本ファイル **§13** |
 | `workspace-ui-kit/components/ui/**` | [`workspace-dev-entry.mdc`](../../../yk-tool/workspace-ui-kit/.cursor/rules/workspace-dev-entry.mdc) → **§12** |
 | その他 `components/ui/**` · `components.json` | [`shadcn-dev-entry.mdc`](../../.cursor/rules/shadcn-dev-entry.mdc) |
 
@@ -239,7 +239,7 @@ npx shadcn@latest add button dialog table field
 
 | 種別 | 例 | shadcn |
 |------|-----|--------|
-| **単体** | `flowchart-web-*` · **`workspace-ui-kit`**（ルート単体 Next） | `init` / `add` のみ · **`--monorepo` 不要** |
+| **単体** | `flowchart-studio` · **`workspace-ui-kit`**（ルート単体 Next） | `init` / `add` のみ · **`--monorepo` 不要** |
 | **モノレポ** | 将来の Turborepo 雛形 | `init --monorepo` · 各 workspace に `components.json` |
 
 モノレポ要件（公式）: `style` · `baseColor` · **`iconLibrary`** を workspace 間で揃える · v4 は `tailwind.config` を空に。

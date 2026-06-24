@@ -64,7 +64,7 @@
 
 | シグナル | tag | 禁止 |
 |----------|-----|------|
-| `flowchart-web-*` · `components.json` なし | `init-radix` + `flowchart-web` | ui-kit で `-b radix` |
+| `flowchart-studio` · `components.json` なし | `init-radix` + `flowchart-web` | ui-kit で `-b radix` |
 | `npx shadcn add` | `add-component` | surge 静的 HTML |
 | `asChild` · `@radix-ui` | `flowchart-web` | ui-kit で `asChild` |
 | `render` · `@base-ui` | `ui-kit-base-ui` | flowchart で `render` |
@@ -78,7 +78,7 @@
 
 | パス | L0 優先 | shadcn lead |
 |------|---------|-------------|
-| `flowchart-web-*/components/ui/**` | **`reactflow-dev-entry`** → 本スキル | init-radix / add |
+| `flowchart-studio/components/ui/**` | **`reactflow-dev-entry`** → 本スキル | init-radix / add |
 | `workspace-ui-kit/components/ui/**` | **`workspace-dev-entry`** → 本スキル | add のみ（init 禁止） |
 | その他 `**/components/ui/**` | **`shadcn-dev-entry.mdc`** | Standard |
 | `**/components.json` | **`shadcn-dev-entry.mdc`** | §2 確定後 |

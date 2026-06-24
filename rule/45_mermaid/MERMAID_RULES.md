@@ -71,7 +71,7 @@
 
 **迷ったとき（3 問）**
 
-1. **正本は表（行・列）か、テキスト（`.mmd`）か** — 表なら flowchart-web-*（企画は Excel 8列表 · ADR-010）、テキストなら Mermaid
+1. **正本は表（行・列）か、テキスト（`.mmd`）か** — 表なら `flowchart-studio` / `flowchart-web-mermaid`（Excel 8列表 · ADR-010）、テキストなら Mermaid
 2. **Mermaid から flowchart-web へエクスポートが必要か** — **現状 No**（reactflow 版は Mermaid 出力 Phase 外）。比較中は mermaid 版でプレビュー
 3. **surge 図解 HTML か** — 別系統（`creating-visual-explainers` 等）。本節の Mermaid は **diagram-as-code** のみ
 
@@ -81,7 +81,7 @@
 
 | 種類 | パス / 成果物 | L1 · スキル | **使わない** |
 |------|----------------|-------------|--------------|
-| **Mermaid DSL** | `.mmd` · diagram-as-code | **本ファイル** · `creating-mermaid-yk` | No 35 · `flowchart-web-*` |
+| **Mermaid DSL** | `.mmd` · diagram-as-code | **本ファイル** · `creating-mermaid-yk` | No 35 · `flowchart-studio` / `flowchart-web-mermaid` |
 | **表 → Mermaid プレビュー** | `flowchart-web-mermaid` · `toMermaid.ts` | [`REACTFLOW_RULES`](../35_reactflow/REACTFLOW_RULES.md) · `creating-reactflow-yk` | **本スキル** · `mmdc` |
 | **表 → React Flow** | `flowchart-studio` · `toReactFlow.ts` | 同上 | **本スキル** |
 
@@ -260,7 +260,7 @@ Linux CI で Chromium が落ちる場合は `puppeteer-config.json` で `--no-sa
 |------|------|
 | Cursor Agent で `npx mmdc` が `EPERM` / spawn 失敗 | サンドボックス制限 — ユーザー明示 **test** 時のみ Shell · 通常は [Live Editor](https://mermaid.live/) で確認し完了報告に 1 行（`AGENT_SHELL_RULES.md`） |
 | Ref Plan なしで `.mmd` を編集 | §6 Step 0.1 · `creating-mermaid-yk` Step 0.1 — **Write/StrReplace 前**に Ref Plan |
-| 表駆動 `flowchart-web-*` に `creating-mermaid-yk` を使う | 方式境界は §1.5 — 表は **`creating-reactflow-yk`**（mermaid 版プレビューも同スキル） |
+| 表駆動 `flowchart-studio` / `flowchart-web-mermaid` に `creating-mermaid-yk` を使う | 方式境界は §1.5 — 表は **`creating-reactflow-yk`**（mermaid 版プレビューも同スキル） |
 | `.mmd` と ` ```mermaid ` フェンスの二重 SSOT | リポ正本は **`.mmd` 1 箇所**。MD 埋め込みはコピー or 生成元を明記（§2） |
 | 品質ゲート未記載で完了報告 | §8 — **読んだ refs** + mmdc/Live のどちらで確認したか 1 行 |
 

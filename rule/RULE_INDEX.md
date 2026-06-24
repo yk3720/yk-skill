@@ -130,7 +130,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | ルート | 役割 |
 |--------|------|
 | `c:/yk-skill` | スキル · **`rule/`（本索引）** · `metadata/` |
-| `c:/yk-tool` | 成果物 · `publish/` · `workspace-ui-kit/` · `flowchart-web-*` |
+| `c:/yk-tool` | 成果物 · `publish/` · `workspace-ui-kit/` · `flowchart-web-mermaid` |
 | `c:/yk-memo` | 企画 · 講座 · `handoffs/`（Governance 段階 7 — 実装の正解ではない） |
 | `c:/yk-document` | Excel 原本（Git 外）· `exports/` |
 | `c:/yk-application` | 完成間近のアプリ（個別リポジトリ管理用） |
@@ -206,7 +206,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · **企画ドキュメント 6 種** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
-| 35_reactflow | 表駆動 · React Flow · flowchart-web-* | Mermaid DSL（→ 45）· surge 図解 HTML |
+| 35_reactflow | 表駆動 · React Flow · `flowchart-studio` | Mermaid DSL（→ 45）· surge 図解 HTML |
 | 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
 | 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | L1 本文に手順全文は含めない（→ L2 `creating-mermaid-yk` + `ROUTER.md`） |
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
@@ -284,7 +284,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | タスク | 載せるルート |
 |--------|-------------|
 | 図解生成・デプロイ | `yk-skill` + `yk-tool` |
-| ui-kit / flowchart-studio | `yk-tool` + `yk-skill` |
+| ui-kit / flowchart-studio | `yk-application/flowchart-studio` + `yk-skill`（handoffs 時は `yk-memo`） |
 | Excel 読取・変換 | `yk-document` + `5.Python` |
 | 企画確認のみ | `yk-memo` のみ可 |
 

@@ -86,7 +86,7 @@
 | `c:/yk-tool/flowchart-web-mermaid/lib/flowchart/` | domain / `toMermaid`（**reactflow 版と同期 MUST**） |
 | `c:/yk-tool/flowchart-web-mermaid/components/flowchart/` | UI / Mermaid プレビュー |
 | `c:/yk-application/flowchart-studio/docs/design-system.md` | 操作 UI / スタイル変更（**chrome-ui**） |
-| `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/04_decisions/意思決定記録(ADR).md` | Full · 方式変更 |
+| `c:/yk-application/flowchart-studio/specs/03_技術仕様/意思決定記録(ADR).md` | Full · 方式変更 |
 
 ---
 

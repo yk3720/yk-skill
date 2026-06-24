@@ -4,7 +4,7 @@
 **要約・MUST:** `yk-skill/rule/30_web_stack/NEXTJS_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-05-24
+**最終更新:** 2026-06-24
 
 ---
 
@@ -73,7 +73,7 @@
 | `generateMetadata` · OG | `metadata` |
 | `app/**/route.ts` | `route-handler` |
 | `await cookies()` · `headers()` | `request-apis` |
-| `flowchart-web-*` の `app/` のみ | `flowchart-web`（RF 本体は `creating-reactflow-yk`） |
+| `flowchart-studio` の `app/` のみ | `flowchart-web`（RF 本体は `creating-reactflow-yk`） |
 | `workspace-ui-kit/app/` | `ui-kit-shell` |
 
 ---
@@ -82,7 +82,7 @@
 
 | パス | いつ load |
 |------|-----------|
-| `c:/yk-tool/flowchart-web-*/app/**` | flowchart Next シェル（§6 floor） |
+| `c:/yk-application/flowchart-studio/app/**` | flowchart Next シェル（§6 floor） |
 | `c:/yk-tool/workspace-ui-kit/app/**` | ui-kit Server シェル |
 | その他 Next プロジェクト `app/**` | 作業対象リポの該当ファイル |
 

@@ -33,7 +33,7 @@ ROUTER §1 と同じ: §2 確定 → tier/tag → Ref Plan → load → §15 ゲ
 
 **cwd を必ず明示。** ui-kit 既存は **`add` のみ**（init / `-b` 禁止）。
 
-### flowchart-web-*（初回 · Radix）
+### flowchart-studio（初回 · Radix）
 
 ```bash
 cd c:/yk-application/flowchart-studio   # または flowchart-web-mermaid
@@ -72,7 +72,7 @@ npx shadcn@latest add <component> --diff    # 上書き前必須
 
 | パス | 優先 entry |
 |------|------------|
-| `flowchart-web-*/components/ui/**` | **`reactflow-dev-entry.mdc`** → 本スキル |
+| `flowchart-studio/components/ui/**` | **`reactflow-dev-entry.mdc`** → 本スキル |
 | `workspace-ui-kit/components/ui/**` | **`workspace-dev-entry.mdc`** → 本スキル |
 | その他 `**/components/ui/**` · `components.json` | `shadcn-dev-entry.mdc` |
 

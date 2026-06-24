@@ -71,7 +71,7 @@
 | パス | いつ load |
 |------|-----------|
 | `c:/yk-tool/workspace-ui-kit/components/**` | ui-kit Client 作業 |
-| `c:/yk-tool/flowchart-web-*/components/flowchart/**` | flowchart Client（**RF 併用** — `creating-reactflow-yk`） |
+| `c:/yk-application/flowchart-studio/components/flowchart/**` | flowchart Client（**RF 併用** — `creating-reactflow-yk`） |
 
 ---
 

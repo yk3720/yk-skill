@@ -12,7 +12,7 @@
 **最終更新:** 2026-05-24  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 36
 
-**L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-web-*` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
+**L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-studio` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
 
 ---
 
