@@ -65,7 +65,7 @@
 |------|------|------|
 | `check-merge-conflict` | `<<<<<<<` 等の未解決マーカーを commit 拒否 | ステージされた `flowchart-studio/**` 全般 |
 | `detect-private-key` | SSH / PEM 秘密鍵の誤 commit 拒否 | 同上 |
-| `ruff-check` + `ruff-format` | Python lint / format | `tools/excel_normalize/**` のみ |
+| `ruff-check` + `ruff-format` | Python lint / format | `python/**` のみ |
 
 **pre-commit に入れない:** `tsc`（遅い）· E2E（遅い）· `mypy`（CI 向け）— `PLAYWRIGHT_RULES` §12 どおり E2E はターン内で実行。
 
@@ -90,17 +90,17 @@
 ```powershell
 cd flowchart-studio
 npm install
-pip install -e "tools/excel_normalize[dev]"
+pip install -e "python[dev]"
 ```
 
 `pip install` は **Python ファイルだけでなく** `check-merge-conflict` / `detect-private-key` にも必要（flowchart 配下のあらゆる commit で pre-commit が走る）。
 
 ---
 
-## 4. Python（tools/excel_normalize）
+## 4. Python（python/）
 
 - **Ruff** + **pre-commit**（`ruff-check --fix` → `ruff-format`）
-- 設定: `tools/excel_normalize/pyproject.toml` · `.pre-commit-config.yaml`
+- 設定: `python/pyproject.toml` · `.pre-commit-config.yaml`
 - `PYTHON_RULES` 準拠（mypy は hook ではなく CI 拡張候補 · uv 移行は別タスク）
 
 ---

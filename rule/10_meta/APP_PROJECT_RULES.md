@@ -4,15 +4,15 @@
 **用途:** 個人開発 × AI 支援で **新規アプリを始める · 企画フォルダを整える · 再開する** ときの横断 SSOT。  
 **ステータス:** active（L1 · スキル `starting-app-project-yk` v1 — 実例 1 件）  
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `10_meta/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
-**実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [specs/](c:/yk-application/flowchart-studio/specs/)
+**実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-06-23（§4–§5 · §13 6 種同期）
+**最終更新:** 2026-06-24（§2 docs/ 統合 · frontend/backend/database 三層）
 
 ---
 
 ## 13. 企画ドキュメント種別（経緯 · 合意 · 2026-05-31）
 
-**実例:** [flowchart-studio decision-log](c:/yk-application/flowchart-studio/specs/05_開発ガイドライン/decision-log.md)
+**実例:** [flowchart-studio decision-log](c:/yk-application/flowchart-studio/docs/05_開発ガイドライン/decision-log.md)
 
 | 種別 | パターン | 正本 | 載せる内容 |
 |------|----------|------|------------|
@@ -51,12 +51,12 @@
 
 | 層 | 置き場 | 更新頻度 | 載せる内容 |
 |----|--------|----------|------------|
-| **Product Spec** | **`yk-application/{app}/specs/`**（独立リポ · 推奨）または `yk-memo/.../{企画フォルダ}/`（講座のみ等） | 低 | 概要 · MVP · データモデル · ADR · 完成定義 |
+| **Product Spec** | **`yk-application/{app}/docs/`**（独立リポ · 推奨）または `yk-memo/.../{企画フォルダ}/`（講座のみ等） | 低 | 概要 · MVP · データモデル · ADR · 完成定義 |
 | **Session Handoff** | `yk-memo/handoffs/{slug}/` | 毎セッション | HANDOFF + セッション MD（**§4 = 次の 1 件**） |
 | **Agent Constitution** | 独立リポ **`AGENTS.md`**（推奨）または企画 `05_開発ガイドライン/エージェント憲法.md` | 低 | 境界 · SSOT マップ · 再開 3 ファイル · やる/やらない |
 
 ```text
-Product Spec（何を作るか）— specs/ とコードが同一 Git
+Product Spec（何を作るか）— docs/ とコードが同一 Git
     ↓ 参照
 Session Handoff（今回 1 件）— yk-memo/handoffs/
     ↓ 境界確認
@@ -74,7 +74,7 @@ AGENTS.md（憲法）→ コード
 |--------|------|
 | `c:/yk-memo` | **`handoffs/`** · 講座テーマ（`00_テーマ/`）· 企画 stub（独立リポ移行後） |
 | `c:/yk-tool` | 汎用ツール · 実験アプリ（モノレポ） |
-| `c:/yk-application` | **独立 Git** の本線アプリ — **`specs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`）· 構成テンプレ: [`templates/independent-app-repo/STRUCTURE.md`](templates/independent-app-repo/STRUCTURE.md) |
+| `c:/yk-application` | **独立 Git** の本線アプリ — **`docs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`）· 構成テンプレ: [`templates/independent-app-repo/STRUCTURE.md`](templates/independent-app-repo/STRUCTURE.md) |
 | `c:/yk-skill` | **本 rule** · スタック rule · スキル |
 | `c:/1.cursor/5.Python` | Python デスクトップ（rev 積層保護） |
 
@@ -205,16 +205,17 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 
 ---
 
-## 11. 実例（flowchart-studio · 2026-06-23）
+## 11. 実例（flowchart-studio · 2026-06-24）
 
 | 項目 | 値 |
 |------|-----|
-| slug | `flowchart-web` |
-| Product Spec | `c:/yk-application/flowchart-studio/specs/` |
+| slug | `flowchart-studio` |
+| Product Spec | `c:/yk-application/flowchart-studio/docs/` |
 | 憲法 | `c:/yk-application/flowchart-studio/AGENTS.md` |
-| handoffs | `c:/yk-memo/handoffs/flowchart-web/HANDOFF.md` |
+| handoffs | `c:/yk-memo/handoffs/flowchart-studio/HANDOFF.md` |
 | 講座・提出 | `c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/00_テーマ/` |
-| 経緯索引 | `specs/05_開発ガイドライン/decision-log.md` |
+| 経緯索引 | `docs/05_開発ガイドライン/decision-log.md` |
+| 実装三層 | `frontend/` · `backend/` · `database/`（`docs/04_リポジトリ構造/`） |
 | スタック | No 35 REACTFLOW · No 31 NEXTJS · No 37 SUPABASE |
 
 ---
