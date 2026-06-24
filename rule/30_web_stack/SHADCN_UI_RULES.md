@@ -288,7 +288,7 @@ npx shadcn@latest add button dialog table field
 
 ---
 
-## 13. flowchart-web（Radix · 標準 shadcn）
+## 13. flowchart-studio（Radix · 標準 shadcn）
 
 **現状:** shadcn **導入済**（2026-05-24 · `radix-nova` · `button` 初回 add · 既存 UI は段階的に shadcn 化）。ui-kit から **コピー禁止**。
 

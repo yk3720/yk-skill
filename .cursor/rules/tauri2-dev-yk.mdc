@@ -181,5 +181,5 @@ Deep Link を確実に受け取るために必須。
 
 ## 推奨スタック
 - **Frontend**: React + shadcn/ui + Tailwind CSS (v4)
-- **Rationale**: Web版（flowchart-web）とのコード共通化、および洗練された UI の迅速な構築のため。
+- **Rationale**: Web版（flowchart-studio）とのコード共通化、および洗練された UI の迅速な構築のため。
 - **Path Aliases**: `tsconfig.json` と `vite.config.ts` で `@/*` エイリアスを設定し、shadcn/ui の標準的なインポート形式を維持すること。

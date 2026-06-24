@@ -44,7 +44,7 @@ description: >
 
 ## 整理モード
 
-既存企画で `再開メモ.md` 等の二重 SSOT があるとき（[flowchart-web 実例](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/)）。
+既存企画で `再開メモ.md` 等の二重 SSOT があるとき（[flowchart-studio 実例](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/)）。
 
 1. [checklist.md §整理](references/checklist.md#既存プロジェクト整理) を実行
 2. `再開メモ.md` → handoffs リダイレクト stub（削除しない）
@@ -72,9 +72,9 @@ description: >
 ## 制約
 
 - **commit** — ユーザー明示までしない
-- **v1 注意** — 実例は flowchart-web のみ。2 アプリ目以降で checklist を [references/checklist.md](references/checklist.md) に追記
+- **v1 注意** — 実例は flowchart-studio のみ。2 アプリ目以降で checklist を [references/checklist.md](references/checklist.md) に追記
 
 ## 参照
 
-- 実例: [flowchart-web エージェント憲法](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/05_開発ガイドライン/エージェント憲法.md)
+- 実例: [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md)（企画側は [stub](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/AGENTS.md)）
 - プレイブック: `RULE_ROUTING_PLAYBOOK.md` §個人アプリ

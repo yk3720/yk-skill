@@ -481,7 +481,7 @@ await expect(async () => {
 - [ ] Trace が**実際に残る**設定（`on-first-retry` は **`retries >= 1` が前提**。`retries: 0` なら `retain-on-failure` または `trace: 'on'`）
 - [ ] ユーザーへの依頼は「spec を直して green にする」に寄せ、スクショ依頼は最終手段
 
-### 12-6. flowchart-web — レイアウト E2E の落とし穴（2026-05）
+### 12-6. flowchart-studio — レイアウト E2E の落とし穴（2026-05）
 
 | 落とし穴 | 対策 |
 |----------|------|

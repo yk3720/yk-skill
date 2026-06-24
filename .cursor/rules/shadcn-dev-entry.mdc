@@ -10,7 +10,7 @@ alwaysApply: false
 
 **優先（ドメイン L0 が先）:**
 
-- `flowchart-studio/components/ui/**` → **`reactflow-dev-entry.mdc` 先** → 本入口（shadcn §13）
+- `flowchart-studio/frontend/src/components/ui/**` → **`reactflow-dev-entry.mdc` 先** → 本入口（shadcn §13）
 - `workspace-ui-kit/components/ui/**` → **`workspace-dev-entry.mdc` 先** → 本入口（§12 · add のみ）
 - `app/**` のみの編集 → **`nextjs-dev-entry.mdc`**（本入口は不要）
 

@@ -21,7 +21,7 @@
 
 1. `NEXTJS_RULES.md` → `SKILL.md` を読む
 2. 本 ROUTER で **tier** と **tags** を決める
-3. flowchart-web → L1 §6 を floor に追加
+3. flowchart-studio → L1 §6 を floor に追加
 4. **Ref Plan** をチャットに出力
 5. Ref Plan の `load` に列挙したもの **だけ** Read してから編集
 6. L1 §8 ゲート → §9 完了報告
@@ -52,7 +52,7 @@
 | `metadata` | [Metadata and OG images](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) |
 | `route-handler` | [Route Handlers](https://nextjs.org/docs/app/getting-started/route-handlers) |
 | `request-apis` | [Upgrade v15 · Async Request APIs](https://nextjs.org/docs/app/guides/upgrading/version-15) |
-| `flowchart-web` | L1 §6 · 触る `app/**`（**RF スキルは `components/flowchart` 作業時のみ**） |
+| `flowchart-studio` | L1 §6 · 触る `app/**`（**RF スキルは `frontend/src/components/flowchart` 作業時のみ**） |
 | `ui-kit-shell` | L1 §5-3 · `WORKSPACE_RULES` §3 |
 
 **公式 URL:** 1 tag あたり **1 ページまで**（Getting Started 系を優先）。
@@ -73,7 +73,7 @@
 | `generateMetadata` · OG | `metadata` |
 | `app/**/route.ts` | `route-handler` |
 | `await cookies()` · `headers()` | `request-apis` |
-| `flowchart-studio` の `app/` のみ | `flowchart-web`（RF 本体は `creating-reactflow-yk`） |
+| `flowchart-studio` の `app/` のみ | `flowchart-studio`（RF 本体は `creating-reactflow-yk`） |
 | `workspace-ui-kit/app/` | `ui-kit-shell` |
 
 ---

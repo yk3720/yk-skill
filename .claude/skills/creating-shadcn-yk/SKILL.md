@@ -72,7 +72,7 @@ npx shadcn@latest add <component> --diff    # 上書き前必須
 
 | パス | 優先 entry |
 |------|------------|
-| `flowchart-studio/components/ui/**` | **`reactflow-dev-entry.mdc`** → 本スキル |
+| `flowchart-studio/frontend/src/components/ui/**` | **`reactflow-dev-entry.mdc`** → 本スキル |
 | `workspace-ui-kit/components/ui/**` | **`workspace-dev-entry.mdc`** → 本スキル |
 | その他 `**/components/ui/**` · `components.json` | `shadcn-dev-entry.mdc` |
 

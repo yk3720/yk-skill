@@ -82,7 +82,7 @@
 | パス | いつ load |
 |------|-----------|
 | `c:/yk-application/flowchart-studio/lib/flowchart/` | domain / layout / edges 変更（**mermaid 版と同期 MUST**） |
-| `c:/yk-application/flowchart-studio/components/flowchart/` | UI / canvas（reactflow 版） |
+| `c:/yk-application/flowchart-studio/frontend/src/components/flowchart/` | UI / canvas（reactflow 版） |
 | `c:/yk-tool/flowchart-web-mermaid/lib/flowchart/` | domain / `toMermaid`（**reactflow 版と同期 MUST**） |
 | `c:/yk-tool/flowchart-web-mermaid/components/flowchart/` | UI / Mermaid プレビュー |
 | `c:/yk-application/flowchart-studio/docs/design-system.md` | 操作 UI / スタイル変更（**chrome-ui**） |

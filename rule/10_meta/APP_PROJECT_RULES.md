@@ -126,7 +126,7 @@ AGENTS.md（憲法）→ コード
 
 **標準（2026-06-23〜）:** 6 種（`01_要求定義/` 〜 `06_ユビキタス言語/`）+ 別枠（`00_テーマ/` · `99_アーカイブ/` · handoffs）。憲法は `05_開発ガイドライン/エージェント憲法.md`。新規は最小 3 種（`01` · `04` · `05/エージェント憲法`）。命名 · 追加トリガー → `PROJECT_DOCUMENT_RULES` §11 · §12。
 
-**移行中:** flowchart-web 等は旧 `01_product/` · ルート `AGENTS.md` のまま可 — 物理移行は rule 確定後（`PROJECT_DOCUMENT_RULES` §8）。
+**移行中:** 旧 slug `flowchart-web` 等は `flowchart-studio`（`yk-application`）へ移行済 — 物理移行は rule 確定後（`PROJECT_DOCUMENT_RULES` §8）。
 
 **読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → エージェント憲法（移行完了後は `05_開発ガイドライン/`、未完了はルート `AGENTS.md`）。
 

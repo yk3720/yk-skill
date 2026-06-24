@@ -29,7 +29,7 @@ SSOT: `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` §4–§8 · `c:/yk-skill/
 
 **MUST NOT（新規）:** ルート `AGENTS.md` — 憲法は `05_開発ガイドライン/エージェント憲法.md` のみ（[PROJECT_DOCUMENT_RULES §4](c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md)）
 
-**実例:** [flowchart-web 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/) · [エージェント憲法](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/05_開発ガイドライン/エージェント憲法.md)
+**実例:** [flowchart-studio 企画](c:/yk-memo/00.ai-driven-school/個人テーマ_フローチャートアプリ/) · [AGENTS.md 正本](c:/yk-application/flowchart-studio/AGENTS.md)
 
 ---
 

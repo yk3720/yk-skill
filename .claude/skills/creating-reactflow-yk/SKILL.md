@@ -40,7 +40,7 @@ description: 表駆動フローチャート（@xyflow/react）の作成・更新
 | 表 · CSV → React Flow · PNG/SVG | **本スキル + REACTFLOW_RULES** |
 | テキスト SSOT（`.mmd`） | `creating-mermaid-yk` |
 | Next シェル（`app/`） | `creating-nextjs-yk` · `NEXTJS_RULES` §6 |
-| Client Hooks（`components/flowchart`） | `creating-react-yk` · `REACT_RULES` |
+| Client Hooks（`frontend/src/components/flowchart` · studio） | `creating-react-yk` · `REACT_RULES` |
 | shadcn 表 UI | `creating-shadcn-yk`（未導入時は触らない） |
 | surge 図解 HTML | `creating-visual-explainers` 等 |
 

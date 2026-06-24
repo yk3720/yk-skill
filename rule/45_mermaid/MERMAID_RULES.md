@@ -72,7 +72,7 @@
 **迷ったとき（3 問）**
 
 1. **正本は表（行・列）か、テキスト（`.mmd`）か** — 表なら `flowchart-studio` / `flowchart-web-mermaid`（Excel 8列表 · ADR-010）、テキストなら Mermaid
-2. **Mermaid から flowchart-web へエクスポートが必要か** — **現状 No**（reactflow 版は Mermaid 出力 Phase 外）。比較中は mermaid 版でプレビュー
+2. **Mermaid から flowchart-studio へエクスポートが必要か** — **現状 No**（reactflow 版は Mermaid 出力 Phase 外）。比較中は mermaid 版でプレビュー
 3. **surge 図解 HTML か** — 別系統（`creating-visual-explainers` 等）。本節の Mermaid は **diagram-as-code** のみ
 
 **併用:** 同一プロジェクトで「概要は `.mmd`」「実務フロー編集は flowchart-studio」は可。**同一ノードを二重 SSOT にしない**（正本は企画 ADR · Excel 表）。

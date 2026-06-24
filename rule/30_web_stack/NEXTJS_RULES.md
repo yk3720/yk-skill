@@ -157,7 +157,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 
 ---
 
-## 6. flowchart-web 向け追記（`yk-tool` · ADR-010）
+## 6. flowchart-studio 向け追記（`yk-application` · ADR-010）
 
 **対象:** `c:/yk-application/flowchart-studio/` · `c:/yk-tool/flowchart-web-mermaid/`  
 **React Flow / 表駆動:** [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) · `creating-reactflow-yk`  
@@ -167,7 +167,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 
 | 項目 | 規則 |
 |------|------|
-| 配置 | `yk-tool` リポジトリ直下（単体 Next アプリ · Turborepo モノレポではない） |
+| 配置 | **本線:** `yk-application/flowchart-studio`（独立 Git）· **比較:** `yk-tool/flowchart-web-mermaid`（単体 Next アプリ） |
 | ルータ | **App Router のみ**（`app/` · `pages/` なし） |
 | 参照 | `catalog.yaml` · `flowchart-studio` / `flowchart-web-mermaid` |
 | dev ポート | reactflow **3000** · mermaid **3001**（並行起動可） |

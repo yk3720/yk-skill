@@ -48,7 +48,7 @@
 | `init-radix` | L1 §13 · [Installation / Next](https://ui.shadcn.com/docs/installation/next) |
 | `init-base` | L1 §12 · **新規 ui-kit のみ**（既存 re-init 禁止） |
 | `add-component` | L1 §9 · [CLI](https://ui.shadcn.com/docs/cli) · 追加する component 公式 1 本 |
-| `flowchart-web` | L1 §13 · `REACTFLOW_RULES.md` shadcn 行 |
+| `flowchart-studio` | L1 §13 · `REACTFLOW_RULES.md` shadcn 行 |
 | `ui-kit-base-ui` | L1 §12 · `WORKSPACE_RULES` · ui-kit `CLAUDE.md`（Base UI · `--diff`） |
 | `theme-css` | L1 §8-2 · [Theming](https://ui.shadcn.com/docs/theming) · `app/globals.css` |
 | `monorepo` | L1 §11 · [Monorepo](https://ui.shadcn.com/docs/monorepo) |
@@ -64,9 +64,9 @@
 
 | シグナル | tag | 禁止 |
 |----------|-----|------|
-| `flowchart-studio` · `components.json` なし | `init-radix` + `flowchart-web` | ui-kit で `-b radix` |
+| `flowchart-studio` · `components.json` なし | `init-radix` + `flowchart-studio` | ui-kit で `-b radix` |
 | `npx shadcn add` | `add-component` | surge 静的 HTML |
-| `asChild` · `@radix-ui` | `flowchart-web` | ui-kit で `asChild` |
+| `asChild` · `@radix-ui` | `flowchart-studio` | ui-kit で `asChild` |
 | `render` · `@base-ui` | `ui-kit-base-ui` | flowchart で `render` |
 | `globals.css` · `@theme` · CSS 変数 | `theme-css` | — |
 | `--monorepo` · 複数 `components.json` | `monorepo` | 単体 flowchart/ui-kit に `--monorepo` |
@@ -78,7 +78,7 @@
 
 | パス | L0 優先 | shadcn lead |
 |------|---------|-------------|
-| `flowchart-studio/components/ui/**` | **`reactflow-dev-entry`** → 本スキル | init-radix / add |
+| `flowchart-studio/frontend/src/components/ui/**` | **`reactflow-dev-entry`** → 本スキル | init-radix / add |
 | `workspace-ui-kit/components/ui/**` | **`workspace-dev-entry`** → 本スキル | add のみ（init 禁止） |
 | その他 `**/components/ui/**` | **`shadcn-dev-entry.mdc`** | Standard |
 | `**/components.json` | **`shadcn-dev-entry.mdc`** | §2 確定後 |
@@ -100,7 +100,7 @@
 ## Ref Plan
 - §2 対象: flowchart-studio | flowchart-web-mermaid | workspace-ui-kit | （surge なら中止）
 - tier: Standard（理由を1行）
-- tags: add-component, flowchart-web
+- tags: add-component, flowchart-studio
 - load: SHADCN_UI_RULES L1 · components.json · （ROUTER §3 の公式 1 本）
 - skip: REACT_RULES（Hooks 不変のため）
 - 委譲: creating-nextjs-yk（app/ 同時編集時のみ）
