@@ -62,7 +62,7 @@
 
 | パス | entry |
 |------|-------|
-| `flowchart-studio/components/ui/**` | [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc) → 本ファイル **§13** |
+| `flowchart-studio/frontend/src/components/ui/**` | [`reactflow-dev-entry.mdc`](../../.cursor/rules/reactflow-dev-entry.mdc) → 本ファイル **§13** |
 | `workspace-ui-kit/components/ui/**` | [`workspace-dev-entry.mdc`](../../../yk-tool/workspace-ui-kit/.cursor/rules/workspace-dev-entry.mdc) → **§12** |
 | その他 `components/ui/**` · `components.json` | [`shadcn-dev-entry.mdc`](../../.cursor/rules/shadcn-dev-entry.mdc) |
 

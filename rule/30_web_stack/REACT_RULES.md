@@ -41,7 +41,7 @@
 | 触るもの | 使う入口 | **使わない** |
 |----------|----------|--------------|
 | **`components/**`（flowchart 以外）** · Hooks · 合成 | **本帯** · `creating-react-yk` | `creating-reactflow-yk` |
-| **`components/flowchart/**`（表 UI · プレビュー）** | 本帯 + `REACTFLOW_RULES` §3 | RF API のみで React 一般を省略しない |
+| **`frontend/src/components/flowchart/**`（表 UI · プレビュー）** | 本帯 + `REACTFLOW_RULES` §3 | RF API のみで React 一般を省略しない |
 | **`lib/flowchart/**` | `creating-reactflow-yk`（React 禁止） | 本スキル |
 | **`app/**`** | `creating-nextjs-yk` | 本スキル単独 |
 | surge 図解 HTML | 図解スキル系 | 本帯 |

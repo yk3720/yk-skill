@@ -179,7 +179,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 | パス | 規則 |
 |------|------|
 | `app/page.tsx` | **Server Component** — 子の Client のみ import |
-| `components/flowchart/**` | **`"use client"`** |
+| `frontend/src/components/flowchart/**` | **`"use client"`** |
 | `lib/flowchart/**` | React 非依存 — DOM 禁止 |
 
 **任意:** Canvas のみ `next/dynamic(..., { ssr: false })` + 親 `min-height`（CLS 防止）。

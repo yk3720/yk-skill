@@ -57,7 +57,7 @@
 
 | プロジェクト / 帯 | 拡張 SSOT | 本ルールとの関係 |
 |-------------------|-----------|------------------|
-| flowchart-studio | `flowColors.ts`（キャンバス）· [`docs/design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md)（操作 chrome）· REACTFLOW §5.6-2a · §5.6-3 | ノード枠 `FLOW_NODE_FRAME_WIDTH`（既定 2px） |
+| flowchart-studio | `visual/flowColors.ts`（キャンバス）· [`docs/design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md)（操作 chrome）· REACTFLOW §5.6-2a · §5.6-3 | ノード枠 `FLOW_NODE_FRAME_WIDTH`（既定 2px） |
 | GAS 進捗 · surge 図解 chip | GAS_REPORT_DESIGN | padding · バッジ形状等。線幅は **§2 に合わせる** |
 | shadcn / Tailwind UI | SHADCN · TAILWIND | `border-2` 等を選ぶとき **§2 を優先** |
 

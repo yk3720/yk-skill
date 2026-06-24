@@ -83,12 +83,12 @@
 | hook 失敗（exit 1） | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
 | `check-merge-conflict` が **WinError 4551**（アプリケーション制御ポリシー） | Cursor エージェント環境で pre-commit フックが OS により実行不可 | 競合マーカーを手動確認後、当該フックのみ `SKIP=check-merge-conflict` — 詳細は `committing-with-git-yk/references/commit-shell.md` |
 
-**モノレポ注意:** `yk-tool` が git ルート。pre-commit の `--files` はルート相対パス（`flowchart-studio/...`）で、**実行 cwd は git ルート**。
+**モノレポ注意（yk-tool 配下の旧配置のみ）:** 過去に `yk-tool/flowchart-studio` だった頃は git ルート相対の pre-commit だった。**現行**は `c:/yk-application/flowchart-studio` が**独立 Git** — ルートで `npm install` · husky · pre-commit を実行する。
 
 ### 初期化（新規クローン後）
 
 ```powershell
-cd flowchart-studio
+cd c:/yk-application/flowchart-studio
 npm install
 pip install -e "python[dev]"
 ```
@@ -118,12 +118,12 @@ pip install -e "python[dev]"
 
 ## 6. CI
 
-- **SSOT:** `yk-tool/.github/workflows/flowchart-studio-ci.yml`
+- **SSOT:** `c:/yk-application/flowchart-studio/.github/workflows/ci.yml`
 - **`HUSKY=0`:** CI では Git hook をスキップし、同じ検査をコマンドで直接実行（二重実行防止）
-- push/PR で `flowchart-studio/**` 変更時に **2 ジョブ**（`quality` · `Playwright E2E` · 並列）:
+- push/PR で **flowchart-studio リポ**変更時に **2 ジョブ**（`quality` · `Playwright E2E` · 並列）:
   - **quality:** lint · format · typecheck · vitest · ruff · **mypy** · pre-commit（セキュリティ + ruff）· pytest · **`npm run build`**（`AUTH_DISABLED=1`）
-  - **e2e:** `npm run build` → **`npm run test:e2e`**（`AUTH_DISABLED=1` · `IMPORT_E2E_STUB=1` · `PLAYWRIGHT_E2E=1` · 既存 28 spec）
-- pre-commit は **git ルート**から `--config flowchart-studio/.pre-commit-config.yaml`（モノレポ path 整合）
+  - **e2e:** `npm run build` → **`npm run test:e2e`**（`AUTH_DISABLED=1` · `IMPORT_E2E_STUB=1` · `PLAYWRIGHT_E2E=1`）
+- pre-commit は **リポジトリルート**（`flowchart-studio/`）の `.pre-commit-config.yaml`
 - Vercel build はデプロイ最終ゲート（CI build は早期検出）
 
 ---

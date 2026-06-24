@@ -79,7 +79,7 @@
 | 触るもの | 読む順序 |
 |----------|----------|
 | **`components/**`（flowchart 以外）** · Hooks | 1. **`30_web_stack/REACT_RULES.md`** 2. **`creating-react-yk`** 3. ROUTER · Ref Plan 4. **`NEXTJS_RULES` §5**（RSC 境界が絡むとき） |
-| **`components/flowchart/**`** | 上 + **`35_reactflow/REACTFLOW_RULES.md`** · `creating-reactflow-yk` |
+| **`frontend/src/components/flowchart/**`**（studio） | 上 + **`35_reactflow/REACTFLOW_RULES.md`** · `creating-reactflow-yk` |
 | **`app/**`** | **`creating-nextjs-yk`** · `NEXTJS_RULES` §5（§6 は flowchart のみ） |
 | **`lib/flowchart/**`** | `creating-reactflow-yk` のみ（React 禁止） |
 
@@ -94,7 +94,7 @@
 3. **`creating-reactflow-yk/references/ROUTER.md`** — tier / tag · Ref Plan
 4. **Ref Plan** — コード編集前（ROUTER §7）
 5. **Next.js シェル** — `30_web_stack/NEXTJS_RULES.md` §5 + §6 · `creating-nextjs-yk`
-6. **Client React 一般** — `REACT_RULES.md` · `creating-react-yk`（`components/flowchart` の Hooks）
+6. **Client React 一般** — `REACT_RULES.md` · `creating-react-yk`（`frontend/src/components/flowchart` の Hooks）
 7. **shadcn 表 UI** — [shadcn/ui](#読む順序shadcnui-を触るとき) · §13 · `init-radix`（未導入時は init が次の 1 件）
 8. **参照実装** — `c:/yk-application/flowchart-studio/`
 9. **方式境界** — `45_mermaid/MERMAID_RULES.md` §1.5
@@ -215,7 +215,7 @@
 6. **新規/整理/AGENTS 整備** — スキル `starting-app-project-yk`
 7. **引き継ぎ終了** — スキル `handoff-session-work`（本 rule に手順全文は載せない）
 
-**実例:** flowchart-web → [AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [specs/](c:/yk-application/flowchart-studio/specs/) · [handoffs/flowchart-web](c:/yk-memo/handoffs/flowchart-web/HANDOFF.md)
+**実例:** flowchart-studio → [AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/) · [handoffs/flowchart-studio](c:/yk-memo/handoffs/flowchart-studio/HANDOFF.md)
 
 ---
 

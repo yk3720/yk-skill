@@ -4,7 +4,7 @@
 **用途:** 個人アプリの **企画フォルダ内ドキュメント種別 · フォルダ構成 · 正本の置き場** の SSOT。  
 **ステータス:** active（L1 · 2026-06-23 グリル確定）  
 **関連:** `10_meta/APP_PROJECT_RULES.md`（ライフサイクル · handoffs · 再開）· `RULE_INDEX.md` No 25  
-**実例:** [flowchart-studio specs](c:/yk-application/flowchart-studio/specs/) — 2026-06-23 **spec-in-repo** 移行完了
+**実例:** [flowchart-studio docs](c:/yk-application/flowchart-studio/docs/) — 2026-06-23 **spec-in-repo** 移行完了（`specs/` → `docs/`）
 
 **最終更新:** 2026-06-23（§11–§12 残グリル確定）
 
@@ -88,7 +88,7 @@ c:/yk-application/{app}/
 
 **MUST NOT:** `specs/` と yk-memo 企画フォルダの **二重正本**を維持する。移行完了後は yk-memo 側は stub のみ。
 
-**パイロット:** [flowchart-studio](c:/yk-application/flowchart-studio/specs/)
+**パイロット:** [flowchart-studio](c:/yk-application/flowchart-studio/docs/)
 
 ---
 
@@ -215,7 +215,7 @@ c:/yk-application/{app}/
 | 技術ゲート | `G-1` 等（任意） | `03_技術仕様/` または ADR 1 節 | DB · API 等 |
 | セッション DoD | チェックボックス | handoffs セッション MD **§4** | 今回 1 件の実行完了 |
 
-**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart `MVP定義.md`](c:/yk-application/flowchart-studio/specs/01_要求定義/MVP定義.md)。
+**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart 製品要求.md](c:/yk-application/flowchart-studio/docs/01_要求定義/製品要求.md)。
 
 **MUST:** `AC-N` 番号は **マイルストーン層のみ**。§4 に `AC-3 を満たす` と書かない。  
 **MUST:** MVP+（完了条件外）は AC 表の別表に「完了条件外」と明記。
@@ -261,7 +261,7 @@ c:/yk-application/{app}/
 
 **MUST NOT:** 同一役割を `概要.md` と `プロジェクト概要.md` のように **別名で二重作成**する。
 
-実例 → [flowchart-studio specs](c:/yk-application/flowchart-studio/specs/) §13。
+実例 → [flowchart-studio docs](c:/yk-application/flowchart-studio/docs/) · `05_開発ガイドライン/decision-log.md`。
 
 ---
 
@@ -325,12 +325,12 @@ c:/yk-application/{app}/
 
 ---
 
-## 15. 実例（flowchart-studio · spec-in-repo · 2026-06-23）
+## 15. 実例（flowchart-studio · docs-in-repo · 2026-06-24）
 
 | 項目 | 値 |
 |------|-----|
-| slug | `flowchart-web` |
-| Product Spec | `c:/yk-application/flowchart-studio/specs/` |
+| slug | `flowchart-studio` |
+| Product Spec | `c:/yk-application/flowchart-studio/docs/` |
 | 憲法 | `c:/yk-application/flowchart-studio/AGENTS.md` |
-| handoffs | `c:/yk-memo/handoffs/flowchart-web/` |
+| handoffs | `c:/yk-memo/handoffs/flowchart-studio/HANDOFF.md` |
 | yk-memo 企画 | stub + `00_テーマ/` · `99_アーカイブ/` |

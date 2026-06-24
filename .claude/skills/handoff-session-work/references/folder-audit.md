@@ -114,5 +114,5 @@
 ```
 
 ```text
-@handoffs/flowchart-web/ の詳細確認（Tier-1）。実行・整理・git は不要。
+@handoffs/flowchart-studio/ の詳細確認（Tier-1）。実行・整理・git は不要。
 ```

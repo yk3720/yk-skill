@@ -283,7 +283,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 |------|--------------|------|
 | `workspace-layout` | `handoffs/workspace-layout/HANDOFF.md` | ルート stub · No 36 `REACT_RULES` |
 | `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 · 待機時は §6 のみ |
-| `flowchart-web` | `handoffs/flowchart-web/HANDOFF.md` | spec-in-repo · `flowchart-studio/specs/` + `AGENTS.md` |
+| `flowchart-studio` | `handoffs/flowchart-studio/HANDOFF.md` | `docs/` + `AGENTS.md` · 四層レイアウト |
 | `tauri-practice` | `handoffs/tauri-practice/HANDOFF.md` | 学習スパイク · `yk-application/tauri-practice` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 

@@ -166,8 +166,8 @@ UI を **Write / 大きく変える前** または **UI レビュー** で、次
 
 | # | 当てはめ例 | SSOT / 実装 |
 |---|------------|-------------|
-| 1 | 再生成の stale 強調 · 警告バナー · 読込中 | `FlowchartEditor` · `validationMeta.ts` |
-| 2 | 装置・ユニット・動作 · 列名（接続先(下) 等） | `flowchart-studio/specs/03_技術仕様/` · `tableColumns.ts` |
+| 1 | 再生成の stale 強調 · 警告バナー · 読込中 | `FlowchartEditor` · `model/validationMeta.ts` |
+| 2 | 装置・ユニット・動作 · 列名（接続先(下) 等） | `flowchart-studio/docs/03_技術仕様/作者ガイド.md` · `table/tableColumns.ts` |
 | 3 | サンプルはプレビューのみ · 雛形適用の確認 · 削除確認 | `REACTFLOW` §5.6-1b · §5.6-1c |
 | 4 | `fcBtn*` · `design-system.md` · その他メニュー IA | §5.6-2a · `flowchartUiClasses.ts` |
 | 5 | 生成前バリデーション · import は正規化 JSON のみ | §5.6-5 · §5.6-2b |

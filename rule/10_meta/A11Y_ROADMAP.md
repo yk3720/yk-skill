@@ -114,7 +114,7 @@ Phase 5  キャンバス（別意思決定）
 
 ### 5-1. flowchart（最優先）
 
-**SSOT:** `c:/yk-application/flowchart-studio/components/flowchart/flowchartUiClasses.ts`
+**SSOT:** `c:/yk-application/flowchart-studio/frontend/src/components/flowchart/flowchartUiClasses.ts`
 
 | Step | 内容 | WCAG |
 |------|------|------|
