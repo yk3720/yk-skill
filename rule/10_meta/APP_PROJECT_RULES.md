@@ -74,7 +74,7 @@ AGENTS.md（憲法）→ コード
 |--------|------|
 | `c:/yk-memo` | **`handoffs/`** · 講座テーマ（`00_テーマ/`）· 企画 stub（独立リポ移行後） |
 | `c:/yk-tool` | 汎用ツール · 実験アプリ（モノレポ） |
-| `c:/yk-application` | **独立 Git** の本線アプリ — **`specs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`） |
+| `c:/yk-application` | **独立 Git** の本線アプリ — **`specs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`）· 構成テンプレ: [`templates/independent-app-repo/STRUCTURE.md`](templates/independent-app-repo/STRUCTURE.md) |
 | `c:/yk-skill` | **本 rule** · スタック rule · スキル |
 | `c:/1.cursor/5.Python` | Python デスクトップ（rev 積層保護） |
 

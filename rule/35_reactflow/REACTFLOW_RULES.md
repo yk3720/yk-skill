@@ -244,10 +244,12 @@ validateTable(table)
 
 | 項目 | 値 |
 |------|-----|
-| localStorage キー | `flowchart-web:draft-v1`（**`flowchart-studio` と `flowchart-web-mermaid` で共有** · リネーム後も維持） |
+| localStorage キー | `flowchart-studio:draft-v1`（SSOT: `lib/flowchart/storageKeys.ts` · 旧 `flowchart-web:draft-v1` — 2026-06-24 に新キーへ書き換え済み） |
+| モジュール下書きプレフィックス | `flowchart-studio:module-v1:` |
+| IndexedDB DB 名 | `flowchart-studio-offline-v1` |
 | ドキュメント JSON | `FlowchartDocument`（`version: 1`） |
 
-`lib/flowchart/document.ts` · `draftStorage.ts` を SSOT。キー変更は ADR + マイグレーション必須。
+`lib/flowchart/storageKeys.ts` が SSOT（`draftStorage.ts` · `moduleDraftRepository.ts` · `offlineFlowCache.ts` が参照）。**`flowchart-web-mermaid` は別キーのまま · 同期対象外**。
 
 ### 5.5 UI 整理 — コードをきれいに保つ（優先度: 高）
 
