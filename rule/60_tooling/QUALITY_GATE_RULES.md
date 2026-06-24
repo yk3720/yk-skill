@@ -1,7 +1,7 @@
 # 品質ゲート（YK 横断）
 
 **目的:** 編集時・コミット時・CI/デプロイ時の3層で、人間・AI 双方の変更を機械的に検証する。  
-**関連:** `AGENT_SHELL_RULES.md` · `GIT_WORKFLOW_RULES.md` · `PLAYWRIGHT_RULES.md` · `PYTHON_RULES.md` · `REACTFLOW_RULES.md` §6 · `SECRETS_HYGIENE_RULES.md`
+**関連:** `AGENT_SHELL_RULES.md` · `GIT_WORKFLOW_RULES.md` · `PLAYWRIGHT_RULES.md` · `PYTHON_RULES.md` · `REACTFLOW_RULES.md` §6 · `SECRETS_HYGIENE_RULES.md` · `WORKSPACE_SCRIPTS_RULES.md`
 
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **63** · L0: `quality-gates-yk.mdc`
 
@@ -27,7 +27,8 @@
 | パス | フック |
 |------|--------|
 | `yk-application/flowchart-studio` | **要**（Web + Python 混在） |
-| `yk-memo` · `yk-skill` | 不要（MD/ルール中心） |
+| `yk-memo` | **任意** — staged `.md` ローカルリンク（`yk-tool/scripts/check-markdown-links-staged.ps1` · `.githooks/pre-commit`）· Cursor `afterFileEdit`（同上 staged 版の姉妹） |
+| `yk-skill` | 不要（MD/ルール中心） |
 | その他 `yk-tool/*` | `package.json` / `pyproject.toml` の有無で個別判断 |
 
 ---

@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-23（No 25 PROJECT_DOCUMENT_RULES 追加）
+**最終更新:** 2026-06-24（No 64 WORKSPACE_SCRIPTS_RULES 追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -36,6 +36,7 @@
 | トークン · `.env` · 秘密情報 | 15 | `10_meta/SECRETS_HYGIENE_RULES.md` | [Secrets](RULE_ROUTING_PLAYBOOK.md#読む順序資格情報トークンを扱うとき) | — |
 | 調査のみ · Shell 抑制 | 62 | `60_tooling/AGENT_SHELL_RULES.md` | [Shell](RULE_ROUTING_PLAYBOOK.md#読む順序agent-が-shell-を使うとき) | `yk-skill` · `agent-shell-yk`（always） |
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
+| 横断スクリプト · hook 用ユーティリティ | 64 | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | L1 → `yk-tool/scripts/README.md` | — |
 | Python `.py` | 41 | `40_python/PYTHON_RULES.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
@@ -198,6 +199,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 61 | 60_tooling | `60_tooling/CURSOR_RULES.md` | Cursor / Windows 実務 | active |
 | 62 | 60_tooling | `60_tooling/AGENT_SHELL_RULES.md` | **Agent Shell / RUN 削減** · Read 優先 · allowlist | active |
 | 63 | 60_tooling | `60_tooling/QUALITY_GATE_RULES.md` | **品質ゲート** · lint/hook/CI · hook 失敗時のエージェント行動 | active |
+| 64 | 60_tooling | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | **横断スクリプト配置** · 正本 `yk-tool/scripts/` · `catalog.yaml` | active |
 
 **帯の意味（要約）**
 
@@ -265,9 +267,10 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |------|----------|------|
 | AI 指示・実装 rule の SSOT | `c:/yk-skill/rule/` | 本ファイル所在 |
 | surge 公開図解台帳 | `c:/yk-skill/metadata/surge-published-list.md` | 図解スキルがデプロイ後に更新 |
-| スキル台帳（インベントリ） | `c:/yk-skill/metadata/SKILL_CATALOG.md` | `creating-skills` 完了時に再生成 · 整理依頼時は `managing-skills-yk` · `yk-tool/catalog.yaml` と混同しない |
+| スキル台帳（インベントリ） | `c:/yk-skill/metadata/SKILL_CATALOG.md` | `creating-skills` 完了時に再生成 · 整理依頼時は `managing-skills-yk` · **`yk-tool/catalog.yaml`（成果物台帳）と混同しない** — 後者に `tools:` / `scripts:` |
 | 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
 | 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
+| **ワークスペース横断スクリプト** | `c:/yk-tool/scripts/` | L1 [`WORKSPACE_SCRIPTS_RULES.md`](60_tooling/WORKSPACE_SCRIPTS_RULES.md) · 台帳 [`catalog.yaml`](c:/yk-tool/catalog.yaml) · 入口 [`scripts/README.md`](c:/yk-tool/scripts/README.md) |
 | 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
 | フローチャート Web（React Flow） | `c:/yk-application/flowchart-studio/` | ADR-010 · 表 → React Flow |
 | フローチャート Web（Mermaid 比較） | `c:/yk-tool/flowchart-web-mermaid/` | ADR-010 · 表 → Mermaid プレビュー |

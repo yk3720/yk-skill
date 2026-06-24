@@ -50,7 +50,7 @@
 |------------|------|
 | **yk-memo** | 企画・設計書・handoffs を保持。`yk-application` 側のソースコードとはパスでリンクする。 |
 | **yk-skill** | アプリで使用する技術スタックのルールを保持。 |
-| **yk-tool** | 汎用的なツールやスクリプトを保持。特定のアプリに特化しない成果物を置く。 |
+| **yk-tool** | 汎用的なツールやスクリプトを保持。特定のアプリに特化しない成果物を置く。横断スクリプトは [`yk-tool/scripts/`](c:/yk-tool/scripts/README.md) · 台帳は [`catalog.yaml`](c:/yk-tool/catalog.yaml)。 |
 
 ---
 
