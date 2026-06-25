@@ -104,7 +104,7 @@ push: 未実施（依頼があれば別途）
 | コミット対象なし | 報告して終了 |
 | `&&` 構文エラー · 日本語で Shell パーサエラー · `.git/objects` Permission denied · index.lock | [commit-shell.md](references/commit-shell.md) **トラブルシュート** — Write + `-F` · `;` 連結 · **`all` 権限で再試行** |
 | commit 成功だがメッセージが `????` | Shell の here-string / パイプで `-F -` — [commit-shell.md](references/commit-shell.md) · Write → `-F` · 必要なら amend |
-| `check-merge-conflict` が WinError 4551 | エージェント環境で pre-commit 実行不可 — [commit-shell.md](references/commit-shell.md) · Grep 確認後 `SKIP=check-merge-conflict`（`--no-verify` 不可） |
+| pre-commit が WinError 4551 / Windows セキュリティで `pre-commit.exe` ブロック | OS がフックランナー実行不可（エージェント・ローカル両方）— [commit-shell.md](references/commit-shell.md) § pre-commit OS ブロック · 手動確認後 `SKIP`（`--no-verify` 不可） |
 | `could not read log file ... COMMIT_EDITMSG_YK.txt` | commit **前**にメッセージファイルを削除した — [commit-shell.md](references/commit-shell.md) **履歴** · 再 Write → `commit -F`（ステージ済みなら add 不要） |
 | index.lock（単独） | 他プロセス確認後、削除して [commit-shell.md](references/commit-shell.md) の再試行手順 |
 

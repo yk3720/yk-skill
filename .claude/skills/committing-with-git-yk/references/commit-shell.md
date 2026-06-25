@@ -87,10 +87,29 @@ push はユーザーが **当ターンで push を明示**したときのみ。c
 | `トークン '&&' は...有効なステートメント区切りではありません` | PS 5.1 で `&&` 非対応 | `;` で連結するか、コマンドを分ける |
 | Shell 実行直後に PowerShell の **パーサエラー**（日本語が文字化け・`UnexpectedToken`） | エージェントが **1 行の Shell 引数に日本語 commit 文を埋め込んだ**（`@(...)` · `-m "日本語"` 等） | **A. Write → `git commit -F`**。短い英語のみなら **2 つの `-m`** も可 |
 | commit は成功するがメッセージが **`????`** になる | Shell の **here-string / パイプ**で `git commit -F -` に渡した（`@"..."@ \| git commit -F -` 等） | **A. Write → `git commit -F <path>`** に切り替え。文字化け済みなら User Rules の amend 条件を満たすとき **`git commit --amend -F <path>`** |
-| `check for merge conflicts` が **`[WinError 4551] アプリケーション制御ポリシーによってこのファイルがブロックされました`** で失敗 | Cursor エージェント環境で **pre-commit フック本体が OS により実行不可**（コード不備ではない） | ステージ済みを **Grep** で `<<<<<<<` / `=======` / `>>>>>>>` が無いことを確認 → **`$env:SKIP='check-merge-conflict'; git commit -F ...`**（**`--no-verify` とは別** · 当該フックのみスキップ） |
+| `check for merge conflicts` / `detect private key` 等が **`[WinError 4551] アプリケーション制御ポリシーによってこのファイルがブロックされました`** で失敗 | **pre-commit フックランナー**（`pre-commit.exe`）が Cursor エージェントまたは OS ポリシーにより実行不可（コード不備ではない） | [§ pre-commit OS ブロック](#pre-commit-os-ブロック) |
+| **Windows セキュリティ**「`pre-commit.exe` の発行元を確認できないためブロック」 | 同上（ローカル端末で pip 由来の未署名 `pre-commit.exe` が Smart App Control 等に拒否される） | ユーザー: **詳細情報** → 実行を許可 · または `python -m pre_commit` で代替確認 · ダメなら [§ pre-commit OS ブロック](#pre-commit-os-ブロック) |
 | `Permission denied`（`.git/objects/...`）· `failed to insert into database` | Cursor **サンドボックス**が `.git` 書き込みを拒否 | Shell を **`required_permissions: ["all"]`** で再実行（`git_write` のみでは不足することがある） |
 | `Unable to create '.git/index.lock': File exists` | 上記失敗の直後に **壊れた lock** が残った | 他の git プロセスが無いことを確認し、`index.lock` を削除してから **all** で add/commit をやり直す |
 | `fatal: could not read log file '.../COMMIT_EDITMSG_YK.txt': No such file or directory` | **`git commit -F` より前に** メッセージファイルを削除した（マルチリポで先に片方だけ消した等） | メッセージを **Write で再作成** → `git commit -F` のみ再実行（**add はステージ済みなら不要**）→ 成功後に削除 |
+
+### pre-commit OS ブロック
+
+`QUALITY_GATE_RULES` §3「Windows で pre-commit がブロックされたとき」と同一。**`--no-verify` とは別** — ブロックされた **hook-id のみ** `SKIP` する。
+
+**恒久対処（人間 · 先に実施）:** Windows セキュリティ → ウイルスと脅威の防止 → 設定の管理 → **除外** → フォルダ `%USERPROFILE%\.cache\pre-commit`。確認: `python -m pre_commit run detect-private-key --all-files` が Passed。
+
+| hook | SKIP 前の手動確認 |
+|------|-------------------|
+| `check-merge-conflict` | Grep: `<<<<<<<` / `=======` / `>>>>>>>` がステージに無い |
+| `detect-private-key` | Grep: `BEGIN OPENSSH PRIVATE KEY` / `BEGIN RSA PRIVATE KEY` 等が無い |
+| `ruff-check` / `ruff-format` | `ruff check` / `ruff format` を手動実行 |
+
+```powershell
+$env:SKIP = 'check-merge-conflict,detect-private-key'
+git -C "c:/yk-application/flowchart-studio" commit -F "c:/yk-application/flowchart-studio/.git/COMMIT_EDITMSG_YK.txt"
+Remove-Item Env:SKIP
+```
 
 ### 履歴（失敗事例）
 
@@ -98,6 +117,7 @@ push はユーザーが **当ターンで push を明示**したときのみ。c
 |------|------|------|------|------|
 | 2026-05-23 | yk-memo | `could not read log file 'c:/yk-memo/.git/COMMIT_EDITMSG_YK.txt'` | yk-skill の commit/push **成功直後**に、エージェントが **yk-memo 用ファイルも含めて** `COMMIT_EDITMSG_YK.txt` を一括 Delete。yk-memo は **add 済み・commit 未実行**のままメッセージだけ消えた | メッセージ再 Write → `git commit -F` → push で **`788652b`** として成功。ステージは残っていたため add 不要 |
 | 2026-06-11 | yk-tool | メッセージが `????` · `check-merge-conflict` が WinError 4551 | `@"..."@ \| git commit -F -` を使用 · エージェント環境で pre-commit フックが OS によりブロック | Grep で競合マーカー確認後 `SKIP=check-merge-conflict` で commit → Write + `amend -F` でメッセージ修正 → push 成功（**`3b8fb2e`**） |
+| 2026-06-25 | flowchart-studio | `detect-private-key` が WinError 4551 · ローカルで Windows セキュリティが `pre-commit.exe` をブロック | pip 由来の未署名 `pre-commit.exe` · Defender が `\.cache\pre-commit` をブロックするケースあり | **Defender 除外** `%USERPROFILE%\.cache\pre-commit` で `detect-private-key` Passed · 一時は `SKIP` · CI は `quality` ジョブで pre-commit 相当を実行 |
 
 **教訓:** `COMMIT_EDITMSG_YK.txt` の削除は **当該リポで `git commit` が成功したあと**のみ。並列 Delete や「片方成功したら両方消す」は禁止。
 
@@ -125,7 +145,7 @@ git -C "c:/yk-memo" status
 
 - `git commit --amend` — User Rules の条件をすべて満たすときのみ
 - `--no-verify` — ユーザー明示時のみ（**全体の hook 回避**）
-- `SKIP=<hook-id>` — **上記 WinError 4551 のように環境が特定フックを実行できないときのみ**（競合マーカーの手動確認後 · `check-merge-conflict` に限定）
+- `SKIP=<hook-id>` — **WinError 4551 または Windows セキュリティで pre-commit がブロックされたときのみ**（上記 [§ pre-commit OS ブロック](#pre-commit-os-ブロック) の手動確認後 · ブロックされた hook-id ごと · カンマ区切り可）
 - コミットメッセージに `.env` の値 · API キーを書かない
 - エージェントの Shell に **日本語の長い here-string を渡さない**（`git commit -F -` へのパイプ含む · B は手動端末向け）
 - **`COMMIT_EDITMSG_YK.txt` を commit 前に Delete しない**（マルチリポで他リポ分を先に消さない）

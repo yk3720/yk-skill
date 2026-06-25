@@ -5,7 +5,7 @@
 
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **63** · L0: `quality-gates-yk.mdc`
 
-**最終更新:** 2026-06-10（CI に build · mypy 追加）
+**最終更新:** 2026-06-25（Defender 除外 `\.cache\pre-commit` · pre-commit ブロック対処）
 
 ---
 
@@ -81,8 +81,45 @@
 | pre-push で typecheck + test が走る | **正常**（10 秒前後かかる） | 待つ |
 | `check for merge conflicts ... Passed` | セキュリティ hook が効いている | — |
 | `(no files to check) Skipped`（commit 時） | **異常** — pre-commit がファイルを認識できていない | `.husky/pre-commit` が git ルートから `--config` 付きで実行されているか確認（2026-06-09 修正済） |
-| hook 失敗（exit 1） | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
-| `check-merge-conflict` が **WinError 4551**（アプリケーション制御ポリシー） | Cursor エージェント環境で pre-commit フックが OS により実行不可 | 競合マーカーを手動確認後、当該フックのみ `SKIP=check-merge-conflict` — 詳細は `committing-with-git-yk/references/commit-shell.md` |
+| hook 失敗（exit 1）で **上記以外** | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
+| **WinError 4551** または **Windows セキュリティ「pre-commit.exe をブロック」** | `pre-commit` フックランナーが OS により実行不可（Cursor エージェント **および** ローカル端末の両方で起こりうる · コード不備ではない） | 下記 **Windows で pre-commit がブロックされたとき** · 詳細は `committing-with-git-yk/references/commit-shell.md` |
+
+#### Windows で pre-commit がブロックされたとき
+
+| 段階 | 人間（推奨順） | エージェント |
+|------|----------------|--------------|
+| **1. 恒久対処（Defender 除外）** | **Windows セキュリティ** → ウイルスと脅威の防止 → **設定の管理** → **除外** → **+ 除外の追加** → **フォルダ** → `%USERPROFILE%\.cache\pre-commit`（例: `C:\Users\<user>\.cache\pre-commit` · 隠しフォルダのためアドレス欄に貼り付け可）。追加後 `python -m pre_commit run detect-private-key --all-files` が **Passed** になること | — |
+| **2. 恒久対処（未署名 exe）** | ダイアログで **詳細情報** → **実行を許可**（`pre-commit.exe`）。パスは `where.exe pre-commit` で確認（Microsoft Store 版 Python では `...\Python313\Scripts\pre-commit.exe` 等） | — |
+| **3. 代替起動** | `python -m pre_commit run --all-files` で個別 hook を確認（`.exe` のみブロックのとき有効 · **Defender 除外が先**） | 同上 |
+| **4. 一時回避** | 下表の手動確認後、**当該 hook のみ** `SKIP`（`--no-verify` とは別） | 手動確認 → `SKIP` → `commit -F` |
+| **5. 最後** | ユーザー明示時のみ `--no-verify` | 原則禁止 |
+
+**症状の切り分け**
+
+| 症状 | よくある原因 | 先に試す対処 |
+|------|--------------|--------------|
+| `detect-private-key` のみ WinError 4551 · `check-merge-conflict` は Passed | Defender が hook キャッシュをブロック | **段階 1**（`\.cache\pre-commit` 除外） |
+| 「`pre-commit.exe` の発行元を確認できない」ダイアログ | 未署名の pip スクリプト | **段階 2** |
+| Cursor エージェントの Shell のみ失敗 | App Control / サンドボックス | ユーザー端末で commit · または **段階 4** `SKIP` |
+
+**SKIP 前の手動確認（hook 別）**
+
+| hook | 手動確認 |
+|------|----------|
+| `check-merge-conflict` | Grep で `<<<<<<<` / `=======` / `>>>>>>>` がステージに無いこと |
+| `detect-private-key` | Grep で `BEGIN OPENSSH PRIVATE KEY` / `BEGIN RSA PRIVATE KEY` 等が無いこと |
+| `ruff-check` / `ruff-format` | `ruff check` / `ruff format` を手動実行 |
+
+**PowerShell 例（複数 hook）:**
+
+```powershell
+$env:SKIP = 'check-merge-conflict,detect-private-key'
+git commit -F .git/COMMIT_EDITMSG_YK.txt
+Remove-Item Env:SKIP
+```
+
+**記録:** handoff 終了時はセッション MD §2 に「OS が pre-commit をブロック · ローカル commit 要」等を 1 行。
+
 
 **モノレポ注意（yk-tool 配下の旧配置のみ）:** 過去に `yk-tool/flowchart-studio` だった頃は git ルート相対の pre-commit だった。**現行**は `c:/yk-application/flowchart-studio` が**独立 Git** — ルートで `npm install` · husky · pre-commit を実行する。
 
@@ -114,6 +151,7 @@ pip install -e "python[dev]"
 4. **hook 自動修正後:** `git status` で差分確認 · 必要なら再 stage。
 5. **UI 変更 + E2E spec 追加:** 同一ターンで `npm run test:e2e`（`PLAYWRIGHT_RULES` §12）。
 6. **秘密検出で止まった場合:** 該当行を削除または `.env` 等へ移し、**値をチャットに貼らない**（`SECRETS_HYGIENE_RULES`）。
+7. **pre-commit が WinError 4551 / Windows セキュリティでブロック:** §3「Windows で pre-commit がブロックされたとき」· `commit-shell.md` — 手動確認後 `SKIP`（`--no-verify` 不可）。
 
 ---
 
