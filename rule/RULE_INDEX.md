@@ -281,6 +281,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | セッション引き継ぎ MD | `c:/yk-memo/handoffs/{project}/` | スキル `handoff-session-work`（終了·再開·確認·整理）· `references/template.md` · `folder-audit.md` |
 | Git commit（ユーザー明示時） | 各リポ의 Git ルート | スキル `committing-with-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
 | Agent Shell / RUN 承認 | `60_tooling/cursor-permissions/permissions.json` → `~/.cursor/` にデプロイ | `60_tooling/AGENT_SHELL_RULES.md` · `cursor-permissions/README.md` |
+| Claude Code グローバル設定 | `60_tooling/claude-global/CLAUDE.md` → `~/.claude/` にデプロイ | `claude-global/README.md` |
 
 ### Cursor マルチルート（目安）
 
