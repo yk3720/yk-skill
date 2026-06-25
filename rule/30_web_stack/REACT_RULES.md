@@ -149,6 +149,30 @@ type Props = { csvPane?: React.ReactNode };
 <Table csvPane={!readOnly ? <details>...</details> : undefined} />
 ```
 
+#### 重い依存の遅延 import（Client）
+
+`xlsx` · `html-to-image` 等の大型ライブラリは **Client コンポーネントから静的 import しない**。`lib/` を経由した transitive import でもバンドルに載る。
+
+- **Excel 取込:** ファイル選択時のみ `await import("@/lib/flowchart/table/parseExcel")`（または同等の dynamic import）
+- **PNG/SVG エクスポート:** メニュー操作時のみ `await import("html-to-image")`
+- **根拠:** [Next.js Lazy Loading](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading)
+
+#### リポジトリ内 JSON も Zod 境界を通す
+
+サンプル・雛形 JSON は `as FlowchartDocument` で一括キャストしない。`parseFlowchartDocument`（内部 Zod）→ `normalizeFlowchartDocument` の順で読む。失敗時はユーザーへ通知し、黙って雛形にフォールバックしない（ワークスペースの `initialSnapshot` 復元を含む）。
+
+#### 初期状態は effect に委ねない
+
+`ModuleSnapshot` / `initialSnapshot` に `nodes` · `edges` · `jsonText` · `committedJson` があるとき、**`resolveInitialState`（または `useState` 初期化）で復元**する。マウント `useEffect` → `runGenerate` は非 workspace の下書き復元など effect が不可避な経路に限定。
+
+#### 表編集と React Flow の再レンダー分離
+
+表の 1 セル更新で React Flow まで再描画しない。
+
+- 変更ハンドラは `useCallback` で安定化
+- `memo` した `FlowTableEditor` / `FlowCanvas`（または `FlowPreviewPane`）に分割
+- ズーム % などキャンバス UI 専用 state は **プレビュー子コンポーネント内**に閉じる（親の `setState` で全体を更新しない）
+
 ---
 
 ## 4. 公式参照 — エージェント索引

@@ -17,6 +17,7 @@ description: >
 | ユーザー意図の例 | 委譲先 |
 |------------------|--------|
 | サブエージェント · 並列 · 多視点 · 3レンズ · 委員会型 | `reviewing-with-subagents` |
+| 公式推奨と照合 · コードチェック · 最適化レビュー（Web 調査込み） | `optimizing-code-yk` |
 | 報告者/報告先/監査 · Staff+Security など **複数レンズ明示** | 同上 |
 | スキルパッケージの **執筆品質を多視点**で見る | 同上（基準は `SKILL_AUTHORING_RULES.md`） |
 

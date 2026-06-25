@@ -193,6 +193,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 | `app/page.tsx` | **Server Component** — 子の Client のみ import |
 | `frontend/src/components/flowchart/**` | **`"use client"`** |
 | `lib/flowchart/**` | React 非依存 — DOM 禁止 |
+| 重い Client 依存 | `xlsx` · `html-to-image` 等 — **`lib/` 静的 import を Client が引くとバンドルに載る**。操作時 `import()` 遅延（詳細は `REACT_RULES` §3-1） |
 
 **任意:** Canvas のみ `next/dynamic(..., { ssr: false })` + 親 `min-height`（CLS 防止）。
 

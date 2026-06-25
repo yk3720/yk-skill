@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-06-06（`designing-playwright-tests-yk` 新設）  
+**最終更新:** 2026-06-25（`optimizing-code-yk` M1/M2 本実装）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **26** · nested **2** · sample **1**（計 **29** `SKILL.md`）
+**件数:** L1 **29** · nested **2** · sample **1**（計 **32** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -35,12 +35,15 @@
 | 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
 | 9b | designing-playwright-tests-yk | `.claude/skills/designing-playwright-tests-yk/SKILL.md` | L1 | — | no | E2E 設計 · `PLAYWRIGHT_RULES` §13 |
+| 9c | distilling-rules-yk | `.claude/skills/distilling-rules-yk/SKILL.md` | L1 | — | no | 実装気づき → L1 ルール追記 |
 | 10 | creating-proposalmap-yk | `.claude/skills/creating-proposalmap-yk/SKILL.md` | L1 | — | no | 社内提案図解 proposalmap · surge |
 | 10b | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
 | 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了（commit+push 含む）・再開・確認・整理 |
 | 14 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
+| 14b | organizing-documents-yk | `.claude/skills/organizing-documents-yk/SKILL.md` | L1 | — | no | 資料 M1 整合 · M2 更新（v1 M1 本実装） |
+| 14c | optimizing-code-yk | `.claude/skills/optimizing-code-yk/SKILL.md` | L1 | — | no | コードチェック · M1 Web+サブエージェント · M2 修正 |
 | 15 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
 | 16 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | push / GitHub PR（明示のみ） |
 | 17 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |
@@ -67,6 +70,10 @@
 | `committing-with-git-yk` ↔ `pushing-and-pr-yk` | commit vs push/PR · いずれも `explicit_only`（`disable-model-invocation`） |
 | `creating-react-yk` ↔ `creating-reactflow-yk` | React 一般 vs 表駆動 `@xyflow/react`。description の Do NOT で分離 |
 | `creating-react-yk` ↔ `creating-nextjs-yk` | `components/` Hooks vs `app/` RSC 境界 |
+| `organizing-documents-yk` ↔ `handoff-session-work` | 資料整合 vs セッション運用 · archive · commit。description の Do NOT で分離 |
+| `organizing-documents-yk` ↔ `distilling-rules-yk` | 資料矛盾 vs 実装→L1 ルール蒸留 |
+| `reviewing-code-yk` ↔ `optimizing-code-yk` | 単一パス差分レビュー vs Web+公式照合+サブエージェント最適化チェック |
+| `optimizing-code-yk` → `researching-web` · `reviewing-with-subagents` · `creating-*-yk` | M1/M2 は子スキル委譲（オーケストレーション） |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 
