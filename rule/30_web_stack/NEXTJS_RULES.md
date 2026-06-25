@@ -115,6 +115,18 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 - **バンドル doc の読み方:** `creating-nextjs-yk` ROUTER §3（`AGENTS.md` · `node_modules/next/dist/docs/`）。YK 横断 MUST は **本ファイルが SSOT**。
 - **環境変数:** クライアントに載るのは `NEXT_PUBLIC_` 接頭辞のみ。秘密は Server 側（`server-only` 推奨）。
 - **L1 の Read 深さ:** ROUTER **tier** に従う（Light は §5 中心 · Standard は L1 全体）。
+- **`useState` initializer でのブラウザ API:** `localStorage` · `sessionStorage` · `navigator` 等は SSR でクラッシュする。`useState(() => ...)` の initializer は SSR でも実行されるため **`typeof window === "undefined"` ガード**が必要。`useEffect` 内は SSR で実行されないためガード不要。util 関数側にガードを置くのが再利用しやすい。
+  ```typescript
+  // NG: SSR でクラッシュ
+  const [v] = useState(() => localStorage.getItem(key));
+
+  // OK: util にガード
+  function loadFromStorage(key: string): string | null {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem(key);
+  }
+  const [v] = useState(() => loadFromStorage(key));
+  ```
 
 ---
 

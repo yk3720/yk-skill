@@ -120,6 +120,35 @@ flowchart のドメイン詳細は **REACTFLOW §3** が SSOT。ui-kit の `lib/
 
 **ui-kit 固有の見た目規約** — `workspace-ui-kit` の `coding-rules.md` · `designing-workspace-ui`（yk-skill には全文コピーしない）。
 
+### 3-1. よく使うパターン補足（YK 実装から）
+
+#### State→Ref ミラー（安定コールバック）
+
+`useCallback` の deps を空にしつつ最新 state を読みたいとき、state を ref に mirror する。
+ドラッグ `mousemove` 等 deps 空の callback が古い state を掴むバグを防ぐ。
+
+```typescript
+const widthsRef = useRef(widths);
+useEffect(() => { widthsRef.current = widths; }, [widths]);
+
+const stableHandler = useCallback(() => {
+  // widthsRef.current は常に最新
+}, []); // deps 空でも安全
+```
+
+#### 名前付きスロット（ReactNode prop）
+
+コンポーネントの特定位置にコンテンツを注入するとき、`children` より名前付き `ReactNode` prop が挿入位置の意図を明確にする。呼び元で条件分岐や `readOnly` 判定も完結し、コンポーネントの関心が分離できる。
+
+```typescript
+// NG: children を内部で分岐して配置（挿入位置が不明瞭）
+<Table>{csvPanel}</Table>
+
+// OK: 挿入位置を prop 名で明示
+type Props = { csvPane?: React.ReactNode };
+<Table csvPane={!readOnly ? <details>...</details> : undefined} />
+```
+
 ---
 
 ## 4. 公式参照 — エージェント索引

@@ -63,3 +63,9 @@
 
 - Next.js のひな形では **Tailwind が既に含まれている**ことが多い。自分で触るのは主に **クラス名**と、必要なら `tailwind.config` 周り。
 - UI の見た目を説明するときは、**レイアウト（flex / grid）、余白（p-/m-）、タイポ（text-/font-）、色（bg-/text-）** の読み方ができると伝わりやすい。
+- **`overflow-auto` 二重ネスト禁止:** 外側 wrapper と内側コンテナ両方に `overflow-auto`（または `overflow-scroll`）を付けると、内側コンテンツが増えたとき水平スクロールバーが画面外に落ちる。**スクロール源は 1 箇所だけ**にする。
+  ```
+  NG: 外側 div.overflow-auto → 内側 div.overflow-auto
+  OK: 外側 div（overflow なし） → 内側 div.overflow-auto
+  ```
+  `flex-col` レイアウトで複数ペインを積むとき、外側ペイン wrapper に残った `overflow-auto` が原因で踏みやすい。

@@ -63,7 +63,7 @@
 | UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `10_meta/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
 | アクセシビリティ · WCAG 2.2 | 24 | `10_meta/A11Y_RULES.md` | a11y 実装 · レビュー · チェックリスト | — |
 | アクセシビリティ · 導入計画 | 23 | `10_meta/A11Y_ROADMAP.md` | Phase 判断 · CI 段階 · 工数 | — |
-| 講座・行動指針（人間向け） | 13 | `AI_DRIVEN_RULES.md` | **通常 Read しない** | — |
+| 講座・行動指針 · ルール抽出ループ（YK 補足） | 13 | `10_meta/AI_DRIVEN_RULES.md` | **通常 Read しない**（YK 補足: `distilling-rules-yk` 発火時） | — |
 
 ---
 
