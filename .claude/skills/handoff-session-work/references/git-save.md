@@ -73,7 +73,16 @@ Git（Phase C）:
 ## Shell（AGENT_SHELL_RULES D-2）
 
 - Phase B: 触ったルートの `git status`（従来どおり · 1 本 `;` 連結可）
-- Phase C: `committing-with-git-yk` · `pushing-and-pr-yk` に従い **add / commit / push** 可。初回から `required_permissions: ["all"]`
+- Phase C: **Bash ツール** で `add + commit + push` を **1 コール**にまとめる（[commit-shell.md §最優先: Bash ツール + HEREDOC](../../committing-with-git-yk/references/commit-shell.md)）。リポごとに 1 コール = 3 リポで 3 コール。
+
+  ```bash
+  cd "c:/yk-repo" && git add FILES && git commit -m "$(cat <<'EOF'
+  メッセージ
+  EOF
+  )" && git push origin main
+  ```
+
+  **C-1 と C-2 を別コールに分けない。** 同ターンで commit + push するときは必ず 1 コールに束ねる。
 
 ---
 

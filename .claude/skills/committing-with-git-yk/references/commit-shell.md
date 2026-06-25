@@ -2,11 +2,30 @@
 
 **手順 SSOT:** Cursor User Rules `committing-changes-with-git`（調査 · amend 条件）· `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`（RUN 最小 · 初回 `all`）
 
-## 推奨: メッセージファイル + `-F`
+## 最優先: Bash ツール + HEREDOC（add→commit→push を 1 コール）
 
-PowerShell では bash HEREDOC が使えない。**Cursor エージェントが Shell ツールで commit するとき**は、下記 **A（Write ツール）** を優先する。
+**Bash ツール**（POSIX sh）は HEREDOC と `&&` に対応しているため、add / commit / push を **1 Shell コール**にまとめられる。PowerShell での `&&` エラーは発生しない。Write ツールも不要。
 
-### A. エージェント向け（推奨）— Write で UTF-8 ファイルを作る
+```bash
+cd "c:/yk-application/flowchart-studio" && git add file1 file2 && git commit -m "$(cat <<'EOF'
+feat(scope): 日本語の要約
+
+なぜこの変更か（日本語 1〜2 文）。
+EOF
+)" && git push origin main
+```
+
+**マルチリポ:** メッセージが異なるため、リポごとに別の Bash コール（並列実行可）。3 リポ = 3 コールで完了。
+
+**許可設定:** `settings.json` に `Bash(git add *)` · `Bash(git commit *)` · `Bash(git push origin main)` を追加済みなら確認不要。
+
+---
+
+## 代替: メッセージファイル + `-F`（Bash ツールが使えない場合）
+
+PowerShell では bash HEREDOC が使えない。**PowerShell ツールで commit するとき**は、下記 **A（Write ツール）** を使う。
+
+### A. エージェント向け（PowerShell 用）— Write で UTF-8 ファイルを作る
 
 日本語本文を **Shell コマンド文字列に直接書かない**（後述「トラブルシュート」）。エディタの **Write** で次を作成し、`git commit -F` する。
 
@@ -52,6 +71,28 @@ git -C $root commit -F $msgFile
 ```powershell
 git -C $root commit -m "feat(scope): 日本語の要約" -m "なぜこの変更か（日本語）"
 ```
+
+## マルチリポ 1 ターン完結パターン（Bash ツール）
+
+リポごとに Bash コールを並列送信すれば 1 ターンで複数リポを commit+push できる。
+
+```bash
+# yk-application/flowchart-studio
+cd "c:/yk-application/flowchart-studio" && git add FILE && git commit -m "$(cat <<'EOF'
+feat: 変更A
+EOF
+)" && git push origin main
+```
+
+```bash
+# yk-skill（並列で送信）
+cd "c:/yk-skill" && git add FILE && git commit -m "$(cat <<'EOF'
+rule: 変更B
+EOF
+)" && git push origin main
+```
+
+---
 
 ## 調査コマンド（status / diff / log）— RUN 最小
 
