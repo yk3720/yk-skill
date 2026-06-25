@@ -7,7 +7,7 @@
 
 **関連:** [`COMMUNICATION_RULES.md`](COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-3（flowchart 定数）
 
-**最終更新:** 2026-05-31
+**最終更新:** 2026-06-25
 
 ---
 
@@ -47,9 +47,10 @@
 ## 3. 色・コントラスト（要約）
 
 - **色の役割分担**はプロジェクトで定義してよい（例: 矢印=青 · 枠=スレート/黒）。
+- **大面積の surface（サイドバー・ナビ・ペイン背景）** はニュートラルにし、**彩度の高い brand / accent 色はプライマリ CTA と小面積の選択・リンク**に寄せる。CTA と図形・矢印がすでに同色 family のとき、ナビ大面積に同系統の chromatic 色を載せない（階層競合 · hue pollution）。
 - **色だけに意味を頼らない**（色覚多様性 · ラベル併記）— 詳細はドメイン rule（GAS レポート · 企画の色列 B 等）。
 - **WCAG 2.2 AA · a11y チェックリスト** — [`A11Y_RULES.md`](A11Y_RULES.md) No **24**（コントラスト数値 · focus · タッチターゲット）。
-- 本ファイルは**色のパレット SSOT ではない**。太さの横断ルールが主。
+- 本ファイルは**色のパレット SSOT ではない**。太さの横断ルールが主。flowchart の操作 chrome 詳細は [`design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md) レイヤー C。
 
 ---
 
