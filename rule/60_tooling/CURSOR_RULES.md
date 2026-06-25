@@ -105,3 +105,68 @@ reg query "HKCU\Software\Classes\cursor\shell\open\command"
 ```
 
 インストール先が異なる場合は、`Cursor.exe` の実パスに合わせてルール3のコマンドを書き換える。
+
+---
+
+## ルール6：Team プランの有料範囲（含まれる使用量）の残り確認
+
+**最終確認:** 2026-06-25（公式ドキュメント・フォーラム・ブログを Web 調査）
+
+### 結論（どこで見るか）
+
+| 確認したい内容 | 場所 | 備考 |
+|----------------|------|------|
+| **自分の含まれる使用量の残り** | [cursor.com/dashboard](https://cursor.com/dashboard) → **Usage** | Member も Admin も自分分はここ |
+| **IDE 内のサマリー** | Cursor → **Settings → General → Usage Summary** を **Always** | アカウントにより項目が出ない場合あり |
+| **チーム全体・メンバー別** | 同上ダッシュボード（**Admin** でサインイン） | Usage で個人・合計・推移 |
+| **含まれる分を超えた従量（On-demand）** | ダッシュボード **Spending** / **Billing** | On-demand 無効時は Spending はほぼ空で正常 |
+| **次回リセット日** | ダッシュボード → **Manage Subscription** | Team は全員が同一の請求サイクルでリセット |
+
+**Spending タブは「含まれる使用量の残り」ではない。** 含まれる分を使い切ったあとの超過課金（On-demand）用。残りは **Usage** タブを見る。
+
+### Team プランの使用量の考え方
+
+- 各 **有料シート**（Standard / Premium）に、**ユーザー単位**で月次の含まれる使用量が付く。メンバー間で譲渡・共有しない。
+- 2026-06 時点の Teams 料金改定後、含まれる使用量は **2 プール**に分かれる（[Improvements to Teams Pricing · Cursor](https://cursor.com/blog/teams-pricing-june-2026)）:
+  1. **Composer and Auto** — Cursor 自社モデル・Auto 用
+  2. **Third-party API models** — Claude / GPT 等の第三者モデル用
+- **Standard:** $40/ユーザー/月（月払い）— 標準の含まれる使用量
+- **Premium:** $120/ユーザー/月 — Standard の **5 倍**の含まれる使用量
+- 含まれる分を使い切ると、On-demand が有効なら従量課金で継続（Teams では **既定で On-demand 有効**）。無効ならエディタ通知後に Auto / Composer への切り替え等（[Team Pricing](https://cursor.com/docs/account/teams/pricing)）。
+- 未使用分は **翌月へ繰越されない**。Team 全員が **チームの請求サイクル**で同時にリセット（[Usage and limits](https://cursor.com/help/models-and-usage/usage-limits)）。
+
+### ロール別に見える範囲
+
+| ロール | 自分の残り | 他メンバー・チーム全体 |
+|--------|------------|------------------------|
+| **Member** | ✓（Usage） | ✗ |
+| **Admin** | ✓ | ✓（Usage・分析） |
+| **Unpaid Admin** | ✗（Cursor 未使用） | ✓（管理画面） |
+
+出典: [Members, Roles, and Seat Types](https://cursor.com/docs/account/teams/members) · [Manage your team](https://cursor.com/help/account-and-billing/teams-management)
+
+### Usage タブの表示について（2026-06 時点の注意）
+
+- 公式: Usage に **リアルタイムの使用量・残り・On-demand 料金**を表示（[Usage and limits](https://cursor.com/help/models-and-usage/usage-limits)）。
+- **進捗バー / サマリーチャート**は段階的ロールアウト中。アカウントによって Usage に表だけしか出ないことがある（[フォーラム: Usage not showing](https://forum.cursor.com/t/usage-not-showing/154766)）。
+- チャート未表示時は **Usage のリクエスト一覧**で消費を追う。Enterprise 等で IDE の **Usage Summary 設定自体が消える**既知事象あり → その場合は Web ダッシュボードが正。
+
+### Admin API（プログラムで集計する場合）
+
+Admin が API キーを発行し、以下で請求サイクル内の利用・支出を取得できる（[Admin API](https://cursor.com/docs/account/teams/admin-api)）:
+
+- `GET /teams/spend` — メンバー別 On-demand 支出・全体支出
+- `POST /teams/daily-usage-data` — 日次利用（ポーリングは **1 時間に 1 回以下**推奨）
+- `POST /teams/filtered-usage-events` — イベント単位（`chargedCents` の合計でダッシュボードと突合）
+
+### 参照 URL（公式）
+
+| 内容 | URL |
+|------|-----|
+| 使用量・上限の一般説明 | https://cursor.com/help/models-and-usage/usage-limits |
+| Team 料金・含まれる使用量・On-demand | https://cursor.com/docs/account/teams/pricing |
+| Team ダッシュボード | https://cursor.com/docs/account/teams/dashboard |
+| メンバー・ロール・シート | https://cursor.com/docs/account/teams/members |
+| チーム管理（利用状況の見方） | https://cursor.com/help/account-and-billing/teams-management |
+| Admin API | https://cursor.com/docs/account/teams/admin-api |
+| Teams 料金改定（2026-06） | https://cursor.com/blog/teams-pricing-june-2026 |
