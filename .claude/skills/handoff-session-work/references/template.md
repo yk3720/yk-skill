@@ -20,7 +20,7 @@
 | **状態** | {一行サマリー · 例: 進行中 / 本セッション分は引き継ぎ終了済} |
 | **次の 1 手** | §「次回の最初の 1 件」のみ（HANDOFF ロードマップ全体ではない） |
 | **推奨 workspace** | {例: yk-memo + yk-skill + yk-tool} |
-| **commit** | 終了時 Phase C で commit+push（結果を §2 に記録） |
+| **commit** | Phase C 完了報告に hash（方式 A）· Post-C 専用 commit 不要 |
 
 ---
 

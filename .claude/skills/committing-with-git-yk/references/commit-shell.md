@@ -2,9 +2,21 @@
 
 **手順 SSOT:** Cursor User Rules `committing-changes-with-git`（調査 · amend 条件）· `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`（RUN 最小 · 初回 `all`）
 
+## 引き継ぎ終了 Phase C — RUN 最小（最優先）
+
+| やる | やらない |
+| ---- | -------- |
+| **Bash 1 本/リポ:** `add && commit && push` | Phase B 単独 `git status` Shell |
+| 2 リポ → **2 Run**（並列送信可） | Post-C 専用 commit（hash 同期の 2 回目 push） |
+| hash は **完了報告**に載せる（方式 A） | PowerShell の `$(cat <<'EOF'...)` |
+
+詳細: [handoff-session-work/references/git-save.md](../handoff-session-work/references/git-save.md)
+
+---
+
 ## 最優先: Bash ツール + HEREDOC（add→commit→push を 1 コール）
 
-**Bash ツール**（POSIX sh）は HEREDOC と `&&` に対応しているため、add / commit / push を **1 Shell コール**にまとめられる。PowerShell での `&&` エラーは発生しない。Write ツールも不要。
+**PowerShell ツールで HEREDOC は使わない** — 構文エラーで Run が倍化する。PowerShell では **`-m` 1 行** または **Write + `git commit -F`**。
 
 ```bash
 cd "c:/yk-application/flowchart-studio" && git add file1 file2 && git commit -m "$(cat <<'EOF'
@@ -17,7 +29,7 @@ EOF
 
 **マルチリポ:** メッセージが異なるため、リポごとに別の Bash コール（並列実行可）。3 リポ = 3 コールで完了。
 
-**許可設定:** `settings.json` に `Bash(git add *)` · `Bash(git commit *)` · `Bash(git push origin main)` を追加済みなら確認不要。
+**許可設定:** `cursor-permissions/permissions.json`（Tier B）を `Deploy-CursorPermissions.ps1` で `~/.cursor/` にデプロイ済みなら、Agents の Command Allowlist 経由で RUN 省略可。Claude Code は別途 `settings.json` allow。
 
 ---
 

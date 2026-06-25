@@ -35,8 +35,16 @@ cd c:\yk-skill\rule\60_tooling\cursor-permissions
 
 ## 編集ルール
 
-- **`terminalAllowlist` に載せる:** `cd` · `python` · 読取系 git の列挙（`git status` 等）
-- **載せない:** `"git"` 単体 · `git add` · `git commit` · `git push` · `git pull`
+### Tier A — 読取（既定 · 全環境）
+
+- **`terminalAllowlist` に載せる:** `cd` · `python` · 読取系 git（`git status` · `git diff` · `git log` · `git -C` · `git rev-parse`）
+
+### Tier B — 書込（個人 dev · RUN 削減 · 2026-06-25 以降の正本）
+
+- **追加で載せる:** `git add` · `git commit` · `git push` · `git mv`
+- **載せない:** `"git"` 単体 · `git push --force` 等 — branch protection と併用
+- **リスク:** allowlist は便利機能でありセキュリティ境界ではない（公式）。社内共有 PC では Tier A のみを検討
+
 - **`mcpAllowlist`:** 使うときだけ JSON にキーを追加。空配列 `[]` だけ書くと MCP が全部ブロックされるので **キーごと省略**
 
 変更後は Cursor 再起動不要（ファイル監視）。Agent で `git status` が RUN なしになるか確認する。

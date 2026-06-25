@@ -75,7 +75,7 @@ description: >
 9. セッション MD を **新規 Write**（上書き禁止）
 10. テンプレの全見出しを埋める（空欄・`TBD` 禁止）。§1-3 に **Phase A の移動・削除一覧**を記録
 11. `HANDOFF.md` の **「最新セッション」1 行**（と必要なら §6）だけ更新
-12. 触った各 Git ルートで `git status` → セッション MD §2 に記載
+12. 触った各 Git ルートの変更 — **Glob/Read で把握**（**Phase B 単独の `git status` Shell 禁止** · hash は Phase C 完了報告へ）
 13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
 14. `handoffs/README.md` の当該 slug **1 行**を更新（状態 · 最新ファイル · ルート MD 本数 · 次の 1 手）— [routing.md §横断索引](references/routing.md)
 
@@ -91,12 +91,15 @@ description: >
 
 [routing.md §引き継ぎ終了](references/routing.md) · [git-save.md](references/git-save.md) に従う。
 
-16. **`committing-with-git-yk` を Read** — 触った各 Git ルートで子スキル手順どおり commit（終了依頼 = 当ターンの commit 明示）
-17. **`pushing-and-pr-yk` を Read** — commit 済みルートを push（**PR は含めない**）
-18. セッション MD の先頭表 `commit` 行と §2 を **Post-C** で更新（hash · push 結果）
-19. ユーザーに保存パス · 再開用 `@` 依頼文 · **リポごとの commit / push 結果**を提示
+**RUN 予算:** 触った Git ルート数 = Phase C の Shell **最大**（1 リポ = **1 Run**）。Phase B 単独の `git status` **禁止**。
 
-**禁止:** Phase A 前の新規 Write · Phase B 前の `git commit` / `git push` · **Phase B+ 前の Phase C** · 確認/整理モードでの commit/push · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
+16. **`committing-with-git-yk` を Read** — Phase C は **Bash 1 本/リポ**（add+commit+push）。PowerShell HEREDOC **禁止**
+17. **`pushing-and-pr-yk` を Read** — push は C-1 に含める（別 Shell 不要）
+18. **Post-C 専用 commit 禁止** — hash は完了報告（方式 A）または push 前 amend（方式 B · [git-save.md §C-3](references/git-save.md)）
+19. セッション MD §2 · 先頭表 `commit` — 方式 A なら「完了報告参照」でよい
+20. ユーザーに保存パス · 再開 `@` · **Run 回数** · リポごと commit / push を提示
+
+**禁止:** Phase A 前の Write · Phase B 前の commit/push · Phase B だけの git status Shell · Post-C 2 回目 push
 
 ---
 

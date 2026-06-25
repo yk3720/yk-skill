@@ -5,6 +5,11 @@
     "git status",
     "git diff",
     "git log",
-    "git -C"
+    "git -C",
+    "git add",
+    "git commit",
+    "git push",
+    "git mv",
+    "git rev-parse"
   ]
 }

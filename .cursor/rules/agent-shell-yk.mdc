@@ -1,5 +1,5 @@
 ---
-description: Agent の Shell/RUN 承認を減らす — Read 優先・commit 時のみ Shell
+description: Agent の Shell/RUN 承認を減らす — Read 優先 · 引き継ぎ Phase C は Bash 1本/リポ
 alwaysApply: true
 ---
 
@@ -8,6 +8,7 @@ alwaysApply: true
 **SSOT:** `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`
 
 - **確認・調査・引き継ぎ俯瞰:** Shell 禁止。Glob / Read / Grep のみ。
-- **Shell を使うのは:** ユーザーが commit / push / test（E2E 含む）/ 引き継ぎ終了 を**当ターンで明示**したとき、または **UI 修正で E2E spec を足した同一ターン**（`PLAYWRIGHT_RULES` §12 の完了判定）のみ。
-- **同一ターン:** 複数 git コマンドは `;` で **1 本の Shell**（`&&` 不可）。`.git` 書き込み・push は初回から **`required_permissions: ["all"]`**。
+- **Shell を使うのは:** ユーザーが commit / push / test（E2E 含む）/ **引き継ぎ終了** を**当ターンで明示**したとき、または **UI 修正で E2E spec を足した同一ターン**（`PLAYWRIGHT_RULES` §12 の完了判定）のみ。
+- **引き継ぎ終了 Phase C:** **Bash 1 本/リポ**（add+commit+push）。Phase B 単独 `git status` 禁止。Post-C 専用 commit 禁止（`handoff-session-work` · `git-save.md`）。
+- **その他 git:** PowerShell は `;` 連結 · `.git` 書き込みは初回 **`required_permissions: ["all"]`**。Phase C の HEREDOC は **Bash のみ**。
 - **引き継ぎ確認:** スキル `handoff-session-work` 確認モード（Shell 禁止）を優先。
