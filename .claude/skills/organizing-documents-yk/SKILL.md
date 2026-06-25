@@ -3,6 +3,7 @@ name: organizing-documents-yk
 description: >
   プロジェクト資料の整合（M1）と Web 鮮度更新（M2）。M1 発火例「資料整合して」「矛盾を直して」「doc-sync」。
   M2 発火例「資料を最新化して」「古い記述を整理して」。横断は「四リポ横断で整合」等の明示時のみ。
+  handoff-session-work 終了 Phase B+ からも Tier P 整合を呼ぶ（持ち越し禁止 · PROJECT_DOCUMENT_RULES §9.1）。
   Do NOT use for handoffs 終了・アーカイブ（handoff-session-work）、L1 ルール追記（distilling-rules-yk）、
   コード修正（creating-*-yk / optimizing-code-yk）、commit/push のみ（committing-with-git-yk）。
 ---
@@ -62,6 +63,8 @@ description: >
    - **意味的** → 報告のみ（正本不明 · 方針 A vs B）
 6. **報告** — 修正一覧 · WARN 一覧 · 触っていないファイル
 7. **Git** — commit しない。変更ファイルを列挙し、必要なら「コミットして」を提案
+
+**終了モード連携:** `handoff-session-work` Phase B+ から呼ばれたときは、上記 4〜6 を実施し **機械的矛盾は修正まで**行う（持ち越し禁止 · `PROJECT_DOCUMENT_RULES` §9.1）。
 
 **禁止:** Tier C をユーザー明示なしで勝手に実行 · 意味的矛盾の独断解決 · `git commit` / `git push`
 

@@ -182,6 +182,19 @@ c:/yk-application/{app}/
 
 **却下した案（参考）:** spec-as-source（仕様のみ編集）· `types.ts` を正本とするコードファースト · 仕様+現状の 2 ファイル併存。
 
+### 9.1 セッション終了時 — 矛盾の持ち越し禁止
+
+| 原則 | 内容 |
+|------|------|
+| **持ち越し禁止** | 完了タスクが「未着手」「次 §4」・ ADR が「未実装」のまま残る等、**次回の誤読を招く記述を終了時に残さない** |
+| **正本（次の1件）** | `handoffs/{slug}/HANDOFF.md` §4 · §6 · 最新セッション §4 |
+| **追随 MD（Tier P）** | `現状とロードマップ` · `decision-log`（戦術次タスク · ADR 索引）· 触った **ADR 状態行** · 触った **UI仕様 / 方針 MD** · `AGENTS.md` |
+| **archive** | 当時記録のまま更新しない（`archive/` 注記どおり） |
+| **実施タイミング** | `handoff-session-work` **終了モード Phase B+**（Phase C の前）— `organizing-documents-yk` M1 Tier P |
+| **判定** | [reconcile.md](c:/yk-skill/.claude/skills/organizing-documents-yk/references/reconcile.md) の S1–S6 · H1。機械的矛盾は **同一ターンで修正** |
+
+**MUST NOT:** HANDOFF だけ更新し Product Spec のステータス表を古いまま commit する（意図的な「後続タスク」バックログ行を除く）。
+
 ---
 
 ## 10. SDD 取り込み（Spec-Driven Development）

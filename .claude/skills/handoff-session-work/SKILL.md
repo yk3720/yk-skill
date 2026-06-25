@@ -79,6 +79,14 @@ description: >
 13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
 14. `handoffs/README.md` の当該 slug **1 行**を更新（状態 · 最新ファイル · ルート MD 本数 · 次の 1 手）— [routing.md §横断索引](references/routing.md)
 
+### Phase B+ — 資料整合（必須 · Phase C の前）
+
+15. **矛盾の持ち越し禁止** — `PROJECT_DOCUMENT_RULES` §9.1
+16. **`organizing-documents-yk` M1（Tier P）** — [reconcile.md](../organizing-documents-yk/references/reconcile.md) の S1–S7 · H1。セッション §1 で触った論点（機能名 · ADR · 作者データ等）を Grep し、追随 MD を HANDOFF と照合
+17. **機械的矛盾は同一ターンで修正**（`現状とロードマップ` · `decision-log` 戦術/ADR索引 · ADR 状態行 · 触った方針/UI仕様 · `AGENTS.md`）
+18. 修正一覧をセッション MD §1-3 に 1 行追記（`資料整合（Phase B+）:` …）
+19. **スキップ不可** — WARN のみ残して Phase C に進めない（意図的バックログ行を除く）
+
 ### Phase C — Git 保存（記録のあと · 必須）
 
 [routing.md §引き継ぎ終了](references/routing.md) · [git-save.md](references/git-save.md) に従う。
@@ -88,7 +96,7 @@ description: >
 18. セッション MD の先頭表 `commit` 行と §2 を **Post-C** で更新（hash · push 結果）
 19. ユーザーに保存パス · 再開用 `@` 依頼文 · **リポごとの commit / push 結果**を提示
 
-**禁止:** Phase A 前の新規 Write · Phase B 前の `git commit` / `git push` · 確認/整理モードでの commit/push · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
+**禁止:** Phase A 前の新規 Write · Phase B 前の `git commit` / `git push` · **Phase B+ 前の Phase C** · 確認/整理モードでの commit/push · rule / SKILL 全文の貼り付け · 最新セッション MD の削除
 
 ---
 

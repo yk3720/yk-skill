@@ -15,7 +15,7 @@
 
 ## 前提
 
-- Phase A（整理）・ Phase B（新規セッション MD · HANDOFF · README）が完了している
+- Phase A（整理）· Phase B（新規セッション MD · HANDOFF · README）· **Phase B+（Tier P 資料整合）** が完了している
 - **Agent モード**（Shell 可）
 - ユーザー発話が **終了モード**（引き継ぎして · セッション終了 · 作業を保存 · 引き継ぎ終了）
 
