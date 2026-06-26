@@ -159,7 +159,7 @@ type Props = { csvPane?: React.ReactNode };
 
 #### リポジトリ内 JSON も Zod 境界を通す
 
-サンプル・雛形 JSON は `as FlowchartDocument` で一括キャストしない。`parseFlowchartDocument`（内部 Zod）→ `normalizeFlowchartDocument` の順で読む。失敗時はユーザーへ通知し、黙って雛形にフォールバックしない（ワークスペースの `initialSnapshot` 復元を含む）。
+サンプル・雛形 JSON は `as FlowchartDocument` で一括キャストしない。`parseFlowchartDocument`（内部 Zod）→ `normalizeFlowchartDocument` の順で読む。失敗時はユーザーへ通知し、黙って雛形にフォールバックしない（ワークスペースの `initialSnapshot` 復元を含む）。**snapshot の `jsonText` も normalize 後 serialize に揃える**（`doc` だけ v2 · JSON が v1 のまま残さない — `REACTFLOW_RULES` §5.7）。
 
 #### 初期状態は effect に委ねない
 

@@ -528,10 +528,26 @@ const handleToggle = () => {
 | 旧スキーマ定数を残す | `TIER10_V1_SCHEMA = "table-10col-v1"` |
 | 新スキーマ定数を追加 | `TIER10_SCHEMA = "table-10col-v2"` |
 | 移行関数（行レベル）を追加 | `migrateTable10ColV1ToV2(row)` — `[r[0], r[1], r[9], r[2]...]` |
-| ドキュメント移行ラッパーを追加 | `migrateDocToV2(doc)` |
+| ドキュメント移行ラッパーを追加 | `migrateDocToV2(doc)` · desync 修復は `ensureTable10ColV2Order` |
 | **`normalizeFlowchartDocument()` を唯一の移行エントリにする** | v1→v2 変換をここだけで実施 |
 | `schema` を呼び出しスタック全体に通す | `generate → validate → parseTable(table, schema)` |
-| 9→10 列パディングは **旧スキーマ形式**でパディング後に migrate | パディング時に `TIER10_V1_SCHEMA` を渡し、そのあと `migrateDocToV2` |
+| 9→10 列パディングの schema | **未 v2 の doc のみ** `TIER10_V1_SCHEMA` で pad → `migrateDocToV2`。**既に `table-10col-v2` なら v2 のまま pad**（tier9 判定で v1 に戻さない） |
+
+**YK パターン補足 — v2 正規化の落とし穴（2026-06 · 色列 select バグ）**
+
+| 症状 | 原因 |
+|------|------|
+| 色 select で「黄」が **下先** に入る · 他列がずれる | `normalizeFlowchartDocument` が tier9 判定のたびに **v2 schema を v1 に戻し**、`migrateTable10ColV1ToV2` を **v2 行に再適用**していた |
+| UI は v2 ヘッダーなのに列の中身がおかしい | DB / snapshot が **`schema: table-10col-v2` + v1 列順の table** の desync |
+
+| MUST | 実装 |
+|------|------|
+| v2 doc を normalize しても **schema を v1 に戻さない** | `isTenColV2Schema(doc.schema)` で pad 用 schema を分岐（`document.ts`） |
+| v2 schema + v1 列順を読込時に修復 | `tableNeedsV1ToV2Migration`（目安: index 6 が `MR…` = v1 の Text1）→ `migrateTable10ColV1ToV2` |
+| 表編集後も v2 行を壊さない | `handleTableChange` → `syncJsonFromDoc` → `normalizeFlowchartDocument` の経路で **再 migrate しない** |
+| snapshot 復元で **doc と JSON を揃える** | `resolveInitialState`: `parse` → `normalize` → **`serializeDocument` を `jsonText` / `committedJson` に使う**（raw v1 JSON を doc だけ v2 にして残さない） |
+
+**禁止:** tier9 レイアウトだからといって **常に** `TIER10_V1_SCHEMA` で pad してから `migrateDocToV2` を毎回走らせる（v2 保存データを v1 行として解釈し直す）。
 
 **Python 側（`python/src/excel_normalize/constants.py`）**
 
@@ -542,7 +558,9 @@ const handleToggle = () => {
 
 | テスト | 場所 |
 |--------|------|
-| TS ピン | `lib/flowchart/table/tableColumns.test.ts` — `TABLE_HEADERS_10_V2` · `TIER10_SCHEMA` のアサーション |
+| TS ピン | `lib/flowchart/table/tableColumns.test.ts` — `TABLE_HEADERS_10_V2` · `TIER10_SCHEMA` · `tableNeedsV1ToV2Migration` |
+| 正規化回帰 | `lib/flowchart/model/document.normalize.test.ts` — v2 色編集後の normalize · desync 修復 · A0001 M002 |
+| E2E | `e2e/table-pane-ux.spec.ts` — 色 select 後も他列維持 |
 | Python ピン | `python/tests/test_schema_consistency.py` — `FLOW_HEADERS` · `FLOW_SCHEMA` のピンテスト（ADR-016 で追加） |
 
 **禁止:** Python だけ / TypeScript だけ更新して片方を放置する。両テストが同時にグリーンであることを commit 条件にすること。
@@ -554,7 +572,7 @@ const handleToggle = () => {
 | 項目 | SSOT · 方針 |
 |------|-------------|
 | **Excel（表ペイン）** | `CsvPastePanel` → `parseExcel` は **ファイル選択時のみ** dynamic import。表表示だけでは `xlsx` を載せない |
-| **スナップショット復元** | `ModuleSnapshot` の `nodes` / `edges` / `jsonText` / `committedJson` を `resolveInitialState` でそのまま使う。空 `nodes` + マウント effect `runGenerate` は避ける |
+| **スナップショット復元** | `nodes` / `edges` は snapshot から。**`jsonText` / `committedJson` は `normalize` 後の `serializeDocument` に揃える**（`REACTFLOW_RULES` §5.7）。空 `nodes` + マウント effect `runGenerate` は避ける |
 | **プレビュー UI** | `FlowPreviewPane`（または同等）— ズーム % state をキャンバス subtree に閉じ、`memo(FlowCanvas)` で表編集と分離 |
 | **サンプル JSON** | `as FlowchartDocument` 禁止 — `parseFlowchartDocument` 経由（`REACT_RULES` §3-1） |
 
