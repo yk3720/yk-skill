@@ -6,7 +6,7 @@
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `10_meta/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-06-24（§2 docs/ 統合 · frontend/backend/database 三層）
+**最終更新:** 2026-06-26（§2 docs/ 統合 · 検証駆動例外 footnote）
 
 ---
 
@@ -43,7 +43,7 @@
 | 進捗が信頼できない | `再開メモ` · 手動確認 · handoffs の **日付・定義の不一致** |
 | ルールが散在 | スタック rule（No 31–35）と **プロジェクトの置き方** が未分離 |
 
-**目標:** 企画（安定）· セッション（毎回）· 憲法（境界）を分離し、**再開は handoffs §4 の 1 件だけ**。
+**目標:** 企画（安定）· セッション（毎回）· 憲法（境界）を分離し、**再開は handoffs §4 の 1 件だけ**（**検証駆動フェーズ**は HANDOFF §6 が実行正本 — §11 実例参照）。
 
 ---
 
@@ -139,6 +139,7 @@ AGENTS.md（憲法）→ コード
 | 操作 | 正本 | 鉄則 |
 |------|------|------|
 | **再開** | 最新セッション MD **§4 の 1 件** | ロードマップ全体に広げない |
+| **再開（検証駆動）** | HANDOFF **§6** | §4 機械消化しない · 検証メモまたは明示依頼まで待機（例: `flowchart-studio`） |
 | **終了** | 新規セッション MD Write | **整理→archive 先**（Phase A 必須） |
 | **確認** | Glob + Read のみ | Shell 禁止 |
 
@@ -217,6 +218,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | 経緯索引 | `docs/05_開発ガイドライン/decision-log.md` |
 | 実装三層 | `frontend/` · `backend/` · `database/`（`docs/04_リポジトリ構造/`） |
 | スタック | No 35 REACTFLOW · No 31 NEXTJS · No 37 SUPABASE |
+| 検証駆動例外 | HANDOFF §6 が実行正本（§4 機械消化しない · 2026-06-26〜） |
 
 ---
 
