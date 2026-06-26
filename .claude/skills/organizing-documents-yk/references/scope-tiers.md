@@ -18,9 +18,16 @@
 2. **機能設計 SSOT**（例: ボタン一覧 · 方針 MD）
 3. **AGENTS.md**（憲法・境界）
 4. **decision-log**（経緯索引 — 1 行要約）
-5. **handoffs 最新 §4**（次の 1 手 — 恒久方針は HANDOFF §6）
+5. **handoffs 最新 §4**（次の 1 手 — 恒久方針は **HANDOFF §6** · 検証駆動フェーズでは §6 が実行正本）
 
-意味的矛盾で上記だけでは決められないときは **報告のみ**（独断で古い方を削除しない）。
+## Tier C と M1a/M1b
+
+| Tier | 監査（M1a） | 適用（M1b） |
+|------|-------------|-------------|
+| **P / P+H** | 不要（M1 即修正） | handoff Phase B+ · ユーザー「直して」 |
+| **C** | **デフォルト** — inbox に監査 MD のみ | 別セッション · 承認 ID のみ |
+
+監査 MD 正本パス: `c:/yk-memo/inbox/doc-sync-audit_YYYY-MM-DD_{slug}.md`
 
 ## flowchart-studio の Tier P 目安
 

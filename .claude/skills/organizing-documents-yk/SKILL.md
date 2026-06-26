@@ -2,6 +2,8 @@
 name: organizing-documents-yk
 description: >
   プロジェクト資料の整合（M1）と Web 鮮度更新（M2）。M1 発火例「資料整合して」「矛盾を直して」「doc-sync」。
+  M1a 監査「横断チェックして」「矛盾リストを作って」（Tier C · 修正しない）。
+  M1b 適用「監査 ID を適用して」「承認した項目だけ直して」。
   M2 発火例「資料を最新化して」「古い記述を整理して」。横断は「四リポ横断で整合」等の明示時のみ。
   handoff-session-work 終了 Phase B+ からも Tier P 整合を呼ぶ（持ち越し禁止 · PROJECT_DOCUMENT_RULES §9.1）。
   Do NOT use for handoffs 終了・アーカイブ（handoff-session-work）、L1 ルール追記（distilling-rules-yk）、
@@ -12,16 +14,26 @@ description: >
 
 プロジェクト資料の **内部整合（M1）** と **外部鮮度・旧情報整理（M2）** をモード分離で扱う。
 
-**応答の先頭ラベル:** `[整合]` `[更新]` のいずれかを付ける。
+**応答の先頭ラベル:** `[整合]` `[監査]` `[適用]` `[更新]` のいずれかを付ける。
 
 ## モード選択（先に 1 つだけ）
 
-| モード | 発火例 | v1 |
-|--------|--------|-----|
-| **M1 整合** | 資料整合 · 矛盾を直して · doc-sync · 資料の不整合 | **本実装** |
+| モード | 発火例 | 編集 |
+|--------|--------|------|
+| **M1a 監査** | 横断チェック · 矛盾リスト · Tier C doc-sync（監査のみ） | **inbox 監査 MD のみ**（他ファイル禁止） |
+| **M1b 適用** | 監査 ID 適用 · 承認項目だけ直して | リスト承認分のみ |
+| **M1 整合** | 資料整合 · 矛盾を直して · doc-sync（単一プロジェクト） | Tier P/P+H は機械的即修正 |
 | **M2 更新** | 資料最新化 · 資料更新 · 古い記述を整理 | 骨格のみ → [refresh.md](references/refresh.md) |
 
-曖昧時は **1 問**: M1（資料同士の矛盾）か M2（Web 最新化）か。
+**解釈ルール**
+
+| 依頼 | モード |
+|------|--------|
+| 「矛盾を直して」（プロジェクト単体） | **M1** · Tier P · 機械的即修正 |
+| 「四リポ横断」「横断 doc-sync」「監査だけ」 | **M1a** · Tier C |
+| `@inbox/doc-sync-audit_*.md` + 承認 ID | **M1b** |
+
+曖昧時は **1 問**: M1（資料同士の矛盾）か M2（Web 最新化）か。横断キーワードがあれば M1a。
 
 **M1 と M2 を同一依頼で連続実行しない**（「整合して最新化して」と明示されたときのみ M1 完了後に M2 へ）。
 
@@ -30,7 +42,7 @@ description: >
 | 用途 | 参照 |
 |------|------|
 | 読む範囲 Tier | [references/scope-tiers.md](references/scope-tiers.md) |
-| M1 手順・判定表 | [references/reconcile.md](references/reconcile.md) |
+| M1 手順・判定表 · 監査出力 | [references/reconcile.md](references/reconcile.md) |
 | M2 手順（v1 骨格） | [references/refresh.md](references/refresh.md) |
 | ドキュメント種別・正本 | `c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md` |
 | handoffs フォルダ整合 | `handoff-session-work`（確認 Tier-1）— 本スキルは置換しない |
@@ -48,7 +60,32 @@ description: >
 
 ---
 
-## M1 整合（Reconcile）
+## M1a 監査（Audit · Tier C デフォルト）
+
+[references/reconcile.md](references/reconcile.md) §監査出力 に従う。
+
+1. **Tier C** 確定（「四リポ横断」等の明示）
+2. Grep · Read のみ（`AGENT_SHELL_RULES` — Shell 禁止）
+3. 矛盾を ID 付きで列挙（機械的 / 意味的 · P0–P2）
+4. **出力:** `c:/yk-memo/inbox/doc-sync-audit_YYYY-MM-DD_{slug}.md`
+5. **他ファイルは編集しない**（削除 · archive 移動も禁止）
+
+ユーザーが「監査せず直して」と明示したときのみ M1（Tier P）または M1b へ。
+
+---
+
+## M1b 適用（Apply）
+
+1. 監査 MD を Read — **承認 `[x]` の ID のみ**
+2. [reconcile.md](references/reconcile.md) の種別・最小差分ルールに従って修正
+3. 監査 MD の `適用` 列を `applied` に更新
+4. commit しない
+
+**ガードレール:** ファイル削除禁止 · `archive/` への移動は M2 またはユーザー明示時 · Tier C 無承認の一括適用禁止
+
+---
+
+## M1 整合（Reconcile · Tier P / P+H）
 
 [references/reconcile.md](references/reconcile.md) に従う。
 
@@ -64,9 +101,9 @@ description: >
 6. **報告** — 修正一覧 · WARN 一覧 · 触っていないファイル
 7. **Git** — commit しない。変更ファイルを列挙し、必要なら「コミットして」を提案
 
-**終了モード連携:** `handoff-session-work` Phase B+ から呼ばれたときは、上記 4〜6 を実施し **機械的矛盾は修正まで**行う（持ち越し禁止 · `PROJECT_DOCUMENT_RULES` §9.1）。
+**終了モード連携:** `handoff-session-work` Phase B+ から呼ばれたときは、上記 4〜6 を実施し **機械的矛盾は修正まで**行う（持ち越し禁止 · `PROJECT_DOCUMENT_RULES` §9.1）。**Tier P のみ**（横断は M1a）。
 
-**禁止:** Tier C をユーザー明示なしで勝手に実行 · 意味的矛盾の独断解決 · `git commit` / `git push`
+**禁止:** Tier C をユーザー明示なしで勝手に実行 · Tier C で無承認適用 · 意味的矛盾の独断解決 · `git commit` / `git push` · **監査モードでの資料削除**
 
 ---
 

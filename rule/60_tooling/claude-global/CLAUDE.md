@@ -140,6 +140,6 @@ handoffs/
 | `grill-me` | 「グリルして」「grill me」「計画を詰めて」 | 計画・設計を1問ずつ深掘り |
 | `re-explaining-in-chat-yk` | 「もう一度説明して」「さっぱり整理して」 | 直前の作業・技術説明を簡潔に再説明 |
 | `distilling-rules-yk` | 「ルールに追記して」「今回の気づきを整理して」「コードから学んだことを記録して」 | 実装の気づきを L1 ルールファイルへ追記 |
-| `organizing-documents-yk` | 「資料整合して」「矛盾を直して」「doc-sync」 | 資料 M1 整合 · M2 最新化（v1 は M1 本実装） |
+| `organizing-documents-yk` | 「資料整合して」「矛盾を直して」「doc-sync」· 「横断チェック」「監査だけ」 | M1 整合 · M1a 監査 · M1b 適用 · M2 最新化 |
 | `optimizing-code-yk` | 「コードチェックして」「コード最適化レビュー」「最適化を適用して」 | コード M1 チェック（Web+サブエージェント）· M2 修正 |
 | `personal-scheduler` | 「スケジュールを更新」「今日の予定を整理」 | 個人スケジュール → surge.sh 公開 |
