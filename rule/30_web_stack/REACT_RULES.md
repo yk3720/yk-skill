@@ -9,7 +9,7 @@
 
 **横断:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC · `"use client"` — **本ファイルでは再掲しない**） · [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)（表駆動 · `@xyflow/react`） · [`20_web_workspace/WORKSPACE_RULES.md`](../20_web_workspace/WORKSPACE_RULES.md) §3（`lib/` 純関数）
 
-**最終更新:** 2026-05-24  
+**最終更新:** 2026-06-26（§3-1 に TDZ バグ · キーボードショートカット input ガード · skipXxxCheck パターン追記）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 36
 
 **L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-studio` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
@@ -164,6 +164,55 @@ type Props = { csvPane?: React.ReactNode };
 #### 初期状態は effect に委ねない
 
 `ModuleSnapshot` / `initialSnapshot` に `nodes` · `edges` · `jsonText` · `committedJson` があるとき、**`resolveInitialState`（または `useState` 初期化）で復元**する。マウント `useEffect` → `runGenerate` は非 workspace の下書き復元など effect が不可避な経路に限定。
+
+#### useState の初期値に useMemo の出力を使うとき — TDZ バグ
+
+`const initial = useMemo(...)` の出力を `useState` / `useRef` の初期値に使う場合、**`useMemo` 宣言の後ろ** に置く。前に書くと TDZ（Temporal Dead Zone）エラーになる。TypeScript コンパイラが検出しないケースがあり、`npm run build` まで気づかないことがある。
+
+```typescript
+// NG — initial は TDZ で参照できない
+const [savedJson, setSavedJson] = useState(initial.committedJson); // ← ReferenceError
+const initial = useMemo(() => resolveState(props), [moduleId]);
+
+// OK — useMemo の後ろ
+const initial = useMemo(() => resolveState(props), [moduleId]);
+const [savedJson, setSavedJson] = useState(initial.committedJson);
+```
+
+#### document.addEventListener でキーボードショートカットを設定するときの input ガード
+
+document レベルで Ctrl+Z/Y など編集系ショートカットを捕捉する場合、ハンドラ冒頭で input 内のネイティブ undo/redo を妨げないガードを入れる。
+
+```typescript
+const inInput =
+  target.tagName === "INPUT" ||
+  target.tagName === "TEXTAREA" ||
+  target.tagName === "SELECT" ||
+  target.isContentEditable;
+if (inInput) return; // input 内はブラウザに任せる
+```
+
+ただし **Ctrl+S（保存）は input 内でも `e.preventDefault()` してよい**（ブラウザの「ページを保存」ダイアログを防ぐため）。
+
+#### プログラム的なナビ呼び出しには skipXxxCheck オプションを付ける
+
+ユーザー操作と `useEffect`（自動切替など）の両方から呼ばれるハンドラに確認ダイアログを追加する場合、`options?: { skipXxxCheck?: boolean }` を付けてエフェクト側から `{ skipXxxCheck: true }` を渡す。こうしないとシステム起因の自動ナビゲーションでダイアログが意図せず表示される。
+
+```typescript
+// ハンドラ側
+const handleSelectDevice = useCallback(
+  (deviceId: string, options?: { skipUnsavedCheck?: boolean }) => {
+    if (!options?.skipUnsavedCheck && editor.current?.isUnsaved) {
+      setPendingSwitch({ kind: "device", id: deviceId });
+      return;
+    }
+    // ... 切替処理
+  }, [...]
+);
+
+// エフェクト側（自動切替）
+handleSelectDevice(imported.id, { skipUnsavedCheck: true });
+```
 
 #### 表編集と React Flow の再レンダー分離
 
