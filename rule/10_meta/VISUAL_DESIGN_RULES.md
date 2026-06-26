@@ -5,7 +5,7 @@
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **19**  
 **L0 入口:** `c:/yk-skill/.cursor/rules/visual-design-yk.mdc`（`alwaysApply`）· 同期: `c:/yk-memo/.cursor/rules/`
 
-**関連:** [`COMMUNICATION_RULES.md`](COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-3（flowchart 定数）
+**関連:** [`COMMUNICATION_RULES.md`](COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/references/REACTFLOW_UX_CHROME.md`](../35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-3（flowchart 定数）
 
 **最終更新:** 2026-06-25
 
@@ -58,7 +58,7 @@
 
 | プロジェクト / 帯 | 拡張 SSOT | 本ルールとの関係 |
 |-------------------|-----------|------------------|
-| flowchart-studio | `visual/flowColors.ts`（キャンバス）· [`docs/design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md)（操作 chrome）· REACTFLOW §5.6-2a · §5.6-3 | ノード枠 `FLOW_NODE_FRAME_WIDTH`（既定 2px） |
+| flowchart-studio | `visual/flowColors.ts`（キャンバス）· [`docs/design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md)（操作 chrome）· REACTFLOW `references/REACTFLOW_UX_CHROME` §5.6-2a · §5.6-3 | ノード枠 `FLOW_NODE_FRAME_WIDTH`（既定 2px） |
 | GAS 進捗 · surge 図解 chip | GAS_REPORT_DESIGN | padding · バッジ形状等。線幅は **§2 に合わせる** |
 | shadcn / Tailwind UI | SHADCN · TAILWIND | `border-2` 等を選ぶとき **§2 を優先** |
 
@@ -72,4 +72,4 @@
 - [ ] 菱形・`clip-path` 図形で **CSS `border` だけ**に頼っていないか
 - [ ] 強調以外で **判断だけ太い**などの例外が増えていないか
 
-迷ったときは本ファイル（L1）を Read。flowchart 実装中は REACTFLOW §5.6 も併読。
+迷ったときは本ファイル（L1）を Read。flowchart 実装中は REACTFLOW §5.6 索引 + 該当 `references/` も併読。

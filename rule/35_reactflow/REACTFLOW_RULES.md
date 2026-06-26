@@ -1,4 +1,4 @@
-# React Flow 開発ルール（ひな形 v0）
+﻿# React Flow 開発ルール（ひな形 v0）
 ## YK 表駆動フローチャート — Design & Development Rules
 
 **ステータス:** `active`（[`RULE_INDEX.md`](../RULE_INDEX.md) Status 列 · L0/L1/L2 整備済）
@@ -12,7 +12,7 @@
 
 **横断:** [`../30_web_stack/REACT_RULES.md`](../30_web_stack/REACT_RULES.md)（React 一般 · Hooks） · [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · §5 RSC · §6 flowchart） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
 
-**最終更新:** 2026-06-26（§5.6-1b-2 isUnsaved の sample preview 除外 · 再生成プレビュー専用パターン追記）  
+**最終更新:** 2026-06-27（P14 · §5.6 を `references/` へ分割 · L1 索引化）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 35
 
 **L0 入口:** 正本 `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（glob `flowchart-studio/**` · `flowchart-web-mermaid/**`）。同期コピー: `yk-memo/.cursor/rules/` · `yk-tool/.cursor/rules/`。
@@ -27,7 +27,7 @@
 | L1 | **本ファイル** | 毎回・最初 |
 | L2 | `creating-reactflow-yk/SKILL.md` | 手順・ゲート |
 | L2.5 | **Ref Plan** | **Write/StrReplace 前**（ROUTER §7 · `creating-mermaid-yk` 同型） |
-| L3 | ROUTER の `load` のみ | Ref Plan 後 |
+| L3 | ROUTER の `load` + `35_reactflow/references/`（tag 別） | Ref Plan 後 |
 
 **Ref Plan 不要:** 質問のみ · Read のみ · 本ルール索引の更新のみ。
 
@@ -195,7 +195,7 @@ validateTable(table)
 | カスタムエッジ実装 | `BaseEdge` + `getStraightPath` / `getBezierPath` 等 · `EdgeLabelRenderer` · 型 `labeled`（`edges/LabeledEdge.tsx`） |
 | ノード寸法（v12） | **`toReactFlow` が layout 由来の `width`/`height` を設定**（固定寸法）。`node.measured.*` は RF 内部計測 — 表駆動では触らない |
 | ノード単位 | `toReactFlow` で各 Node に `draggable: false` · `selectable: false` · `connectable: false` |
-| **複数行ラベル（Text1–3）** | `parseTable` が `\n` 結合 · **`FlowShapeNode` は `flex-col`**（行方向 `flex` 禁止）· 行高は `measureHeights` の `textLineCount`（§5.6-4） |
+| **複数行ラベル（Text1–3）** | `parseTable` が `\n` 結合 · **`FlowShapeNode` は `flex-col`**（行方向 `flex` 禁止）· 行高は `measureHeights` の `textLineCount`（[`references/REACTFLOW_EDGES.md`](references/REACTFLOW_EDGES.md) §5.6-4） |
 | 操作（グローバル） | 公式デフォルトは `nodesDraggable` / `nodesConnectable` / `elementsSelectable` / `edgesReconnectable` すべて **`true`**。表駆動は **四つとも `false` を MUST**（`FlowCanvas.tsx`）。`readOnly` prop は v12 で廃止 — 上記が SSOT |
 | Provider | **`ReactFlowProvider` でラップ MUST**。**`useReactFlow` は Provider の子のみ**（Provider 自身の中では不可 · Common Errors） |
 | 状態 | nodes/edges は **`generateFlowchart` → `toReactFlow` 派生**。`useNodesState` + `onConnect` を表更新の主経路にしない |
@@ -268,351 +268,19 @@ validateTable(table)
 
 ### 5.6 実用版 UX（2026-05 ブラッシュアップ）
 
-**対象:** `flowchart-studio` のエディタ UI · 3 ペイン · 表→再生成の日常操作。企画: [相談_2026-05-30_Web版ブラッシュアップ方針.md](c:/yk-application/flowchart-studio/docs/archive/01_要求定義/相談_2026-05-30_Web版ブラッシュアップ方針.md)（Historical）。
+**対象:** `flowchart-studio` エディタ UI · 3 ペイン · 表→再生成。**詳細は L3 `references/`** — Ref Plan `load` は [`ROUTER.md`](c:/yk-skill/.claude/skills/creating-reactflow-yk/references/ROUTER.md) §2·§3。
 
-**横断 UX チェックリスト:** [`USABILITY_HEURISTICS_RULES.md`](../10_meta/USABILITY_HEURISTICS_RULES.md) No **20**（ニールセン10原則 · 画面設計・レビュー時）
+**企画（Historical）:** [相談_2026-05-30_Web版ブラッシュアップ方針.md](c:/yk-application/flowchart-studio/docs/archive/01_要求定義/相談_2026-05-30_Web版ブラッシュアップ方針.md)
 
-**エージェント向けチェックリスト:** `flowchart-studio/.cursor/rules/flowchart-practical-ux-yk.mdc`
+| L3 参照 | 節（旧 §5.6 番号） | ROUTER tag |
+|---------|-------------------|------------|
+| [`references/REACTFLOW_UX_WORKSPACE.md`](references/REACTFLOW_UX_WORKSPACE.md) | 5.6-1〜1d · 1b · 1c · 5.6-10 · **5.7** · 5.6-8 | `persist` · `next-shell` |
+| [`references/REACTFLOW_UX_CHROME.md`](references/REACTFLOW_UX_CHROME.md) | 5.6-2 · 2a · 2b · 2c · 5.6-3 · 5.6-6 · 5.6-9 | `chrome-ui` · `table-ui` |
+| [`references/REACTFLOW_EDGES.md`](references/REACTFLOW_EDGES.md) | 5.6-4 · 5.6-5 · 5.6-7 | `edges` · `canvas` · `layout` |
 
-#### 5.6-1 ナビ階層 · 永続化キー
+**横断 UX:** [`USABILITY_HEURISTICS_RULES.md`](../10_meta/USABILITY_HEURISTICS_RULES.md) No **20** · `flowchart-studio/.cursor/rules/flowchart-practical-ux-yk.mdc`
 
-| 項目 | 規則 |
-|------|------|
-| 階層 | **装置（Nav 最上段 `<select>`）→ ユニット → 動作 → 表｜図** |
-| 選択単位 | 動作 1 件 = フロー 1 本（`moduleId`） |
-| 保存キー SSOT | `moduleDraftKey(deviceId, moduleId)` → **`${deviceId}:${moduleId}`**（`lib/flowchart/moduleHierarchy.ts`） |
-| 読込 | `resolveModuleDraftKey` — **press-01** の旧キー（`supply-feed` 等・装置 prefix なし）へフォールバック可 |
-| 装置切替 | 編集中モジュールを退避 → 動作選択クリア → 新装置のユニット一覧 |
-| ヘッダー | 装置名は Nav に集約。エディタヘッダーは **選択中フロー文脈**（例: `供給ユニット · 供給動作`）のみ |
-
-#### 5.6-1a モジュール読込の非同期（レース防止 · 2026-06）
-
-左ナビで動作を切り替えると **クラウド / IndexedDB / localStorage** から非同期読込が走る。完了が遅れたり順序が入れ替わると、**別モジュールの内容で上書き**・**サンプル読込後に勝手に切り替わる**症状になる。
-
-| MUST | 実装（`FlowchartWorkspace.tsx` · `FlowchartEditor.tsx`） |
-|------|--------------------------------------------------------|
-| モジュール選択時に **`initialSnapshot` を即 `null`** | `resetModuleLoadState()` — 前モジュールの snapshot をエディタに渡さない |
-| 読込リクエストに **世代 ID（`loadGenerationRef`）** を付与 | 選択のたびに `++` し、古い `loadModule` 完了は **state 更新しない** |
-| 読込完了時は **世代が一致するときだけ** `setInitialSnapshot` · `setLoadKey` | `isModuleLoadStale(generation)` — **`getOfflineModuleCache` の await 後も再チェック** |
-| 装置切替時も世代を進める | 進行中の `loadModule` を無効化 |
-| **同一モジュール選択中にユーザーが内容を上書きしたら世代を進める** | `invalidatePendingModuleLoad()` — サンプル · 表編集 · CSV · JSON 取込 · 再生成。`userContentOverrideRef` を立てる · `initialSnapshot` を `null` に戻す。`setLoadKey` は**進めない** |
-| 無効化後は **読込中バナーを下ろす** | `setLoadingModule(false)` |
-| 遅延 `loadModule` は **override 中は適用しない** | `userContentOverrideRef` · `skipSnapshotHydrationRef`（`FlowchartEditor` の useEffect 水合わせスキップ） |
-| キャンセル時は **IndexedDB へ古い cloud を書き戻さない** | `loadModuleDraft(..., { isCancelled })` — cloud 取得後・`putOfflineModuleCache` 前にチェック |
-| **フロー自動保存で `revalidatePath("/")` しない** | `saveFlowDocument` — 保存完了後の Router refresh が遅延巻き戻しの一因になりうる |
-
-**確認（手動または E2E）:**
-
-1. モジュール A 選択 → サンプル読込 → **数秒待っても** サンプル表示が保存内容に戻らないこと（パターン A · 本番 cloud 遅延で顕在化しやすい）
-2. モジュール A 選択 → サンプル読込 → すぐモジュール B — 表示が A/B で意図せず入れ替わらないこと
-
-E2E: `e2e/edge-label-placement.spec.ts`（モジュール選択中サンプル · 巻き戻し防止）
-
-#### 5.6-1d 装置プリフェッチ（2026-06）
-
-動作切替のたびに `loadFlowDocument` を逐次呼ぶと遅い。**装置選択時**に配下モジュールを一括取得する。
-
-| MUST | 実装 |
-|------|------|
-| 一括 RPC | `loadFlowDocumentsBatch`（`flowDocuments.ts`）— `module_id IN (...)` |
-| プリフェッチ | `prefetchDeviceModuleDrafts`（`moduleDraftLoader.ts`）— warm cache + IndexedDB |
-| トリガー | `FlowchartWorkspace` — `device.id` 変更時 · 装置切替で `prefetchGenerationRef` を進めてキャンセル |
-| 動作切替 | warm cache 命中時はクラウド往復なし（`loadModuleDraft` 先頭） |
-
-#### 5.6-1b サンプル／雛形と自動保存（2026-06）
-
-| MUST | 実装 |
-|------|------|
-| **サンプル（例）はプレビューのみ**（`persist: false`） | `onPreviewSample` → `runGenerate(..., { persist: false })` |
-| **モジュールに保存するのは明示操作のみ** | 「モジュールに適用」· 雛形適用 · 表 JSON 取込 · 再生成 |
-| **編集済みモジュールへの破壊的適用は確認** | `isModuleContentDirty`（`moduleContentDirty.ts`）— `userTouched` · `committedJson` · `initialSnapshot` |
-| **プレビュー中は復元点を保持** | `prePreviewRestoreRef` — 「プレビューを終了」で復元 |
-| **空モジュール**（dirty でない） | 雛形は無確認適用可 · サンプルはプレビュー → 任意で適用 |
-
-**確認（手動または E2E）:** 表編集後に「例を見る」→ プレビュー終了で元の表が残る · 編集後に雛形適用で確認ダイアログ
-
-#### 5.6-1b-2 `isUnsaved` は sample preview フラグを除外する（2026-06）
-
-`isUnsaved`（DB 未保存の編集あり）の判定では **`!moduleSamplePreviewActive && !samplePreviewActive`** を必ず含める。この除外がないとサンプルプレビュー中のモジュール切替で false positive が発生し、`module-load-ux.spec.ts` が壊れる。
-
-```typescript
-const isUnsaved =
-  workspaceMode &&
-  !!moduleId &&
-  jsonText !== savedJson &&
-  !moduleSamplePreviewActive && // ← 必須
-  !samplePreviewActive;          // ← 必須
-```
-
-あわせて `workspaceMode` での再生成は `persist: !workspaceMode`（プレビュー更新のみ · DB保存なし）とする。明示的な「保存」操作時のみ `onSnapshotPersist` を呼び `setSavedJson(jsonText)` で同期する。
-
-#### 5.6-1c モジュール削除の楽観 UI（2026-06）
-
-動作削除成功直後、サーバー refresh 完了前に左ナビから当該行を消す。
-
-| MUST | 実装 |
-|------|------|
-| 削除成功後 **`optimisticRemovedModuleIds` に moduleId を追加** | `FlowchartWorkspace.tsx` · `excludeModulesFromDevices`（`moduleHierarchy.ts`） |
-| サーバー反映済み ID は楽観セットから外す | **`useMemo` で派生**（`activeOptimisticRemovedModuleIds`）— `useEffect` 内の `setState` は **禁止**（`react-hooks/set-state-in-effect`） |
-| E2E | 成功バナー **と** ナビから当該動作が消えること（`e2e/module-delete.spec.ts`） |
-
-#### 5.6-2 ツールバー（AppHeader）
-
-| 常時表示 | その他メニュー（`EditorMoreMenu`） |
-|----------|-------------------------------------|
-| **再生成**（主操作 · stale 時は視覚強調） | PNG · SVG |
-| 表を保存 · 表を読込（editor のみ） | オフライン用に保存（モジュール選択時） |
-| | **装置取込 → import.jsonを取込…**（editor · workspace · `005` RPC 要） |
-| | **危険 → フローをリセット…**（確認ダイアログ文言は「フローを雛形にリセットしますか？」のまま） |
-| | サンプル表 · 下書き削除（非 workspace） |
-
-- ボタン追加前に **「常時か / その他か」** を決める（§5.5 と併用）。
-- JSON 編集タブは **出さない**（保存形式としての JSON は `document.ts` · 表を保存/読込）。
-
-#### 5.6-2a UI 操作部品 · workspace レイアウト（2026-06 · スタイル Phase 2）
-
-**入口（人間・エージェント）:** [`docs/design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md) — レイヤー A〜E · 変更マップ · Phase 1–2
-
-| 項目 | SSOT |
-|------|------|
-| スタイルガイド索引 | `flowchart-studio/docs/design-system.md` |
-| 操作 UI トークン | `app/globals.css` の `--flow-*` → `@theme` の Tailwind `flow-*` ユーティリティ |
-| ボタン・ダイアログ・ナビ・表 chrome class | `frontend/src/components/flowchart/flowchartUiClasses.ts`（`fcBtn*` · `fcTable*` · `fcColorLegend*` · `fcZoomBtn` · `fcTextUi` / `fcTextHint`） |
-| プレビュー初期表示 | `lib/flowchart/visual/flowHomeViewport.ts` · `FlowCanvas.applyHomeViewport` |
-| 開発用見本ページ | `app/dev/style/` — `npm run dev` 時 `http://localhost:3000/dev/style`（本番 **404**） |
-| 表ペイン : プレビュー比率（スタンドアロン） | `FC_WORKSPACE_MAIN_GRID` = **`2fr:3fr`**（`lg:grid-cols-[2fr_3fr]`）— `workspaceMode` デスクトップは PanelGroup で上書き |
-| 左ナビ幅（デスクトップ PanelGroup） | **18% default · 160px min · 28% max · 48px collapsed**（`flowchart-studio:workspace-outer-v2`） |
-| 表｜プレビュー（デスクトップ PanelGroup） | **52% : 48%（400px min : 280px min）**（`flowchart-studio:workspace-inner-v2`）· v1 はリセットまで維持 |
-| ペイン幅 SSOT · リセット | `frontend/src/components/flowchart/workspacePaneLayout.ts` — `DEFAULT_*_LAYOUT` · `resetWorkspacePaneLayouts` |
-| 枠線太さ | [`VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) §2 と整合 |
-
-**禁止:** フロー編集 chrome に `blue-600` 等の Tailwind 色を直書き（`flowchartUiClasses.ts` 経由）。キャンバス色は `visual/flowColors.ts`（§5.6-3）— chrome と混在させない。
-
-**却下（2026-06）:** 12 カラム CSS grid への移行 — 現比率で目的達成 · 大規模リファクタ不要。
-
-#### 5.6-2c 操作 chrome — 文字サイズ · コントロール（2026-06）
-
-WCAG 2.2 は最小 px を規定しない（SC 1.4.4 は 200% 拡大）。YK 実務:
-
-| トークン | 値 | 用途 |
-|----------|-----|------|
-| `--flow-font-ui` | `0.875rem`（14px） | ボタン · 表 · メニュー項目 |
-| `--flow-font-hint` | `0.75rem`（12px） | 凡例 · セクション説明 · メタ（**これ未満にしない**） |
-| `--flow-control-size` | `2rem`（32px） | ツールバー · ズーム `−` `%` `+` `⌂` の高さ/幅 |
-
-| MUST | 実装 |
-|------|------|
-| 新規 chrome class | `fcTextUi` / `fcTextHint` / `fcControlSquare` 経由（`text-xs` 直書き禁止） |
-| その他メニュー | `text-left` · `justify-start`（`EditorMoreMenu` · `fcMenuItem`） |
-| ズーム UI | 倍率 `%` 表示 · ホームは Lucide `Home` · `onViewportChange` で同期 |
-
-#### 5.6-2b 装置一括取込（Excel パイプライン · ADR-014 · 2026-06）
-
-| 項目 | 規則 |
-|------|------|
-| **作者入力** | 1 xlsx = 1 装置 · 構成 1 シート + ユニット数フローシート · 動作表は**横並び** · 各動作 = Excel **テーブル** |
-| **正規化 SSOT** | **Python** `flowchart-studio/python/` → `import.json`（Power Query 任意 · VBA 禁止） |
-| **Web 入口** | その他 → **import.jsonを取込…**（`EditorMoreMenu` · editor · workspace） |
-| **DB** | RPC **`import_equipment_bundle`**（`005_import_equipment_bundle.sql`）— 4 表 + `flow_documents` · 1 トランザクション |
-| **再取込** | upsert のみ · 構成行削除の **prune なし** |
-| **Git（作者 xlsx）** | **`*.xlsx` / `*.xls` はコミットしない** — ローカル編集 · 共有は **`import.json`**（`python/.gitignore`）· CI は `excel:template` / `excel:fixture` で生成 |
-| **設計 SSOT** | [Excel取込.md](c:/yk-application/flowchart-studio/docs/03_技術仕様/Excel取込.md) |
-| **v0.3 入力 SSOT** | [Excel入力フォーマット_v0.3.md](c:/yk-application/flowchart-studio/docs/03_技術仕様/Excel入力フォーマット_v0.3.md)（作者 xlsx · 帯・構成割当。正規化は上記 Excel取込） |
-
-- **Web は入力用 xlsx を読まない**（横並び分割は Python 側）。
-- テーブル名規約 v0.1: **`{ユニット短名}_{動作名}`**（例: `供給_取出`）— ブック全体で一意。
-- dev DB: Runbook `docs/runbooks/DB2_MIGRATION_RUNBOOK.md` — **004 後に 005**。
-
-**YK パターン補足 — Web 表ペイン Excel 取込と v2 列順（2026-06）**
-
-| 経路 | 列順 |
-|------|------|
-| Python → `import.json` → RPC | **v2 正本**（`normalize_device.py` · `prepareImportBundleForRpc`） |
-| 表ペイン **Excelから取込…**（`parseExcelBuffer`） | **v2 正規化済**（`ensureParsedTable10ColV2Order` · 取込直後） |
-
-| 症状 | 対処 |
-|------|------|
-| 取込後 **接続先エラー** · Text/MR が列ずれ | **repair スクリプトは作らない** — 取込直後に `migrateTable10ColV1ToV2` / `normalizeFlowchartDocument` を通す（**取込後 v2 正規化必須** · §5.6-2b 上段） |
-| 本番・import.json データ | §5.7 の normalize 経路で OK（session 48 色列バグは別件） |
-
-**既存コマンド（新規スクリプト不要）:** `npm run excel:a0001:scratch` · `excel:a0001:normalize` · `seed:a0001`
-
-#### 5.6-3 見た目の固定（ユーザー向け選択なし）
-
-| 項目 | SSOT |
-|------|------|
-| レイアウト寸法 | `DEFAULT_LAYOUT`（`model/types.ts`）— サイズ preset なし |
-| 矢印・ラベル色 | `visual/flowColors.ts` — テーマ切替なし |
-| ノード枠の太さ・色 | `FLOW_NODE_FRAME_WIDTH` / `FLOW_NODE_DIAMOND_STROKE_WIDTH`（**2px** · 菱形は `miter`）· [`VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) §2 |
-| **斜め図形（入出力・手動入力）** | `FlowShapeNode` — **SVG `polygon` stroke**（菱形と同様）。**`clip-path` + CSS border は禁止**（角が途切れる） |
-| **10 列表 · 色列** | 最右列「色」— 狭い中央ペインでは**表コンテナ横スクロール**で表示（列自体は省略しない） |
-| Yes/No ラベル | `graph/edgeLabelPlacement.ts` — **halo**（透明＋白縁文字）· 線の右 `FLOW_EDGE_LABEL_GAP`（`edge.data.branch` + `direction`） |
-
-#### 5.6-4 プレビュー edges の鮮度（落とし穴 · 2026-05）
-
-| 禁止 | 理由 |
-|------|------|
-| **保存済み `snapshot.edges` を `toReactFlow` なしでそのまま表示** | 旧形式（`edge.label` + 白 pill・線上）が残る。モジュール選択時に再発しやすい |
-| **`toReactFlow` で `edge.label` / `labelBgStyle` を付与** | `BaseEdge` が SVG ラベルを二重描画する。文言は **`data.edgeLabel` のみ** · `labelShowBg={false}` |
-
-| 必須 | 実装 |
-|------|------|
-| 表からの再生成後だけ edges を state に載せる | `runGenerate` → `toReactFlow` |
-| モジュール復元時 | `initialSnapshot` 読込後に **`runGenerate(committedJson \|\| jsonText)`**（`FlowchartEditor`） |
-| 古い snapshot 互換 | `LabeledEdge` で `edgeLabel` + Yes/No から `branch` / `direction` を推定 |
-
-**確認:** サンプル読込だけでなく **モジュール選択中**（左ナビ）でも Yes/No が halo・線の右であること。E2E は `e2e/edge-label-placement.spec.ts`（§6）。No の縦脚幾何はエルボー形状のため **halo スタイル**を優先し、Yes の縦線右オフセットを幾何 assert の代表とする。
-
-#### 5.6-5 警告（`model/validationMeta.ts`）
-
-| 種別 | 挙動 |
-|------|------|
-| **警告** | 生成 **継続** · 琥珀バナー · 行クリックでジャンプ |
-| **エラー** | 生成 **停止**（ADR-002） |
-
-- バナー説明 SSOT: `WARNING_BANNER_HINT`（「図はこのまま生成されます…」）。
-- 文言は **列名**（接続先(下) 等）と **直し方** をセット。判断ノードは Yes=下 · No=右 を案内してよい。
-
-#### 5.6-6 作者向け記述（図形 · 色）
-
-| 項目 | SSOT |
-|------|------|
-| **作者向け記述（図形 · 色 · ループ）** | [`docs/03_技術仕様/作者ガイド.md`](c:/yk-application/flowchart-studio/docs/03_技術仕様/作者ガイド.md)（§2 図形 · §3 色 · §4 ループ） |
-| **列ヘルプ（表 UI ?）** | `table/tableColumns.ts` — `SHAPE_TYPE_COLUMN_HELP` · `COLOR_COLUMN_HELP` · `CONNECT_RIGHT_HELP` |
-| **プレビュー凡例** | `visual/flowColors.ts` — `COLOR_HINT_LEGEND_ITEMS`（`FlowColorLegend`） |
-
-- **図形・色の種類追加**は同 SSOT §1 の結論に従う（当面は維持 · 将来候補=サブルーチン記号）。
-
-#### 5.6-7 図形描画 · エッジ配線（2026-06）
-
-| 項目 | SSOT · 方針 |
-|------|-------------|
-| **菱形** | SVG `polygon` · `FLOW_NODE_DIAMOND_STROKE_WIDTH` |
-| **入出力（平行四辺形）· 手動入力（台形）** | 同上 — `SlantedPolygonShape` · **`globals.css` の clip-path 禁止** |
-| **順方向エッジ（接続先(下)）** | `graph/buildEdges.ts` — `tierDiff > 0`（先が下段）→ `sourceSide=bottom` · `targetSide=top`（合流も top 入口）。**`levelDiff` 単独で left 入口にしない** |
-| **ループエッジ** | 同上 — 戻り先 `rowIndex < source` で `isLoop` · `route: elbow` · 左/右入口 |
-| **プレビュー ID バッジ** | `FlowShapeNode` — 表 ID を左上表示。**PNG/SVG に含めない**（`exportImageFilter` · class `flow-node-id` · §4 エクスポート） |
-| **表の書き方（作者）** | [`docs/03_技術仕様/作者ガイド.md`](c:/yk-application/flowchart-studio/docs/03_技術仕様/作者ガイド.md) **§4**（No → 右列1行 → 接続先(下) で戻す） |
-| **列ヘルプ** | `table/tableColumns.ts` — `CONNECT_RIGHT_HELP` |
-| **E2E** | `e2e/curry-loop.spec.ts`（ループ · 斜め図形 · ID バッジ）· `fixtures/sample-curry.json` · `generate.test.ts`（順方向配線） |
-| **並列エッジのバス重なり（v1.1 #1 · 2026-06-26）** | `graph/assignEdgePathOffsets.ts` — 同一 source 出口 / 同一 target 入口の **elbow** をグループ化し `pathOffset`（`EDGE_PARALLEL_LANE_SPACING_PX` = **12**）を付与 · `buildEdges` 末尾で実行 |
-| **`getSmoothStepPath` の `offset` 混同禁止** | `offset` はハンドルからの離れ（既定 20px）— **並列線の分離には使わない**。分離は `edgePathOffset.ts` → **`centerX` / `centerY` 上書き**（`LabeledEdge`） |
-| **straight 並列** | レーン **順序・本数**のカウントに含める · `pathOffset` は **elbow のみ**（straight はオフセット対象外） |
-| **テスト** | `assignEdgePathOffsets.test.ts` · `generate.test.ts`（M002 fan-out / merge） |
-
-#### 5.6-9 FlowTableEditor — 表コンテナ minWidth（2026-06）
-
-表の列幅合計を `style={{ minWidth }}` に設定しないと、ウィンドウ縮小 → 拡大時に列が潰れたまま戻らないリサイズ視覚バグが出る。
-
-| MUST | 実装 |
-|------|------|
-| `<table style={{ minWidth: tableMinWidth }}>` | `tableMinWidth = getTotalDefaultWidth(colCount, tableSchema)` (`tableColumnWidths.ts`) |
-| 列幅 SSOT | `DATA_COL_WIDTHS_10_V2` (`tableColumnWidths.ts`) — スキーマ別に分岐 |
-| 表示ラベル SSOT | `getDisplayHeaders(colCount, schema)` — 短縮ラベル（例: "接続先(下)" → "下先"） |
-
----
-
-#### 5.6-10 3ペイン PanelGroup（react-resizable-panels v4 · ADR-016 PR-B · 2026-06）
-
-デスクトップ（lg+）: 外側 `Group`（ナビ｜エディタ）+ 内側 `Group`（表｜プレビュー）。モバイルは既存タブ UX（`useIsDesktop` フックで切り替え）。
-
-**react-resizable-panels v4 — v2/v3 からの破壊的変更（型定義を読まないと気づかない）**
-
-| v2/v3 | v4 | 備考 |
-|-------|-----|------|
-| `PanelGroup` | `Group` | — |
-| `PanelResizeHandle` | `Separator` | — |
-| `direction="horizontal"` | `orientation="horizontal"` | — |
-| `autoSaveId="key"` prop | `useDefaultLayout({ id: "key" })` フック | localStorage 永続化 |
-| `ref` on Panel | `panelRef` prop + `usePanelRef()` | 型: `PanelImperativeHandle` |
-| `onCollapse`/`onExpand` prop | **なし** — `onResize` + `panelRef.current?.isCollapsed()` | 折りたたみ検知パターン |
-
-**`Panel` の `className` は外側 flex アイテムではなく内側ネスト div に適用される。** flex 子として min-h-0 を設定するなら `<Panel className="flex min-h-0 flex-col">` で OK（外側は Group が flex サイジング）。
-
-**collapse/expand をボタンからトリガーするパターン（`FlowchartWorkspace.tsx` 参照）:**
-
-```tsx
-const navPanelRef = usePanelRef();
-const handleToggle = () => {
-  const p = navPanelRef.current;
-  if (!p) { setNavCollapsed(v => !v); return; }
-  p.isCollapsed() ? p.expand() : p.collapse();
-};
-// <Panel panelRef={navPanelRef} collapsible collapsedSize="48px"
-//        onResize={() => setNavCollapsed(navPanelRef.current?.isCollapsed() ?? false)} />
-```
-
-**`useIsDesktop` フック:** `frontend/src/hooks/useIsDesktop.ts`（`window.matchMedia` · 初期値 `false` で SSR 安全）。親（`FlowchartWorkspace`）で保持し、子（`FlowchartEditor`）へ prop 経由で渡す。フックを両方で呼ぶと render タイミングがずれる。
-
-**`useDefaultLayout` + SSR（`next start` · 2026-06）:** 省略時のデフォルト引数 `storage = localStorage` が**呼び出し時に評価**され、SSR で `ReferenceError: localStorage is not defined` になる。**必ず** `storage: getWorkspaceLayoutStorage()` を渡す（`workspacePaneLayout.ts`）。`react-resizable-panels` を `"use client"` 外のモジュールから import しない（型はローカル interface で足りる）。
-
-**ペイン幅リセット（T4）:** `useGroupRef` × 2（outer + inner）· `resetWorkspacePaneLayouts(outer, inner)` — v1/v2 キーをクリアして `setLayout`（`FlowchartWorkspace` → `FlowchartEditor` → `FlowTableEditor`）。
-
-**tsconfig パスエイリアス:** `frontend/src/` 配下に新サブディレクトリを作ったら `tsconfig.json` の `paths` に `"@/hooks/*": ["./frontend/src/hooks/*"]` を追加する（既存の `@/components/*` と同型）。
-
----
-
-#### 5.7 スキーマバージョニング — 列順変更の手順（ADR-016 · 2026-06）
-
-テーブル列構造を変えるときの定石。**TypeScript と Python を必ず同時に更新**。
-
-**TypeScript 側（`lib/flowchart/table/`）**
-
-| 手順 | 実装例 |
-|------|--------|
-| 旧スキーマ定数を残す | `TIER10_V1_SCHEMA = "table-10col-v1"` |
-| 新スキーマ定数を追加 | `TIER10_SCHEMA = "table-10col-v2"` |
-| 移行関数（行レベル）を追加 | `migrateTable10ColV1ToV2(row)` — `[r[0], r[1], r[9], r[2]...]` |
-| ドキュメント移行ラッパーを追加 | `migrateDocToV2(doc)` · desync 修復は `ensureTable10ColV2Order` |
-| **`normalizeFlowchartDocument()` を唯一の移行エントリにする** | v1→v2 変換をここだけで実施 |
-| `schema` を呼び出しスタック全体に通す | `generate → validate → parseTable(table, schema)` |
-| 9→10 列パディングの schema | **未 v2 の doc のみ** `TIER10_V1_SCHEMA` で pad → `migrateDocToV2`。**既に `table-10col-v2` なら v2 のまま pad**（tier9 判定で v1 に戻さない） |
-
-**YK パターン補足 — v2 正規化の落とし穴（2026-06 · 色列 select バグ）**
-
-| 症状 | 原因 |
-|------|------|
-| 色 select で「黄」が **下先** に入る · 他列がずれる | `normalizeFlowchartDocument` が tier9 判定のたびに **v2 schema を v1 に戻し**、`migrateTable10ColV1ToV2` を **v2 行に再適用**していた |
-| UI は v2 ヘッダーなのに列の中身がおかしい | DB / snapshot が **`schema: table-10col-v2` + v1 列順の table** の desync |
-
-| MUST | 実装 |
-|------|------|
-| v2 doc を normalize しても **schema を v1 に戻さない** | `isTenColV2Schema(doc.schema)` で pad 用 schema を分岐（`document.ts`） |
-| v2 schema + v1 列順を読込時に修復 | `tableNeedsV1ToV2Migration`（目安: index 6 が `MR…` = v1 の Text1）→ `migrateTable10ColV1ToV2` |
-| 表編集後も v2 行を壊さない | `handleTableChange` → `syncJsonFromDoc` → `normalizeFlowchartDocument` の経路で **再 migrate しない** |
-| snapshot 復元で **doc と JSON を揃える** | `resolveInitialState`: `parse` → `normalize` → **`serializeDocument` を `jsonText` / `committedJson` に使う**（raw v1 JSON を doc だけ v2 にして残さない） |
-
-**禁止:** tier9 レイアウトだからといって **常に** `TIER10_V1_SCHEMA` で pad してから `migrateDocToV2` を毎回走らせる（v2 保存データを v1 行として解釈し直す）。
-
-**Python 側（`python/src/excel_normalize/constants.py`）**
-
-- `FLOW_HEADERS` タプルを新列順に更新
-- `FLOW_SCHEMA` を新スキーマ文字列に更新
-
-**整合性テスト（変更時は必ず更新）**
-
-| テスト | 場所 |
-|--------|------|
-| TS ピン | `lib/flowchart/table/tableColumns.test.ts` — `TABLE_HEADERS_10_V2` · `TIER10_SCHEMA` · `tableNeedsV1ToV2Migration` |
-| 正規化回帰 | `lib/flowchart/model/document.normalize.test.ts` — v2 色編集後の normalize · desync 修復 · A0001 M002 |
-| 再生成スナップショット | `lib/flowchart/model/a0001-m005-m006.snapshot.test.ts` — A0001 M005/M006 |
-| E2E · 色列 | `e2e/table-pane-ux.spec.ts` — 色 select 後も他列維持 |
-| E2E · N8 | `e2e/nav-n8.spec.ts` — 一括展開/折りたたみ · `data-testid="toggle-all-units"` |
-| E2E · §E chrome | [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md) **§12-8** |
-| Python ピン | `python/tests/test_schema_consistency.py` — `FLOW_HEADERS` · `FLOW_SCHEMA` のピンテスト（ADR-016 で追加） |
-
-**禁止:** Python だけ / TypeScript だけ更新して片方を放置する。両テストが同時にグリーンであることを commit 条件にすること。
-
----
-
-#### 5.6-8 クライアントバンドル · プレビュー再レンダー（2026-06）
-
-| 項目 | SSOT · 方針 |
-|------|-------------|
-| **Excel（表ペイン）** | `CsvPastePanel` → `parseExcel` は **ファイル選択時のみ** dynamic import。表表示だけでは `xlsx` を載せない。**取込後は v2 列順へ正規化すること**（§5.6-2b · 恒常 repair スクリプト禁止） |
-| **スナップショット復元** | `nodes` / `edges` は snapshot から。**`jsonText` / `committedJson` は `normalize` 後の `serializeDocument` に揃える**（`REACTFLOW_RULES` §5.7）。空 `nodes` + マウント effect `runGenerate` は避ける |
-| **プレビュー UI** | `FlowPreviewPane`（または同等）— ズーム % state をキャンバス subtree に閉じ、`memo(FlowCanvas)` で表編集と分離 |
-| **サンプル JSON** | `as FlowchartDocument` 禁止 — `parseFlowchartDocument` 経由（`REACT_RULES` §3-1） |
+**行数監査:** `yk-tool/scripts/audit-rule-line-counts.ps1` — L1 理想 ~250行 · FAIL 500行超（[`RULE_INDEX`](../RULE_INDEX.md) · [`PROGRESSIVE`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)）
 
 ---
 
@@ -646,7 +314,7 @@ const handleToggle = () => {
 | React Flow 版 | `c:/yk-application/flowchart-studio/` · dev ポート → [`NEXTJS_RULES`](../30_web_stack/NEXTJS_RULES.md) §6-1 |
 | Mermaid 比較版 | `c:/yk-tool/flowchart-web-mermaid/` · 同上 |
 | ツール台帳 | `catalog.yaml`（`flowchart-studio` · `flowchart-web-mermaid`） |
-| ルール・スキル | `c:/yk-skill/rule/35_reactflow/` · `creating-reactflow-yk` |
+| ルール・スキル | `c:/yk-skill/rule/35_reactflow/` · `references/` · `creating-reactflow-yk` |
 
 **Cursor マルチルート:** `yk-application/flowchart-studio` + `yk-skill`（handoffs · 企画時は `yk-memo` · Mermaid 比較時は `yk-tool/flowchart-web-mermaid` を追加）。
 

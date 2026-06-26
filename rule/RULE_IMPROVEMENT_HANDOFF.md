@@ -4,7 +4,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| **状態** | Phase 2 待機 · **次回: L1 肥大化分割**（2026-06-26 — flowchart セッションからエスカレーション） |
+| **状態** | Phase 2 進行中 · **P14 系完了**（2026-06-27）· 次候補: SHADCN / SKILL_AUTHORING 等 WARN 帯 |
 | **リポジトリ** | `c:/yk-skill`（主）· 参照更新済み: `5.Python` · `yk-memo` 一部 · `workspace-ui-kit` |
 | **入口 SSOT** | `c:/yk-skill/rule/RULE_INDEX.md` |
 | **対話の経緯** | ルール矛盾チェック → Web調査 → 多視点レビュー → 対話で1件ずつ決定 → 実装 |
@@ -56,6 +56,10 @@
 | **P11** | 図モダリティ横断リンク | `MERMAID_RULES` §1.5 ↔ reactflow/mermaid README · アンカー · INDEX/PLAYBOOK |
 | **P13** | Mermaid §11 フィードバック | 構文表 + エージェント運用（Ref Plan · 方式境界 · mmdc/Shell） |
 | **P9** | load-manifest 試作 | `rule/load-manifest.yaml` 22 本 · INDEX Phase 2 節更新 |
+| **P14b** | ルール行数監査スクリプト | `yk-tool/scripts/audit-rule-line-counts.ps1` · `catalog.yaml` · `scripts/README.md` |
+| **P14** | L1 肥大化分割（REACTFLOW） | `REACTFLOW_RULES.md` 662→328行 · §5.6 → `35_reactflow/references/` 3 本 · ROUTER Standard を索引+tag 読みに変更 |
+| **P14c** | L1 肥大化分割（PLAYWRIGHT） | `PLAYWRIGHT_RULES.md` 556→427行 · §12-13 → `references/` 2 本 · `using-playwright/references/ROUTER.md` 新設 |
+| **P14d** | L1 肥大化分割（SUPABASE · GAS） | `SUPABASE_RULES.md` 500→192行 · `GAS_RULES.md` 428→233行 · 各 `references/` 3 本 |
 
 ### 採用済みアーキテクチャ決定（再議論しない）
 
@@ -95,8 +99,7 @@
 
 | ID | 優先 | タイトル | 概要・受け入れ基準 | 主に触るファイル |
 |----|------|----------|-------------------|------------------|
-| **P14** | **P0** | L1 肥大化分割（REACTFLOW 優先） | `REACTFLOW_RULES.md` 662行 → §5.6 を `35_reactflow/references/` へ（`REACTFLOW_UX_WORKSPACE` · `REACTFLOW_UX_CHROME` · `REACTFLOW_EDGES` 案）· ROUTER Standard「L1 全体」を索引+tag に変更 · 次点 `PLAYWRIGHT_RULES` §12-13 · **新規チャットで着手**（コンテキスト節約） | `35_reactflow/` · `creating-reactflow-yk/references/ROUTER.md` · `RULE_INDEX` |
-| **P14b** | **P0 同ターン（Step 1）** | ルール行数監査スクリプト | `audit-rule-line-counts.ps1` · `rule/**/*.md` 行数一覧 · 250行超 WARN · 500行超 FAIL · `catalog.yaml` 登録 · **P14 の前に実施** | `yk-tool/scripts/` · `catalog.yaml` · `scripts/README.md` |
+| **P14e** | P3 | L1 肥大化分割（残 WARN） | `SHADCN_UI`（353）· `SKILL_AUTHORING`（351）等 — 250行未満を目標 | 各帯 `references/` |
 | **P9b** | 予約 | manifest 本格運用 | L1 ~25 本超 · `route_refs.py` / CI 連携（PROGRESSIVE §7） | `load-manifest.yaml` |
 
 ### 当初レビューで言及・未タスク化した周辺
@@ -142,4 +145,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-06-26（P14/P14b 追加 · 次回セッションは L1 分割から）
+**最終更新:** 2026-06-27（P14d 完了 · SUPABASE/GAS WARN 解消 · audit FAIL 0）

@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Playwright Agent（YK）
 
-**SSOT:** `c:/yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md`（§12 · §13）— 正本は yk-skill
+**SSOT:** `c:/yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md`（§12 · §13 索引）— 詳細は `references/` · ROUTER: `using-playwright/references/ROUTER.md`
 
 - **E2E の範囲・優先度（spec 前）:** `designing-playwright-tests-yk`（§13）
 - **spec 執筆・実行:** `using-playwright`（§12）

@@ -15,7 +15,8 @@ description: >
 ## Step 0（必読）
 
 1. `c:/yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md` **§13**（索引）
-2. [decision-matrix.md](references/decision-matrix.md)（**SSOT · 必読**）
+2. [`PLAYWRIGHT_TEST_STRATEGY.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_TEST_STRATEGY.md)
+3. [decision-matrix.md](references/decision-matrix.md)（**SSOT · 必読**）
 
 ## ワークフロー
 
@@ -33,7 +34,7 @@ description: >
 | 決定マトリクス · チェックリスト | [decision-matrix.md](references/decision-matrix.md) |
 | Web 調査要約（URL） | [web-research.md](references/web-research.md) |
 | a11y（axe / keyboard） | [a11y.md](references/a11y.md) |
-| ロケーター · 待機 · 幾何 · 実行 | `PLAYWRIGHT_RULES` §1–12 · `using-playwright` |
+| ロケーター · 待機 · 幾何 · 実行 | L1 §1–11 · [`PLAYWRIGHT_AGENT_OPS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_AGENT_OPS.md) · `using-playwright` |
 
 ## 出力（設計完了時）
 

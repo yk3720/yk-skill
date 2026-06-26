@@ -1,5 +1,8 @@
-# GAS 設計ルール
+﻿# GAS 設計ルール
 ## Google Apps Script Web アプリ開発 — Design & Development Rules v2
+
+**最終更新:** 2026-06-27（P14d · §1 · §3 · §7-8 を `references/` へ分割）
+**索引:** [`RULE_INDEX.md`](../RULE_INDEX.md) No 51
 
 ---
 
@@ -30,113 +33,15 @@
 
 ---
 
-## 1. GAS HTML Service の制約と必須対応
+## 1. GAS HTML Service（索引）
 
-Google Apps Script の HTML テンプレートは通常の Web ブラウザとは異なる環境で動作する。  
-以下の制約を必ず理解した上で実装すること。
+**詳細:** [`references/GAS_HTML_SERVICE.md`](references/GAS_HTML_SERVICE.md) — viewport · CSS · Tailwind · ALLOWALL
 
-### 1-1. `<meta viewport>` は HTML ファイル内では**無効**
-
-> **GAS の HTML ファイル内に書いた `<meta name="viewport">` タグは GAS によって無視される。**  
-> — [Google Apps Script 公式ドキュメント: HTML Service Restrictions](https://developers.google.com/apps-script/guides/html/restrictions)
-
-```html
-<!-- ❌ GAS HTML ファイル内での記述 — 無視される -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-```
-
-#### 正しい対応：`doGet()` 内で `addMetaTag()` を使う
-
-**`XFrameOptionsMode`:** 省略時は **DENY**（より安全）。**iframe 埋め込みが必要なときだけ** `ALLOWALL` を設定する。
-
-```javascript
-// ✅ 通常（単体で開く・埋め込み不要）— setXFrameOptionsMode は書かない
-function doGet() {
-  return HtmlService.createTemplateFromFile('Report')
-    .evaluate()
-    .setTitle('タイトル')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
-}
-```
-
-```javascript
-// ✅ iframe 埋め込みが必要なときだけ ALLOWALL
-function doGet() {
-  const output = HtmlService.createTemplateFromFile('Report')
-    .evaluate()
-    .setTitle('タイトル')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
-  output.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
-  return output;
-}
-```
-
-#### ⚠️ 「接続が拒否されました」エラーの注意点
-GAS Web アプリを直接開いているのにこのエラーが出る場合、以下の原因が考えられる。
-1. **ファイル名の不一致**: `createTemplateFromFile('FileName')` の引数が GAS エディタ上のファイル名と 1 文字でも違うと、GAS は内部エラーを起こし、ブラウザ側で「接続拒否」として表示されることがある。
-2. **メソッドチェーンの失敗**: `.evaluate().setXFrameOptionsMode(...)` のように繋げて書くと設定が反映されないケースがある。一度変数に代入してから設定を適用すると確実。
-
-```javascript
-// ✅ より確実な書き方（埋め込み不要 — ALLOWALL は付けない）
-const output = HtmlService.createTemplateFromFile('Report').evaluate();
-output.setTitle('タイトル');
-output.addMetaTag('viewport', 'width=device-width, initial-scale=1');
-return output;
-```
-
-```javascript
-// ❌ 悪い例：埋め込み不要なのに ALLOWALL をデフォルトで付ける
-const output = HtmlService.createTemplateFromFile('Report').evaluate();
-output.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
-return output;
-```
-
-#### この設定がないと発生する問題
-
-| 症状 | 原因 |
-|------|------|
-| モバイルで CSS メディアクエリが効かない | ブラウザが画面幅を約 980px（PC デフォルト）と認識する |
-| `@media (max-width: 639px)` が発火しない | 実際の幅は 390px なのにビューポートが 980px と判定される |
-| `window.innerWidth` が 980 前後を返す | viewport 未設定によるブラウザのデフォルト動作 |
-| **接続が拒否されました** | `XFrameOptionsMode` の設定不備、またはファイル名指定ミスによる内部エラー |
-
----
-
-### 1-2. CSS の管理方針：インラインスタイルを避ける
-
-**インラインスタイル（`style="..."` 属性）は CSS メディアクエリで上書きできない**（`!important` なしの場合）。
-
-```html
-<!-- ❌ インラインスタイル — メディアクエリで上書き不可 -->
-<table style="min-width: 900px;">
-
-<!-- ✅ CSS クラスで管理 — メディアクエリで確実に上書き可能 -->
-<table class="rpt-tbl rpt-tbl-planned">
-```
-
-```css
-.rpt-tbl-planned { min-width: 900px; }
-
-@media (max-width: 639px) {
-  .rpt-tbl-planned { min-width: 500px; }
-}
-```
-
----
-
-### 1-3. Tailwind CDN との共存ルール
-
-Tailwind Play CDN は JavaScript で動作し、`<style>` ブロックよりも**後からスタイルを DOM に注入**する場合がある。  
-`whitespace-nowrap` 等の Tailwind クラスが独自 CSS クラスを上書きするケースに注意。
-
-**解決方法：** Tailwind クラスを HTML から削除し、該当スタイルを独自 CSS クラスに移管する。
-
-```css
-.td-dev { color: var(--c-t2); white-space: nowrap; }
-@media (max-width: 639px) {
-  .td-dev { white-space: normal; }
-}
-```
+| 節 | 内容 |
+|----|------|
+| §1-1 | `addMetaTag` viewport · XFrameOptionsMode |
+| §1-2 | インラインスタイル禁止 |
+| §1-3 | Tailwind CDN 共存 |
 
 ---
 
@@ -175,42 +80,10 @@ HTML エディタや整形ツールがこれらを壊す場合があるため、
 
 ---
 
-## 3. データ設計ルール
 
-### 3-1. 列インデックスは定数で管理する
+## 3. データ設計（索引）
 
-```javascript
-// ✅ 定数管理
-const COL = {
-  NO:         0,  // A
-  TYPE:       1,  // B
-  DEVICE:     2,  // C
-  SUBJECT:    3,  // D
-  STATUS:     9,  // J
-  PRIORITY:   10, // K
-};
-
-// ❌ ハードコードは禁止
-const status = row[9];
-```
-
-### 3-2. ステータス・種別の固定値は定数で管理する
-
-スプレッドシートの入力規則とコード・HTML の値は**必ず一致させる**。
-
-```javascript
-const STATUS = {
-  DONE:        '完了',
-  IN_PROGRESS: '対応中',
-  PENDING:     '確認中',
-  NOT_REPORTED:'未報告',
-};
-const CATEGORY = {
-  PLANNED: '定期作業',
-  TROUBLE: '不具合',
-  SPECIAL: '特記事項',
-};
-```
+**詳細:** [`references/GAS_DATA_DESIGN.md`](references/GAS_DATA_DESIGN.md) — 列定数 · STATUS/CATEGORY
 
 ---
 
@@ -315,82 +188,14 @@ const safeMsg = String(err.message)
 
 ---
 
-## 7. パフォーマンスルール
+## 7–8. パフォーマンス · データ処理（索引）
 
-### 7-1. スプレッドシート I/O はバッチ処理する
+**詳細:** [`references/GAS_RUNTIME.md`](references/GAS_RUNTIME.md)
 
-**セル単位のループは禁止レベルで遅い。必ず `getValues()` / `setValues()` で二次元配列を一括処理する。**
-
-```javascript
-// ❌ セル単位ループ（数百行で数十秒かかる）
-for (let i = 2; i <= lastRow; i++) {
-  const val = sheet.getRange(i, 1).getValue();
-}
-
-// ✅ 一括読み込み（数百行でも 1 回のAPIコール）
-const data = sheet.getRange(2, 1, lastRow - 1, colCount).getValues();
-```
-
-### 7-2. 6 分制限を超える処理は分割する
-
-単一の実行で完結しない場合はトリガーで続きから再開する設計にする。  
-途中経過は `PropertiesService` やシートに保存する。
-
-### 7-3. CacheService で頻繁に読む値をキャッシュする
-
-```javascript
-const cache = CacheService.getScriptCache();
-const cached = cache.get('summary');
-if (cached) return JSON.parse(cached);
-
-const data = /* 重い計算 */;
-cache.put('summary', JSON.stringify(data), 300); // 5 分キャッシュ
-return data;
-```
-
-### 7-4. 同時書き込みは LockService で保護する
-
-```javascript
-const lock = LockService.getScriptLock();
-if (!lock.tryLock(5000)) {
-  throw new Error('ロック取得に失敗（同時書き込みが競合）');
-}
-try {
-  // スプレッドシートへの書き込み
-} finally {
-  lock.releaseLock();
-}
-```
-
----
-
-## 8. データ処理ルール
-
-### 8-1. セル値は必ず `trim()` で正規化する
-
-```javascript
-function norm_(v) {
-  return v != null ? String(v).trim() : '';
-}
-```
-
-### 8-2. 日付はサーバー側でタイムゾーンを指定してフォーマットする
-
-```javascript
-// ✅ GAS サーバー側でフォーマット（Asia/Tokyo は appsscript.json の timeZone と揃える）
-function formatDate(d) {
-  if (!d || d === '') return '';
-  if (d instanceof Date) return Utilities.formatDate(d, 'Asia/Tokyo', 'yyyy/MM/dd');
-  return String(d);
-}
-```
-
-### 8-3. 数値の上限クランプ
-
-```javascript
-const safeCur = Math.min(row.current, row.total);
-const pct = (row.total > 0) ? Math.round(safeCur / row.total * 100) : null;
-```
+| 節 | 内容 |
+|----|------|
+| §7 | バッチ I/O · 6 分制限 · Cache · Lock |
+| §8 | trim · 日付 TZ · 数値クランプ |
 
 ---
 

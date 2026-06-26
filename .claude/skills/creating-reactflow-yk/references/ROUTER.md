@@ -4,13 +4,14 @@
 **要約・MUST:** `yk-skill/rule/35_reactflow/REACTFLOW_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-06-19（`chrome-ui` tag · design-system 索引）
+**最終更新:** 2026-06-27（P14 · Standard を L1 索引 + tag 別 `references/` に変更）
 
 ---
 
 ## 0. 禁止・原則
 
 - `REACTFLOW_RULES.md` を毎ターン全文 Read する必要はないが、**flowchart コードを Write/StrReplace するターンでは L1 を Read 済み**であること
+- **`35_reactflow/references/` の全ファイルを毎回 Read しない** — tag に応じた 1〜2 本のみ（Ref Plan `load`）
 - 公式 React Flow ページは **tag に該当するときだけ** Read（Ref Plan の `load` に列挙）
 - tier / tag 表を `SKILL.md` や L1 に **複製しない**（リンクのみ）
 - **L1 §3-5 は要約。ファイル floor の正本は本 §3**
@@ -32,17 +33,33 @@
 
 | tier | いつ | floor（必ず Read） |
 |------|------|----------------------|
-| **Light** | コメント · ラベル文言 · **操作 chrome の色/class のみ** · パイプライン不変 | L1 §5.6-2a + `design-system.md` §4、または該当 1 ファイル |
-| **Standard** | レイアウト · エッジ · Canvas · 表 UI · 複数ファイル | **L1 全体** + 参照実装 floor（**§3 Tag — floor に加算**） |
-| **Full** | 新形状種別 · 永続化キー変更 · `toMermaid` 契約変更 · 両アプリ `lib/flowchart` 同期 | L1 + 企画 ADR + `lib/flowchart/types.ts` |
+| **Light** | コメント · ラベル文言 · **操作 chrome の色/class のみ** · パイプライン不変 | L1 §5.6 索引 + [`references/REACTFLOW_UX_CHROME.md`](../../../rule/35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-2a + `design-system.md` §4、または該当 1 ファイル |
+| **Standard** | レイアウト · エッジ · Canvas · 表 UI · 複数ファイル | **L1（§0–§5 索引 · §4）** + **§2.1 tag 別 `references/`** + 参照実装 floor（**§3 Tag — floor に加算**） |
+| **Full** | 新形状種別 · 永続化キー変更 · `toMermaid` 契約変更 · 両アプリ `lib/flowchart` 同期 | Standard floor + 企画 ADR + `lib/flowchart/types.ts` |
 
 **既定:** 迷ったら **Standard**。
 
 **Light → Standard 昇格（いずれかで Standard）:** Canvas / layout / 両アプリ `lib/flowchart` 同期 / 新 RF API / 永続化キー変更。
 
+### 2.1 L1 references — tag 別 floor（Standard / Full）
+
+**正本パス:** `c:/yk-skill/rule/35_reactflow/references/`（L1 §5.6 索引と同型）
+
+| tag | 追加 Read（`references/`） |
+|-----|---------------------------|
+| `persist` · `next-shell` | `REACTFLOW_UX_WORKSPACE.md` |
+| `chrome-ui` | `REACTFLOW_UX_CHROME.md` |
+| `table-ui` | `REACTFLOW_UX_CHROME.md`（§5.6-2 · §5.6-9）+ `REACTFLOW_UX_WORKSPACE.md` §5.7（列順 · normalize） |
+| `layout` · `edges` | `REACTFLOW_EDGES.md` |
+| `canvas` | `REACTFLOW_EDGES.md` + `REACTFLOW_UX_CHROME.md` §5.6-3（色 · 枠） |
+| `export` | `REACTFLOW_UX_CHROME.md` §5.6-3 |
+| `mermaid-preview` | L1 §3-6 · §4-3 のみ（§5.6 references 不要） |
+
+**複数 tag:** 該当する reference を **重複なく** Ref Plan `load` に列挙。
+
 ---
 
-## 3. Tag — floor に加算
+## 3. Tag — floor に加算（実装ファイル）
 
 | tag | 追加 floor |
 |-----|------------|
@@ -81,6 +98,7 @@
 
 | パス | いつ load |
 |------|-----------|
+| `c:/yk-skill/rule/35_reactflow/references/` | Standard+ · tag に応じ §2.1 |
 | `c:/yk-application/flowchart-studio/lib/flowchart/` | domain / layout / edges 変更（**mermaid 版と同期 MUST**） |
 | `c:/yk-application/flowchart-studio/frontend/src/components/flowchart/` | UI / canvas（reactflow 版） |
 | `c:/yk-tool/flowchart-web-mermaid/lib/flowchart/` | domain / `toMermaid`（**reactflow 版と同期 MUST**） |
@@ -106,7 +124,7 @@
 ```markdown
 ## Ref Plan
 - tier: Light（例: themes.ts の色のみ）
-- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md §4, c:/yk-application/flowchart-studio/lib/flowchart/themes.ts
+- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md §5.6, c:/yk-skill/rule/35_reactflow/references/REACTFLOW_UX_CHROME.md §5.6-2a, c:/yk-application/flowchart-studio/lib/flowchart/themes.ts
 ```
 
 ### Standard / Full
@@ -115,7 +133,7 @@
 ## Ref Plan
 - tier: Standard（例: 分岐ずれ修正）
 - tags: layout, edges
-- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md, c:/yk-application/flowchart-studio/lib/flowchart/layoutGrid.ts, c:/yk-application/flowchart-studio/lib/flowchart/buildEdges.ts
+- load: c:/yk-skill/rule/35_reactflow/REACTFLOW_RULES.md §3-5, c:/yk-skill/rule/35_reactflow/references/REACTFLOW_EDGES.md, c:/yk-application/flowchart-studio/lib/flowchart/layoutGrid.ts, c:/yk-application/flowchart-studio/lib/flowchart/buildEdges.ts
 - skip: 公式（参照実装で足りる）
 ```
 
@@ -123,4 +141,4 @@
 
 ## 8. 完了報告
 
-`REACTFLOW_RULES.md` §7。末尾に **読んだ refs**（L1 · ROUTER · 実装ファイル · 公式 URL）を列挙。
+`REACTFLOW_RULES.md` §7。末尾に **読んだ refs**（L1 · ROUTER · `references/` · 実装ファイル · 公式 URL）を列挙。
