@@ -509,6 +509,22 @@ await expect(async () => {
 
 正本: `importEquipmentBundle.ts` · `deleteModule.ts` · `e2eStub.ts` · `playwright.config.ts` · [`SUPABASE_RULES.md`](../30_web_stack/SUPABASE_RULES.md) §8-2
 
+### 12-8. flowchart-studio — §E chrome 後の E2E 落とし穴（2026-06）
+
+§E 改定（固定ヘッダー · 表/プレビュー見出し整理 · N8/N9 · fixed `EditorMoreMenu`）後に spec が一括で落ちる典型。**新規スクリプトは不要** — ロケーターと helper の SSOT を直す。
+
+| 落とし穴 | 対策 |
+|----------|------|
+| `getByRole('button', { name: '再生成' })` が **strict mode**（表ヘッダー + canvas 内リンクの 2 件） | `#table header` にスコープ（`e2e/helpers/flowchart.ts` · `headerRegenerate`） |
+| デスクトップ §E で見出し **「表」「プレビュー」** が `sr-only` または削除 | `#table` · `#canvas` の visible、または `.react-flow__node` で 3 ペインを検証 |
+| **N8** 初期は全ユニット折りたたみ → 動作ボタン・削除 icon が DOM にない | `getByTestId('toggle-all-units')` / `ensureUnitsExpanded` を **モジュール操作・削除の前**に実行（`e2e/nav-n8.spec.ts`） |
+| `EditorMoreMenu` 下端（**危険** · 例: フローリセット）が **viewport 外**で `.click()` 失敗 | `dispatchEvent('click')`（`e2e/flow-reset.spec.ts`）— fixed 配置メニューの既知パターン |
+| 無効 `menuitem`（例: import 未設定）は **フォーカス不可** | keyboard テストは `getByRole('menuitem', { disabled: false })`（`e2e/a11y-keyboard.spec.ts`） |
+| 取込ステータスが **閉じた `<details>`** 内で `hidden` | `toBeVisible` だけに頼らず `toBeAttached` や **表行数** assert |
+| メニュー文言の **スペース差**（`import.jsonを取込…` 等） | UI 正本は `EditorMoreMenu.tsx` · `ボタン一覧.md` — spec は **完全一致** |
+
+→ 索引: [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6-2 · §5.6-2b · §5.7 · `e2e/nav-n8.spec.ts`
+
 ---
 
 ## 13. テスト戦略 — 何を Playwright でテストするか（索引）
