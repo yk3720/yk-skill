@@ -6,7 +6,7 @@
 
 **ファイルパス:** `c:/yk-skill/rule/30_web_stack/VERCEL_RULES.md`  
 **索引:** [`RULE_INDEX.md`](../RULE_INDEX.md) No 34  
-**最終更新:** 2026-06-23（§6-1 ダッシュボード 2026〜 UI 追記）
+**最終更新:** 2026-06-27（§6-2 flowchart-studio 3 URL · ADR-017）
 
 **横断:** [`SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md) · [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5
 
@@ -201,6 +201,20 @@ Git push でも新デプロイは走るが、**env だけ変えたときは Rede
 | **Custom environments** | 別環境をインポートして切り離す（上級） |
 
 Preview が本番 DB（Supabase 等）を汚さないよう **Production と Preview で値を分ける**（flowchart-studio 等）。
+
+### 6-2. flowchart-studio — 公開 URL 3 本（ADR-017 · B 案）
+
+**正本:** `flowchart-studio` [ADR-017](c:/yk-application/flowchart-studio/docs/03_技術仕様/意思決定記録(ADR).md) · Runbook [PUBLIC_URL_SETUP.md](c:/yk-application/flowchart-studio/docs/runbooks/PUBLIC_URL_SETUP.md)
+
+| URL | Vercel | env 要点 |
+|-----|--------|----------|
+| 本番 1 本 | **本番プロジェクト**（`-dun`） | Supabase · ログイン ON |
+| デモ 2 本（技術 · 一般） | **デモプロジェクト 1 個** · 同一デプロイ | `AUTH_DISABLED=1` · Supabase 不要 |
+
+- `main` push → 本番 + デモ **各 1 デプロイ**（同一 commit）。
+- デモ 2 URL の差は **ホスト名 → デモ階層 JSON** のみ（UI は同一）。
+- Vercel 定番（1 プロジェクト + Custom Environment）の **実務変形**。Hobby + 本番/デモ env 差が大きい場合に採用。
+- **アンチパターン:** 1 プロジェクト Production env だけで本番 URL と `AUTH_DISABLED` デモ URL を兼用（env が 1 セットのため不可）。
 
 #### 旧 UI との対応（エージェント向け）
 
