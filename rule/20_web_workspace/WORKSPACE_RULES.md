@@ -21,7 +21,7 @@
 
 ```text
 狭いスコープ > 広いスコープ
-順序: 本ファイル (WORKSPACE_RULES) → ドメイン固有ルール → NEXTJS / SHADCN / DESIGN
+順序: 本ファイル (WORKSPACE_RULES) → ドメイン固有ルール → NEXTJS / SHADCN / TAILWIND / VISUAL_DESIGN
 ```
 
 - **ペイン数・レイアウトの具体**は本ファイルで固定しない。各ルートの SSOT（`CLAUDE.md`、ADR、`Workspace.tsx` 系）に従う。

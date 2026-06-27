@@ -4,7 +4,7 @@
 **要約・MUST:** `yk-skill/rule/30_web_stack/SHADCN_UI_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-05-24
+**最終更新:** 2026-06-27（P14e · L1 索引化 · `references/SHADCN_*.md`）
 
 ---
 
@@ -34,8 +34,8 @@
 | tier | いつ | floor（必ず Read） |
 |------|------|----------------------|
 | **Light** | 既存 `components/ui` の variant / className のみ | L1 §15 該当項 · 触る 1 ファイル |
-| **Standard** | `add` · 既存部品の合成（asChild / render） | **L1 全体** · §12 or §13 · `components.json` |
-| **Full** | **初回 init** · theming 横断 · `migrate` · monorepo cwd | L1 + 本 ROUTER §3 tag floor + 公式 1 URL |
+| **Standard** | `add` · 既存部品の合成（asChild / render） | L1 · §12 or §13 索引 + 該当 `references/SHADCN_*.md` · `components.json` |
+| **Full** | **初回 init** · theming 横断 · `migrate` · monorepo cwd | L1 + `references/SHADCN_CORE_SETUP.md`（§5–§8）+ 本 ROUTER §3 tag floor + 公式 1 URL |
 
 **既定:** 迷ったら **Standard**。`components.json` 不存在 + flowchart → **Full** + tag `init-radix`。
 
@@ -45,14 +45,14 @@
 
 | tag | 追加 floor |
 |-----|------------|
-| `init-radix` | L1 §13 · [Installation / Next](https://ui.shadcn.com/docs/installation/next) |
-| `init-base` | L1 §12 · **新規 ui-kit のみ**（既存 re-init 禁止） |
-| `add-component` | L1 §9 · [CLI](https://ui.shadcn.com/docs/cli) · 追加する component 公式 1 本 |
-| `flowchart-studio` | L1 §13 · `REACTFLOW_RULES.md` shadcn 行 |
-| `ui-kit-base-ui` | L1 §12 · `WORKSPACE_RULES` · ui-kit `CLAUDE.md`（Base UI · `--diff`） |
-| `theme-css` | L1 §8-2 · [Theming](https://ui.shadcn.com/docs/theming) · `app/globals.css` |
-| `monorepo` | L1 §11 · [Monorepo](https://ui.shadcn.com/docs/monorepo) |
-| `migrate-radix` | L1 §7 `migrate radix` · CLI docs |
+| `init-radix` | L1 §13 · [`SHADCN_FLOWCHART.md`](../../../rule/30_web_stack/references/SHADCN_FLOWCHART.md) · [Installation / Next](https://ui.shadcn.com/docs/installation/next) |
+| `init-base` | L1 §12 · [`SHADCN_WORKSPACE_UKIT.md`](../../../rule/30_web_stack/references/SHADCN_WORKSPACE_UKIT.md) · **新規 ui-kit のみ** |
+| `add-component` | [`SHADCN_CORE_SETUP.md`](../../../rule/30_web_stack/references/SHADCN_CORE_SETUP.md) §7·§9 · [CLI](https://ui.shadcn.com/docs/cli) |
+| `flowchart-studio` | L1 §13 · [`SHADCN_FLOWCHART.md`](../../../rule/30_web_stack/references/SHADCN_FLOWCHART.md) · `REACTFLOW_RULES.md` shadcn 行 |
+| `ui-kit-base-ui` | L1 §12 · [`SHADCN_WORKSPACE_UKIT.md`](../../../rule/30_web_stack/references/SHADCN_WORKSPACE_UKIT.md) · `WORKSPACE_RULES` |
+| `theme-css` | [`SHADCN_CORE_SETUP.md`](../../../rule/30_web_stack/references/SHADCN_CORE_SETUP.md) §8-2 · [Theming](https://ui.shadcn.com/docs/theming) |
+| `monorepo` | L1 §11 · [`SHADCN_CORE_SETUP.md`](../../../rule/30_web_stack/references/SHADCN_CORE_SETUP.md) §5-2 · [Monorepo](https://ui.shadcn.com/docs/monorepo) |
+| `migrate-radix` | [`SHADCN_CORE_SETUP.md`](../../../rule/30_web_stack/references/SHADCN_CORE_SETUP.md) §7 · CLI docs |
 
 **公式 URL:** 1 tag あたり **1 ページまで**。
 

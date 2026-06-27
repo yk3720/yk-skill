@@ -23,7 +23,7 @@ description: >
 
 ### Step 0: 必読を読む
 
-1. **`SKILL_AUTHORING_RULES.md` を最初に Read**（§2〜§5 · §11 を最低限。必要なら全文）
+1. **`SKILL_AUTHORING_RULES.md` を最初に Read**（§2〜§4 · §11 を最低限。Cursor 詳細は `references/SKILL_AUTHORING_CURSOR.md` · 品質は `SKILL_AUTHORING_QUALITY.md`）
 2. 上表の 2〜5（references）を Read。省略禁止。
 
 ### Step 1: 種類を判断

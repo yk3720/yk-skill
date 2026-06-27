@@ -4,7 +4,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| **状態** | Phase 2 進行中 · **P14 系完了**（2026-06-27）· 次候補: SHADCN / SKILL_AUTHORING 等 WARN 帯 |
+| **状態** | Phase 2 進行中 · **P14 系完了**（P14e 含む · 2026-06-27）· 次候補: P9b（manifest CI） |
 | **リポジトリ** | `c:/yk-skill`（主）· 参照更新済み: `5.Python` · `yk-memo` 一部 · `workspace-ui-kit` |
 | **入口 SSOT** | `c:/yk-skill/rule/RULE_INDEX.md` |
 | **対話の経緯** | ルール矛盾チェック → Web調査 → 多視点レビュー → 対話で1件ずつ決定 → 実装 |
@@ -60,17 +60,20 @@
 | **P14** | L1 肥大化分割（REACTFLOW） | `REACTFLOW_RULES.md` 662→328行 · §5.6 → `35_reactflow/references/` 3 本 · ROUTER Standard を索引+tag 読みに変更 |
 | **P14c** | L1 肥大化分割（PLAYWRIGHT） | `PLAYWRIGHT_RULES.md` 556→427行 · §12-13 → `references/` 2 本 · `using-playwright/references/ROUTER.md` 新設 |
 | **P14d** | L1 肥大化分割（SUPABASE · GAS） | `SUPABASE_RULES.md` 500→192行 · `GAS_RULES.md` 428→233行 · 各 `references/` 3 本 |
+| **DocSync** | rule 横断矛盾修正（C-01〜C-06） | `docs/` 統一 · AGENT_SHELL Phase B · manifest 32 本 · WORKSPACE DESIGN 表記 · INDEX 行数目安 |
+| **P14e** | L1 肥大化分割（SHADCN · SKILL_AUTHORING） | `SHADCN_UI` 353→186行 · `SHADCN_*` references 4 本 · `SKILL_AUTHORING` 351→198行 · `SKILL_AUTHORING_*` references 4 本 |
 
 ### 採用済みアーキテクチャ決定（再議論しない）
 
 - **入口:** `rule/` 直下は `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md`（**移行スタブは 2026-05-23 削除済み**）。索引＝WHAT/WHEN · プレイブック＝HOW · L1 SSOT は帯フォルダ内
 - **命名:** ファイル名 `{TOPIC}_RULES.md`（番号なし）。論理順は `RULE_INDEX` の **No 列**
-- **帯:** 10刻み（`10_meta` … `60_tooling`）。Phase 2 予約: ~25本超で `load-manifest.yaml`
+- **帯:** 10刻み（`10_meta` … `60_tooling`）。`load-manifest.yaml` 試作運用中（32 本 · No 00 除く · INDEX と人手同期）
 - **企画 vs 実装:** 実装 SSOT は `yk-skill/rule`（Governance 段階7で yk-memo は参考のみ）
 - **Light Ref Plan:** `tier` + `load` のみ。迷ったら **Standard**
 - **ROUTER:** tier/tag/K-ID 表の SSOT は `references/ROUTER.md` のみ
 - **Git SSOT:** `10_meta/GIT_WORKFLOW_RULES.md` — 方針のみ。push / commit はユーザー明示時。メッセージは直近 `git log` に合わせる。実行手順は User Rules
 - **Secrets SSOT:** `10_meta/SECRETS_HYGIENE_RULES.md` — チェックリスト + 禁止パターン。チャットへの値貼付は **原則禁止（例外なし）**。実装手順は各ドメイン rule
+- **Product Spec（独立リポ）:** `{app}/docs/` + `AGENTS.md`（`specs/` は廃止 · 2026-06-23 移行）
 - **Web L0 入口:** `workspace-ui-kit/.cursor/rules/workspace-dev-entry.mdc` — glob `app` · `components` · `lib` の `*.{ts,tsx}`
 
 ### 帯フォルダ一覧（SSOT パス）
@@ -78,14 +81,14 @@
 | 帯 | パス |
 |----|------|
 | 入口 | `rule/RULE_INDEX.md` · `rule/RULE_ROUTING_PLAYBOOK.md` |
-| 10_meta | `PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` · `COMMUNICATION` |
+| 10_meta | `PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` · `COMMUNICATION` · `APP_PROJECT` · `YK_APPLICATION` · `VISUAL_DESIGN` · `USABILITY` · `A11Y_ROADMAP` · `A11Y` · `PROJECT_DOCUMENT` |
 | 20_web_workspace | `WORKSPACE_RULES.md` · `DIAGRAM_MANAGER_WORKSPACE_RULES.md` |
-| 30_web_stack | `NEXTJS` · `SHADCN_UI` · `TAILWINDCSS` · `VERCEL` · `REACT` |
+| 30_web_stack | `NEXTJS` · `SHADCN_UI` · `TAILWINDCSS` · `VERCEL` · `REACT` · `SUPABASE` |
 | 35_reactflow | `REACTFLOW_RULES.md` |
 | 40_python | `PYTHON_RULES.md` |
 | 45_mermaid | `MERMAID_RULES.md`（`active`） |
 | 50_gas_html_test | `GAS` · `GAS_REPORT_DESIGN` · `PLAYWRIGHT` · `POWERSHELL_HTML`（物理名レガシー · No 51–54） |
-| 60_tooling | `CURSOR_RULES.md` · `AGENT_SHELL_RULES.md` |
+| 60_tooling | `CURSOR_RULES` · `AGENT_SHELL` · `QUALITY_GATE` · `WORKSPACE_SCRIPTS` |
 
 ### P6 スタブ削除（2026-05-23 実施）
 
@@ -95,16 +98,15 @@
 
 ## 未着手バックログ
 
-**優先:** 下記「周辺」または新規ルール追加時の manifest 同期。着手前にユーザー確認を推奨（対話形式の継続）。
+**優先:** 下記「周辺」または新規ルール追加時の manifest 同期。
 
 | ID | 優先 | タイトル | 概要・受け入れ基準 | 主に触るファイル |
 |----|------|----------|-------------------|------------------|
-| **P14e** | P3 | L1 肥大化分割（残 WARN） | `SHADCN_UI`（353）· `SKILL_AUTHORING`（351）等 — 250行未満を目標 | 各帯 `references/` |
-| **P9b** | 予約 | manifest 本格運用 | L1 ~25 本超 · `route_refs.py` / CI 連携（PROGRESSIVE §7） | `load-manifest.yaml` |
+| **P9b** | 予約 | manifest 本格運用 | tag 検証需要時 · `route_refs.py` / CI 連携（PROGRESSIVE §7） | `load-manifest.yaml` |
 
 ### 当初レビューで言及・未タスク化した周辺
 
-- ~~ルール全文の **再矛盾チェック**~~ — **2026-05-24 実施済**（Python L1 昇格 · reactflow L0 同期 · 図解 description · パス統一 等）
+- ~~ルール全文の **再矛盾チェック**~~ — **2026-06-27 実施済**（doc-sync C-01〜C-06 · 2026-05-24 監査含む）
 - ~~**サブエージェント多視点レビュー**の再実施~~ — **2026-05-24 実施済**（監査ターン）
 - `flowchart-studio/` 等、今回スコープ外リポジトリのルールリンク
 
@@ -145,4 +147,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-06-27（P14d 完了 · SUPABASE/GAS WARN 解消 · audit FAIL 0）
+**最終更新:** 2026-06-27（P14e · SHADCN/SKILL_AUTHORING 分割）

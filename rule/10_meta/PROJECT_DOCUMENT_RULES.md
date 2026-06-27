@@ -6,7 +6,7 @@
 **関連:** `10_meta/APP_PROJECT_RULES.md`（ライフサイクル · handoffs · 再開）· `RULE_INDEX.md` No 25  
 **実例:** [flowchart-studio docs](c:/yk-application/flowchart-studio/docs/) — 2026-06-23 **spec-in-repo** 移行完了（`specs/` → `docs/`）
 
-**最終更新:** 2026-06-23（§11–§12 残グリル確定）
+**最終更新:** 2026-06-27（§3.1 `docs/` 統一 · `specs/` 廃止）
 
 ---
 
@@ -68,25 +68,28 @@
 ```text
 c:/yk-application/{app}/
 ├── AGENTS.md                 # エージェント憲法（ルート固定 · Cursor 標準）
-├── specs/                    # Product Spec 正本（6 種フォルダ）
+├── docs/                     # Product Spec 正本（6 種）+ 運用隣接（同一ツリー）
+│   ├── README.md
 │   ├── 01_要求定義/
 │   ├── 02_機能設計/
-│   ├── 03_技術仕様/
+│   ├── 03_技術仕様/          # ADR 正本
 │   ├── 04_リポジトリ構造/
 │   ├── 05_開発ガイドライン/   # decision-log 等（憲法本文は AGENTS.md）
-│   └── 06_ユビキタス言語/
-├── docs/                     # 運用隣接（LOCAL_DEV · Runbook 等）— specs と混在しない
+│   ├── 06_ユビキタス言語/    # 任意
+│   ├── LOCAL_DEV.md
+│   └── runbooks/
 └── （アプリコード）
 ```
 
 | 項目 | 決定 |
 |------|------|
-| Product Spec 正本 | `{app}/specs/` の 6 種 |
+| Product Spec 正本 | `{app}/docs/` の 6 種（運用 MD は同 `docs/` 配下 · `STRUCTURE.md` 参照） |
 | 憲法正本 | ルート **`AGENTS.md`** |
 | handoffs | 従来どおり `yk-memo/handoffs/{slug}/` |
 | yk-memo 企画フォルダ | **stub**（リダイレクト README）+ `00_テーマ/` · `99_アーカイブ/` のみ残す |
 
-**MUST NOT:** `specs/` と yk-memo 企画フォルダの **二重正本**を維持する。移行完了後は yk-memo 側は stub のみ。
+**MUST NOT:** `docs/`（独立リポ）と yk-memo 企画フォルダの **二重正本**を維持する。移行完了後は yk-memo 側は stub のみ。  
+**MUST NOT:** 廃止した `specs/` と `docs/` の **二重正本**（2026-06-23 移行後は `docs/` のみ）。
 
 **パイロット:** [flowchart-studio](c:/yk-application/flowchart-studio/docs/)
 
@@ -96,7 +99,7 @@ c:/yk-application/{app}/
 
 | 項目 | 決定 |
 |------|------|
-| 正本（独立リポ） | ルート **`AGENTS.md`** — `specs/` への索引を含む |
+| 正本（独立リポ） | ルート **`AGENTS.md`** — `docs/` への索引を含む |
 | 正本（yk-memo 企画のみ） | `05_開発ガイドライン/エージェント憲法.md` |
 | ルート `AGENTS.md`（yk-memo 企画） | **廃止** — stub のみ |
 | 再開時の読む順序 | handoffs HANDOFF → 最新 §4 → **AGENTS.md**（3 ファイル） |
@@ -233,13 +236,13 @@ c:/yk-application/{app}/
 | 工程 | YK 正本（独立リポ） | DoD |
 |------|---------------------|-----|
 | Constitution | ルート **`AGENTS.md`** | `APP_PROJECT_RULES` §5 必須項目 |
-| Specify | `specs/01_要求定義/` | **AC 表**（§10.2） |
-| Plan | `specs/02_機能設計/` + `specs/03_技術仕様/` + ADR | フェーズ計画 · Accepted ADR |
+| Specify | `docs/01_要求定義/` | **AC 表**（§10.2） |
+| Plan | `docs/02_機能設計/` + `docs/03_技術仕様/` + ADR | フェーズ計画 · Accepted ADR |
 | Tasks | handoffs 最新 **§4** | チェックリスト（`AC-N` 番号は使わない） |
 | Implement | 同一リポのコード | Vitest → Playwright（`PLAYWRIGHT_RULES`） |
 
 **MUST NOT:** Spec Kit CLI の `.specify/` を **並行 SSOT**として追加する（YK は Markdown + handoffs で足りる）。  
-**MUST NOT:** `specs/` と yk-memo 企画 6 種の **二重正本**。
+**MUST NOT:** 独立リポ `docs/` と yk-memo 企画 6 種の **二重正本**。
 
 ### 10.2 受け入れ条件（AC）3 層
 

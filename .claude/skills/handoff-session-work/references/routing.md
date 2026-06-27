@@ -24,7 +24,7 @@
 | ルート | 引き継ぎでの役割 |
 |--------|------------------|
 | `c:/yk-memo` | `handoffs/`（セッション + プロジェクト HANDOFF）· 講座テーマ（`00_テーマ/`）· 企画 stub |
-| `c:/yk-application` | 独立 Git アプリ — **`specs/` + `AGENTS.md`**（Product Spec 正本 · 触った場合 Phase C） |
+| `c:/yk-application` | 独立 Git アプリ — **`docs/` + `AGENTS.md`**（Product Spec 正本 · 触った場合 Phase C） |
 | `c:/yk-skill` | 本スキル · `rule/`（リンクのみ · 全文コピー禁止） |
 | `c:/yk-tool` | 成果物リポ（触った場合 `git status` に含める） |
 | `c:/yk-document` | データリポ（同上） |
@@ -173,7 +173,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 5. 新規セッション MD を Write（既存上書き禁止）
 6. `HANDOFF.md` の「最新セッション」1 行（+ 必要なら §6 のみ）更新
-7. 触った各 Git ルートで `git status` → セッション MD §2 に記載
+7. 触った各 Git ルートの変更を **Glob/Read** で把握 → セッション MD §2 に記載（**Phase B 単独の `git status` Shell 禁止** · hash は Phase C 後に §2 更新）
 8. `{project}/README.md` の「最新セッション」を HANDOFF と一致
 9. `handoffs/README.md` の当該 slug 行を更新（§横断索引）
 10. Phase A の移動・削除一覧をセッション MD §1-3 に記録 · ユーザーへパスと再開 `@` 文を提示
@@ -267,16 +267,16 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 |------|--------|------|
 | セッション進捗 · §4 | `handoffs/{slug}/` | 本スキル · セッション MD |
 | 恒久方針 · ロードマップ | `handoffs/{slug}/HANDOFF.md` | HANDOFF §6 |
-| **Product Spec · ADR**（独立リポ · 推奨） | `yk-application/{app}/specs/` | 6 種フォルダ · `specs/README.md` |
+| **Product Spec · ADR**（独立リポ · 推奨） | `yk-application/{app}/docs/` | 6 種フォルダ · `docs/README.md` |
 | **エージェント憲法**（独立リポ · 推奨） | `yk-application/{app}/AGENTS.md` | `APP_PROJECT_RULES` §5 |
 | Product Spec（yk-memo 企画のみ） | `yk-memo/.../{企画フォルダ}/` の 6 種 | `PROJECT_DOCUMENT_RULES` §3 |
 | エージェント憲法（yk-memo 企画のみ） | `05_開発ガイドライン/エージェント憲法.md` | 同上 |
 | 講座・提出 · 履歴 | `yk-memo/.../00_テーマ/` · `99_アーカイブ/` | 引き継ぎ対象外 |
 
-**再開時の 3 ファイル（独立リポ）:** `HANDOFF.md` → 最新セッション §4 → **`{app}/AGENTS.md`**（Product Spec は §4 実行時または仕様疑問時のみ `specs/` を Read）。
+**再開時の 3 ファイル（独立リポ）:** `HANDOFF.md` → 最新セッション §4 → **`{app}/AGENTS.md`**（Product Spec は §4 実行時または仕様疑問時のみ `docs/` を Read）。
 
 **MUST NOT:** handoffs に Product Spec 全文をコピーする（パスリンクのみ）。  
-**MUST NOT:** `specs/` と yk-memo 企画 6 種の **二重正本**を維持する（移行後は yk-memo 側は stub のみ）。  
+**MUST NOT:** 独立リポ `docs/` と yk-memo 企画 6 種の **二重正本**を維持する（移行後は yk-memo 側は stub のみ）。  
 **MUST NOT:** 企画フォルダの `再開メモ.md` 等をセッション SSOT として更新する。
 
 横断 rule → `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` · `PROJECT_DOCUMENT_RULES.md` §3.1

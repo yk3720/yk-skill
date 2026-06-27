@@ -42,7 +42,7 @@ npx shadcn@latest add button --dry-run   # 確認後
 npx shadcn@latest add button
 ```
 
-初回は **1 コンポーネント**だけ add して共存確認（L1 §13）。`globals.css` は L1 §8-2 を満たすこと。
+初回は **1 コンポーネント**だけ add して共存確認（L1 §13 · [`SHADCN_FLOWCHART.md`](../../../rule/30_web_stack/references/SHADCN_FLOWCHART.md)）。`globals.css` は [`SHADCN_CORE_SETUP.md`](../../../rule/30_web_stack/references/SHADCN_CORE_SETUP.md) §8-2 を満たすこと。
 
 ### ui-kit（Base UI · 既存）
 

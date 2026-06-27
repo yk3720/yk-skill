@@ -83,7 +83,7 @@
 
 - `commit` / `push` / PR 作成 / テスト実行（`test` · `E2E` · `確認して` 等の明示）
 - **UI 修正で E2E spec を追加した同一ターン** — `PLAYWRIGHT_RULES.md` §12 の完了判定として `npm run test:e2e` 等を実行（スクショ依頼の反復より spec を green にする）
-- 引き継ぎ **終了**（Phase B: `git status` · Phase C: `committing-with-git-yk` / `pushing-and-pr-yk` どおり add/commit/push）
+- 引き継ぎ **終了**（Phase B: Glob/Read のみ · Phase C: `committing-with-git-yk` / `pushing-and-pr-yk` どおり Bash 1 本/リポ）
 - clone · `npm install` 等、実行が必須の作業
 
 ### 3-3. 1 RUN にまとめる

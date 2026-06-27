@@ -2,13 +2,13 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-05-24 試作（L1 23 本 / 本格運用目安 ~25 本超）
+# 状態: 2026-06-27 INDEX 同期（L1 32 本 / No 00 除く）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 24
+rule_count_l1: 32
 
 rules:
   - no: 11
@@ -60,11 +60,25 @@ rules:
     read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開
     status: active
 
+  - no: 18
+    path: 10_meta/YK_APPLICATION_RULES.md
+    band: 10_meta
+    tags: [yk-application, meta, migration]
+    read_when: 独立リポジトリ移行 · yk-application 管理
+    status: active
+
   - no: 19
     path: 10_meta/VISUAL_DESIGN_RULES.md
     band: 10_meta
     tags: [visual-design, meta, ui, stroke]
     read_when: UI · 図 · 枠線 · ストロークの統一
+    status: active
+
+  - no: 20
+    path: 10_meta/USABILITY_HEURISTICS_RULES.md
+    band: 10_meta
+    tags: [usability, ux, meta]
+    read_when: UI/UX · ヒューリスティック評価
     status: active
 
   - no: 21
@@ -79,6 +93,27 @@ rules:
     band: 20_web_workspace
     tags: [workspace, diagram-manager]
     read_when: /diagram-manager 作業
+    status: active
+
+  - no: 23
+    path: 10_meta/A11Y_ROADMAP.md
+    band: 10_meta
+    tags: [a11y, roadmap, meta]
+    read_when: アクセシビリティ導入計画 · Phase 判断
+    status: active
+
+  - no: 24
+    path: 10_meta/A11Y_RULES.md
+    band: 10_meta
+    tags: [a11y, wcag, meta]
+    read_when: アクセシビリティ実装 · レビュー
+    status: active
+
+  - no: 25
+    path: 10_meta/PROJECT_DOCUMENT_RULES.md
+    band: 10_meta
+    tags: [project-document, meta, planning]
+    read_when: 企画フォルダ 6 種 · ドキュメント種別
     status: active
 
   - no: 31
@@ -122,6 +157,13 @@ rules:
     tags: [react, web]
     read_when: React コンポーネント · Hooks
     status: active
+
+  - no: 37
+    path: 30_web_stack/SUPABASE_RULES.md
+    band: 30_web_stack
+    tags: [supabase, web, auth, rls]
+    read_when: Supabase · RLS · Auth · DB
+    status: draft
 
   - no: 41
     path: 40_python/PYTHON_RULES.md
@@ -184,6 +226,13 @@ rules:
     band: 60_tooling
     tags: [quality-gate, lint, hook, ci]
     read_when: 品質ゲート · lint/hook/CI 導入・hook 失敗時
+    status: active
+
+  - no: 64
+    path: 60_tooling/WORKSPACE_SCRIPTS_RULES.md
+    band: 60_tooling
+    tags: [scripts, tooling, workspace]
+    read_when: 横断スクリプト · hook 用ユーティリティ
     status: active
 
 # 索引・プレイブック（L1 ではないが入口）

@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-24（No 64 WORKSPACE_SCRIPTS_RULES 追加）
+**最終更新:** 2026-06-27（manifest 32 本同期 · doc-sync C-01〜C-06）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -98,7 +98,7 @@
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
 | **ルート直下** | `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md` · `load-manifest.yaml`（Phase 2 試作）— 移行スタブ削除済み |
 
-**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **22** 本 · 本格運用は ~25 本超または tag 検証需要時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
+**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **32** 本 · No 00 除く · 本格運用は tag 検証需要時または CI 連携時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
 
 ---
 
@@ -234,7 +234,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 ## 新規ルールの追加手順
 
 1. **帯を選ぶ**（上表「帯の意味」）。該当なしなら **70_** など空き帯を `RULE_INDEX` に定義してから作成
-2. `rule/{帯}/{TOPIC}_RULES.md` を作成（500 行目安。超えたら references へ）
+2. `rule/{帯}/{TOPIC}_RULES.md` を作成（**~250 行目安**（理想 · `PROGRESSIVE` §2）。**500 行超**は `references/` へ · `audit-rule-line-counts.ps1`）
 3. **本表に行を追加**（No · path · いつ読む · status）
 4. **[RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)** に読む順序節を追加 · クイック入口表のリンクを同期
 5. 既存 rule / スキルから **絶対パス `c:/yk-skill/rule/{帯}/{FILE}`** でリンク（`SKILL_AUTHORING` §12 準拠）

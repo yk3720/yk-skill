@@ -49,7 +49,7 @@
 
 ## 2. Git 状態（セッション終了時点）
 
-Phase B で各触った Git ルートの `git status` を記載。**Phase C 後**に同表を更新（commit hash · push 済）。
+Phase B では Glob/Read で変更を把握し §2 に記載（**Phase B 単独の `git status` Shell 禁止**）。**Phase C 後**に同表を更新（`git status --short` は Phase C Bash 先頭 · commit hash · push 済）。
 
 | リポ（ルート） | 状態（要約） |
 |----------------|--------------|
