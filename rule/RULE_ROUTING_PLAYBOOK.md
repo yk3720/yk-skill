@@ -4,7 +4,7 @@
 
 **いつ Read するか:** [RULE_INDEX — タスク別クイック入口](RULE_INDEX.md#タスク別クイック入口) で No と L1 を特定したあと、手順の詳細が必要なときだけ本ファイルを開く。**常時全読みしない**（`10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §3-4）。
 
-**最終更新:** 2026-06-27（P15 Supabase 節追加）
+**最終更新:** 2026-06-27（P15 Supabase 節 · FastAPI 節追加）
 
 **誤ルーティング:** [RULE_INDEX — 誤ルーティング早見表](RULE_INDEX.md#誤ルーティング早見表)
 
@@ -16,6 +16,7 @@
 |----|--------|
 | [PROGRESSIVE 共通手順](#progressive-共通手順スキル付きドメイン) | L1 → SKILL → ROUTER → Ref Plan |
 | [Python](#読む順序python-ツールを触るとき) | `.py` · `5.Python` |
+| [FastAPI](#読む順序fastapi-api-を触るとき) | No 42 · APIRouter · UploadFile |
 | [Mermaid](#読む順序mermaid-図を書くとき) | `.mmd` |
 | [React Client](#読む順序react-client-コンポーネントを触るとき) | components · Hooks · `app/` |
 | [flowchart React Flow](#読む順序flowchart-studio--react-flow-を触るとき) | No 35 |
@@ -60,6 +61,25 @@
    - **Light**（局所修正）: `tier` + `load` の短形式 · **Standard 以上**: フル形式（SKILL Step 0.1）
 
 `5.Python` で `.py` を触るときは `python-dev-entry.mdc` が自動適用される。
+
+---
+
+## 読む順序（FastAPI API を触るとき）
+
+1. **`40_python/PYTHON_RULES.md`** — 環境 · Ruff · mypy · 機密（毎回）
+2. **`40_python/FASTAPI_RULES.md`** — FastAPI L1（毎回）
+3. **該当 `references/`** — 本ファイル L1 §10 索引から **触る節に対応するファイルのみ** Read
+
+| 作業 | 追加で Read |
+|------|-------------|
+| 新規リポ構成 | `references/FASTAPI_PROJECT_STRUCTURE.md` |
+| Excel/CSV アップロード | `references/FASTAPI_EXCEL_UPLOAD.md` |
+| TestClient · Docker · 本番 | `references/FASTAPI_DEPLOY_TEST.md` |
+| 公式 URL | `references/FASTAPI_OFFICIAL_URLS.md` |
+
+**Next.js フロント連携:** [`30_web_stack/NEXTJS_RULES.md`](30_web_stack/NEXTJS_RULES.md) — CORS · `NEXT_PUBLIC_*` · fetch UI。
+
+**PROGRESSIVE 未完了:** スキル `creating-fastapi-yk` · ROUTER · L0 entry は未整備（L1 `draft`）。実装前は Ref Plan をチャットで固定。
 
 ---
 

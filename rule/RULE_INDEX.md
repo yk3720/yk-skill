@@ -38,6 +38,7 @@
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
 | 横断スクリプト · hook 用ユーティリティ | 64 | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | L1 → `yk-tool/scripts/README.md` | — |
 | Python `.py` | 41 | `40_python/PYTHON_RULES.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
+| FastAPI · APIRouter · UploadFile | 42 | `40_python/FASTAPI_RULES.md` | [FastAPI](RULE_ROUTING_PLAYBOOK.md#読む順序fastapi-api-を触るとき) | —（draft · スキル未整備） |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
 | flowchart · 表 → Mermaid プレビュー | 35 | 同上 | [flowchart mmd](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | `reactflow-dev-entry` |
@@ -82,7 +83,8 @@
 | ui-kit の Next / shadcn UI | SHADCN · TAILWIND · WORKSPACE | **GAS_REPORT_DESIGN**（静的 HTML chip は No 52） |
 | React / ui-kit / flowchart の a11y | No **24** · `A11Y_RULES` | No **52** GAS_REPORT のみ（React chrome には読まない） |
 | アクセシビリティ Phase · CI 段階 | No **23** · `A11Y_ROADMAP` | 本ファイルでチェックリストを再定義しない |
-| React/Next **性能**チューニング | ui-kit `vercel-react-best-practices` · ROUTER tag `performance` | `VERCEL_RULES` に性能全文を転記 |
+| Python `.py` · CLI · pandas | No **41** · `creating-pythoncode-yk` | No **42** のみで CLI/SDD を省略 |
+| FastAPI · UploadFile · Uvicorn · TestClient | No **42** · `FASTAPI_RULES` + No **41** | No **41** のみ · No **34** で FastAPI 本体デプロイ |
 
 各ドメインの詳細手順は [RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)（**必要時のみ Read**）。
 
@@ -99,7 +101,7 @@
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
 | **ルート直下** | `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md` · `load-manifest.yaml`（Phase 2 試作）— 移行スタブ削除済み |
 
-**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **32** 本 · No 00 除く · 本格運用は tag 検証需要時または CI 連携時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
+**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **33** 本 · No 00 除く · 本格運用は tag 検証需要時または CI 連携時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
 
 ---
 
@@ -208,6 +210,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 36 | 30_web_stack | `30_web_stack/REACT_RULES.md` | React コンポーネント · Hooks · Client UI | active |
 | 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | active |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
+| 42 | 40_python | `40_python/FASTAPI_RULES.md` | FastAPI REST API · ファイルアップロード · Uvicorn | draft |
 | 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
 | 52 | 50_gas_html_test | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` | **GAS 進捗レポート HTML**・surge 図解 HTML の chip デザイン | active |
@@ -226,7 +229,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel / Supabase | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · `flowchart-studio` | Mermaid DSL（→ 45）· surge 図解 HTML |
-| 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
+| 40_python | Python L1 · FastAPI L1（No 42）· SDD 要約 | KB 全文（スキル references） |
 | 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | L1 本文に手順全文は含めない（→ L2 `creating-mermaid-yk` + `ROUTER.md`） |
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |

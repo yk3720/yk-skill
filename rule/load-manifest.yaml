@@ -2,7 +2,7 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-06-27 INDEX 同期（L1 32 本 / No 00 除く）
+# 状態: 2026-06-27 INDEX 同期（L1 33 本 / No 00 除く）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
@@ -171,6 +171,13 @@ rules:
     tags: [python]
     read_when: Python ツール（毎回 L1）
     status: active
+
+  - no: 42
+    path: 40_python/FASTAPI_RULES.md
+    band: 40_python
+    tags: [python, fastapi, api]
+    read_when: FastAPI · APIRouter · UploadFile · Uvicorn
+    status: draft
 
   - no: 45
     path: 45_mermaid/MERMAID_RULES.md
