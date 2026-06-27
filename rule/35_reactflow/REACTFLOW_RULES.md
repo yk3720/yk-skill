@@ -254,6 +254,34 @@ validateTable(table)
 
 `lib/flowchart/browser/storageKeys.ts` が SSOT（`browser/draftStorage.ts` · `browser/moduleDraftRepository.ts` · `browser/offlineFlowCache.ts` が参照）。**`flowchart-web-mermaid` は別キーのまま · 同期対象外**。
 
+### 5-P. ワークスペースペインレイアウト — localStorage キーバージョニング
+
+**対象:** `workspacePaneLayout.ts`（`WORKSPACE_OUTER_LAYOUT_ID` · `WORKSPACE_INNER_LAYOUT_ID` · `DEFAULT_INNER_LAYOUT` 等）
+
+**MUST:** `DEFAULT_INNER_LAYOUT`（または outer）のデフォルト比率を変えるときは、**必ず** 以下の 2 点をセットで行う。
+
+| やること | やらないと起きること |
+|----------|---------------------|
+| `WORKSPACE_INNER_LAYOUT_ID` の末尾を bump（`-v2` → `-v3`） | 既存ユーザーの localStorage に旧比率が残り、新デフォルトが効かない |
+| 旧キーを `LEGACY_LAYOUT_IDS` 配列に追加 | ペイン幅リセット時に旧キーが残り、古い比率で上書きされる |
+
+`clearWorkspacePaneStorage()` は現行キー + LEGACY_LAYOUT_IDS をすべて削除する。リセット後に新デフォルトが適用されるには、旧キーがここに含まれていること。
+
+```ts
+// NG — キーを変えずにデフォルト比率だけ変更
+export const WORKSPACE_INNER_LAYOUT_ID = "flowchart-studio:workspace-inner-v2"; // 旧キーのまま
+export const DEFAULT_INNER_LAYOUT = { canvas: 40, table: 60 }; // 比率だけ変えた
+
+// OK — キー bump + 旧キーを LEGACY に追加
+export const WORKSPACE_INNER_LAYOUT_ID = "flowchart-studio:workspace-inner-v3";
+const LEGACY_LAYOUT_IDS = ["...-v1", "...-v2"] as const;
+export const DEFAULT_INNER_LAYOUT = { canvas: 40, table: 60 };
+```
+
+**パネル順序を変えるとき（swap）も同様。** デフォルト比率は変わらなくても、Panel の並びが変わるとユーザーの保存値（旧パネル ID 比率）が意図しない幅になりうる。判断基準: レイアウトの**意味が変わる変更**はキー bump する。
+
+---
+
 ### 5.5 UI 整理 — コードをきれいに保つ（優先度: 高）
 
 実用版 UX ブラッシュアップで **ユーザー向け機能を外すとき**、UI 非表示だけにしない。
