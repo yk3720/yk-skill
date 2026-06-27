@@ -392,6 +392,7 @@ cd c:\yk-tool\playwright-test; npx playwright test
 | `トークン '&&' は...有効なステートメント区切りではありません` | **Windows PowerShell 5.1** では `&&` 非対応 | コマンド連結は `;` を使うか **`pwsh`（7+）** に切り替える（`10-1` 参照） |
 | `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
 | `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |
+| `strict mode violation: getByRole('heading') resolved to 2 elements` | 同一テキストの見出しが nav（h2）と main（h1）等の複数ランドマークに存在 | ランドマークでスコープを絞る — `page.getByRole('main').getByRole('heading', { name: 'X' })` または `page.getByRole('complementary').getByRole('heading', { name: 'X' })`。ヘッダーをレイアウト外へ昇格した場合に発生しやすい |
 
 ---
 
