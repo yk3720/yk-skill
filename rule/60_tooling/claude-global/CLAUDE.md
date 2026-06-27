@@ -62,6 +62,7 @@ handoffs/
 | shadcn / `components/ui` | `C:\yk-skill\rule\30_web_stack\SHADCN_UI_RULES.md` |
 | Tailwind | `C:\yk-skill\rule\30_web_stack\TAILWINDCSS_RULES.md` |
 | Vercel / deploy | `C:\yk-skill\rule\30_web_stack\VERCEL_RULES.md` |
+| Supabase · RLS · Auth | `C:\yk-skill\rule\30_web_stack\SUPABASE_RULES.md` |
 | `@xyflow/react` · 表駆動フロー | `C:\yk-skill\rule\35_reactflow\REACTFLOW_RULES.md` |
 | Mermaid DSL / `.mmd` | `C:\yk-skill\rule\45_mermaid\MERMAID_RULES.md` |
 | Playwright E2E | `C:\yk-skill\rule\50_gas_html_test\PLAYWRIGHT_RULES.md` |
@@ -111,6 +112,7 @@ handoffs/
 | `creating-reactflow-yk` | 「flowchart-web」「toReactFlow」 | @xyflow/react フローチャート |
 | `creating-shadcn-yk` | 「shadcn init」「npx shadcn add」「components/ui」 | shadcn/ui 導入・追加 |
 | `creating-vercel-yk` | 「vercel link」「vercel env」「Vercelにデプロイ」 | Vercel link/env/deploy |
+| `creating-supabase-yk` | 「Supabase」「RLS」「auth/callback」「profiles」「AUTH_DISABLED」 | Supabase Auth · RLS · env · Ref Plan |
 | `creating-skills` | 「スキルを作って」「スキルを改善して」 | スキル作成・更新・改善 |
 | `managing-skills-yk` | 「SKILL_CATALOGを更新」（disable-model-invocation） | スキル台帳の再生成・処理 |
 

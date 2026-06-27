@@ -23,4 +23,5 @@ alwaysApply: false
 - **実用版 UX（3ペイン・ツールバー・警告）** → `flowchart-studio/.cursor/rules/flowchart-practical-ux-yk.mdc` · `REACTFLOW_RULES` §5.6
 - **ローカル確認（localhost · 外部ブラウザ）** → `flowchart-studio/.cursor/rules/local-dev-browser-yk.mdc` · `docs/LOCAL_DEV.md`
 - `.mmd` → `creating-mermaid-yk`（本入口非使用）
+- `lib/supabase/**` · RLS · `flowDocuments` 保存の Auth 層 → **`supabase-dev-entry.mdc`** · `creating-supabase-yk`（payload 本体は本入口）
 - 完了報告: `REACTFLOW_RULES.md` §6〜§7 + **読んだ refs**

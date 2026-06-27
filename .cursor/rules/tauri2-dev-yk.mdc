@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Tauri 2 — 開発規約
 
+**INDEX:** [未登録ドメイン（L0 `.mdc` のみ）](c:/yk-skill/rule/RULE_INDEX.md#未登録ドメインl0-mdc-のみ) — flowchart-studio 統合は **2026-06-27 当面しない**（`tauri-practice` 別リポ）。Supabase Deep Link → [`SUPABASE_RULES.md`](c:/yk-skill/rule/30_web_stack/SUPABASE_RULES.md) §10。
+
 **公式ドキュメント:** https://v2.tauri.app/
 
 ## 前提ツール

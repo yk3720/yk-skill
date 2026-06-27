@@ -163,7 +163,7 @@ rules:
     band: 30_web_stack
     tags: [supabase, web, auth, rls]
     read_when: Supabase · RLS · Auth · DB
-    status: draft
+    status: active
 
   - no: 41
     path: 40_python/PYTHON_RULES.md

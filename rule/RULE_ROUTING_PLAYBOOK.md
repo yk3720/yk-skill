@@ -4,7 +4,7 @@
 
 **いつ Read するか:** [RULE_INDEX — タスク別クイック入口](RULE_INDEX.md#タスク別クイック入口) で No と L1 を特定したあと、手順の詳細が必要なときだけ本ファイルを開く。**常時全読みしない**（`10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §3-4）。
 
-**最終更新:** 2026-05-24（I2：INDEX から外出し）
+**最終更新:** 2026-06-27（P15 Supabase 節追加）
 
 **誤ルーティング:** [RULE_INDEX — 誤ルーティング早見表](RULE_INDEX.md#誤ルーティング早見表)
 
@@ -22,6 +22,7 @@
 | [flowchart Mermaid プレビュー](#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | 表 → Mermaid プレビュー |
 | [shadcn/ui](#読む順序shadcnui-を触るとき) | `components/ui` |
 | [Vercel / デプロイ](#読む順序vercel--デプロイを触るとき) | deploy |
+| [Supabase / RLS / Auth](#読む順序supabase--rls--auth-を触るとき) | No 37 |
 | [workspace-ui-kit](#読む順序workspace-ui-kit-を触るとき) | ui-kit |
 | [Agent Shell](#読む順序agent-が-shell-を使うとき) | RUN 削減 |
 | [Git](#読む順序git-操作をするとき) | commit / push |
@@ -143,6 +144,20 @@
 **誤ルーティング:** [RULE_INDEX — 早見表](RULE_INDEX.md#誤ルーティング早見表)。Python `.env` は No 41 · Secrets（No 15）。
 
 **D（性能）:** React/Next **性能**は `yk-tool/workspace-ui-kit/.claude/skills/vercel-react-best-practices` を **ui-kit 正本のまま**とし、yk-skill は `creating-react-yk` ROUTER tag `performance` 経由で参照する。**Vercel デプロイ**は `VERCEL_RULES`（No 34）のみ。
+
+---
+
+## 読む順序（Supabase / RLS / Auth を触るとき）
+
+1. **`30_web_stack/SUPABASE_RULES.md`** — L1 SSOT（**§0 で読む深さ · 委譲先を確定**）
+2. **スキル `creating-supabase-yk/SKILL.md`** — 手順 · Shell 停止条件
+3. **`creating-supabase-yk/references/ROUTER.md`** — tier / tag · Ref Plan
+4. **Ref Plan** — Write/StrReplace 前（ROUTER §7）
+5. **横断** — `SECRETS_HYGIENE_RULES`（env 値）· `GIT_WORKFLOW_RULES`（migration commit 明示時）
+6. **併用** — `NEXTJS_RULES` §5（`app/auth` Route Handler）· `REACT_RULES`（LoginForm Client）· `REACTFLOW_RULES`（`flowDocuments` 保存）· Vercel env → **`vercel-dev-entry`**
+7. **L0** — `supabase-dev-entry.mdc` · `app/**`（auth 以外）→ `nextjs-dev-entry` 優先
+
+**誤ルーティング:** [RULE_INDEX — 早見表](RULE_INDEX.md#誤ルーティング早見表)。初回ダッシュボード操作 → `flowchart-studio/docs/runbooks/SUPABASE_SETUP.md`。
 
 ---
 

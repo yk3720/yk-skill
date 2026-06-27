@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-27（manifest 32 本同期 · doc-sync C-01〜C-06）
+**最終更新:** 2026-06-27（P16 · yk-memo 部分セット · 未登録ドメイン節）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -42,7 +42,7 @@
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
 | flowchart · 表 → Mermaid プレビュー | 35 | 同上 | [flowchart mmd](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | `reactflow-dev-entry` |
 | React 一般 · Hooks（flowchart 外） | 36 | `30_web_stack/REACT_RULES.md` | [React](RULE_ROUTING_PLAYBOOK.md#読む順序react-client-コンポーネントを触るとき) | — |
-| Supabase · RLS · Auth · DB | 37 | `30_web_stack/SUPABASE_RULES.md` | L1 直接 | — |
+| Supabase · RLS · Auth · DB | 37 | `30_web_stack/SUPABASE_RULES.md` | [Supabase](RULE_ROUTING_PLAYBOOK.md#読む順序supabase--rls--auth-を触るとき) | `supabase-dev-entry` |
 | Next.js `app/` | 31 | `30_web_stack/NEXTJS_RULES.md` | [React](RULE_ROUTING_PLAYBOOK.md#読む順序react-client-コンポーネントを触るとき) | `nextjs-dev-entry`（`app/**` 優先） |
 | shadcn / `components/ui` | 32 | `30_web_stack/SHADCN_UI_RULES.md` | [shadcn](RULE_ROUTING_PLAYBOOK.md#読む順序shadcnui-を触るとき) | `shadcn-dev-entry` |
 | Tailwind | 33 | `30_web_stack/TAILWINDCSS_RULES.md` | [PLAYBOOK](RULE_ROUTING_PLAYBOOK.md) · L1 | — |
@@ -78,6 +78,7 @@
 | UI レイアウト・重なり · E2E spec | No **53** §12 · `using-playwright` | 手動スクショ反復 · 単体ロジックのみ Vitest で足りるのに E2E のみ · spec 前設計なし（→ §13 · `designing-playwright-tests-yk`） |
 | shadcn init / add | No **32** · `creating-shadcn-yk` | surge · `lib/flowchart/` · ui-kit 既存への `init -b radix` |
 | Vercel / Neon **デプロイ** | No **34** · `creating-vercel-yk` | surge ホスト · FB 初回のみで vercel スキル完結 · 未明示 `--prod` |
+| Supabase RLS · Auth · `@supabase/ssr` | No **37** · `creating-supabase-yk` | No **31** のみ · No **35** のみ · `creating-vercel-yk` で RLS 代替 |
 | ui-kit の Next / shadcn UI | SHADCN · TAILWIND · WORKSPACE | **GAS_REPORT_DESIGN**（静的 HTML chip は No 52） |
 | React / ui-kit / flowchart の a11y | No **24** · `A11Y_RULES` | No **52** GAS_REPORT のみ（React chrome には読まない） |
 | アクセシビリティ Phase · CI 段階 | No **23** · `A11Y_ROADMAP` | 本ファイルでチェックリストを再定義しない |
@@ -132,12 +133,28 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |--------|------|
 | `c:/yk-skill` | スキル · **`rule/`（本索引）** · `metadata/` |
 | `c:/yk-tool` | 成果物 · `publish/` · `workspace-ui-kit/` · `flowchart-web-mermaid` |
-| `c:/yk-memo` | 企画 · 講座 · `handoffs/`（Governance 段階 7 — 実装の正解ではない） |
+| `c:/yk-memo` | 企画 · 講座 · `handoffs/`（Governance 段階 7 — 実装の正解ではない）· **`.cursor/rules` は部分セット**（下記） |
 | `c:/yk-document` | Excel 原本（Git 外）· `exports/` |
 | `c:/yk-application` | 完成間近のアプリ（個別リポジトリ管理用） |
 | `c:/1.cursor/5.Python` | Python デスクトップ（別リポ · rev 積層保護） |
 
 **ui-kit / flowchart:** `workspace-ui-kit` 作業は **`yk-tool` をワークスペースに含める**（`workspace-dev-entry.mdc` は `yk-tool/workspace-ui-kit/.cursor/rules/` のみ）。
+
+**yk-memo の `.cursor/rules`（部分セット · yk-skill 全文同期しない）:** alwaysApply 4 本（`communication-yk` · `visual-design-yk` · `agent-shell-yk` · `playwright-agent-yk`）+ `reactflow-dev-entry` · `mermaid-dev-entry` · `quality-gates-yk`。Next/shadcn/Vercel/Supabase entry は **含めない**（企画 · handoffs 中心 WS）。
+
+---
+
+## 未登録ドメイン（L0 `.mdc` のみ）
+
+`rule/` 帯 · L1 · L2 スキル · ROUTER **未整備**。glob 一致時は **`.mdc` 本文が SSOT**（Governance 段階 2–3）。PROGRESSIVE 化は本線化判断後。
+
+| ドメイン | L0 entry（`yk-skill/.cursor/rules/`） | 備考 |
+|----------|--------------------------------------|------|
+| Tauri 2 | `tauri2-dev-yk.mdc` | `src-tauri/**` · `tauri.conf.json` · `capabilities/**` |
+| Rust | `rust-dev-yk.mdc` | `**/*.rs` · `Cargo.toml` |
+| Supabase（Desktop Auth） | — | Tauri 連携の索引は [`SUPABASE_RULES.md`](30_web_stack/SUPABASE_RULES.md) §10 |
+
+**Tauri × flowchart-studio:** 2026-06-27 — **当面統合しない**（[`tauri-practice/HANDOFF`](c:/yk-memo/handoffs/tauri-practice/HANDOFF.md) §6）。Web 正本は No 35 · 31 · 37。
 
 ---
 
@@ -189,7 +206,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 34 | 30_web_stack | `30_web_stack/VERCEL_RULES.md` | Vercel / Neon デプロイ | active |
 | 35 | 35_reactflow | `35_reactflow/REACTFLOW_RULES.md` | 表駆動フロー · `@xyflow/react` · `flowchart-studio` | active |
 | 36 | 30_web_stack | `30_web_stack/REACT_RULES.md` | React コンポーネント · Hooks · Client UI | active |
-| 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | draft |
+| 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | active |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
 | 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
@@ -207,7 +224,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 |----|----------|--------------|
 | 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · **企画ドキュメント 6 種** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
-| 30_web_stack | Next / React / shadcn / Tailwind / Vercel | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
+| 30_web_stack | Next / React / shadcn / Tailwind / Vercel / Supabase | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · `flowchart-studio` | Mermaid DSL（→ 45）· surge 図解 HTML |
 | 40_python | Python L1・SDD 要約 | KB 全文（スキル references） |
 | 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | L1 本文に手順全文は含めない（→ L2 `creating-mermaid-yk` + `ROUTER.md`） |

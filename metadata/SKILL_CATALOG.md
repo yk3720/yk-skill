@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-06-25（`optimizing-code-yk` M1/M2 本実装）  
+**最終更新:** 2026-06-27（`creating-supabase-yk` 追加）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **29** · nested **2** · sample **1**（計 **32** `SKILL.md`）
+**件数:** L1 **30** · nested **2** · sample **1**（計 **33** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -33,6 +33,7 @@
 | 7 | creating-reactflow-yk | `.claude/skills/creating-reactflow-yk/SKILL.md` | L1 | — | no | 表駆動 · `@xyflow/react` No 35 |
 | 8 | creating-shadcn-yk | `.claude/skills/creating-shadcn-yk/SKILL.md` | L1 | — | no | shadcn init/add |
 | 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
+| 8c | creating-supabase-yk | `.claude/skills/creating-supabase-yk/SKILL.md` | L1 | — | no | Supabase Auth · RLS · `SUPABASE_RULES` No 37 |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
 | 9b | designing-playwright-tests-yk | `.claude/skills/designing-playwright-tests-yk/SKILL.md` | L1 | — | no | E2E 設計 · `PLAYWRIGHT_RULES` §13 |
 | 9c | distilling-rules-yk | `.claude/skills/distilling-rules-yk/SKILL.md` | L1 | — | no | 実装気づき → L1 ルール追記 |
@@ -74,6 +75,7 @@
 | `organizing-documents-yk` ↔ `distilling-rules-yk` | 資料矛盾 vs 実装→L1 ルール蒸留 |
 | `reviewing-code-yk` ↔ `optimizing-code-yk` | 単一パス差分レビュー vs Web+公式照合+サブエージェント最適化チェック |
 | `optimizing-code-yk` → `researching-web` · `reviewing-with-subagents` · `creating-*-yk` | M1/M2 は子スキル委譲（オーケストレーション） |
+| `creating-vercel-yk` ↔ `creating-supabase-yk` | Vercel env / deploy vs Supabase Auth · RLS · migrations。Vercel env 画面は vercel 側 · RLS は supabase 側 |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 

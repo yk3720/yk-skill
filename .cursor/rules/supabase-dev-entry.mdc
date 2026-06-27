@@ -1,0 +1,26 @@
+---
+description: Supabase（lib/supabase · app/auth · RLS · migrations）は SUPABASE_RULES・creating-supabase-yk・ROUTER を入口とする
+globs:
+  - "**/lib/supabase/**/*.{ts,tsx}"
+  - "**/lib/auth/**/*.{ts,tsx}"
+  - "**/app/auth/**/*.{ts,tsx}"
+  - "**/database/migrations/**/*.sql"
+alwaysApply: false
+---
+
+# Supabase — エージェント入口
+
+**優先:** `app/**` の一般ルート（auth 以外）→ **`nextjs-dev-entry.mdc`**。`lib/flowchart/actions/**` の payload 保存 → **`reactflow-dev-entry.mdc`** + 本入口（RLS 概要）。
+
+`lib/supabase/**` · `lib/auth/**` · `app/auth/**` · DB マイグレーション（`.sql`）を触る · RLS / Auth / env を扱うとき:
+
+1. `c:/yk-skill/rule/30_web_stack/SUPABASE_RULES.md` — L1 SSOT（**§0 読む深さ · 誤ルーティング**）
+2. `c:/yk-skill/.claude/skills/creating-supabase-yk/SKILL.md` — 手順 · Shell 停止条件
+3. `.../creating-supabase-yk/references/ROUTER.md` — tier / tag
+4. **Ref Plan**（Write/StrReplace 前）→ ROUTER §7
+
+- OAuth UI（LoginForm 等）→ `creating-react-yk` · `REACT_RULES`（Client 境界）
+- Vercel env · Redeploy → **`vercel-dev-entry.mdc`** · `VERCEL_RULES` §6-1
+- 初回ダッシュボード操作 → L1 §5 + `flowchart-studio/docs/runbooks/SUPABASE_SETUP.md`
+- 機密 · `.env` 値 → `SECRETS_HYGIENE_RULES`
+- 完了報告: L1 §11 + **読んだ refs**

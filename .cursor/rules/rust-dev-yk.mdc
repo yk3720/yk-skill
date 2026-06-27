@@ -6,6 +6,8 @@ alwaysApply: false
 
 # Rust — 開発規約
 
+**INDEX:** [未登録ドメイン（L0 `.mdc` のみ）](c:/yk-skill/rule/RULE_INDEX.md#未登録ドメインl0-mdc-のみ) — Tauri 本体は `tauri2-dev-yk.mdc` を優先。
+
 **公式ドキュメント:** https://doc.rust-lang.org/book/ | https://doc.rust-lang.org/stable/std/
 
 ## Edition・バージョン
