@@ -17,7 +17,7 @@
 | 種別 | パターン | 正本 | 載せる内容 |
 |------|----------|------|------------|
 | **経緯索引** | `05_開発ガイドライン/decision-log.md` | 企画 | タイムライン · リンク · 1 行要約のみ（本文コピー禁止） |
-| **ADR** | `03_技術仕様/意思決定記録(ADR).md` または `ADR-NNN-*.md` | 企画 | Accepted 技術・プロダクト決定 |
+| **ADR** | `03_技術仕様/意思決定記録(ADR).md` または `ADR-NNN-*.md` | 企画 | Accepted 技術・プロダクト決定（**Draft** = grill 合意済 · 実装前 — 追随 MD は `PROJECT_DOCUMENT_RULES` §9.2） |
 | **grill-me** | `01_要求定義/grill-me_{YYYY-MM-DD}_{論題}.md` | 企画 | 対話 Q&A · 未決 · 優先順位（`相談_*` は同義 · 新規は `grill-me_` 推奨） |
 | **調査** | `01_要求定義/調査_{テーマ}.md` | 企画 | 調査結果 · 比較（決定前） |
 | **計画** | `01_要求定義/計画_{YYYY-MM-DD}_{論題}.md` | 企画 | 相談→実装の分解 · §4 候補 |
@@ -25,10 +25,12 @@
 
 **昇格ルール（MUST）**
 
-1. grill-me で **Accepted** → ADR + decision-log 1 行  
+1. grill-me で **Accepted** → ADR（**Draft 可** · 実装前）+ decision-log 1 行 · 追随 MD は **§9.2**（`PROJECT_DOCUMENT_RULES`）  
 2. grill-me で **未決** → grill-me §4 のみ（ADR に書かない）  
 3. セッション終了 → decision-log 1 行 · handoff §1 要約（ADR 全文コピー禁止）  
 4. **戦略 vs 戦術** — 方針合意（grill-me）と §4 実行タスクがズレても正常。decision-log で両方リンクする  
+5. ADR **Accepted** + 実装完了 → 機能設計 SSOT の二層注記を外し一層に統合（§9.2）  
+6. **UI 同一** 等の曖昧語 — grill / ADR で **骨格** と **差分許容**（例: 認証無効時メニュー）を分けて書く
 
 **報告用:** 最終報告は `00_theme/報告書_*`（将来）← decision-log から要約転記。詳細は ADR · grill-me · handoffs へ委譲。
 

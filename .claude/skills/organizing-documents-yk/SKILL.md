@@ -5,7 +5,7 @@ description: >
   M1a 監査「横断チェックして」「矛盾リストを作って」（Tier C · 修正しない）。
   M1b 適用「監査 ID を適用して」「承認した項目だけ直して」。
   M2 発火例「資料を最新化して」「古い記述を整理して」。横断は「四リポ横断で整合」等の明示時のみ。
-  handoff-session-work 終了 Phase B+ からも Tier P 整合を呼ぶ（持ち越し禁止 · PROJECT_DOCUMENT_RULES §9.1）。
+  handoff-session-work 終了 Phase B+ からも Tier P 整合を呼ぶ（持ち越し禁止 · PROJECT_DOCUMENT_RULES §9.1 · §9.2）。
   Do NOT use for handoffs 終了・アーカイブ（handoff-session-work）、L1 ルール追記（distilling-rules-yk）、
   コード修正（creating-*-yk / optimizing-code-yk）、commit/push のみ（committing-with-git-yk）。
 ---
@@ -101,7 +101,7 @@ description: >
 6. **報告** — 修正一覧 · WARN 一覧 · 触っていないファイル
 7. **Git** — commit しない。変更ファイルを列挙し、必要なら「コミットして」を提案
 
-**終了モード連携:** `handoff-session-work` Phase B+ から呼ばれたときは、上記 4〜6 を実施し **機械的矛盾は修正まで**行う（持ち越し禁止 · `PROJECT_DOCUMENT_RULES` §9.1）。**Tier P のみ**（横断は M1a）。
+**終了モード連携:** `handoff-session-work` Phase B+ から呼ばれたときは、上記 4〜6 を実施し **機械的矛盾は修正まで**行う（持ち越し禁止 · `PROJECT_DOCUMENT_RULES` §9.1 · §9.2）。**Tier P のみ**（横断は M1a）。
 
 **禁止:** Tier C をユーザー明示なしで勝手に実行 · Tier C で無承認適用 · 意味的矛盾の独断解決 · `git commit` / `git push` · **監査モードでの資料削除**
 
