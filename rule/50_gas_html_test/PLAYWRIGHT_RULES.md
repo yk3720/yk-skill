@@ -410,6 +410,7 @@ cd c:\yk-tool\playwright-test; npx playwright test
 | §12-6 | flowchart-studio レイアウト E2E 落とし穴 |
 | §12-7 | Server Action E2E スタブ |
 | §12-8 | flowchart-studio §E chrome 後の E2E 落とし穴 |
+| §12-9 | flowchart-studio ADR-018 第2弾後の E2E パターン（hidden input 注入 · モーダル閉じ · boundingBox null · authDisabled ガード） |
 
 **スキル:** `using-playwright` · **ROUTER:** [`using-playwright/references/ROUTER.md`](../../.claude/skills/using-playwright/references/ROUTER.md)
 

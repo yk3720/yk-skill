@@ -126,7 +126,7 @@ await expect(async () => {
 
 | 落とし穴 | 対策 |
 |----------|------|
-| `getByRole('button', { name: '再生成' })` が **strict mode**（表ヘッダー + canvas 内リンクの 2 件） | `#table header` にスコープ（`e2e/helpers/flowchart.ts` · `headerRegenerate`） |
+| `getByRole('button', { name: '再生成' })` が **strict mode**（表ヘッダー + canvas 内リンクの 2 件） | `#table` にスコープ（`e2e/helpers/flowchart.ts` · `headerRegenerate`）— workspace+desktop では Panel#table 内は `<header>` でなく `<div.shrink-0>` のため `#table header` では見つからない |
 | デスクトップ §E で見出し **「表」「プレビュー」** が `sr-only` または削除 | `#table` · `#canvas` の visible、または `.react-flow__node` で 3 ペインを検証 |
 | **N8** 初期は全ユニット折りたたみ → 動作ボタン・削除 icon が DOM にない | `getByTestId('toggle-all-units')` / `ensureUnitsExpanded` を **モジュール操作・削除の前**に実行（`e2e/nav-n8.spec.ts`） |
 | `EditorMoreMenu` 下端（**危険** · 例: フローリセット）が **viewport 外**で `.click()` 失敗 | `dispatchEvent('click')`（`e2e/flow-reset.spec.ts`）— fixed 配置メニューの既知パターン |
@@ -135,3 +135,19 @@ await expect(async () => {
 | メニュー文言の **スペース差**（`import.jsonを取込…` 等） | UI 正本は `EditorMoreMenu.tsx` · `ボタン一覧.md` — spec は **完全一致** |
 
 → 索引: [`REACTFLOW_UX_CHROME.md`](../../35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-2 · §5.6-2b · [`REACTFLOW_UX_WORKSPACE.md`](../../35_reactflow/references/REACTFLOW_UX_WORKSPACE.md) §5.7 · `e2e/nav-n8.spec.ts`
+
+---
+
+### 12-9. flowchart-studio — ADR-018 第2弾後の E2E 追従パターン（2026-06）
+
+サンプルメニュー削除 · CSV モーダル化 · `authDisabled` ガード強化後の典型落とし穴。
+
+| 落とし穴 | 対策 |
+|----------|------|
+| `setInputFiles` が `display:none`（`className="hidden"`）input でタイムアウト | `page.evaluate` + `DataTransfer` + `dispatchEvent('change', { bubbles: true })` で注入。`Object.defineProperty(input, 'files', { value: dt.files, configurable: true })` が必要（`loadCurrySampleViaFileInput` が正本） |
+| `page.evaluate` 内で input が見つからない | **production build** に `data-testid` が含まれているか確認。E2E は `npm run start`（ビルド済み）を使うため、app code 変更後は必ず `npm run build` が先 |
+| モーダルが `onApply` 直後に閉じ、パネル内 `setMessage()` が消える | モーダル内のステータスは assert せず、**親コンポーネントのステータスバー**（`"CSV を表に反映しました"` 等）を `toBeVisible()` で確認 |
+| `boundingBox()` が `null` — async remount 後に呼ぶとヒットしない | `loadModule → setLoadKey` によるキー変更でリマウントが起きる。`boundingBox()` 前に `await expect(locator).toBeVisible({ timeout: 10_000 })` で安定させる |
+| `authDisabled=true` 時に `!authDisabled` ガードで非表示になる UI | 「危険」セクション（フローリセット等）は `AUTH_DISABLED=1` E2E では DOM に出ない。`test.skip(true, "authDisabled=true 時は…非表示")` でスキップ |
+
+正本: `e2e/helpers/flowchart.ts` · `e2e/flow-reset.spec.ts` · `e2e/a0001-excel-import.spec.ts` · `FlowchartEditor.tsx#import-json-file`
