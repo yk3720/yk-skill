@@ -280,6 +280,45 @@ export const DEFAULT_INNER_LAYOUT = { canvas: 40, table: 60 };
 
 **パネル順序を変えるとき（swap）も同様。** デフォルト比率は変わらなくても、Panel の並びが変わるとユーザーの保存値（旧パネル ID 比率）が意図しない幅になりうる。判断基準: レイアウトの**意味が変わる変更**はキー bump する。
 
+### 5-Q. Group 外昇格（全幅固定ヘッダー）
+
+`react-resizable-panels` の `<Group>` 内に header を置くと、その Panel の幅にしか広がらない。**全ペインをまたぐ全幅固定ヘッダー**は `<Group>` の外・前に配置する。
+
+```tsx
+// NG — header が table Panel 幅に収まる
+<Group>
+  <Panel id="canvas">…</Panel>
+  <Panel id="table">
+    <header>…toolbar…</header>  {/* table 幅にしか広がらない */}
+    …
+  </Panel>
+</Group>
+
+// OK — header が Canvas/Table 両ペインをまたぐ全幅
+<div className="flex flex-col">
+  <header>…toolbar…</header>   {/* Group の外 → 全幅 */}
+  <Group className="flex-1">
+    <Panel id="canvas">…</Panel>
+    <Panel id="table">…</Panel>
+  </Group>
+</div>
+```
+
+Panel 内に残すのは Panel 固有コンテンツ（タブバー・スクロール領域）のみ。`tableTopSlot` · unsaved バナーも同様に Group 外に出す。
+
+### 5-R. Panel 内タブの実装パターン
+
+`fcMobileTabGroup / fcMobileTabActive / fcMobileTabIdle` は名称が "Mobile" だが、**デスクトップ Panel 内タブにも流用可**（同一クラスセット）。
+
+| 項目 | 実装 |
+|------|------|
+| 表示条件の導出 | `const showRightTabs = !!moduleId && !!designMemoContext;`（nullable を `!!` で AND） |
+| タブバー条件 | `{showRightTabs ? <div className={fcMobileTabGroup} role="tablist">…</div> : null}` |
+| コンテンツ切替 | `!showRightTabs \|\| rightTab === "table"` の単純分岐（else に設計メモ） |
+| state リセット | moduleId 切替の reset effect に `setRightTab("table")` を追加する |
+
+タブが不要な状態（モジュール未選択・`designMemoContext` なし）では `showRightTabs === false` となり、タブバーとコンテンツ分岐を両方スキップして従来の tablePaneBody をそのまま表示する。
+
 ---
 
 ### 5.5 UI 整理 — コードをきれいに保つ（優先度: 高）
