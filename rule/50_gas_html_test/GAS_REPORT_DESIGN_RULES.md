@@ -3,7 +3,7 @@
 
 **ファイルパス:** `c:/yk-skill/rule/50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` · **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md)
 
-**横断（線の太さ）:** [`../10_meta/VISUAL_DESIGN_RULES.md`](../10_meta/VISUAL_DESIGN_RULES.md) — 本書は chip・表・余白など**ドメイン固有**。枠・区切り線の太さは横断ルール §2 に従う。
+**横断（線の太さ）:** [`../25_design_ux/VISUAL_DESIGN_RULES.md`](../25_design_ux/VISUAL_DESIGN_RULES.md) — 本書は chip・表・余白など**ドメイン固有**。枠・区切り線の太さは横断ルール §2 に従う。
 
 ---
 

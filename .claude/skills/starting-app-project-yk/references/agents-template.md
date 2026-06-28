@@ -2,7 +2,7 @@
 
 **Write 先:** `{企画フォルダ}/05_開発ガイドライン/エージェント憲法.md`（`{...}` をプロジェクト値で置換）。**500 行未満。**
 
-新規プロジェクトではルート `AGENTS.md` は **作らない**（[PROJECT_DOCUMENT_RULES §4](c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md)）。
+新規プロジェクトではルート `AGENTS.md` は **作らない**（[PROJECT_DOCUMENT_RULES §4](c:/yk-skill/rule/15_project_mgmt/PROJECT_DOCUMENT_RULES.md)）。
 
 ---
 

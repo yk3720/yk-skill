@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-06-27（P16 · yk-memo 部分セット · 未登録ドメイン節）
+**最終更新:** 2026-06-28（P16 · 帯整理 15_project_mgmt / 25_design_ux）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -49,21 +49,21 @@
 | Tailwind | 33 | `30_web_stack/TAILWINDCSS_RULES.md` | [PLAYBOOK](RULE_ROUTING_PLAYBOOK.md) · L1 | — |
 | Vercel · deploy | 34 | `30_web_stack/VERCEL_RULES.md` | [Vercel](RULE_ROUTING_PLAYBOOK.md#読む順序vercel--デプロイを触るとき) | `vercel-dev-entry` |
 | workspace-ui-kit | 21 | `20_web_workspace/WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | `yk-tool/workspace-ui-kit` · `workspace-dev-entry` |
-| `/diagram-manager` | 22 | `DIAGRAM_MANAGER_WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | 同上 |
+| `/diagram-manager` | 22 | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | [ui-kit](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | 同上 |
 | GAS Web アプリ | 51 | `50_gas_html_test/GAS_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
 | Playwright E2E | 53 | `50_gas_html_test/PLAYWRIGHT_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | `playwright-agent-yk`（always）· `designing-playwright-tests-yk`（§13 設計）· `using-playwright`（実行） |
-| surge 図解 · GAS レポート HTML（chip） | 52 | `GAS_REPORT_DESIGN_RULES.md` | [ui-kit デザイン](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | — |
-| 大容量 HTML + PowerShell | 54 | `POWERSHELL_HTML_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
-| スキル MD 作成・更新 | 12 | `SKILL_AUTHORING_RULES.md` | — | — |
-| 新ドメイン rule / スキル | 11 | `PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
-| チャット応答（平易さ等） | 16 | `COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
-| 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `10_meta/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
-| 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `10_meta/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
-| 独立リポジトリ移行 · yk-application | 18 | `10_meta/YK_APPLICATION_RULES.md` | L1 直接 | — |
-| UI · 図の線の太さ・統一感 | 19 | `10_meta/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
-| UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `10_meta/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
-| アクセシビリティ · WCAG 2.2 | 24 | `10_meta/A11Y_RULES.md` | a11y 実装 · レビュー · チェックリスト | — |
-| アクセシビリティ · 導入計画 | 23 | `10_meta/A11Y_ROADMAP.md` | Phase 判断 · CI 段階 · 工数 | — |
+| surge 図解 · GAS レポート HTML（chip） | 52 | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` | [ui-kit デザイン](RULE_ROUTING_PLAYBOOK.md#読む順序workspace-ui-kit-を触るとき) | — |
+| 大容量 HTML + PowerShell | 54 | `50_gas_html_test/POWERSHELL_HTML_RULES.md` | [GAS / E2E](RULE_ROUTING_PLAYBOOK.md#読む順序gas--playwright--大容量-html) | — |
+| スキル MD 作成・更新 | 12 | `10_meta/SKILL_AUTHORING_RULES.md` | — | — |
+| 新ドメイン rule / スキル | 11 | `10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
+| チャット応答（平易さ等） | 16 | `10_meta/COMMUNICATION_RULES.md` | — | `communication-yk`（always） |
+| 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `15_project_mgmt/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
+| 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
+| 独立リポジトリ移行 · yk-application | 18 | `15_project_mgmt/YK_APPLICATION_RULES.md` | L1 直接 | — |
+| UI · 図の線の太さ・統一感 | 19 | `25_design_ux/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
+| UI/UX · 画面設計 · ヒューリスティック評価 | 20 | `25_design_ux/USABILITY_HEURISTICS_RULES.md` | L1 直接 · UI レビュー時 | — |
+| アクセシビリティ · WCAG 2.2 | 24 | `25_design_ux/A11Y_RULES.md` | a11y 実装 · レビュー · チェックリスト | — |
+| アクセシビリティ · 導入計画 | 23 | `25_design_ux/A11Y_ROADMAP.md` | Phase 判断 · CI 段階 · 工数 | — |
 | 講座・行動指針 · ルール抽出ループ（YK 補足） | 13 | `10_meta/AI_DRIVEN_RULES.md` | **通常 Read しない**（YK 補足: `distilling-rules-yk` 発火時） | — |
 
 ---
@@ -95,7 +95,7 @@
 | 項目 | 規約 |
 |------|------|
 | **入口** | `rule/RULE_INDEX.md`（索引）· `rule/RULE_ROUTING_PLAYBOOK.md`（読む順序）— ルート直下（移動しない） |
-| **帯フォルダ** | `10_meta/` · `20_web_workspace/` · `30_web_stack/` · **`35_reactflow/`** · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 35 → `35_reactflow` · No 45 → `45_mermaid`）。**例外:** `50_gas_html_test` は物理名レガシー（カタログ No は **51–54**）— 意味は [帯の意味](#帯の意味要約) |
+| **帯フォルダ** | `10_meta/` · **`15_project_mgmt/`** · `20_web_workspace/` · **`25_design_ux/`** · `30_web_stack/` · **`35_reactflow/`** · `40_python/` · **`45_mermaid/`** · `50_gas_html_test/` · `60_tooling/` — **並び・分類用**（10刻みで空きを残す。中間ドメインは **No と一致**させる例: No 35 → `35_reactflow` · No 45 → `45_mermaid`）。**例外:** `50_gas_html_test` は物理名レガシー（カタログ No は **51–54**）— 意味は [帯の意味](#帯の意味要約) |
 | **ファイル名** | `{TOPIC}_RULES.md`（番号はファイル名に付けない） |
 | **カタログ No** | 下表の **No 列**が論理順の SSOT. 帯番号と優先順位（Governance）は別 |
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
@@ -193,13 +193,13 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 14 | 10_meta | `10_meta/GIT_WORKFLOW_RULES.md` | **Git 操作**（commit / push / メッセージ / 禁止事項） | active |
 | 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・保管場所） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ・作業後3点サマリ） | active |
-| 17 | 10_meta | `10_meta/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
-| 18 | 10_meta | `10_meta/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
-| 19 | 10_meta | `10_meta/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
-| 20 | 10_meta | `10_meta/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
-| 23 | 10_meta | `10_meta/A11Y_ROADMAP.md` | **a11y 導入ロードマップ** — WCAG 2.2 AA 段階導入 · Phase 0–5 | active |
-| 24 | 10_meta | `10_meta/A11Y_RULES.md` | **a11y 横断 SSOT** — WCAG 2.2 AA チェックリスト · ツール · スコープ | active |
-| 25 | 10_meta | `10_meta/PROJECT_DOCUMENT_RULES.md` | **企画フォルダ 6 種** — 要求定義〜ユビキタス言語 · 吸収 · 移行 · 仕様↔コード | active |
+| 17 | 15_project_mgmt | `15_project_mgmt/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
+| 18 | 15_project_mgmt | `15_project_mgmt/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
+| 19 | 25_design_ux | `25_design_ux/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
+| 20 | 25_design_ux | `25_design_ux/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
+| 23 | 25_design_ux | `25_design_ux/A11Y_ROADMAP.md` | **a11y 導入ロードマップ** — WCAG 2.2 AA 段階導入 · Phase 0–5 | active |
+| 24 | 25_design_ux | `25_design_ux/A11Y_RULES.md` | **a11y 横断 SSOT** — WCAG 2.2 AA チェックリスト · ツール · スコープ | active |
+| 25 | 15_project_mgmt | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | **企画フォルダ 6 種** — 要求定義〜ユビキタス言語 · 吸収 · 移行 · 仕様↔コード | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |
@@ -225,8 +225,10 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 | 帯 | 含むもの | 含まないもの |
 |----|----------|--------------|
-| 10_meta | 横断設計·Git · Secrets · **ビジュアル共通** · **個人アプリプロジェクト** · **企画ドキュメント 6 種** · スキル執筆 · 講座原則 | ドメイン実装詳細 |
+| 10_meta | 横断設計·Git · Secrets · チャット応答 · スキル執筆 · 講座原則 | ドメイン実装詳細 |
+| 15_project_mgmt | **個人アプリプロジェクト** · **企画ドキュメント 6 種** · yk-application 管理 | 汎用 Git / Secrets |
 | 20_web_workspace | ui-kit 横断・図解管理等ドメイン | スタック個別 API |
+| 25_design_ux | **ビジュアル共通** · **UX ヒューリスティック** · **アクセシビリティ** | ドメイン個別パレット |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel / Supabase | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · `flowchart-studio` | Mermaid DSL（→ 45）· surge 図解 HTML |
 | 40_python | Python L1 · FastAPI L1（No 42）· SDD 要約 | KB 全文（スキル references） |
@@ -234,7 +236,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |
 
-**パス:** 上表の `帯/{NAME}_RULES.md` が SSOT. 旧 `rule/{NAME}_RULES.md` フラットパスは廃止（2026-05-23）。
+**パス:** 上表 of `帯/{NAME}_RULES.md` が SSOT. 旧 `rule/{NAME}_RULES.md` フラットパスは廃止（2026-05-23）。
 
 ---
 

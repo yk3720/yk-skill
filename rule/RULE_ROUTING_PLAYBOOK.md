@@ -4,7 +4,7 @@
 
 **いつ Read するか:** [RULE_INDEX — タスク別クイック入口](RULE_INDEX.md#タスク別クイック入口) で No と L1 を特定したあと、手順の詳細が必要なときだけ本ファイルを開く。**常時全読みしない**（`10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §3-4）。
 
-**最終更新:** 2026-06-27（P15 Supabase 節 · FastAPI 節追加）
+**最終更新:** 2026-06-28（P15 Supabase 節 · FastAPI 節追加 · 帯整理 15/25 追随）
 
 **誤ルーティング:** [RULE_INDEX — 誤ルーティング早見表](RULE_INDEX.md#誤ルーティング早見表)
 
@@ -194,7 +194,7 @@
 
 | 状況 | 読むルール |
 |------|------------|
-| workspace-ui-kit（Next / shadcn） | `SHADCN_UI` · `TAILWIND` · ドメイン rule |
+| workspace-ui-kit（Next / shadcn） | `SHADCN_UI` · `TAILWINDCSS_RULES` · ドメイン rule |
 | GAS 進捗レポート HTML・surge 図解 HTML（chip・8px グリッド） | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` |
 | 迷ったら | [RULE_INDEX](RULE_INDEX.md) No 00 → クイック入口 |
 
@@ -242,8 +242,8 @@
 
 ## 読む順序（個人アプリ新規 · 企画フォルダ · 再開）
 
-1. **`10_meta/APP_PROJECT_RULES.md`** — 三層モデル · 新規チェックリスト · AGENTS 必須項目
-2. **handoffs** — `c:/yk-memo/handoffs/{slug}/HANDOFF.md` → 最新セッション MD **§4 の 1 件**
+1. **`15_project_mgmt/APP_PROJECT_RULES.md`** — 三層モデル · 新規チェックリスト · AGENTS 必須項目
+2. **handoffs** — `c:/yk-memo/handoffs/{project}/HANDOFF.md` → 最新セッション MD **§4 の 1 件**
 3. **企画 `AGENTS.md`** — 境界 · SSOT マップ · やる/やらない
 4. **Product Spec** — 仕様疑問時のみ（README 読む順序 · データモデル · ADR）
 5. **スタック L1** — 実装開始後 [RULE_INDEX クイック入口](RULE_INDEX.md#タスク別クイック入口)（No 31–35 等）
@@ -257,7 +257,7 @@
 ## 読む順序（ビジュアル · 線の太さ統一）
 
 1. **常時** — L0 `visual-design-yk.mdc`（`alwaysApply`）の要約で足りることが多い
-2. **UI · 図の枠・ストロークを実装/変更するとき** — L1 [`10_meta/VISUAL_DESIGN_RULES.md`](10_meta/VISUAL_DESIGN_RULES.md) §2
+2. **UI · 図の枠・ストロークを実装/変更するとき** — L1 [`25_design_ux/VISUAL_DESIGN_RULES.md`](25_design_ux/VISUAL_DESIGN_RULES.md) §2
 3. **ドメイン拡張** — flowchart: REACTFLOW §5.6-3 · `flowColors.ts` / GAS・surge chip: `GAS_REPORT_DESIGN_RULES.md`（横断 §2 を参照）
 
 ---

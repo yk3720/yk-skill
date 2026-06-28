@@ -5,7 +5,7 @@
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **19**  
 **L0 入口:** `c:/yk-skill/.cursor/rules/visual-design-yk.mdc`（`alwaysApply`）· 同期: `c:/yk-memo/.cursor/rules/`
 
-**関連:** [`COMMUNICATION_RULES.md`](COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/references/REACTFLOW_UX_CHROME.md`](../35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-3（flowchart 定数）
+**関連:** [`COMMUNICATION_RULES.md`](../10_meta/COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/references/REACTFLOW_UX_CHROME.md`](../35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-3（flowchart 定数）
 
 **最終更新:** 2026-06-25
 

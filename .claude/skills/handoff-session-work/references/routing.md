@@ -279,7 +279,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 **MUST NOT:** 独立リポ `docs/` と yk-memo 企画 6 種の **二重正本**を維持する（移行後は yk-memo 側は stub のみ）。  
 **MUST NOT:** 企画フォルダの `再開メモ.md` 等をセッション SSOT として更新する。
 
-横断 rule → `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` · `PROJECT_DOCUMENT_RULES.md` §3.1
+横断 rule → `c:/yk-skill/rule/15_project_mgmt/APP_PROJECT_RULES.md` · `PROJECT_DOCUMENT_RULES.md` §3.1
 
 ---
 

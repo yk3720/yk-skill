@@ -44,7 +44,7 @@ description: >
 | 読む範囲 Tier | [references/scope-tiers.md](references/scope-tiers.md) |
 | M1 手順・判定表 · 監査出力 | [references/reconcile.md](references/reconcile.md) |
 | M2 手順（v1 骨格） | [references/refresh.md](references/refresh.md) |
-| ドキュメント種別・正本 | `c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md` |
+| ドキュメント種別・正本 | `c:/yk-skill/rule/15_project_mgmt/PROJECT_DOCUMENT_RULES.md` |
 | handoffs フォルダ整合 | `handoff-session-work`（確認 Tier-1）— 本スキルは置換しない |
 | M2 の Web 調査 | `researching-web`（M2 実装時に委譲） |
 | Git commit | **しない** — `committing-with-git-yk` はユーザー明示時のみ |

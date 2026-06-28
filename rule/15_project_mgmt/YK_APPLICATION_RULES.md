@@ -3,7 +3,7 @@
 
 **用途:** `yk-application` フォルダで開発されるアプリの **ライフサイクル · 独立リポジトリ管理への移行基準** の SSOT。  
 **ステータス:** active（L1）  
-**関連:** `10_meta/APP_PROJECT_RULES.md`（アプリ開発一般）· `RULE_INDEX.md` No 18  
+**関連:** `15_project_mgmt/APP_PROJECT_RULES.md`（アプリ開発一般）· `RULE_INDEX.md` No 18  
 
 **最終更新:** 2026-06-23
 

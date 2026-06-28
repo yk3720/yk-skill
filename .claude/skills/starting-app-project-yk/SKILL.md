@@ -25,8 +25,8 @@ description: >
 
 | 順 | SSOT |
 |----|------|
-| 1 | `c:/yk-skill/rule/10_meta/APP_PROJECT_RULES.md` |
-| 2 | `c:/yk-skill/rule/10_meta/PROJECT_DOCUMENT_RULES.md` §7 · §11 · §12 |
+| 1 | `c:/yk-skill/rule/15_project_mgmt/APP_PROJECT_RULES.md` |
+| 2 | `c:/yk-skill/rule/15_project_mgmt/PROJECT_DOCUMENT_RULES.md` §7 · §11 · §12 |
 | 3 | 本スキル [references/checklist.md](references/checklist.md) |
 | 4 | 憲法作成時 → [references/agents-template.md](references/agents-template.md) |
 | 5 | handoffs 初回/整理 → スキル `handoff-session-work` · `references/routing.md` |

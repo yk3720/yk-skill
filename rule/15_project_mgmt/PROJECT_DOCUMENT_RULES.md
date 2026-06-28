@@ -3,7 +3,7 @@
 
 **用途:** 個人アプリの **企画フォルダ内ドキュメント種別 · フォルダ構成 · 正本の置き場** の SSOT。  
 **ステータス:** active（L1 · 2026-06-23 グリル確定）  
-**関連:** `10_meta/APP_PROJECT_RULES.md`（ライフサイクル · handoffs · 再開）· `RULE_INDEX.md` No 25  
+**関連:** `15_project_mgmt/APP_PROJECT_RULES.md`（ライフサイクル · handoffs · 再開）· `RULE_INDEX.md` No 25  
 **実例:** [flowchart-studio docs](c:/yk-application/flowchart-studio/docs/) — 2026-06-23 **spec-in-repo** 移行完了（`specs/` → `docs/`）
 
 **最終更新:** 2026-06-27（§3.1 `docs/` 統一 · `specs/` 廃止）

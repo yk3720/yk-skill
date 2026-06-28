@@ -10,7 +10,7 @@
 | 領域 | SSOT |
 |------|------|
 | 線の太さ · 枠 · 視覚的統一 | [`VISUAL_DESIGN_RULES.md`](VISUAL_DESIGN_RULES.md) No **19** |
-| チャットの平易な言葉 | [`COMMUNICATION_RULES.md`](COMMUNICATION_RULES.md) No **16** |
+| チャットの平易な言葉 | [`COMMUNICATION_RULES.md`](../10_meta/COMMUNICATION_RULES.md) No **16** |
 | flowchart 実用版 UX | [`REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md) §5.6 · `flowchart-practical-ux-yk.mdc` |
 | コードレビュー手順 | `reviewing-code-yk` · `reviewing-with-subagents` |
 
@@ -187,4 +187,4 @@ UI を **Write / 大きく変える前** または **UI レビュー** で、次
 | GAS / surge 図解 | `GAS_REPORT_DESIGN_RULES`（読者・情報設計） |
 | 汎用 Next / shadcn | `SHADCN_UI_RULES` · No **19** |
 
-新規アプリは [`APP_PROJECT_RULES.md`](APP_PROJECT_RULES.md) の企画フォルダに、画面ごとの UX メモを置いてよい。10 原則の全文は **本ファイルのみ**に置き、複製しない。
+新規アプリは [`../15_project_mgmt/APP_PROJECT_RULES.md`](../15_project_mgmt/APP_PROJECT_RULES.md) の企画フォルダに、画面ごとの UX メモを置いてよい。10 原則の全文は **本ファイルのみ**に置き、複製しない。

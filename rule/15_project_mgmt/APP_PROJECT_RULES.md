@@ -3,7 +3,7 @@
 
 **用途:** 個人開発 × AI 支援で **新規アプリを始める · 企画フォルダを整える · 再開する** ときの横断 SSOT。  
 **ステータス:** active（L1 · スキル `starting-app-project-yk` v1 — 実例 1 件）  
-**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `10_meta/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
+**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
 **最終更新:** 2026-06-26（§2 docs/ 統合 · 検証駆動例外 footnote）
@@ -124,7 +124,7 @@ AGENTS.md（憲法）→ コード
 
 ## 6. 企画フォルダ推奨構成（個人 · 6 種体系）
 
-**SSOT:** フォルダ名 · 種別定義 · 吸収ルール · 移行手順は **`10_meta/PROJECT_DOCUMENT_RULES.md`（No 25）** を Read。本節はライフサイクル上の要約のみ。
+**SSOT:** フォルダ名 · 種別定義 · 吸収ルール · 移行手順は **`15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（No 25）** を Read。本節はライフサイクル上の要約のみ。
 
 **標準（2026-06-23〜）:** 6 種（`01_要求定義/` 〜 `06_ユビキタス言語/`）+ 別枠（`00_テーマ/` · `99_アーカイブ/` · handoffs）。憲法は `05_開発ガイドライン/エージェント憲法.md`。新規は最小 3 種（`01` · `04` · `05/エージェント憲法`）。命名 · 追加トリガー → `PROJECT_DOCUMENT_RULES` §11 · §12。
 
@@ -184,8 +184,8 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 
 ## 9. 実装セッションの読む順序
 
-1. **`10_meta/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時
-2. **`10_meta/PROJECT_DOCUMENT_RULES.md`** — 企画フォルダ構成 · 6 種 · 移行時
+1. **`15_project_mgmt/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時
+2. **`15_project_mgmt/PROJECT_DOCUMENT_RULES.md`** — 企画フォルダ構成 · 6 種 · 移行時
 3. **handoffs** — 毎セッション §4
 4. **エージェント憲法**（`05_開発ガイドライン/` または移行中はルート `AGENTS.md`）— 境界
 5. **スタック L1** — `RULE_INDEX` クイック入口（触るドメインのみ）

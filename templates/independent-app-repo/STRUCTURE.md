@@ -15,7 +15,7 @@
 | **セッション** | `yk-memo/handoffs/{slug}/` | §4 = 次の 1 件 |
 | **講座・提出**（任意） | `yk-memo/.../00_テーマ/` | テーマ文案のみ |
 
-詳細: [`APP_PROJECT_RULES.md`](../rule/10_meta/APP_PROJECT_RULES.md)
+詳細: [`APP_PROJECT_RULES.md`](../rule/15_project_mgmt/APP_PROJECT_RULES.md)
 
 ---
 

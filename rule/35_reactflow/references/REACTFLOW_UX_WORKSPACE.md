@@ -10,7 +10,7 @@
 
 **対象:** `flowchart-studio` のナビ階層 · モジュール読込 · 3 ペイン · スキーマ移行 · クライアントバンドル。
 
-**横断 UX チェックリスト:** [`USABILITY_HEURISTICS_RULES.md`](../../10_meta/USABILITY_HEURISTICS_RULES.md) No **20**  
+**横断 UX チェックリスト:** [`USABILITY_HEURISTICS_RULES.md`](../../25_design_ux/USABILITY_HEURISTICS_RULES.md) No **20**  
 **エージェント向けチェックリスト:** `flowchart-studio/.cursor/rules/flowchart-practical-ux-yk.mdc`
 
 ### 5.6-1 ナビ階層 · 永続化キー
