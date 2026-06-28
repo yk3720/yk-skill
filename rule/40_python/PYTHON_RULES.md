@@ -11,7 +11,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-05-23  
+**最終更新:** 2026-06-28  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -203,3 +203,41 @@ value = raw_value or derive_from_fallback(idx)
 if not value:
     continue   # 本当に空の末尾余白行のみここに到達
 ```
+
+---
+
+## 13. YK パターン補足（PyInstaller · GUI exe）
+
+`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify`。
+
+### relative import を `__main__.py` に書かない（凍結 exe で ImportError）
+
+PyInstaller の `--windowed` onefile では、Analysis 入口を `package/__main__.py` にすると **`from .module import …` が「no known parent package」で落ちる**。
+
+- **対策:** ロジックは `runner.py` 等に置き **absolute import のみ**（`from pkg.runner import main`）。PyInstaller 入口は `packaging/*_entry.py`（`excel_converter_gui.__main__` を import しない）。
+- **アンチパターン:** `hiddenimports` だけ増やして `__main__.py` の relative import を残す。
+
+### ビルド前に実行中 exe を止める
+
+Windows では dist の exe が起動中だと PyInstaller が `PermissionError: WinError 5` で上書き失敗する（GUI 起動確認 · 作者の手元 exe · エージェントの `Start-Process` テスト）。
+
+- **対策:** 再ビルド前に `taskkill /IM Foo.exe /F` 相当。リポでは `python/scripts/build_and_verify_converter.py` が自動実行。
+- **アンチパターン:** ビルド失敗を「PyInstaller の不具合」と決めつける。
+
+### 凍結 exe の検証は GUI 目視だけにしない
+
+`--windowed` exe は `--convert` 等の **ヘッドレス CLI 分岐**を同梱し、smoke で module CLI + 凍結 exe の両方を通す。stdout は cp932 環境で Unicode 記号（中黒等）を避ける。
+
+### 命名は 3 層（作者向け / ファイル名 / 技術キー）
+
+- **GUI · VERSIONINFO:** 日本語可（例: `Flowchart Studio — Excel 変換`）
+- **exe ファイル名 · Release 資産:** **ASCII**（PATH · SmartScreen · npm 脚本）
+- **Python パッケージ · spec · Git タグ:** kebab/snake（`excel_converter_gui` · `excel-converter-v0.1.0`）
+
+---
+
+## 14. 変更履歴（L1）
+
+| 日付 | 内容 |
+|------|------|
+| 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
