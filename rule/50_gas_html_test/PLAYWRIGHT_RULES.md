@@ -3,7 +3,7 @@
 
 **ステータス:** active（横断 always · `playwright-agent-yk.mdc` · L2 `designing-playwright-tests-yk` · `using-playwright` · ROUTER: `using-playwright/references/ROUTER.md`）
 
-**最終更新:** 2026-06-27（P14c · §12-13 を `references/` へ分割）  
+**最終更新:** 2026-06-28（§12-10 本番 auth UI E2E · AUTH_E2E_STUB）  
 **配置:** `c:\yk-tool\playwright-test\`（@playwright/test v1.59.1 / TypeScript / Chromium / Windows）— [RULE_INDEX](../RULE_INDEX.md) リポジトリマップ参照
 
 ---
@@ -411,6 +411,7 @@ cd c:\yk-tool\playwright-test; npx playwright test
 | §12-7 | Server Action E2E スタブ |
 | §12-8 | flowchart-studio §E chrome 後の E2E 落とし穴 |
 | §12-9 | flowchart-studio ADR-018 第2弾後の E2E パターン（hidden input 注入 · モーダル閉じ · boundingBox null · authDisabled ガード） |
+| §12-10 | flowchart-studio 本番 auth UI E2E（`AUTH_E2E_STUB` · `test:e2e:import-auth` · import-bundle-auth spec 分離） |
 
 **スキル:** `using-playwright` · **ROUTER:** [`using-playwright/references/ROUTER.md`](../../.claude/skills/using-playwright/references/ROUTER.md)
 

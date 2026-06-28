@@ -79,7 +79,7 @@ await expect(async () => {
 | リポジトリ | テスト置き場 | 起動例 |
 |------------|--------------|--------|
 | `c:/yk-tool/playwright-test/` | `tests/*.spec.ts` | `cd ...; npx playwright test` |
-| `flowchart-studio` | `e2e/*.spec.ts` | `npm run test:e2e` · ラベルのみ `npm run test:e2e:labels` · E2E は **:3001** + `AUTH_DISABLED=1`（日常 dev :3000 と別）· [`docs/LOCAL_DEV.md`](c:/yk-application/flowchart-studio/docs/LOCAL_DEV.md) |
+| `flowchart-studio` | `e2e/*.spec.ts` | `npm run test:e2e`（デモ · **:3001** · `AUTH_DISABLED=1`）· **`npm run test:e2e:import-auth`**（本番 auth UI · §12-10）· ラベルのみ `npm run test:e2e:labels` · [`docs/LOCAL_DEV.md`](c:/yk-application/flowchart-studio/docs/LOCAL_DEV.md) |
 | その他 Next アプリ | `e2e/*.spec.ts` | 各 `docs/LOCAL_DEV.md` |
 
 **エージェント:** Shell は [`AGENT_SHELL_RULES.md`](../../60_tooling/AGENT_SHELL_RULES.md) §3-2（test / E2E / 確認して の明示、**または** UI 修正で spec を追加した同一ターン）。Cursor からは `required_permissions: ["all"]`。
@@ -117,6 +117,7 @@ await expect(async () => {
 | スタブは **Playwright `webServer.env`（または CI job env）のみ**で有効化 | 通常 dev / 本番バンドルに含めない |
 | 実 DB 取込の検証は **Runbook 手動**（E2E は UI 配線まで） | CI コスト · 認証分離 |
 | **削除系 E2E** は action 成功だけでなく **UI 反映**まで assert | 例: 動作削除 — 成功バナー **+** 左ナビから当該動作が消える（`e2e/module-delete.spec.ts` · [`REACTFLOW_UX_WORKSPACE.md`](../../35_reactflow/references/REACTFLOW_UX_WORKSPACE.md) §5.6-1c） |
+| **本番 auth UI**（装置取込 · 設計メモタブ等） | **`AUTH_E2E_STUB`** — デモ E2E とは **別 npm 脚本**（→ §12-10） |
 
 正本: `importEquipmentBundle.ts` · `deleteModule.ts` · `e2eStub.ts` · `playwright.config.ts` · [`SUPABASE_AUTH_SSR.md`](../../30_web_stack/references/SUPABASE_AUTH_SSR.md) §8-2
 
@@ -151,3 +152,25 @@ await expect(async () => {
 | `authDisabled=true` 時に `!authDisabled` ガードで非表示になる UI | 「危険」セクション（フローリセット等）は `AUTH_DISABLED=1` E2E では DOM に出ない。`test.skip(true, "authDisabled=true 時は…非表示")` でスキップ |
 
 正本: `e2e/helpers/flowchart.ts` · `e2e/flow-reset.spec.ts` · `e2e/a0001-excel-import.spec.ts` · `FlowchartEditor.tsx#import-json-file`
+
+---
+
+### 12-10. flowchart-studio — 本番 auth UI E2E（AUTH_E2E_STUB · 2026-06）
+
+`AUTH_DISABLED=1` のデモ E2E では装置取込 · 設計メモタブ等が **非表示**（ADR-018）。本番 auth UI だけを検証する **別系統**を用意する。
+
+| MUST | 実装 |
+|------|------|
+| **`AUTH_E2E_STUB=1` + `AUTH_DISABLED=0`** | `getAuthState()` → `kind: allowed`（Supabase 不要 · `isPlaywrightAuthStubEnabled` · Vercel 本番では無効） |
+| **`IMPORT_E2E_STUB=1` とセット** | `importEquipmentBundle` が RPC をスキップ — **UI 配線**（ファイル選択 → プレビュー → 取込）まで |
+| **spec 分離** | `e2e/import-bundle-auth.spec.ts` — 通常 `npm run test:e2e` では `playwright.config` の **`testIgnore`** で除外 |
+| **実行** | `npm run test:e2e:import-auth` · CI は **別ステップ** · config の `isAuthImportRun()` が webServer env を切替 |
+| **デモ spec との分担** | `import-bundle.spec.ts` — デモで取込メニュー**非表示** · auth spec — 取込**表示〜成功** · 右タブ表示 |
+
+| 落とし穴 | 対策 |
+|----------|------|
+| 全 spec を `AUTH_DISABLED=0` で回す | **不可** — デモ専用 spec（`right-tabs` 等）が壊れる。auth 系は **ファイル分離 + 別 npm 脚本** |
+| `import-bundle.spec.ts` の `test.skip` を外すだけ | webServer が `AUTH_DISABLED=1` のままでは import input が DOM にない — **auth 専用 spec + env 切替**が正 |
+| Supabase なしで `allowed` を試す | **`AUTH_E2E_STUB`** を使う。本番 URL への E2E 直叩きは別途 storageState / 実ログイン |
+
+正本: `backend/src/lib/supabase/e2eStub.ts` · `backend/src/lib/auth/session.ts` · `playwright.config.ts` · `e2e/import-bundle-auth.spec.ts` · [`LOCAL_DEV.md`](c:/yk-application/flowchart-studio/docs/LOCAL_DEV.md)

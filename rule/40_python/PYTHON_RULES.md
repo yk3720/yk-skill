@@ -208,7 +208,7 @@ if not value:
 
 ## 13. YK パターン補足（PyInstaller · GUI exe）
 
-`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify`。
+`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify` · **`npm run excel:converter:release`**（版 bump 済み commit 上で verify → タグ → GitHub Release）。
 
 ### relative import を `__main__.py` に書かない（凍結 exe で ImportError）
 
@@ -232,7 +232,8 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 
 - **GUI · VERSIONINFO:** 日本語可（例: `Flowchart Studio — Excel 変換`）
 - **exe ファイル名 · Release 資産:** **ASCII**（PATH · SmartScreen · npm 脚本）
-- **Python パッケージ · spec · Git タグ:** kebab/snake（`excel_converter_gui` · `excel-converter-v0.1.0`）
+- **Python パッケージ · spec · Git タグ:** kebab/snake（`excel_converter_gui` · `excel-converter-v0.1.1`）
+- **Release 自動化:** `python/scripts/release_converter.py` — `pyproject.toml` 版を読み `excel-converter-v{semver}` タグ + 版付き exe 添付（exe 本体は Git に commit しない）
 
 ### v0.3 フロー表 ↔ モジュールは ListObject 名を使わない
 
