@@ -234,10 +234,21 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 - **exe ファイル名 · Release 資産:** **ASCII**（PATH · SmartScreen · npm 脚本）
 - **Python パッケージ · spec · Git タグ:** kebab/snake（`excel_converter_gui` · `excel-converter-v0.1.0`）
 
+### v0.3 フロー表 ↔ モジュールは ListObject 名を使わない
+
+作者が Excel テーブルをコピペすると **ListObject 名**（例: `動作00018`）は MID と無関係になり、テーブル名から MID を推測すると **別モジュールにフローが紐付く**。
+
+- **SSOT:** `構成` シート（UinID + MID + モジュール名）— Product Spec: `flowchart-studio/docs/03_技術仕様/Excel入力フォーマット_v0.3.md` §6.4
+- **物理表のキー:** 各 Excel テーブル **直上 2 行**（行1: UinID · ユニット / 行2: MID · モジュール）— テンプレは `FlowTableMeta` + `_add_flow_table`（`workbook_builder.py`）が自動挿入
+- **正規化:** `tables._read_table_meta_rows` → `kosei.module_label_for_mid`。**ListObject 名は照合に使わない**
+- **互換:** 見出し 2 行が無い v0.2 / 旧 U0 手書きのみ `resolve_table_module_label`（テーブル名フォールバック）
+- **アンチパターン:** `動作(\d+)` を MID として `% 100` 照合（`動作00018` → MID 18 誤マップ）
+
 ---
 
 ## 14. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
 | 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
