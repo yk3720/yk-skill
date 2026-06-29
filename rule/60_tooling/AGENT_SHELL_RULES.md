@@ -3,7 +3,7 @@
 **目的:** Cursor Agent が **Shell（ターミナル）** を呼ぶたびに出る **RUN 承認**を、安全性を保ちつつ減らす。  
 **関連:** `60_tooling/CURSOR_RULES.md`（Windows 実務）· `10_meta/GIT_WORKFLOW_RULES.md` · スキル `committing-with-git-yk` · `handoff-session-work`
 
-**最終更新:** 2026-05-23
+**最終更新:** 2026-06-29
 
 ---
 
@@ -110,6 +110,20 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 
 **非推奨:** サンドボックスで失敗してから `all` で同じコマンドを再実行（RUN が 2 倍になりやすい）。詳細は `committing-with-git-yk/references/commit-shell.md`。
 
+### 3-5. 破壊的ファイル操作 · UTF-8 一括書き換え（禁止）
+
+**背景:** PowerShell の `ReadAllText` / `WriteAllText`（エンコーディング未指定）や、既存 Git リポジトリの **移動・削除** で、作業ツリーが空化・文字化けした事例がある（2026-06）。
+
+| 禁止（ユーザー明示まで） | 代替 |
+|--------------------------|------|
+| `Remove-Item` · `rm -rf` · `rmdir /s` · `del /s` on 既存プロジェクト | 削除が必要ならユーザーに確認 → 対象パスを限定 |
+| `Move-Item` · `robocopy /MOVE` で **既存アプリ**（`.git` あり）を移動 | 新パスは `mkdir` + `git clone` · 旧パスはユーザーが手動整理 |
+| 親スイートフォルダ（`fa-suite` 等）の新設 + 既存アプリ取り込み | `15_project_mgmt/YK_APPLICATION_RULES.md` §1-1（フラット構成） |
+| `Get-ChildItem -Recurse` + `ReadAllText` / `WriteAllText` による横断置換 | **Grep** → **StrReplace / Write**（1 ファイルずつ） |
+| 文字化けへの **Shift-JIS ↔ UTF-8 変換の繰り返し** | 下記 §6「日本語 MD が文字化け」 |
+
+UTF-8 で書く必要がある Shell 処理は `50_gas_html_test/POWERSHELL_HTML_RULES.md` ルール1（`UTF8Encoding($false)` 明示）に従う。
+
 ---
 
 ## 4. タスク別例外（優先: 発火スキル > 本ファイル）
@@ -147,6 +161,8 @@ yk-memo だけコミット＆プッシュ。git は Bash 1 本（add+commit+push
 | 1 コマンドで RUN が 2 回 | サンドボックス失敗 → Run。§3-4どおり **初回 `all`** |
 | 引き継ぎで Run が 6 回以上 | Post-C 2 回 push · Phase B の status · PowerShell HEREDOC 失敗 — [git-save.md §RUN 予算](../../.claude/skills/handoff-session-work/references/git-save.md) |
 | 確認なのに `git status` だらけ | 依頼文に **D-1** の文言を付ける |
+| 日本語 `.md` が文字化け（`å個` 等） | **エンコーディング変換しない**。`git status` → 未コミットなら **`git restore <path>`** で HEAD 復元。正本も壊れているときだけ履歴調査 |
+| フォルダが空 · `.git` だけ残る | **移動・削除を再実行しない**。ユーザーに報告 → `git clone` で復旧（`15_project_mgmt/YK_APPLICATION_RULES.md` §5-4） |
 
 ---
 
