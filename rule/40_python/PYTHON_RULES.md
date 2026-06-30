@@ -204,6 +204,38 @@ if not value:
     continue   # 本当に空の末尾余白行のみここに到達
 ```
 
+### Excel テンプレートのプレースホルダー行: sentinel 終端で判定する
+
+Excel テンプレートには「まだ未入力」を示すプレースホルダー行が混在することがある（例: `M001_` — モジュール名 + 末尾アンダースコア）。`is None` チェックだけでは抜けるため、フォールバック後にセル値の末尾文字も判定してスキップする。
+
+```python
+def _is_placeholder(comment: str | None) -> bool:
+    """None・空・末尾アンダースコア（テンプレ未入力）はプレースホルダーとみなす"""
+    if not comment:
+        return True
+    return comment.strip().endswith("_")
+```
+
+- **アンチパターン:** `if comment is None: continue` のみ → 部分入力行（`M001_`）が有効行として通過する
+- sentinel 文字はドメインにより異なる（`-`・`*` 等）。定数化して `constants.py` に置くとメンテしやすい
+
+### 外部ツール向け CSV/TSV 出力は文字コードを明示する
+
+Windows FA ツール（キーエンス KV-STUDIO 等）や業務アプリへのテキスト出力は UTF-8 ではなく Shift-JIS（`cp932`）を要求するケースがある。半角カタカナ（`ﾏｶﾞｼﾞﾝ` 等）は UTF-8 コピペで特に文字化けする。
+
+```python
+# 外部ツール向け（Shift-JIS）
+with open(path, "w", encoding="shift_jis", errors="replace") as f:
+    f.write(f"{address}\t{comment}\n")
+
+# Web アプリ・内部データ向け（UTF-8）
+with open(path, "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+```
+
+- `errors="replace"` で変換不能文字を `?` 置換し、サイレントクラッシュを防ぐ
+- エンコード変換は出力層（`export_*.py`）のみに閉じ、読み込み・変換ロジックは UTF-8 で統一する
+
 ---
 
 ## 13. YK パターン補足（PyInstaller · GUI exe）
@@ -253,3 +285,4 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 |------|------|
 | 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
 | 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
+| 2026-07-01 | §12 プレースホルダー行 sentinel 終端判定 · 外部ツール向け Shift-JIS 出力パターン追記（comment-studio） |

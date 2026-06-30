@@ -9,7 +9,7 @@
 
 **横断:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC · `"use client"` — **本ファイルでは再掲しない**） · [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)（表駆動 · `@xyflow/react`） · [`20_web_workspace/WORKSPACE_RULES.md`](../20_web_workspace/WORKSPACE_RULES.md) §3（`lib/` 純関数）
 
-**最終更新:** 2026-06-26（§3-1 に TDZ バグ · キーボードショートカット input ガード · skipXxxCheck パターン追記）  
+**最終更新:** 2026-07-01（§3-1 に 連鎖セレクト useReducer パターン追記）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 36
 
 **L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-studio` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
@@ -213,6 +213,28 @@ const handleSelectDevice = useCallback(
 // エフェクト側（自動切替）
 handleSelectDevice(imported.id, { skipUnsavedCheck: true });
 ```
+
+#### 連鎖セレクト（cascading select）は useReducer で一括管理する
+
+「モジュール → ユニット → ポジション → 動作」のような多段フォームで、上位フィールドを変更したとき下位 state が古い値のまま残るバグが出やすい。`useEffect` の連鎖ではなく `useReducer` で一括アクション処理する。
+
+```typescript
+// NG: useEffect 連鎖（上位変更で下位がリセットされないことがある）
+useEffect(() => { setUnit(""); }, [module]);
+useEffect(() => { setPosition(""); }, [unit]);
+
+// OK: useReducer でモジュール変更 → 下位を一括初期化
+type Action = { type: "SET_MODULE"; module: string } | { type: "SET_UNIT"; unit: string } | ...;
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "SET_MODULE":
+      return { ...state, module: action.module, unit: "", position: "", action_: "" };
+    ...
+  }
+}
+```
+
+派生テキスト（命名規則で生成されるプレビュー文字列等）も同じ state から計算し、`useEffect` で sync しない。
 
 #### 表編集と React Flow の再レンダー分離
 
