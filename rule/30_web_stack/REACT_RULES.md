@@ -236,6 +236,18 @@ function reducer(state: State, action: Action): State {
 
 派生テキスト（命名規則で生成されるプレビュー文字列等）も同じ state から計算し、`useEffect` で sync しない。
 
+#### クリッカブル行の中に子ボタンを置くときの stopPropagation
+
+`TableRow` など行全体を `onClick` で選択可能にした場合、行内の削除ボタン等をクリックすると行選択と削除が同時発火する。子ボタンの `onClick` には必ず `e.stopPropagation()` を付ける。
+
+```tsx
+// NG: 削除と行選択が同時発火
+<button onClick={() => deleteRow(i)}>削除</button>
+
+// OK: 行への伝播を止める
+<button onClick={(e) => { e.stopPropagation(); deleteRow(i); }}>削除</button>
+```
+
 #### 表編集と React Flow の再レンダー分離
 
 表の 1 セル更新で React Flow まで再描画しない。
