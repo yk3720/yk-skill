@@ -110,6 +110,20 @@
 
 **RSC の一般論・データ取得境界:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5 を併読（本節で再掲しない）。
 
+### 10-1. 非標準パス（`frontend/src/components/`）での shadcn 配置
+
+`app/` と `components/` が分離した構成（flowchart-studio / comment-studio 型）では、`components.json` の `aliases` と `tsconfig` の `paths` を **必ず整合** させる。
+
+```jsonc
+// components.json
+"aliases": { "components": "@/components", "ui": "@/components/ui" }
+
+// tsconfig.json paths
+"@/components/*": ["./frontend/src/components/*"]
+```
+
+この組み合わせにより `npx shadcn add` が `frontend/src/components/ui/` に自動生成する。**片方だけ設定するとパス解決が壊れる**（shadcn は `components.json` の alias → tsconfig の paths を辿る）。
+
 ---
 
 ## 11. 単体アプリ vs モノレポ（YK）
