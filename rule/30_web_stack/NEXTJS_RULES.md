@@ -10,7 +10,7 @@ React を前提としたフルスタック Web 開発で **Next.js** を触る�
 
 **実行スキル:** `creating-nextjs-yk` · 参照ルーティング: `.../creating-nextjs-yk/references/ROUTER.md`
 
-**最終更新:** 2026-05-24（公式 `llms.txt` @doc-version **16.2.6** に基づく索引整備）
+**最終更新:** 2026-07-03（公式 `llms.txt` @doc-version **16.2.10** · proxy 移行節追加）
 
 ---
 
@@ -91,6 +91,19 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 
 ルーティングファイル規約 · `(group)` · `_folder` → [Project Structure](https://nextjs.org/docs/app/getting-started/project-structure)（ROUTER tag `routing-files`）
 
+### 2-8. ネットワーク境界 — `proxy.ts`（Next.js 16+）
+
+| 項目 | 規則 |
+|------|------|
+| ファイル名 | **Next.js 16+** ではルートの `middleware.ts` は **deprecated**。**新規・移行時は `proxy.ts`**（[Version 16 upgrade · middleware to proxy](https://nextjs.org/docs/app/guides/upgrading/version-16#middleware-to-proxy)） |
+| エクスポート | `export function proxy(request: Request)` — 旧 `middleware` 関数名も deprecated |
+| 役割 | リクエストのリダイレクト · リライト · ヘッダー変更など**ネットワーク境界**の処理。重い認可・DB は Route Handler / DAL へ |
+| 移行 | `npx @next/codemod@canary middleware-to-proxy .` — **`middleware.ts` と `proxy.ts` の併存は禁止**（proxy のみ残す） |
+| レガシー | 既存の `middleware.ts` は当面動くが、新規プロジェクト・本番修正時は **proxy へ移行を MUST** |
+| Supabase セッション | クッキーリフレッシュは proxy 経由 — [`SUPABASE_AUTH_SSR.md`](references/SUPABASE_AUTH_SSR.md) · `backend/src/lib/supabase/middleware.ts` の `updateSession` を proxy から呼ぶ |
+
+**Edge runtime:** `proxy.ts` は **Node.js 固定**（設定不可）。地理リダイレクト等で Edge が必要なときのみ `middleware.ts` を継続可（deprecated 扱い）。
+
 ---
 
 ## 3. 参照 URL（公式）
@@ -102,6 +115,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 | Server and Client Components | https://nextjs.org/docs/app/getting-started/server-and-client-components |
 | Project Structure | https://nextjs.org/docs/app/getting-started/project-structure |
 | LLM 向け索引 | https://nextjs.org/docs/llms.txt |
+| middleware → proxy 移行 | https://nextjs.org/docs/app/guides/upgrading/version-16#middleware-to-proxy |
 
 データ取得 · 変更 · キャッシュ · セキュリティの公式 URL → **ROUTER §3**（本ファイル §7 は索引 1 行のみ）。
 
@@ -112,6 +126,7 @@ HTML / CSS / JavaScript / React にある程度慣れていること。不安な
 - プロジェクトが **App Router か Pages Router か** を `app/` / `pages/` の有無で確認する。
 - **Hooks · 純粋性** → [`REACT_RULES.md`](REACT_RULES.md)（本ファイルでは再掲しない）。
 - **Next.js 15+（v15.0.0-RC 以降）の Request APIs:** 動的 segment の **`params`**（`layout` · `page` · `route` · `generateMetadata` 等）と **`page` の `searchParams`** は **Promise**。Server では `await`、Client の `page` では React の **`use(params)`** / **`use(searchParams)`**（[Version 15 upgrade · Async Request APIs](https://nextjs.org/docs/app/guides/upgrading/version-15)）。**`cookies()` · `headers()` · `draftMode()`** も `await` 必須。v15 では同期アクセスが残るが deprecated — 新規・修正は Promise 前提。
+- **Next.js 16+ の `proxy.ts`:** §2-8。既存 `middleware.ts` は移行対象。Supabase セッションリフレッシュも proxy 経由が正本（[`SUPABASE_AUTH_SSR.md`](references/SUPABASE_AUTH_SSR.md)）。
 - **バンドル doc の読み方:** `creating-nextjs-yk` ROUTER §3（`AGENTS.md` · `node_modules/next/dist/docs/`）。YK 横断 MUST は **本ファイルが SSOT**。
 - **環境変数:** クライアントに載るのは `NEXT_PUBLIC_` 接頭辞のみ。秘密は Server 側（`server-only` 推奨）。
 - **L1 の Read 深さ:** ROUTER **tier** に従う（Light は §5 中心 · Standard は L1 全体）。

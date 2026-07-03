@@ -2,15 +2,22 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-06-27 INDEX 同期（L1 33 本 / No 00 除く）
+# 状態: 2026-07-03 INDEX 同期（L1 33 本 / No 00 除く · 帯移行 15/25 追随）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 32
+rule_count_l1: 33
 
 rules:
+  - no: 05
+    path: 5_writing/WRITING_RULES.md
+    band: 5_writing
+    tags: [writing, slack, document, communication]
+    read_when: Slack・ドキュメント・メール — L1 要約 · 具体例 references/
+    status: active
+
   - no: 11
     path: 10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md
     band: 10_meta
@@ -50,34 +57,34 @@ rules:
     path: 10_meta/COMMUNICATION_RULES.md
     band: 10_meta
     tags: [communication, meta]
-    read_when: チャット応答
+    read_when: チャット応答 · No 05 精神借用 · 作業後3点サマリ
     status: active
 
   - no: 17
-    path: 10_meta/APP_PROJECT_RULES.md
-    band: 10_meta
-    tags: [app-project, meta, handoffs, planning]
+    path: 15_project_mgmt/APP_PROJECT_RULES.md
+    band: 15_project_mgmt
+    tags: [app-project, handoffs, planning]
     read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開
     status: active
 
   - no: 18
-    path: 10_meta/YK_APPLICATION_RULES.md
-    band: 10_meta
-    tags: [yk-application, meta, migration]
+    path: 15_project_mgmt/YK_APPLICATION_RULES.md
+    band: 15_project_mgmt
+    tags: [yk-application, migration]
     read_when: 独立リポジトリ移行 · yk-application 管理
     status: active
 
   - no: 19
-    path: 10_meta/VISUAL_DESIGN_RULES.md
-    band: 10_meta
-    tags: [visual-design, meta, ui, stroke]
+    path: 25_design_ux/VISUAL_DESIGN_RULES.md
+    band: 25_design_ux
+    tags: [visual-design, ui, stroke]
     read_when: UI · 図 · 枠線 · ストロークの統一
     status: active
 
   - no: 20
-    path: 10_meta/USABILITY_HEURISTICS_RULES.md
-    band: 10_meta
-    tags: [usability, ux, meta]
+    path: 25_design_ux/USABILITY_HEURISTICS_RULES.md
+    band: 25_design_ux
+    tags: [usability, ux]
     read_when: UI/UX · ヒューリスティック評価
     status: active
 
@@ -96,23 +103,23 @@ rules:
     status: active
 
   - no: 23
-    path: 10_meta/A11Y_ROADMAP.md
-    band: 10_meta
-    tags: [a11y, roadmap, meta]
+    path: 25_design_ux/A11Y_ROADMAP.md
+    band: 25_design_ux
+    tags: [a11y, roadmap]
     read_when: アクセシビリティ導入計画 · Phase 判断
     status: active
 
   - no: 24
-    path: 10_meta/A11Y_RULES.md
-    band: 10_meta
-    tags: [a11y, wcag, meta]
+    path: 25_design_ux/A11Y_RULES.md
+    band: 25_design_ux
+    tags: [a11y, wcag]
     read_when: アクセシビリティ実装 · レビュー
     status: active
 
   - no: 25
-    path: 10_meta/PROJECT_DOCUMENT_RULES.md
-    band: 10_meta
-    tags: [project-document, meta, planning]
+    path: 15_project_mgmt/PROJECT_DOCUMENT_RULES.md
+    band: 15_project_mgmt
+    tags: [project-document, planning]
     read_when: 企画フォルダ 6 種 · ドキュメント種別
     status: active
 

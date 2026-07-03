@@ -40,7 +40,7 @@
 ├── AGENTS.md
 ├── README.md
 ├── package.json
-├── middleware.ts                 # Next.js · ルート固定
+├── proxy.ts                      # Next.js 16+ · セッションリフレッシュ（旧 middleware.ts）
 ├── {起動.bat}                    # 任意 · → scripts/dev/open.bat
 │
 ├── docs/                         # 仕様 + 運用

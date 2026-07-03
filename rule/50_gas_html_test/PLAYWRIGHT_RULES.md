@@ -3,8 +3,8 @@
 
 **ステータス:** active（横断 always · `playwright-agent-yk.mdc` · L2 `designing-playwright-tests-yk` · `using-playwright` · ROUTER: `using-playwright/references/ROUTER.md`）
 
-**最終更新:** 2026-06-28（§12-10 本番 auth UI E2E · AUTH_E2E_STUB）  
-**配置:** `c:\yk-tool\playwright-test\`（@playwright/test v1.59.1 / TypeScript / Chromium / Windows）— [RULE_INDEX](../RULE_INDEX.md) リポジトリマップ参照
+**最終更新:** 2026-07-03（バージョン表記追随 · 実装は package.json 参照）  
+**配置:** `c:\yk-tool\playwright-test\`（@playwright/test **v1.61.1** / TypeScript / Chromium / Windows）— [RULE_INDEX](../RULE_INDEX.md) リポジトリマップ参照
 
 ---
 

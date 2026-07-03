@@ -1,7 +1,7 @@
 ﻿# Supabase — Auth · Next.js SSR（L3 参照）
 
 **SSOT:** 本ファイル · **索引:** [`SUPABASE_RULES.md`](../SUPABASE_RULES.md) §6 · §8
-**最終更新:** 2026-06-27（P14d · L1 から分割）
+**最終更新:** 2026-07-03（proxy.ts 例 · flowchart-studio 移行追随）
 
 ---
 
@@ -74,8 +74,8 @@ Supabase Auth を Next.js App Router で使う場合、`@supabase/ssr` の 3 ク
 Server Components はクッキーを書けないため、**セッションリフレッシュは必ず proxy.ts（または middleware.ts）で行う**。proxy.ts を経由しないルートではトークン期限切れが起きる。
 
 ```ts
-// middleware.ts（実装: lib/supabase/middleware.ts の updateSession を呼ぶ）
-export async function middleware(request: NextRequest) {
+// proxy.ts（実装: lib/supabase/middleware.ts の updateSession を呼ぶ）
+export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"] };

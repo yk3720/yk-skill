@@ -6,9 +6,9 @@
 
 **ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/TAILWINDCSS_RULES.md`
 
-**最終更新:** 2026-05-10
+**最終更新:** 2026-07-03
 
-**メモ:** ドキュメント取得時点のバージョン表記は **v4.2**。
+**メモ:** ドキュメント取得時点のバージョン表記は **v4.3.2**（v4 は CSS-first · `@import "tailwindcss"` · テーマは `@theme` が既定。レガシー `tailwind.config.js` は移行期のみ）。
 
 ---
 
@@ -61,7 +61,7 @@
 
 ## 4. エージェント向けメモ
 
-- Next.js のひな形では **Tailwind が既に含まれている**ことが多い。自分で触るのは主に **クラス名**と、必要なら `tailwind.config` 周り。
+- Next.js のひな形では **Tailwind が既に含まれている**ことが多い。自分で触るのは主に **クラス名**と、必要なら **`globals.css` の `@theme`**（v4 · [`SHADCN_CORE_SETUP.md`](references/SHADCN_CORE_SETUP.md) §8-2）。
 - UI の見た目を説明するときは、**レイアウト（flex / grid）、余白（p-/m-）、タイポ（text-/font-）、色（bg-/text-）** の読み方ができると伝わりやすい。
 - **`overflow-auto` 二重ネスト禁止:** 外側 wrapper と内側コンテナ両方に `overflow-auto`（または `overflow-scroll`）を付けると、内側コンテンツが増えたとき水平スクロールバーが画面外に落ちる。**スクロール源は 1 箇所だけ**にする。
   ```

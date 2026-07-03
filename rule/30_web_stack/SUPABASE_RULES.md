@@ -85,7 +85,7 @@ Supabase（PostgreSQL + Auth + RLS）を Next.js / Server Actions と組み合�
 | Cloud 保存・読込 Server Actions | `backend/src/lib/flowchart/actions/documents/flowDocuments.ts` |
 | ログイン UI | `frontend/src/components/auth/LoginForm.tsx` |
 | コールバック | `app/auth/callback/route.ts` |
-| セッションリフレッシュ（proxy） | `middleware.ts` → `backend/src/lib/supabase/middleware.ts` |
+| セッションリフレッシュ（proxy） | ルート **`proxy.ts`**（Next.js 16+ · 未移行時は `middleware.ts`）→ `backend/src/lib/supabase/middleware.ts` の `updateSession` |
 
 ---
 

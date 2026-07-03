@@ -83,8 +83,10 @@
 | 帯 | パス |
 |----|------|
 | 入口 | `rule/RULE_INDEX.md` · `rule/RULE_ROUTING_PLAYBOOK.md` |
-| 10_meta | `PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` · `COMMUNICATION` · `APP_PROJECT` · `YK_APPLICATION` · `VISUAL_DESIGN` · `USABILITY` · `A11Y_ROADMAP` · `A11Y` · `PROJECT_DOCUMENT` |
+| 10_meta | `PROGRESSIVE` · `SKILL_AUTHORING` · `AI_DRIVEN` · `GIT_WORKFLOW` · `SECRETS_HYGIENE` · `COMMUNICATION` |
+| 15_project_mgmt | `APP_PROJECT` · `YK_APPLICATION` · `PROJECT_DOCUMENT` |
 | 20_web_workspace | `WORKSPACE_RULES.md` · `DIAGRAM_MANAGER_WORKSPACE_RULES.md` |
+| 25_design_ux | `VISUAL_DESIGN` · `USABILITY` · `A11Y_ROADMAP` · `A11Y` |
 | 30_web_stack | `NEXTJS` · `SHADCN_UI` · `TAILWINDCSS` · `VERCEL` · `REACT` · `SUPABASE` |
 | 35_reactflow | `REACTFLOW_RULES.md` |
 | 40_python | `PYTHON_RULES.md` |
@@ -149,4 +151,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-06-27（P14e · SHADCN/SKILL_AUTHORING 分割）
+**最終更新:** 2026-07-03（doc-sync R-01〜R-09 · 帯一覧 · manifest 15/25 追随）

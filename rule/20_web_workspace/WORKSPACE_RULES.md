@@ -9,7 +9,7 @@
 **リポジトリ:** `c:\yk-tool\workspace-ui-kit`  
 **リポジトリ内エントリ:** `workspace-ui-kit/CLAUDE.md`（ADR・スキル・採用雛形の既定）
 
-**最終更新:** 2026-05-17
+**最終更新:** 2026-07-03（NEXTJS proxy 節 · TAILWIND v4.3 追随と整合）
 
 **併用するルール:** `../30_web_stack/NEXTJS_RULES.md` · `SHADCN_UI_RULES.md` · `TAILWINDCSS_RULES.md` · 各ドメイン固有ルール（下記索引）。**GAS レポート HTML デザインは含めない**（→ `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`）
 
