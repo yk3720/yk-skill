@@ -1,6 +1,6 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年5月28日（Agents Window Techmap・CuriosityMap を追加）  
+**最終更新**: 2026年7月5日（briefmap-flowchart-studio-ops を teardown）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
 **HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
 **作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
@@ -81,6 +81,7 @@
 | Techmap | 13件 |
 | CuriosityMap | 3件 |
 | ProposalMap | 1件 |
+| BriefMap | 0件（ローカルのみ運用可 · `creating-briefmap-yk`） |
 | その他（ツール） | 1件 |
 | 最初の公開日 | 2026/03/28 |
 | 最新の公開日 | 2026/05/28 |
@@ -94,6 +95,7 @@
 - Techmap：`techmap-{slug}.surge.sh`
 - CuriosityMap：`curimap-{slug}.surge.sh`
 - ProposalMap：`promap-{slug}.surge.sh`
+- BriefMap：`briefmap-{slug}.surge.sh`
 - 公開済み HTML の正本は `c:\yk-tool\publish\`（2026-05-23 移行完了。旧 `c:\yk-memo\output\` は Git 上削除済み · 実体は `yk-tool` へ）
 - このリストは `c:\yk-skill\metadata\surge-published-list.md` で管理（各スキルがデプロイ後に更新）
 - 図解管理 UI（`workspace-ui-kit/data/figures.ts`）は本台帳と **手動同期**（`url` · 公開日 · 種別）。UI 専用の `topicId` / タグ / メモは `figures.ts` のみ

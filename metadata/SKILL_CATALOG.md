@@ -1,8 +1,8 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-06-27（`creating-supabase-yk` 追加）  
+**最終更新:** 2026-07-05（`creating-briefmap-yk` 追加）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **30** · nested **2** · sample **1**（計 **33** `SKILL.md`）
+**件数:** L1 **32** · nested **2** · sample **1**（計 **35** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -38,6 +38,7 @@
 | 9b | designing-playwright-tests-yk | `.claude/skills/designing-playwright-tests-yk/SKILL.md` | L1 | — | no | E2E 設計 · `PLAYWRIGHT_RULES` §13 |
 | 9c | distilling-rules-yk | `.claude/skills/distilling-rules-yk/SKILL.md` | L1 | — | no | 実装気づき → L1 ルール追記 |
 | 10 | creating-proposalmap-yk | `.claude/skills/creating-proposalmap-yk/SKILL.md` | L1 | — | no | 社内提案図解 proposalmap · surge |
+| 10c | creating-briefmap-yk | `.claude/skills/creating-briefmap-yk/SKILL.md` | L1 | — | no | 上司向け briefmap · 調査報告 · surge |
 | 10b | creating-visual-explainers | `.claude/skills/creating-visual-explainers/SKILL.md` | L1 | — | no | 汎用図解 · surge |
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
@@ -56,6 +57,7 @@
 | 23 | creating-pythoncode-yk | `.claude/skills/creating-pythoncode-yk/SKILL.md` | L1 | — | no | `paths: **/*.py` · PYTHON_RULES |
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 | 25 | starting-app-project-yk | `.claude/skills/starting-app-project-yk/SKILL.md` | L1 | — | no | 個人アプリ企画 · handoffs 一本化 · AGENTS.md |
+| 26 | writing-proposals | `.claude/skills/writing-proposals/SKILL.md` | L1 | — | no | 提案文書 · ADS 上流取り込み（`UPSTREAM.md`） |
 
 ---
 
