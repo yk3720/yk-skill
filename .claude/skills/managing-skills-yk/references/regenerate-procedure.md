@@ -41,3 +41,4 @@ Get-ChildItem -Path "c:\yk-skill\.claude\skills","c:\yk-skill\sample" -Filter "S
 - `canonical=no` の一覧（重複）
 - sample 件数
 - `yk-tool/catalog.yaml` とは別物である旨 1 行
+- **新規 name が増えたとき:** `skill-categories.yaml` · `SKILLS_INDEX.md` の更新漏れがないか確認（`exploring-skills-yk` M3 参照可）

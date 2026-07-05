@@ -53,3 +53,4 @@
 |------|------|
 | 2026-07-05 | 初版 |
 | 2026-07-05 | supervisor 既定 · ローカル納品 · 図解は簡易版に |
+| 2026-07-05 | 文言洗練 SSOT 追加（copy-refinement.md）· status/preamble 統合を構造 SSOT に反映 |

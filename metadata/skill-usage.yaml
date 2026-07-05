@@ -1,0 +1,95 @@
+# スキル利用メモ（補助シグナル）
+# Cursor 公式の利用統計はない。count_estimate は手動または M2 監査で更新。
+# 0 回でも L（意図的低頻度）のことがある — 削除判断は exploring-skills-yk M2 参照。
+
+schema_version: 1
+updated: 2026-07-05
+audit_note: "初回 M2 — agent-transcripts（c-yk-desk）を部分 Grep + 本セッション実績"
+
+entries:
+  creating-briefmap-yk:
+    count_estimate: 3
+    last_used: 2026-07-05
+    classification: null
+    note: flowchart-studio 07_社内合意 · 図解_補足.html
+
+  grill-me:
+    count_estimate: 1
+    last_used: 2026-07-05
+    note: 資料作成方針_2026-07-05 確定
+
+  reviewing-with-subagents:
+    count_estimate: 2
+    last_used: 2026-07-05
+    note: メール多視点レビュー（flowchart-studio）
+
+  refining-copy-yk:
+    count_estimate: 1
+    last_used: 2026-07-05
+    note: 05_送付メール洗練ループ
+
+  writing-internal-mail-yk:
+    count_estimate: 1
+    last_used: 2026-07-05
+    classification: null
+    note: 送付メール起草 · refining-copy-yk と境界を description に明記（2026-07-05 更新）
+
+  creating-skills:
+    count_estimate: 2
+    last_used: 2026-07-05
+    note: refining-copy-yk · exploring-skills-yk 新設
+
+  exploring-skills-yk:
+    count_estimate: 1
+    last_used: 2026-07-05
+    note: 初版構築 · M2 初回
+
+  routing-diagram-yk:
+    count_estimate: 2
+    last_used: 2026-07-05
+    note: transcript 言及（図解系セッション）
+
+  creating-diagram-techmap:
+    count_estimate: 1
+    last_used: 2026-07-05
+    note: transcript 言及
+
+  handoff-session-work:
+    count_estimate: null
+    classification: L
+    note: explicit_only 相当の運用 · 引き継ぎ明示時
+
+  committing-with-git-yk:
+    count_estimate: null
+    classification: L
+    note: disable-model-invocation · コミット明示時のみ
+
+  pushing-and-pr-yk:
+    count_estimate: null
+    classification: L
+    note: disable-model-invocation · push/PR 明示時のみ
+
+  managing-skills-yk:
+    count_estimate: null
+    classification: L
+    note: disable-model-invocation · 台帳更新明示時のみ
+
+  personal-scheduler:
+    count_estimate: null
+    classification: L
+    note: 個人予定 · 低頻度想定
+
+  setup-fb-tool:
+    count_estimate: null
+    classification: L
+    note: nested · FB 図解初回のみ
+
+  creating-visual-explainers-fb:
+    count_estimate: null
+    classification: L
+    note: nested · FB バンドル専用
+
+  diagram-maji:
+    count_estimate: null
+    classification: L
+    note: sample · 本番外

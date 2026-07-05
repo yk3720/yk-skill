@@ -1,8 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-07-05（`creating-briefmap-yk` 追加）  
+**最終更新:** 2026-07-05（`exploring-skills-yk` · `SKILLS_INDEX.md` 追加）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
-**件数:** L1 **32** · nested **2** · sample **1**（計 **35** `SKILL.md`）
+**人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
+**件数:** L1 **35** · nested **2** · sample **1**（計 **38** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -44,12 +45,14 @@
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
 | 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了（commit+push 含む）・再開・確認・整理 |
 | 14 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
+| 14a | exploring-skills-yk | `.claude/skills/exploring-skills-yk/SKILL.md` | L1 | — | no | 一覧・未使用分析 · SKILLS_INDEX SSOT |
 | 14b | organizing-documents-yk | `.claude/skills/organizing-documents-yk/SKILL.md` | L1 | — | no | 資料 M1 整合 · M2 更新（v1 M1 本実装） |
 | 14c | optimizing-code-yk | `.claude/skills/optimizing-code-yk/SKILL.md` | L1 | — | no | コードチェック · M1 Web+サブエージェント · M2 修正 |
 | 15 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
 | 16 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | push / GitHub PR（明示のみ） |
 | 17 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |
 | 18 | re-explaining-in-chat-yk | `.claude/skills/re-explaining-in-chat-yk/SKILL.md` | L1 | — | no | チャット再説明 · `COMMUNICATION_RULES` |
+| 18b | refining-copy-yk | `.claude/skills/refining-copy-yk/SKILL.md` | L1 | — | no | 文章洗練 · 多視点レビュー→修正ループ · 文体は毎回確認 |
 | 19 | reviewing-code-yk | `.claude/skills/reviewing-code-yk/SKILL.md` | L1 | — | no | 単一パスコードレビュー（差分・PR 前） |
 | 20 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
 | 21 | routing-diagram-yk | `.claude/skills/routing-diagram-yk/SKILL.md` | L1 | — | no | 図解形式の受付・質問・委譲（HTML は作らない） |
@@ -58,6 +61,7 @@
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 | 25 | starting-app-project-yk | `.claude/skills/starting-app-project-yk/SKILL.md` | L1 | — | no | 個人アプリ企画 · handoffs 一本化 · AGENTS.md |
 | 26 | writing-proposals | `.claude/skills/writing-proposals/SKILL.md` | L1 | — | no | 提案文書 · ADS 上流取り込み（`UPSTREAM.md`） |
+| 27 | writing-internal-mail-yk | `.claude/skills/writing-internal-mail-yk/SKILL.md` | L1 | — | no | 「私の文体で」明示時のみ · 社内メール |
 
 ---
 
@@ -77,7 +81,13 @@
 | `organizing-documents-yk` ↔ `distilling-rules-yk` | 資料矛盾 vs 実装→L1 ルール蒸留 |
 | `reviewing-code-yk` ↔ `optimizing-code-yk` | 単一パス差分レビュー vs Web+公式照合+サブエージェント最適化チェック |
 | `optimizing-code-yk` → `researching-web` · `reviewing-with-subagents` · `creating-*-yk` | M1/M2 は子スキル委譲（オーケストレーション） |
-| `creating-vercel-yk` ↔ `creating-supabase-yk` | Vercel env / deploy vs Supabase Auth · RLS · migrations。Vercel env 画面は vercel 側 · RLS は supabase 側 |
+| `writing-proposals` ↔ `writing-internal-mail-yk` | 長い提案文書 vs 係長向け送付メール1通。description の Do NOT で分離 |
+| `writing-internal-mail-yk` ↔ `creating-briefmap-yk` | メール文面 vs 図解 HTML 本文 |
+| `writing-internal-mail-yk` ↔ `refining-copy-yk` | 新規起草（私の文体で） vs 既存文の洗練 |
+| `refining-copy-yk` ↔ `reviewing-with-subagents` | 洗練（親が修正まで） vs 多視点レビューのみ |
+| `refining-copy-yk` → `writing-internal-mail-yk` · `creating-briefmap-yk` | 文体 SSOT は子参照を Read |
+| `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳再生成（書込） vs 一覧・監査（Read 基本） |
+| `creating-skills` ↔ `exploring-skills-yk` | 改善実行 vs 健康診断・提案のみ |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 
@@ -95,6 +105,9 @@
 
 | ファイル | 役割 |
 |----------|------|
+| [SKILLS_INDEX.md](./SKILLS_INDEX.md) | カテゴリ別 · 発火要約（人間向け SSOT） |
+| [skill-categories.yaml](./skill-categories.yaml) | カテゴリ分類 |
+| [skill-usage.yaml](./skill-usage.yaml) | 利用メモ（補助 · 手動） |
 | [surge-published-list.md](surge-published-list.md) | surge 公開図解の URL 台帳 |
 | `c:/yk-tool/catalog.yaml` | ツール・成果物レジストリ（スキルではない） |
 | `c:/yk-skill/rule/RULE_INDEX.md` | rule カタログ（スキル全文は載せない） |

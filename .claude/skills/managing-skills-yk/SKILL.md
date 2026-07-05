@@ -16,6 +16,7 @@ disable-model-invocation: true
 | レイヤ | 参照 |
 |--------|------|
 | 台帳ファイル | `c:/yk-skill/metadata/SKILL_CATALOG.md` |
+| 人間向け索引 | `c:/yk-skill/metadata/SKILLS_INDEX.md` · `exploring-skills-yk` |
 | 列・tier · canonical | [references/catalog-schema.md](references/catalog-schema.md) |
 | 再生成手順 | [references/regenerate-procedure.md](references/regenerate-procedure.md) |
 | スキル執筆 | `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` |

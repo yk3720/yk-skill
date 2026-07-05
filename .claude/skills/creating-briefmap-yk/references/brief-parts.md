@@ -3,6 +3,29 @@
 Tailwind（ads 配色）· Lucide のみ。絵文字禁止。  
 proposalmap の [proposal-parts.md](../../creating-proposalmap-yk/references/proposal-parts.md) と同型。文言だけ briefmap 用。
 
+## いまの状況（status · 5 項目）
+
+文言・ラベル・strong の規則は [copy-refinement.md](copy-refinement.md) §4。構造は [html-structure-supervisor.md](html-structure-supervisor.md)。
+
+```html
+<section id="status" class="mb-10">
+  <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+    <i data-lucide="info" class="w-5 h-5 text-ads-accent"></i>
+    いまの状況
+  </h2>
+  <div class="rounded-lg border border-ads-border p-4 bg-ads-surface text-sm">
+    <ol class="space-y-3">
+      <li><span class="font-semibold text-ads-text">1.</span> <strong>経緯：</strong>…</li>
+      <li><span class="font-semibold text-ads-text">2.</span> <strong>進捗：</strong>…</li>
+      <li><span class="font-semibold text-ads-text">3.</span> <strong>位置づけ：</strong>…</li>
+      <li><span class="font-semibold text-ads-text">4.</span> <strong>本番運用：</strong>…</li>
+      <li><span class="font-semibold text-ads-text">5.</span> <strong>有償が難しい場合：</strong>…</li>
+    </ol>
+  </div>
+  <p class="mt-3 text-sm">触る：<a href="…" class="text-ads-accent hover:underline" target="_blank" rel="noopener">…</a></p>
+</section>
+```
+
 ## 資料種別帯（notice · hybrid）
 
 ```html

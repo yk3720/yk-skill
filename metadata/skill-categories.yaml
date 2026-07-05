@@ -1,0 +1,73 @@
+# YK スキルカテゴリ（SSOT）
+# 新規スキル追加時: creating-skills Step 8 または managing-skills-yk で name を追記する。
+# exploring-skills-yk · SKILLS_INDEX.md が参照する。
+
+schema_version: 1
+
+category_labels:
+  diagram: 図解・可視化
+  dev-web: Web 開発
+  dev-python: Python
+  test-review: テスト・レビュー
+  git-session: Git・セッション
+  research-plan: 調査・計画・説明
+  writing: 文書・提案
+  meta: スキル・ルール・資料メタ
+  personal: 個人ツール
+
+skills:
+  # 図解・可視化
+  routing-diagram-yk: diagram
+  creating-curiosity-map: diagram
+  creating-diagram-techmap: diagram
+  creating-proposalmap-yk: diagram
+  creating-briefmap-yk: diagram
+  creating-visual-explainers: diagram
+  creating-visual-explainers-fb: diagram
+  setup-fb-tool: diagram
+  creating-mermaid-yk: diagram
+  creating-reactflow-yk: diagram
+
+  # Web 開発
+  creating-nextjs-yk: dev-web
+  creating-react-yk: dev-web
+  creating-shadcn-yk: dev-web
+  creating-vercel-yk: dev-web
+  creating-supabase-yk: dev-web
+
+  # Python
+  creating-pythoncode-yk: dev-python
+
+  # テスト・レビュー
+  designing-playwright-tests-yk: test-review
+  using-playwright: test-review
+  reviewing-code-yk: test-review
+  reviewing-with-subagents: test-review
+  optimizing-code-yk: test-review
+
+  # Git・セッション
+  committing-with-git-yk: git-session
+  pushing-and-pr-yk: git-session
+  handoff-session-work: git-session
+  starting-app-project-yk: git-session
+
+  # 調査・計画・説明
+  researching-web: research-plan
+  grill-me: research-plan
+  re-explaining-in-chat-yk: research-plan
+  personal-scheduler: personal
+
+  # 文書・提案
+  writing-proposals: writing
+  writing-internal-mail-yk: writing
+  refining-copy-yk: writing
+  organizing-documents-yk: meta
+
+  # メタ
+  creating-skills: meta
+  managing-skills-yk: meta
+  exploring-skills-yk: meta
+  distilling-rules-yk: meta
+
+  # sample
+  diagram-maji: diagram

@@ -12,7 +12,7 @@ description: >
 
 - [設計 SSOT](references/DESIGN.md) · [Phase 0](references/intake-checklist.md)
 - [supervisor（既定）](references/html-structure-supervisor.md) · [hybrid 詳細](references/html-structure-hybrid.md) · [report](references/html-structure-report.md)
-- [パーツ](references/brief-parts.md) · [文体](references/tone-checklist.md)
+- [パーツ](references/brief-parts.md) · [文体](references/tone-checklist.md) · [文言洗練](references/copy-refinement.md)
 
 **一文:** 上司向けに **状況とお願いだけ** を HTML で渡す。詳細は正本テキスト + 面談。**既定はローカル保存。**
 
@@ -44,7 +44,10 @@ description: >
 
 ### Phase 2: ブラッシュアップ
 
-[tone-checklist.md](references/tone-checklist.md)
+1. [tone-checklist.md](references/tone-checklist.md)
+2. 本文の短文化・リスト整備 → [copy-refinement.md](references/copy-refinement.md)（**全文 Read 後**に整合チェック）
+3. ユーザーが **「文章を洗練」** と明示したとき → `refining-copy-yk` に委譲（ループはそちら。HTML 固有は copy-refinement §2〜§5 を併用）
+4. 「サブエージェントでレビュー」のみで修正まで不要なとき → copy-refinement §3
 
 ### Phase 3: 保存（既定: ローカル）
 

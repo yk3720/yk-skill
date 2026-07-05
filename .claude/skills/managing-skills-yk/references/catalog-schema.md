@@ -72,4 +72,6 @@ L1 `creating-visual-explainers` は変更なし。同名 `name` の重複は解�
 
 1. **ペア・要判断** — 関連スキルペア（例: L1 ↔ FB 版）を要約。`canonical=no` があればここに列挙
 2. **sample** — tier=sample の表（本番表と分離可）
-3. **関連** — surge 台帳 · yk-tool catalog へのリンク 1 行ずつ
+3. **関連** — `SKILLS_INDEX.md` · `skill-categories.yaml` · surge 台帳 · yk-tool catalog へのリンク
+
+**人間向け索引:** 新規スキル追加時は `metadata/skill-categories.yaml` に `name` を追記し、`SKILLS_INDEX.md` を同ターンで更新する（`creating-skills` Step 8 · `managing-skills-yk` 再生成時）。

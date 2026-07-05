@@ -78,6 +78,7 @@ SKILL.md に置く情報と references/ に置く情報を分離する。
 1. [managing-skills-yk/SKILL.md](../managing-skills-yk/SKILL.md) の「手順」に従う
 2. 詳細は [regenerate-procedure.md](../managing-skills-yk/references/regenerate-procedure.md) と [catalog-schema.md](../managing-skills-yk/references/catalog-schema.md) を Read
 3. **`creating-skills` 完了ターン**では台帳専用のユーザー明示は不要（本 Step が手順の一部）
-4. 報告は `managing-skills-yk` と同様（件数サマリ · `canonical=no` 行があれば一覧）
+4. 新規 `name` 追加時は `metadata/skill-categories.yaml` と `metadata/SKILLS_INDEX.md` も更新する
+5. 報告は `managing-skills-yk` と同様（件数サマリ · `canonical=no` 行があれば一覧）
 
 **台帳だけ更新したいとき:** `managing-skills-yk` を直接使う（ユーザーが当ターンで明示）。

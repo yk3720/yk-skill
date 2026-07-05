@@ -89,59 +89,14 @@ handoffs/
 
 ## 利用可能なスキル一覧
 
-### 図解・可視化
+**SSOT（手書き表は廃止 · 2026-07-05）**
 
-| スキル | 発火条件 | 用途 |
-|--------|----------|------|
-| `routing-diagram-yk` | 「図解して」（形式未指定） | 読者・形式を判定して適切な図解スキルへ委譲 |
-| `creating-curiosity-map` | 「curiositymapで」「文系向けに」「初心者向けに」 | 文系の大人向けHTML図解 → surge.sh |
-| `creating-diagram-techmap` | 「techmapで」「技術を図解して」 | 理系エンジニア向け技術解説HTML図解 → surge.sh |
-| `creating-proposalmap-yk` | 「proposalmapで」「企画書形式で」「社内周知で」 | 社内非専門職向けHTML図解 → surge.sh |
-| `creating-visual-explainers` | 「汎用で図解」「visualで図解」 | 形式指定なし汎用HTML図解 → surge.sh |
-| `commenting-visual-explainers` | 図解ページへのフィードバック機能追加 | surge図解にコメント・FB機能を付加 |
-| `creating-mermaid-yk` | 「mermaidで図」「.mmdを書いて」 | Mermaid DSL（.mmd）作成・更新・検証 |
-| `creating-reactflow-yk` | 「flowchart-web」「表駆動フロー」「layoutGrid」 | @xyflow/react 表駆動フローチャート |
+| 用途 | 参照 |
+|------|------|
+| カテゴリ別 · 発火要約 | `c:/yk-skill/metadata/SKILLS_INDEX.md` |
+| tier · explicit_only · ペア | `c:/yk-skill/metadata/SKILL_CATALOG.md` |
+| 一覧を聞く · 未使用分析 · 改善提案 | スキル `exploring-skills-yk`（「スキル一覧を教えて」等） |
+| 台帳の機械再生成 | `managing-skills-yk`（ユーザー明示時のみ） |
+| スキル作成・改善の実行 | `creating-skills` |
 
-### 開発・実装
-
-| スキル | 発火条件 | 用途 |
-|--------|----------|------|
-| `creating-pythoncode-yk` | 「Pythonで」「ツールを作って」 | Python コード作成・更新・修正 |
-| `creating-nextjs-yk` | 「Next.jsで」「app/page」「layout.tsx」 | Next.js（App Router）作成・更新 |
-| `creating-react-yk` | 「useState」「カスタムHook」「Clientコンポーネント」 | React コンポーネント・Hooks・Client UI |
-| `creating-reactflow-yk` | 「flowchart-web」「toReactFlow」 | @xyflow/react フローチャート |
-| `creating-shadcn-yk` | 「shadcn init」「npx shadcn add」「components/ui」 | shadcn/ui 導入・追加 |
-| `creating-vercel-yk` | 「vercel link」「vercel env」「Vercelにデプロイ」 | Vercel link/env/deploy |
-| `creating-supabase-yk` | 「Supabase」「RLS」「auth/callback」「profiles」「AUTH_DISABLED」 | Supabase Auth · RLS · env · Ref Plan |
-| `creating-skills` | 「スキルを作って」「スキルを改善して」 | スキル作成・更新・改善 |
-| `managing-skills-yk` | 「SKILL_CATALOGを更新」（disable-model-invocation） | スキル台帳の再生成・処理 |
-
-### テスト・レビュー
-
-| スキル | 発火条件 | 用途 |
-|--------|----------|------|
-| `designing-playwright-tests-yk` | 「E2Eで何をテストするか設計」「テストピラミッド」 | Playwright E2E テスト設計 |
-| `using-playwright` | 「Playwrightでテスト」「E2E」「specを書いて」 | Playwright E2E spec 実行 |
-| `reviewing-code-yk` | 「コードレビューして」「PRを見て」「差分をレビュー」 | 単一パスコードレビュー（エージェント1回） |
-| `reviewing-with-subagents` | 「サブエージェントでレビュー」「複数視点でレビュー」 | 複数視点並列レビュー（3+レンズ） |
-
-### Git・セッション管理
-
-| スキル | 発火条件 | 用途 |
-|--------|----------|------|
-| `committing-with-git-yk` | 「コミットして」「日本語でコミット」（disable-model-invocation） | YK向け git commit（日本語メッセージ） |
-| `pushing-and-pr-yk` | 「pushして」「PRを作って」「プルリクを出して」 | git push + GitHub PR 作成 |
-| `handoff-session-work` | 「引き継ぎして」「セッション終了」「続きから」 | セッション引き継ぎ・再開・確認・処理 |
-| `starting-app-project-yk` | 「新しいアプリを始めて」「設計フォルダを作って」 | 個人アプリ設計パック新設・handoffs 一本化 |
-
-### 調査・計画・説明
-
-| スキル | 発火条件 | 用途 |
-|--------|----------|------|
-| `researching-web` | 「ウェブで調べて」「公式ドキュメントを確認」 | Web調査・収集（スコア10点まで再帰） |
-| `grill-me` | 「グリルして」「grill me」「計画を詰めて」 | 計画・設計を1問ずつ深掘り |
-| `re-explaining-in-chat-yk` | 「もう一度説明して」「さっぱり整理して」 | 直前の作業・技術説明を簡潔に再説明 |
-| `distilling-rules-yk` | 「ルールに追記して」「今回の気づきを整理して」「コードから学んだことを記録して」 | 実装の気づきを L1 ルールファイルへ追記 |
-| `organizing-documents-yk` | 「資料整合して」「矛盾を直して」「doc-sync」· 「横断チェック」「監査だけ」 | M1 整合 · M1a 監査 · M1b 適用 · M2 最新化 |
-| `optimizing-code-yk` | 「コードチェックして」「コード最適化レビュー」「最適化を適用して」 | コード M1 チェック（Web+サブエージェント）· M2 修正 |
-| `personal-scheduler` | 「スケジュールを更新」「今日の予定を整理」 | 個人スケジュール → surge.sh 公開 |
+ディレクトリ: `C:\yk-skill\.claude\skills` — 各 `SKILL.md` の `description` が Cursor に常時載る。詳細は上記 SSOT を Read する。
