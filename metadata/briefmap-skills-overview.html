@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta property="og:title" content="AIエージェント用スキル一覧 — 整理結果">
+  <meta property="og:description" content="35件の作業手順を9カテゴリに整理した結果の共有資料">
+  <meta property="og:type" content="article">
+  <title>AIエージェント用スキル一覧 — 整理結果</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><rect x='22' y='28' width='56' height='8' rx='2' fill='%233B82F6'/><rect x='22' y='44' width='40' height='6' rx='2' fill='%2394A3B8'/><rect x='22' y='56' width='48' height='6' rx='2' fill='%2394A3B8' opacity='0.5'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF',
+              surface: '#F8FAFC',
+              hover: '#F1F5F9',
+              border: '#E2E8F0',
+              accent: '#3B82F6',
+              'accent-light': '#2563EB',
+              text: '#1E293B',
+              muted: '#64748B',
+              dim: '#94A3B8',
+              positive: '#10B981',
+              negative: '#EF4444',
+              warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button type="button" onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i>
+      PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+
+    <header class="mb-8">
+      <p class="text-xs text-ads-dim mb-2">BriefMap · 【共有】 · 2026-07-05</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-ads-text">AIエージェント用スキル一覧 — 整理結果</h1>
+      <p class="mt-4 text-sm text-ads-text leading-relaxed">
+        Cursor 上の AI に「こういう依頼のときはこう動け」と教える<strong>作業手順書（スキル）</strong>を、用途別に整理した。
+        全部で <strong>35 件</strong>（補助込みで 37 件）を <strong>9 カテゴリ</strong>に分類し、索引と図を用意している。
+      </p>
+    </header>
+
+    <div class="rounded-xl border-2 border-ads-accent/30 bg-ads-accent/5 px-4 py-3 mb-8 flex gap-3">
+      <i data-lucide="file-text" class="w-5 h-5 text-ads-accent shrink-0 mt-0.5"></i>
+      <p class="text-sm text-ads-text leading-relaxed">
+        本資料は<strong>整理結果の共有</strong>用です。正式な判断依頼は含みません。
+        正本: <code class="text-xs bg-white/80 px-1 rounded">yk-skill/metadata/SKILLS_INDEX.md</code>
+      </p>
+    </div>
+
+    <section id="summary" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2">
+        <i data-lucide="clipboard-list" class="w-5 h-5 text-ads-accent"></i>
+        5分で把握
+      </h2>
+      <ul class="space-y-2 text-sm bg-ads-surface rounded-xl p-5 border-2 border-ads-border">
+        <li><span class="font-medium text-ads-text">結論：</span>スキルは 9 カテゴリ · 35 件に整理済み。索引・Mermaid 図・本資料で俯瞰できる。</li>
+        <li><span class="font-medium text-ads-text">現状：</span>図解・Web 開発・テスト・文書作成など、よく使う作業ごとに手順書が揃っている。</li>
+        <li><span class="font-medium text-ads-text">運用：</span>コミット・push・台帳更新の 3 件だけは<strong>明示したときのみ</strong> AI が動く（誤操作防止）。</li>
+      </ul>
+    </section>
+
+    <section id="purpose" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+        <i data-lucide="target" class="w-5 h-5 text-ads-accent"></i>
+        なぜ整理したか
+      </h2>
+      <ul class="space-y-2 text-sm text-ads-muted">
+        <li class="rounded-lg border-2 border-ads-border p-4 bg-ads-surface">スキルが増えると「どれを使うか」が分かりにくくなるため、一覧と図で全体像を共有できるようにした。</li>
+        <li class="rounded-lg border-2 border-ads-border p-4 bg-ads-surface">似た手順（例: 設計と実装、1 回レビューと多視点レビュー）の使い分けを明示した。</li>
+      </ul>
+    </section>
+
+    <section id="facts" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2">
+        <i data-lucide="layout-grid" class="w-5 h-5 text-ads-accent"></i>
+        9 カテゴリの内訳
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">図解・可視化 <span class="text-ads-accent font-mono text-xs">10</span></p>
+          <p class="text-ads-muted mt-1 text-xs">HTML 図解 · Mermaid · フローチャート · 形式の受付</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">Web 開発 <span class="text-ads-accent font-mono text-xs">5</span></p>
+          <p class="text-ads-muted mt-1 text-xs">Next.js · React · デプロイ · DB</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">Python <span class="text-ads-accent font-mono text-xs">1</span></p>
+          <p class="text-ads-muted mt-1 text-xs">Python ツールの作成</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">テスト・レビュー <span class="text-ads-accent font-mono text-xs">5</span></p>
+          <p class="text-ads-muted mt-1 text-xs">E2E 設計 · テスト実行 · コードレビュー</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">Git・セッション <span class="text-ads-accent font-mono text-xs">4</span></p>
+          <p class="text-ads-muted mt-1 text-xs">コミット · 引き継ぎ · 新規アプリ企画</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">調査・計画 <span class="text-ads-accent font-mono text-xs">3</span></p>
+          <p class="text-ads-muted mt-1 text-xs">Web 調査 · 要件の深掘り · 再説明</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">文書・提案 <span class="text-ads-accent font-mono text-xs">3</span></p>
+          <p class="text-ads-muted mt-1 text-xs">提案文 · メール · 文章の洗練</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface">
+          <p class="font-bold text-ads-text">スキル・ルール・資料 <span class="text-ads-accent font-mono text-xs">5</span></p>
+          <p class="text-ads-muted mt-1 text-xs">スキル作成 · 一覧 · 資料整合</p>
+        </div>
+        <div class="rounded-xl border-2 border-ads-border p-4 bg-ads-surface sm:col-span-2">
+          <p class="font-bold text-ads-text">個人ツール <span class="text-ads-accent font-mono text-xs">1</span></p>
+          <p class="text-ads-muted mt-1 text-xs">個人スケジュールの公開</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="routing" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+        <i data-lucide="git-branch" class="w-5 h-5 text-ads-accent"></i>
+        図解依頼の流れ（代表例）
+      </h2>
+      <p class="text-sm text-ads-muted mb-4">「図解して」とだけ言ったときは、まず形式を選び、あとから専用の手順書に渡す。</p>
+      <div class="rounded-xl border-2 border-ads-border p-5 bg-ads-surface text-sm space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="rounded-lg border-2 border-ads-accent bg-white px-3 py-2 font-medium text-ads-text">「図解して」</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim"></i>
+          <span class="rounded-lg border-2 border-ads-border bg-white px-3 py-2">形式の受付</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-ads-dim"></i>
+          <span class="rounded-lg border-2 border-ads-border bg-white px-3 py-2 text-xs">文系 / 理系 / 社内周知 / 上司向け / 汎用</span>
+        </div>
+        <p class="text-xs text-ads-dim">その他: E2E は「設計 → spec 実行」、Git は「コミット → push」の順が基本。</p>
+      </div>
+    </section>
+
+    <section id="explicit" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+        <i data-lucide="shield" class="w-5 h-5 text-ads-warning"></i>
+        明示したときだけ動く手順（3 件）
+      </h2>
+      <div class="rounded-lg border-2 border-amber-300 bg-amber-50/80 p-4 text-sm">
+        <ul class="space-y-2 text-ads-text">
+          <li><strong>コミット</strong> — 「コミットして」と言ったときのみ</li>
+          <li><strong>push / PR</strong> — 「push して」「PR を作って」と言ったときのみ</li>
+          <li><strong>スキル台帳の再生成</strong> — 「スキル台帳を更新」と言ったときのみ</li>
+        </ul>
+        <p class="text-xs text-ads-muted mt-3">意図しない Git 操作や台帳の上書きを防ぐための設定。</p>
+      </div>
+    </section>
+
+    <section id="interpret" class="mb-10">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+        <i data-lucide="lightbulb" class="w-5 h-5 text-ads-accent"></i>
+        所見
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-ads-muted">
+        <li>日常作業はカテゴリ単位で探すと早い（例: 図解 · テスト · 文書）。</li>
+        <li>詳細な名前一覧はテキスト索引が正本。本資料と Mermaid 図は俯瞰用。</li>
+        <li>スキル追加時は索引と図をあわせて更新する運用が必要。</li>
+      </ul>
+    </section>
+
+    <section id="refs" class="mb-6">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2">
+        <i data-lucide="book-open" class="w-5 h-5 text-ads-accent"></i>
+        正本・関連資料
+      </h2>
+      <ul class="text-sm space-y-2 text-ads-muted">
+        <li><code class="text-xs bg-ads-surface px-1 rounded border border-ads-border">yk-skill/metadata/SKILLS_INDEX.md</code> — 全スキル一覧（テキスト正本）</li>
+        <li><code class="text-xs bg-ads-surface px-1 rounded border border-ads-border">yk-skill/metadata/diagrams/skills-overview.mmd</code> — カテゴリ俯瞰図</li>
+        <li><code class="text-xs bg-ads-surface px-1 rounded border border-ads-border">yk-skill/metadata/diagrams/skills-routing-pairs.mmd</code> — 受付・ペア関係図</li>
+        <li><code class="text-xs bg-ads-surface px-1 rounded border border-ads-border">yk-skill/metadata/SKILL_CATALOG.md</code> — 機械向け台帳</li>
+      </ul>
+      <p class="text-xs text-ads-dim mt-4">詳細な各スキルの発火条件は面談または索引テキストを参照。</p>
+    </section>
+
+  </main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">BriefMap（上司向けブリーフ図解）</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

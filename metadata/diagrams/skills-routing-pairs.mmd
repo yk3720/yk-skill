@@ -1,0 +1,56 @@
+%% YK スキル — 受付・委譲とペア関係
+%% SSOT: ../SKILL_CATALOG.md ペア表
+flowchart LR
+  subgraph routeDiagram["図解の受付と実行"]
+    direction TB
+    ask(["図解して（形式未指定）"])
+    route["routing-diagram-yk"]
+    curiosity["creating-curiosity-map（文系）"]
+    techmap["creating-diagram-techmap（理系）"]
+    proposal["creating-proposalmap-yk（社内周知）"]
+    brief["creating-briefmap-yk（上司向け）"]
+    visual["creating-visual-explainers（汎用）"]
+    ask --> route
+    route --> curiosity
+    route --> techmap
+    route --> proposal
+    route --> brief
+    route --> visual
+  end
+
+  subgraph pairTest["E2E"]
+    direction TB
+    pwDesign["designing-playwright-tests-yk（設計）"]
+    pwUse["using-playwright（spec）"]
+    pwDesign -->|"設計後"| pwUse
+  end
+
+  subgraph pairReview["レビュー"]
+    direction TB
+    review1["reviewing-code-yk（単一パス）"]
+    reviewN["reviewing-with-subagents（多視点）"]
+  end
+
+  subgraph pairWriting["文書"]
+    direction TB
+    proposals["writing-proposals（長文提案）"]
+    mail["writing-internal-mail-yk（私の文体で）"]
+    refine["refining-copy-yk（文章を洗練）"]
+    briefmap["creating-briefmap-yk（図解本文）"]
+  end
+
+  subgraph pairMeta["メタ運用"]
+    direction TB
+    explore["exploring-skills-yk（一覧・監査）"]
+    manage["managing-skills-yk（台帳再生成）"]
+    createSkill["creating-skills（作成・改善）"]
+    explore -.->|"改善提案"| createSkill
+    manage -.->|"台帳書込"| explore
+  end
+
+  subgraph pairGit["Git"]
+    direction TB
+    commit["committing-with-git-yk"]
+    push["pushing-and-pr-yk"]
+    commit --> push
+  end

@@ -2,6 +2,7 @@
 
 **最終更新:** 2026-07-05（`exploring-skills-yk` 初版）  
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
+**図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
 
 > 発火条件の正本は各 `SKILL.md` の YAML `description`。本索引は要約。矛盾時は `description` を優先する。

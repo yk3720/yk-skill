@@ -1,0 +1,82 @@
+%% YK スキル一覧 — カテゴリ別俯瞰
+%% SSOT: ../SKILLS_INDEX.md · ../skill-categories.yaml
+%% 更新: creating-skills Step 8 または managing-skills-yk 後に同期
+flowchart TD
+  root(["YK スキル L1×35 + nested×2"])
+
+  subgraph catDiagram["図解・可視化"]
+    skRouting["routing-diagram-yk"]
+    skCuriosity["creating-curiosity-map"]
+    skTechmap["creating-diagram-techmap"]
+    skProposal["creating-proposalmap-yk"]
+    skBrief["creating-briefmap-yk"]
+    skVisual["creating-visual-explainers"]
+    skMermaid["creating-mermaid-yk"]
+    skReactflow["creating-reactflow-yk"]
+    skVisualFb["creating-visual-explainers-fb (nested)"]
+    skFbSetup["setup-fb-tool (nested)"]
+  end
+
+  subgraph catWeb["Web 開発"]
+    skNext["creating-nextjs-yk"]
+    skReact["creating-react-yk"]
+    skShadcn["creating-shadcn-yk"]
+    skVercel["creating-vercel-yk"]
+    skSupabase["creating-supabase-yk"]
+  end
+
+  subgraph catPython["Python"]
+    skPython["creating-pythoncode-yk"]
+  end
+
+  subgraph catTest["テスト・レビュー"]
+    skPwDesign["designing-playwright-tests-yk"]
+    skPwUse["using-playwright"]
+    skReview["reviewing-code-yk"]
+    skReviewMulti["reviewing-with-subagents"]
+    skOptimize["optimizing-code-yk"]
+  end
+
+  subgraph catGit["Git・セッション"]
+    skCommit["committing-with-git-yk (明示のみ)"]
+    skPush["pushing-and-pr-yk (明示のみ)"]
+    skHandoff["handoff-session-work"]
+    skStartApp["starting-app-project-yk"]
+  end
+
+  subgraph catResearch["調査・計画・説明"]
+    skResearch["researching-web"]
+    skGrill["grill-me"]
+    skReexplain["re-explaining-in-chat-yk"]
+  end
+
+  subgraph catWriting["文書・提案"]
+    skProposals["writing-proposals"]
+    skMail["writing-internal-mail-yk"]
+    skRefine["refining-copy-yk"]
+  end
+
+  subgraph catMeta["スキル・ルール・資料メタ"]
+    skCreateSkill["creating-skills"]
+    skManageSkill["managing-skills-yk (明示のみ)"]
+    skExploreSkill["exploring-skills-yk"]
+    skDistill["distilling-rules-yk"]
+    skOrganize["organizing-documents-yk"]
+  end
+
+  subgraph catPersonal["個人ツール"]
+    skScheduler["personal-scheduler"]
+  end
+
+  root --> catDiagram
+  root --> catWeb
+  root --> catPython
+  root --> catTest
+  root --> catGit
+  root --> catResearch
+  root --> catWriting
+  root --> catMeta
+  root --> catPersonal
+
+  classDef explicit fill:#fff3cd,stroke:#856404,stroke-width:2px
+  class skCommit,skPush,skManageSkill explicit
