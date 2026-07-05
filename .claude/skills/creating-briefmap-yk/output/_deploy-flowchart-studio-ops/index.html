@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta property="og:title" content="Flowchart Studio 運用構成 — 調査報告（BriefMap）">
+  <meta property="og:description" content="表駆動フローチャート Web アプリの本番運用について、調査結果と判断依頼3点をまとめた上司向けブリーフです。">
+  <meta property="og:type" content="article">
+  <title>Flowchart Studio 運用構成 — 調査報告（BriefMap）</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FFFFFF'/><rect x='8' y='8' width='84' height='84' rx='14' fill='none' stroke='%233B82F6' stroke-width='4'/><rect x='22' y='28' width='56' height='8' rx='2' fill='%233B82F6'/><rect x='22' y='44' width='40' height='6' rx='2' fill='%2394A3B8'/><rect x='22' y='56' width='48' height='6' rx='2' fill='%2394A3B8' opacity='0.5'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ads: {
+              bg: '#FFFFFF', surface: '#F8FAFC', hover: '#F1F5F9', border: '#E2E8F0',
+              accent: '#3B82F6', 'accent-light': '#2563EB', text: '#1E293B',
+              muted: '#64748B', dim: '#94A3B8', positive: '#10B981', negative: '#EF4444', warning: '#F59E0B',
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Hiragino Sans"', '"Yu Gothic UI"', '"Meiryo"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { border-top: none !important; }
+      .rounded-xl { break-inside: avoid; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="bg-ads-bg text-slate-600 antialiased leading-relaxed border-t-4 border-ads-accent">
+  <div class="no-print max-w-3xl mx-auto px-5 pt-2 flex justify-end">
+    <button type="button" onclick="window.print()" class="flex items-center gap-1.5 text-xs text-ads-dim hover:text-ads-accent transition-colors cursor-pointer">
+      <i data-lucide="download" class="w-3.5 h-3.5"></i> PDF
+    </button>
+  </div>
+  <main class="max-w-3xl mx-auto px-5 py-10 md:py-16">
+
+    <header class="mb-8">
+      <p class="text-xs font-medium text-ads-accent mb-2">BriefMap · 【提案】</p>
+      <h1 class="text-2xl md:text-3xl font-bold text-ads-text tracking-tight">Flowchart Studio 運用構成 — 調査報告</h1>
+      <p class="mt-3 text-ads-muted leading-relaxed">表駆動 Web 版の叩き台は完成。本番運用の推奨は構成 B（月 $50）。現状の $0 公開は検証用 PoC。</p>
+      <p class="mt-2 text-xs text-ads-dim">対象読者：制御設計エンジニア（上司確認用）｜正本：01_調査報告_概要.txt｜2026-07-05</p>
+    </header>
+
+    <div class="rounded-xl border border-ads-accent/30 bg-ads-accent/5 px-4 py-3 mb-8 flex gap-3">
+      <i data-lucide="file-text" class="w-5 h-5 text-ads-accent shrink-0 mt-0.5"></i>
+      <p class="text-sm text-ads-text leading-relaxed">
+        本資料は<strong>調査結果の報告</strong>と<strong>運用方針のご判断依頼</strong>用。Copilot 等の生成 AI 利用規程とは別議題（ホスティング · DB の話）。
+      </p>
+    </div>
+
+    <section id="ask" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-3 flex items-center gap-2 flex-wrap">
+        <i data-lucide="help-circle" class="w-5 h-5 text-ads-accent"></i>
+        ご判断いただきたい点（3点）
+        <span class="text-xs font-medium text-ads-warning">提案</span>
+      </h2>
+      <ol class="list-decimal pl-5 space-y-2 text-sm text-ads-text">
+        <li>有償クラウド（月 約 $50 · 構成 B）の利用可否</li>
+        <li>社内設計データ（社内番号 · 装置名 · PLCコメント等）の外部クラウド保存可否</li>
+        <li>本番化時のサービスアカウント名義（個人 → 会社）の取得可否</li>
+      </ol>
+    </section>
+
+    <section id="summary" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="clipboard-list" class="w-5 h-5 text-ads-accent"></i>
+        5分で把握
+        <span class="text-xs font-medium text-ads-dim">解釈</span>
+      </h2>
+      <ul class="space-y-2 text-sm bg-ads-surface rounded-xl p-5 border border-ads-border">
+        <li><span class="font-medium text-ads-text">結論：</span>本番運用は構成 B（Vercel Pro + Supabase Pro + FastAPI/Railway · 月 $50）を推奨</li>
+        <li><span class="font-medium text-ads-text">現状：</span>構成 A 相当 · 無料枠 · PoC 公開中（FastAPI 未デプロイ）</li>
+        <li><span class="font-medium text-ads-text">主たる判断：</span>無料（A/D）か 有償 Web 本番（B/C）か の二択</li>
+        <li><span class="font-medium text-ads-text">触る：</span><a href="https://flowchart-studio-dun.vercel.app" class="text-ads-accent hover:underline" target="_blank" rel="noopener">flowchart-studio-dun.vercel.app</a>（手順は 02_触ってみる手順.txt）</li>
+      </ul>
+    </section>
+
+    <section id="facts" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="search" class="w-5 h-5 text-ads-accent"></i>
+        調査結果 · 現状（PoC）
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-ads-muted">
+        <li>Web 版の基本機能は実装済み（表編集 · 図プレビュー · 保存 · PNG/SVG · ログイン）</li>
+        <li>Vercel + Supabase 無料枠で公開中（月 $0）</li>
+        <li>FastAPI は未デプロイ — Excel 変換は作者 PC の exe → import.json 取込</li>
+        <li>現フェーズは「調査 · 検証」。方針確定後に開発を進める</li>
+      </ul>
+    </section>
+
+    <section id="recommend" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="target" class="w-5 h-5 text-ads-accent"></i>
+        推奨：構成 B
+        <span class="text-xs font-medium text-ads-warning">提案</span>
+      </h2>
+      <p class="text-sm mb-3">構成 B — Vercel Pro + Supabase Pro + FastAPI（Railway）。正式運用ならログイン認証あり。</p>
+      <ul class="list-disc pl-5 space-y-1.5 text-sm text-ads-muted">
+        <li>ブラウザから装置 xlsx 変換まで完結（FastAPI 組み込み）</li>
+        <li>正式運用にはログイン · ユーザー管理が必要（共用 admin は検証用のみ）</li>
+        <li>Railway は月 $5 程度 — 追加コストは小さい</li>
+        <li>PLC コメントとフローの対応づけにはクラウド保存 · 認証付き Web が前提</li>
+        <li>推奨構成は完全無料では実現できない</li>
+        <li>PoC（A）から本番（B）への移行が年度テーマ（1装置分 · 実用化）に自然</li>
+      </ul>
+    </section>
+
+    <section id="options" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="layout-grid" class="w-5 h-5 text-ads-accent"></i>
+        運用構成（4択）
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <div class="overflow-x-auto rounded-xl border border-ads-border">
+        <table class="w-full text-sm">
+          <thead class="bg-ads-surface">
+            <tr>
+              <th class="text-left p-3 font-semibold text-ads-text">構成</th>
+              <th class="text-left p-3 font-semibold text-ads-text">内容</th>
+              <th class="text-left p-3 font-semibold text-ads-text">月額</th>
+              <th class="text-left p-3 font-semibold text-ads-text">位置づけ</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ads-border">
+            <tr>
+              <td class="p-3 font-medium">A</td>
+              <td class="p-3">無料枠 · FastAPI なし</td>
+              <td class="p-3 font-mono">$0</td>
+              <td class="p-3 text-ads-muted">現状 · 検証用 PoC</td>
+            </tr>
+            <tr class="bg-emerald-50/60">
+              <td class="p-3 font-medium text-ads-positive">B <span class="text-xs">推奨</span></td>
+              <td class="p-3">本番 · 認証あり · FastAPI あり</td>
+              <td class="p-3 font-mono">$50〜</td>
+              <td class="p-3">本番運用</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-medium">C</td>
+              <td class="p-3">本番 · 認証なし · FastAPI あり</td>
+              <td class="p-3 font-mono">$25〜35〜</td>
+              <td class="p-3 text-ads-muted">低コスト Web</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-medium">D</td>
+              <td class="p-3">デスクトップ（Python+Excel）</td>
+              <td class="p-3 font-mono">$0</td>
+              <td class="p-3 text-ads-muted">選定時想定</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-ads-dim mt-2">$50 = Vercel Pro $20 + Supabase Pro $25 + Railway $5（1席 · 1 DB · 軽量 API 想定）· 1$=150円目安 · 従量超過別</p>
+      <p class="text-sm mt-3 text-ads-text">B/C の差（ログイン要否）は月 $15〜25 程度 · 面談で相談可。</p>
+    </section>
+
+    <section id="compare" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="git-compare" class="w-5 h-5 text-ads-accent"></i>
+        Web版を選んだ理由（Excel+オートシェイプとの比較）
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <div class="overflow-x-auto rounded-xl border border-ads-border">
+        <table class="w-full text-sm">
+          <thead class="bg-ads-surface">
+            <tr>
+              <th class="text-left p-3 font-semibold text-ads-text">観点</th>
+              <th class="text-left p-3 font-semibold text-ads-text">デスクトップ Excel+シェイプ</th>
+              <th class="text-left p-3 font-semibold text-ads-text">Web Flowchart Studio</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ads-border">
+            <tr><td class="p-3 font-medium">所在</td><td class="p-3">シート分散 · 管理煩雑</td><td class="p-3">Web 集約 · 一覧からアクセス</td></tr>
+            <tr><td class="p-3 font-medium">探索 · 共有</td><td class="p-3">場所不明 · 他者参照困難</td><td class="p-3">DB 保存で共有容易</td></tr>
+            <tr><td class="p-3 font-medium">作図 · 修正</td><td class="p-3">削除 · 貼付の手作業</td><td class="p-3">表編集 → 再生成</td></tr>
+            <tr><td class="p-3 font-medium">配布 · 版管理</td><td class="p-3">端末ごと · 版揃え大変</td><td class="p-3">一箇所修正で全員利用</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="arch" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="network" class="w-5 h-5 text-ads-accent"></i>
+        利用サービス（構成 B 想定）
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <div class="overflow-x-auto rounded-xl border border-ads-border mb-4">
+        <table class="w-full text-sm">
+          <thead class="bg-ads-surface">
+            <tr>
+              <th class="text-left p-3 font-semibold text-ads-text">サービス</th>
+              <th class="text-left p-3 font-semibold text-ads-text">制御設計でのたとえ</th>
+              <th class="text-left p-3 font-semibold text-ads-text">役割</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-ads-border">
+            <tr><td class="p-3 font-medium">GitHub</td><td class="p-3">設計フォルダ＋変更履歴</td><td class="p-3">ソース保管 · 自動デプロイ</td></tr>
+            <tr><td class="p-3 font-medium">Vercel</td><td class="p-3">HMI 配信サーバ</td><td class="p-3">Web アプリ公開</td></tr>
+            <tr><td class="p-3 font-medium">Supabase</td><td class="p-3">レシピ保存庫＋ログイン</td><td class="p-3">フロー保存 · 認証</td></tr>
+            <tr><td class="p-3 font-medium">Railway</td><td class="p-3">変換バッチサーバ</td><td class="p-3">Excel→JSON（FastAPI）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-ads-dim">アカウント：現状は個人名義。本番（B/C）では会社名義への移行を推奨。</p>
+    </section>
+
+    <section id="data" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="database" class="w-5 h-5 text-ads-accent"></i>
+        保存データの扱い
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-ads-muted">
+        <li><strong class="text-ads-text">含む：</strong>社内番号 · 装置名 · フロー表 · PLC コメント（リンク予定）</li>
+        <li><strong class="text-ads-text">含まない想定：</strong>客先名 · 契約情報等</li>
+        <li>社内番号 · 装置名だけでは客先特定不可</li>
+        <li>装置名の付け方で客先が推測される場合 → 運用ルールとして別途相談</li>
+      </ul>
+    </section>
+
+    <section id="risks" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2 flex-wrap">
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-ads-warning"></i>
+        リスク（無料枠のまま本番にしない理由）
+        <span class="text-xs font-medium text-ads-dim">事実</span>
+      </h2>
+      <div class="rounded-lg border border-ads-warning/40 bg-amber-50/80 p-4 text-sm">
+        <ul class="list-disc pl-5 space-y-1.5 text-ads-muted">
+          <li><strong class="text-ads-text">Supabase Free：</strong>1週間非アクセスで DB 一時停止 · 自動バックアップなし</li>
+          <li><strong class="text-ads-text">Vercel Hobby：</strong>非商用 · 個人向け — 有給業務の継続利用は規約上グレー</li>
+          <li><strong class="text-ads-text">個人アカウント：</strong>退職 · 請求 · 継続性のリスク</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="terms" class="mb-12">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2">
+        <i data-lucide="book-open" class="w-5 h-5 text-ads-accent"></i>
+        用語
+      </h2>
+      <dl class="grid gap-3 text-sm">
+        <div class="rounded-lg border border-ads-border p-3">
+          <dt class="font-semibold text-ads-text">PoC（Proof of Concept）</dt>
+          <dd class="mt-1 text-ads-muted">概念実証 · 試作。現状の構成 A が該当。</dd>
+        </div>
+        <div class="rounded-lg border border-ads-border p-3">
+          <dt class="font-semibold text-ads-text">FastAPI</dt>
+          <dd class="mt-1 text-ads-muted">Python の Web API。装置 xlsx の正規化に使用（Railway 上 · 構成 B/C）。</dd>
+        </div>
+        <div class="rounded-lg border border-ads-border p-3">
+          <dt class="font-semibold text-ads-text">SaaS</dt>
+          <dd class="mt-1 text-ads-muted">クラウド上のソフトウェアを月額利用する形態（Vercel · Supabase · Railway 等）。</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section id="refs" class="mb-8">
+      <h2 class="text-lg font-bold text-ads-text mb-4 flex items-center gap-2">
+        <i data-lucide="link" class="w-5 h-5 text-ads-accent"></i>
+        正本 · 参照
+      </h2>
+      <ul class="space-y-2 text-sm">
+        <li class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-ads-dim"></i> 01_調査報告_概要.txt（正本）</li>
+        <li class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-ads-dim"></i> 02_触ってみる手順.txt</li>
+        <li class="flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4 text-ads-dim"></i> 03_調査報告_詳細.txt（任意）</li>
+        <li><a href="https://briefmap-flowchart-studio-ops.surge.sh" class="text-ads-accent hover:underline flex items-center gap-2" target="_blank" rel="noopener"><i data-lucide="external-link" class="w-4 h-4"></i> 本図解（surge）</a></li>
+        <li><a href="https://flowchart-studio-dun.vercel.app" class="text-ads-accent hover:underline flex items-center gap-2" target="_blank" rel="noopener"><i data-lucide="external-link" class="w-4 h-4"></i> 本番 URL（アプリ）</a></li>
+      </ul>
+    </section>
+
+  </main>
+  <footer class="max-w-3xl mx-auto px-5 pb-10 pt-6 border-t border-ads-border/30">
+    <p class="text-xs text-ads-dim text-center">BriefMap（上司向けブリーフ図解）· Flowchart Studio 社内合意資料</p>
+  </footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
