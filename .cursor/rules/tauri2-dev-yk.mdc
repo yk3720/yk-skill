@@ -139,6 +139,22 @@ export default defineConfig({
 
 追加: `npx tauri add fs` のように実行。Cargo.toml と capabilities の両方が自動更新される。
 
+## Web + Desktop 並行開発（同一リポ）
+
+製品本線が Tauri・ブラウザがプレビューのとき（例: lci-studio）:
+
+| MUST / 方針 | 内容 |
+|-------------|------|
+| **リポは 1 つ** | `src/`（React）共有 · `src-tauri/` だけホスト。Web 用・Desktop 用の二重リポは避ける |
+| **能力は host で分岐** | OS 依存（シェル起動 · アプリデータ FS 等）は `isTauri()` / `invoke` の薄い層に閉じる。UI ボタンは Web では disabled + 理由、Desktop で有効 |
+| **ドメイン barrel に Tauri を混ぜない** | `@tauri-apps/api` は `host.ts` 等から直接 import。`lib/**/index` 経由で Vitest（node）に引き込まない |
+| **Vercel = プレビュー** | 本線の代替にしない（シェル起動・ローカル永続は Web では窮屈） |
+
+```
+npm run dev          → ブラウザ
+npm run tauri:dev    → デスクトップ（同じ UI + ホスト）
+```
+
 ## Windows 開発トラブルシューティング
 
 Windows 環境特有のビルドエラーや Deep Link の不具合に対する解決策。
@@ -146,10 +162,14 @@ Windows 環境特有のビルドエラーや Deep Link の不具合に対する�
 | 症状 | 原因 | 解決策 |
 |------|------|--------|
 | `linker link.exe not found` | MSVC リンカ不足 | Visual Studio Build Tools で「C++ によるデスクトップ開発」をインストール |
-| アプリ起動時にブロックされる | Windows Defender / AppLocker | 設定でプロジェクトフォルダを除外対象に追加するか、実行許可を与える |
+| `os error 4551` · `Cannot find native binding`（`cli.win32-x64-msvc.node`）· Cargo の `build-script-build` が「never executed」 | **スマート アプリ コントロール（SAC）** が未署名／開発用バイナリをブロック | Windows セキュリティ → アプリとブラウザー制御 → **SAC をオフ**。**アプリ単位の許可リストはない**。再オンは Windows 初期化が必要な場合あり |
+| 同上を「Defender のフォルダ除外」で直そうとする | **アンチパターン** — 除外はウイルス検査用で SAC/4551 は解けない | SAC と Defender 除外を混同しない（下の行は別症状） |
+| アプリ **起動後**にブロックされる | Windows Defender / AppLocker（企業ポリシー含む） | 実行許可 · 企業 WDAC なら IT に許可申請。個人 SAC とは別経路 |
 | フォルダ移動後にビルドエラー | キャッシュのパス不整合 | `src-tauri` 内で `cargo clean` を実行してから再ビルド |
 | ファイル削除・上書き失敗 (Error 5) | プロセスがファイルをロック | `taskkill /f /im {app-name}.exe` で残存プロセスを終了 |
 | Deep Link が反応しない | レジストリ未登録 | アプリを管理者権限で一度起動するか、手動で `HKCU:\Software\Classes\` にプロトコルを登録 |
+
+**確認コマンド（SAC 解除後）:** `npx tauri --version` → 通れば `npm run tauri:dev`
 
 ### Deep Link 手動登録 (PowerShell)
 Tauri の自動登録が失敗する場合、以下で強制登録が可能。
