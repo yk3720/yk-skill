@@ -293,6 +293,8 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `mermaid-rules` | `handoffs/mermaid-rules/HANDOFF.md` | Mermaid L1 · 待機時は §6 のみ |
 | `flowchart-studio` | `handoffs/flowchart-studio/HANDOFF.md` | `docs/` + `AGENTS.md` · 四層レイアウト |
 | `tauri-practice` | `handoffs/tauri-practice/HANDOFF.md` | 学習スパイク · `yk-application/tauri-practice` |
+| `comment-studio` | `handoffs/comment-studio/HANDOFF.md` | PLC コメント · Web |
+| `lci-studio` | `handoffs/lci-studio/HANDOFF.md` | LCI · Tauri 予定 · MVP 凍結 · 旧 prompt-studio |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。

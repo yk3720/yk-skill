@@ -5,7 +5,7 @@
 **ステータス:** active（L1）  
 **関連:** `15_project_mgmt/APP_PROJECT_RULES.md`（アプリ開発一般）· `RULE_INDEX.md` No 18  
 
-**最終更新:** 2026-06-29
+**最終更新:** 2026-07-23
 
 ---
 
@@ -17,7 +17,7 @@
 |------|------|
 | **物理パス** | `c:/yk-application/{app-slug}/`（**フラット** — 下記 §1-1） |
 | **Git 管理** | **アプリ単位で独立**（`yk-tool` のモノレポには含めない） |
-| **実例** | `flowchart-studio`（本線 React Flow · 2026-06-23 移行）· `tauri-practice`（学習スパイク）· `comment-studio` / `manual-studio` / `prompt-studio`（企画スタブ） |
+| **実例** | `flowchart-studio`（本線 React Flow · 2026-06-23 移行）· `tauri-practice`（学習スパイク）· `comment-studio`（Web · docs/実装進行）· `manual-studio`（企画スタブ）· `lci-studio`（企画 docs · MVP 凍結 · 旧 `prompt-studio` · Git 未初期化） |
 | **セキュリティ** | Windows Defender 等の除外対象（開発効率優先） |
 
 ### 1-1. フラット構成（親スイートフォルダは作らない）
