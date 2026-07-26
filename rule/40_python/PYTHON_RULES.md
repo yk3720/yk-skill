@@ -277,12 +277,27 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 - **互換:** 見出し 2 行が無い v0.2 / 旧 U0 手書きのみ `resolve_table_module_label`（テーブル名フォールバック）
 - **アンチパターン:** `動作(\d+)` を MID として `% 100` 照合（`動作00018` → MID 18 誤マップ）
 
+### Tk / CTk + pywebview · Excel COM（デスクトップ + 埋め込み Web）
+
+`flowchart-excel` の studio 相当プレビュー調査（2026-07）で確定。詳細 URL · ルート比較はリポ調査書を正本とする:  
+`yk-application/flowchart-excel/docs/03_技術仕様/調査_1窓WebView埋め込み_事前調査_2026-07-26.md`
+
+| 原則 | 内容 |
+|------|------|
+| **埋め込み** | **pywebview は tk Frame に埋め込まない**（メンテナ明言）。`webview.start` と tk `mainloop` は双方ブロッキング — **同一スレッド同居はアンチパターン** |
+| **真の1窓（HWND 1）** | 現行 pywebview 延長では取れない。要時は **tkwebview2 / tkwry 等の別スタック**で POC。一期は別プロセス維持 + `on_top` 等の疑似1窓で体験を先に満たしてよい |
+| **Excel COM** | Office OM はスレッドセーフではない（STA）。ライブ更新・ステータス・描画を同一プロセスに寄せるなら **単一ワーカー／キューで直列化** · 描画中はライブ停止 |
+| **製品約束** | 「常時 OS 最前面」を絶対約束にしない。ゴールは **Excel 操作中もプレビュー作業が継続できる**こと |
+
+- **アンチパターン:** 「1窓化」＝すぐ pywebview を tk に載せる · 同一プロセス化だけして COM を複数経路から叩く · UI 仕様で常時最前面を必須化する
+
 ---
 
 ## 14. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-07-26 | §13 Tk/CTk + pywebview · Excel COM · 真の1窓（flowchart-excel 事前調査） |
 | 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
 | 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
 | 2026-07-01 | §12 プレースホルダー行 sentinel 終端判定 · 外部ツール向け Shift-JIS 出力パターン追記（comment-studio） |
