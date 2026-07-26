@@ -240,7 +240,7 @@ with open(path, "w", encoding="utf-8") as f:
 
 ## 13. YK パターン補足（PyInstaller · GUI exe）
 
-`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify` · **`npm run excel:converter:release`**（版 bump 済み commit 上で verify → タグ → GitHub Release）。
+`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` · `flowchart-excel` の `FlowchartExcel.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify` · **`npm run excel:converter:release`**（版 bump 済み commit 上で verify → タグ → GitHub Release）· `flowchart-excel/build_exe.py`。
 
 ### relative import を `__main__.py` に書かない（凍結 exe で ImportError）
 
@@ -291,12 +291,27 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 
 - **アンチパターン:** 「1窓化」＝すぐ pywebview を tk に載せる · 同一プロセス化だけして COM を複数経路から叩く · UI 仕様で常時最前面を必須化する
 
+### 隣接リポを Vite alias する preview-web は両側で npm install
+
+`flowchart-excel/preview-web` は `@` → `../../flowchart-studio` で studio の React Flow ソースをバンドルする。解決起点は studio 配下のため、**preview-web だけの `npm install` では `@xyflow/react` 等が解決できず** `vite build` / `build_exe.py` が失敗する。
+
+- **対策:** `c:/yk-application/flowchart-studio` でも `npm install` してから `python build_exe.py`（または `preview-web` の `npm run build`）
+- **アンチパターン:** preview-web 側だけ準備して「依存漏れ」と決めつける · studio 未 clone / 未 install のまま exe ビルド
+
+### Windows コンソール向け print に ✓ 等を書かない
+
+PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeError`** になり、`setup_venv.py` 等が venv 作成前に落ちることがある。
+
+- **対策:** セットアップ · ビルド脚本の stdout は ASCII（`[OK]` 等）。やむを得ず Unicode を出すなら `PYTHONIOENCODING=utf-8` または `sys.stdout.reconfigure(encoding="utf-8")`
+- **アンチパターン:** 成功マークに ✓ / ✔ を使う（凍結 exe の smoke 出力も同様 — 上記「凍結 exe の検証」参照）
+
 ---
 
 ## 14. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-07-27 | §13 flowchart-excel — 隣接 studio の npm install · setup 脚本の cp932/✓ 回避 |
 | 2026-07-26 | §13 Tk/CTk + pywebview · Excel COM · 真の1窓（flowchart-excel 事前調査） |
 | 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
 | 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
