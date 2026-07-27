@@ -305,12 +305,31 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 - **対策:** セットアップ · ビルド脚本の stdout は ASCII（`[OK]` 等）。やむを得ず Unicode を出すなら `PYTHONIOENCODING=utf-8` または `sys.stdout.reconfigure(encoding="utf-8")`
 - **アンチパターン:** 成功マークに ✓ / ✔ を使う（凍結 exe の smoke 出力も同様 — 上記「凍結 exe の検証」参照）
 
+### PyInstaller は venv の Python 経由 · 遅延 import の webview を明示同梱
+
+`flowchart-excel`（2026-07）で、**ビルド成功なのに exe でプレビューが開かない**事例。原因は次の複合。
+
+1. **`build_exe.py` が PATH の `pyinstaller`（ストア版 Python）を呼んだ** — 依存は `.venv` に入れたが、解析環境には `webview` が無い  
+2. **`preview_host` が `try: import webview`（delayed + optional）** — Analysis が webview を必須扱いにせず、`--collect-all=webview` も「not a package」でスキップ  
+3. 結果: `preview-web/dist`（HTML）は同梱されるが **`webview` は PYZ に入らない** → 子プロセス `--flowchart-preview` が即終了し `{"error": "pywebview missing"}`（exit 2）
+
+| やる | やらない |
+|------|----------|
+| ビルド脚本は **`sys.executable -m PyInstaller`**（＝ `python build_exe.py` した同一環境） | 素の `pyinstaller` コマンド（PATH の別 Python） |
+| ビルド前に `import webview` で **同じ interpreter に入っているか**確認 | 「ビルド exit 0」だけ見て配布 |
+| `--hidden-import=webview`（必要なら `pythonnet` · `clr_loader` も） | delayed/optional import だけに任せた同梱 |
+| ビルド後 smoke: `FlowchartExcel.exe --flowchart-preview payload.json result.json <dist>` が **exit 2 / pywebview missing でない**こと | GUI 目視だけ · warn の `missing module named webview` を無視 |
+
+- **切り分け:** `.venv` の `python main.py` でプレビュー可 · 当該 exe だけ不可 → ほぼ同梱漏れ（Runtime / 別PC差分ではない）
+- **warn の合図:** `build/*/warn-*.txt` に `missing module named webview` があれば **配布禁止**で再ビルド
+
 ---
 
 ## 14. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-07-27 | §13 PyInstaller — venv 経由必須 · delayed webview 同梱漏れ（flowchart-excel プレビュー） |
 | 2026-07-27 | §13 flowchart-excel — 隣接 studio の npm install · setup 脚本の cp932/✓ 回避 |
 | 2026-07-26 | §13 Tk/CTk + pywebview · Excel COM · 真の1窓（flowchart-excel 事前調査） |
 | 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
