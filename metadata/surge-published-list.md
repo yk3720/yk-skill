@@ -1,6 +1,6 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年8月9日（自分専用の提案スキル・チューニング前後の提出用図解を公開）  
+**最終更新**: 2026年8月14日（卒業制作・フローチャートスタジオ図解を公開）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
 **HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
 **作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
@@ -33,6 +33,7 @@
 | 20 | 図解管理 — 自作ツールの画面仕上げ | その他 | 2026/08/09 | [diagram-manager-ui.surge.sh](https://diagram-manager-ui.surge.sh) | `manager-ui.html` | 113.3KB |
 | 21 | 図解管理 — 画面に記憶を持たせる | その他 | 2026/08/09 | [diagram-manager-memory.surge.sh](https://diagram-manager-memory.surge.sh) | `manager-memory.html` | 196.3KB |
 | 22 | 自分専用の提案スキル — チューニング前後 | その他 | 2026/08/09 | [diagram-proposal-skill-tuning-20260809.surge.sh](https://diagram-proposal-skill-tuning-20260809.surge.sh) | `proposal-skill-tuning.html` | 24.5KB |
+| 23 | フローチャートスタジオ — 自分の武器（卒業制作） | その他 | 2026/08/14 | [diagram-flowchart-studio-weapon.surge.sh](https://diagram-flowchart-studio-weapon.surge.sh) | `flowchart-studio-weapon.html` | 104.1KB |
 
 ---
 
@@ -78,6 +79,7 @@
 | 図解管理 — 自作ツールの画面仕上げ | [diagram-manager-ui.surge.sh](https://diagram-manager-ui.surge.sh) | 2026/08/09 |
 | 図解管理 — 画面に記憶を持たせる | [diagram-manager-memory.surge.sh](https://diagram-manager-memory.surge.sh) | 2026/08/09 |
 | 自分専用の提案スキル — チューニング前後 | [diagram-proposal-skill-tuning-20260809.surge.sh](https://diagram-proposal-skill-tuning-20260809.surge.sh) | 2026/08/09 |
+| フローチャートスタジオ — 自分の武器（卒業制作） | [diagram-flowchart-studio-weapon.surge.sh](https://diagram-flowchart-studio-weapon.surge.sh) | 2026/08/14 |
 
 ---
 
@@ -85,15 +87,15 @@
 
 | 項目 | 値 |
 |------|---|
-| 公開コンテンツ総数 | 22件 |
+| 公開コンテンツ総数 | 23件 |
 | Techmap | 13件 |
 | CuriosityMap | 3件 |
 | ProposalMap | 1件 |
 | BriefMap | 0件（ローカルのみ運用可 · `creating-briefmap-yk`） |
-| その他（ツール） | 5件 |
+| その他（ツール） | 6件 |
 | 最初の公開日 | 2026/03/28 |
-| 最新の公開日 | 2026/08/09 |
-| ローカルファイル合計サイズ | 約 1.1MB |
+| 最新の公開日 | 2026/08/14 |
+| ローカルファイル合計サイズ | 約 1.2MB |
 
 ---
 
