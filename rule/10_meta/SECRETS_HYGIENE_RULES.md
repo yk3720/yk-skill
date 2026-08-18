@@ -2,7 +2,7 @@
 ## 横断 Secrets SSOT — チェックリスト + 禁止パターン（実装手順は各ドメイン rule）
 
 **用途:** 資格情報・トークン・セッションの **保管・共有・コミット** に関する横断方針。  
-**関連:** [`GIT_WORKFLOW_RULES.md`](GIT_WORKFLOW_RULES.md) §2（コミット禁止）· [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md)（`detect-private-key` hook · Push Protection）· 各ドメイン rule のセキュリティ節  
+**関連:** [`GIT_WORKFLOW_RULES.md`](GIT_WORKFLOW_RULES.md) §2（コミット禁止）· [`GIT_TRACKING_RULES.md`](GIT_TRACKING_RULES.md)（生成物 · 追跡対象全体）· [`QUALITY_GATE_RULES.md`](../60_tooling/QUALITY_GATE_RULES.md)（`detect-private-key` hook · Push Protection）· 各ドメイン rule のセキュリティ節  
 **Git 操作:** コミット / push のタイミング → `GIT_WORKFLOW_RULES.md`
 
 **最終更新:** 2026-05-23

@@ -5,7 +5,7 @@
 **関連:** `40_python/PYTHON_RULES.md` §9（Python / rev 積層）· `60_tooling/QUALITY_GATE_RULES.md`（Git hook / CI）· 各ドメイン rule のセキュリティ節  
 **実行手順:** Cursor **User Rules**（`git status` / `git diff` / HEREDOC 等）— 本ファイルは **方針 SSOT** のみ
 
-**最終更新:** 2026-05-23
+**最終更新:** 2026-08-18（§2 → `GIT_TRACKING_RULES` リンク）
 
 ---
 
@@ -25,9 +25,12 @@
 
 ## 2. コミットしてはいけないもの
 
-**一覧・チェックリスト（SSOT）:** [`SECRETS_HYGIENE_RULES.md`](SECRETS_HYGIENE_RULES.md) §2 · §「エージェント必読チェックリスト」
+| 観点 | SSOT |
+|------|------|
+| **秘密・資格情報** | [`SECRETS_HYGIENE_RULES.md`](SECRETS_HYGIENE_RULES.md) §2 · §「エージェント必読チェックリスト」 |
+| **生成物・追跡対象全体** | [`GIT_TRACKING_RULES.md`](GIT_TRACKING_RULES.md) §2 · §「エージェント必読チェックリスト」 |
 
-**コミット前:** ステージにシークレットが混ざっていないか確認する。含まれていたらステージから外し、ユーザーに報告する。
+**コミット前:** ステージにシークレット **および** 生成物（`__pycache__` · ログ · ビルド成果物等）が混ざっていないか確認する。含まれていたらステージから外し、ユーザーに報告する。
 
 ---
 
