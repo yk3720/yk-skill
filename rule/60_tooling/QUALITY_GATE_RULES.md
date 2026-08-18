@@ -82,7 +82,7 @@
 | `check for merge conflicts ... Passed` | セキュリティ hook が効いている | — |
 | `(no files to check) Skipped`（commit 時） | **異常** — pre-commit がファイルを認識できていない | `.husky/pre-commit` が git ルートから `--config` 付きで実行されているか確認（2026-06-09 修正済） |
 | hook 失敗（exit 1）で **上記以外** | commit / push 拒否 | 出力を読み自己修正 · `--no-verify` 禁止 |
-| **WinError 4551** または **Windows セキュリティ「pre-commit.exe をブロック」** | `pre-commit` フックランナーが OS により実行不可（Cursor エージェント **および** ローカル端末の両方で起こりうる · コード不備ではない） | 下記 **Windows で pre-commit がブロックされたとき** · 詳細は `committing-with-git-yk/references/commit-shell.md` |
+| **WinError 4551** または **Windows セキュリティ「pre-commit.exe をブロック」** | `pre-commit` フックランナーが OS により実行不可（Cursor エージェント **および** ローカル端末の両方で起こりうる · コード不備ではない） | 下記 **Windows で pre-commit がブロックされたとき** · 詳細は `managing-git-yk/references/commit-shell.md` |
 
 #### Windows で pre-commit がブロックされたとき
 

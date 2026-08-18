@@ -5,7 +5,7 @@
 **関連:** `40_python/PYTHON_RULES.md` §9（Python / rev 積層）· `60_tooling/QUALITY_GATE_RULES.md`（Git hook / CI）· 各ドメイン rule のセキュリティ節  
 **実行手順:** Cursor **User Rules**（`git status` / `git diff` / HEREDOC 等）— 本ファイルは **方針 SSOT** のみ
 
-**最終更新:** 2026-08-18（§2 → `GIT_TRACKING_RULES` リンク）
+**最終更新:** 2026-08-18（§2 → `GIT_TRACKING_RULES` リンク · クリーンモード）
 
 ---
 
@@ -15,7 +15,8 @@
 |------|------|
 | **`git commit`** | **ユーザーが明示したときのみ**。曖昧な場合はコミット前に確認する |
 | **`git push`** | **ユーザーが明示したときのみ**。「コミットして」だけでは push 可と解釈しない |
-| **引き継ぎ終了** | 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」は **当ターンで commit + push まで**（スキル `handoff-session-work` Phase C → `committing-with-git-yk` · `pushing-and-pr-yk`） |
+| **作業ツリーのクリーン** | 「クリーンにして」「クリーンにする」明示時のみ。先に dry-run。ignored は消さない。tracked の破棄は `reset --hard` と同じく別途明示 |
+| **引き継ぎ終了** | 「引き継ぎして」「セッション終了」「作業を保存」「引き継ぎ終了」は **当ターンで commit + push まで**（スキル `handoff-session-work` Phase C → `managing-git-yk` **commit+push**） |
 | **`git pull` / fetch** | 作業に必要なとき。破壊的マージの恐れがある場合はユーザーに確認 |
 | **PR 作成** | ユーザー依頼時。push が未実施なら先に push 可否を確認 |
 
@@ -85,8 +86,7 @@
 |--------|------|
 | **本ファイル（yk-skill）** | 方針 SSOT — Governance 段階 5 の横断 rule |
 | **Cursor User Rules** | 実行手順（HEREDOC · PR 用 `gh` 等）— **YK マルチルートでは commit 前調査は `AGENT_SHELL_RULES` §3-3（1 本 `;` 連結）を優先**（User Rules の並列 3 本 Shell は未適用） |
-| **スキル `committing-with-git-yk`** | ユーザー明示時、または引き継ぎ終了 Phase C の commit — `/committing-with-git-yk` |
-| **スキル `pushing-and-pr-yk`** | ユーザー明示時、または引き継ぎ終了 Phase C の push / 依頼時の PR — `/pushing-and-pr-yk` |
-| **スキル `handoff-session-work`** | 終了モードで Phase A→B→C（C で上記 2 スキルを Read して実行） |
+| **スキル `managing-git-yk`** | ユーザー明示時の commit / push / PR / クリーン、または引き継ぎ終了 Phase C の commit+push — `/managing-git-yk` |
+| **スキル `handoff-session-work`** | 終了モードで Phase A→B→C（C で `managing-git-yk` を **commit+push** で Read して実行） |
 
 矛盾したときは **Governance**（`RULE_INDEX.md`）の優先順位に従う。同順位ならユーザーに確認する。

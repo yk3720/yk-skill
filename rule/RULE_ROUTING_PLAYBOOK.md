@@ -218,10 +218,10 @@
 
 1. **`10_meta/GIT_WORKFLOW_RULES.md`** — 横断方針（commit / push / メッセージ / 禁止）
 2. **`10_meta/GIT_TRACKING_RULES.md`** — 追跡対象 · `.gitignore` · 生成物除外（No 65）
-3. **`10_meta/SECRETS_HYGIENE_RULES.md`** — 秘密 · チャット貼付禁止
+3. **`10_meta/SECRETS_HYGIENE_RULES.md`** — コミットしてはいけないファイル・チャット貼付禁止
 4. **ドメイン補足** — 例: Python rev 積層 → `40_python/PYTHON_RULES.md` §9 · Playwright セッション → No 53 §5
 5. **実行手順** — Cursor User Rules（`git status` / `git diff` / HEREDOC 等）
-6. **（任意）** スキル `committing-with-git-yk` — マルチリポ判定 · 日本語メッセージ草案 · `/committing-with-git-yk` 明示起動
+6. **（任意）** スキル `managing-git-yk` — マルチリポ判定 · 日本語メッセージ草案 · `/managing-git-yk` 明示起動
 
 ---
 

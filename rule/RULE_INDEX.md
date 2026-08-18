@@ -34,7 +34,7 @@
 | 初回・迷った | 00 | 本ファイル | — | — |
 | Slack・ドキュメント・メール文章 | 05 | `5_writing/WRITING_RULES.md` | L1 要約 · 具体例は `references/`（人が書く業務文 · Agent チャットは No 16） | — |
 | commit / push（ユーザー明示時） | 14 | `10_meta/GIT_WORKFLOW_RULES.md` | [Git](RULE_ROUTING_PLAYBOOK.md#読む順序git-操作をするとき) | — |
-| トークン · `.env` · 秘密情報 | 15 | `10_meta/SECRETS_HYGIENE_RULES.md` | [Secrets](RULE_ROUTING_PLAYBOOK.md#読む順序資格情報トークンを扱うとき) | — |
+| トークン · `.env` · 秘密情報 | 15 | `10_meta/SECRETS_HYGIENE_RULES.md` | [Secrets](RULE_ROUTING_PLAYBOOK.md#読む順序資格情報トークンを扱うとき) | 貼付禁止 + **`.env*` を Read しない**（§3-1） |
 | `.gitignore` · 追跡対象 · 生成物除外 | 65 | `10_meta/GIT_TRACKING_RULES.md` | [Git tracking](RULE_ROUTING_PLAYBOOK.md#読む順序git-操作をするとき) | — |
 | 調査のみ · Shell 抑制 | 62 | `60_tooling/AGENT_SHELL_RULES.md` | [Shell](RULE_ROUTING_PLAYBOOK.md#読む順序agent-が-shell-を使うとき) | `yk-skill` · `agent-shell-yk`（always） |
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
@@ -194,7 +194,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 12 | 10_meta | `10_meta/SKILL_AUTHORING_RULES.md` | スキル作成・更新 | active |
 | 13 | 10_meta | `10_meta/AI_DRIVEN_RULES.md` | 講座・行動指針（**人間向け** — エージェントは通常 Read しない） | active |
 | 14 | 10_meta | `10_meta/GIT_WORKFLOW_RULES.md` | **Git 操作**（commit / push / メッセージ / 禁止事項） | active |
-| 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・保管場所） | active |
+| 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・**エージェント Read 禁止**・保管場所） | active |
 | 65 | 10_meta | `10_meta/GIT_TRACKING_RULES.md` | **Git 追跡対象**（track / not track · `.gitignore` · 生成物除外） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ · No 05 精神借用 · 作業後3点サマリ） | active |
 | 17 | 15_project_mgmt | `15_project_mgmt/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
@@ -306,7 +306,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 企画・背景（参考のみ） | `c:/yk-memo/` | Governance 段階 7 — 実装の正解ではない |
 | Excel 原本 | `c:/yk-document/**/originals/` | Git ignore · 変換は `5.Python` + `exports/` |
 | セッション引き継ぎ MD | `c:/yk-memo/handoffs/{project}/` | スキル `handoff-session-work`（終了·再開·確認·整理）· `references/template.md` · `folder-audit.md` |
-| Git commit（ユーザー明示時） | 各リポ의 Git ルート | スキル `committing-with-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
+| Git commit / push / PR（ユーザー明示時） | 各リポの Git ルート | スキル `managing-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
 | Agent Shell / RUN 承認 | `60_tooling/cursor-permissions/permissions.json` → `~/.cursor/` にデプロイ | `60_tooling/AGENT_SHELL_RULES.md` · `cursor-permissions/README.md` |
 | Claude Code グローバル設定 | `60_tooling/claude-global/CLAUDE.md` → `~/.claude/` にデプロイ | `claude-global/README.md` |
 

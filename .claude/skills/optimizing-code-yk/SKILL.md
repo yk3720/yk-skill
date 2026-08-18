@@ -4,7 +4,7 @@ description: >
   依頼リポのコード最適化・コードチェック。M1 発火例「コードチェックして」「コード最適化レビュー」「現状と比較して」「サブエージェントで最適化」。
   M2 発火例「最適化を適用して」「レビュー結果を修正して」（M1 所見または同ターン明示必須）。
   Do NOT use for 単一パス差分レビューのみ（reviewing-code-yk）、資料整合（organizing-documents-yk）、
-  機能追加（creating-*-yk）、commit/push のみ（committing-with-git-yk）。
+  機能追加（creating-*-yk）、commit/push のみ（managing-git-yk）。
 ---
 
 # Optimizing Code（YK）
@@ -37,7 +37,7 @@ description: >
 | Web 調査 | **`researching-web`** — M1 Step 2 で Read して委譲 |
 | 多視点比較 | **`reviewing-with-subagents`** — M1 Step 4 で Read して委譲 |
 | 品質ゲート | `c:/yk-skill/rule/60_tooling/QUALITY_GATE_RULES.md` |
-| Git commit | **しない** — `committing-with-git-yk` はユーザー明示時のみ |
+| Git commit | **しない** — `managing-git-yk` はユーザー明示時のみ |
 
 ## 使わない場面
 

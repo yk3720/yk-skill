@@ -154,7 +154,7 @@ archive 内の最新セッション §4 が「完了（履歴）」でも、待�
 | **A 整理** | 資料整理 + ルート直下の既存セッション MD を **すべて** `archive/{YYYY}/` へ移動 | ルートのセッション MD が **0 本** |
 | **B 記録** | 新規セッション MD Write · HANDOFF · README · §2 git（終了時点）· 再開 `@` 文 | ルートに **最新 1 本** · HANDOFF と一致 |
 | **B+ 整合** | `organizing-documents-yk` M1 Tier P — 追随 MD を HANDOFF と同期（`PROJECT_DOCUMENT_RULES` §9.1） | S1–S7 の機械的矛盾なし |
-| **C Git** | `committing-with-git-yk` → `pushing-and-pr-yk`（push のみ）· §2 Post-C 更新 | 触ったルートは commit+push 済またはスキップ理由を §2 に記録 |
+| **C Git** | `managing-git-yk`（**commit+push**）· §2 Post-C 更新 | 触ったルートは commit+push 済またはスキップ理由を §2 に記録 |
 
 Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済ではない**（要整理）。**Phase B+ を飛ばして Phase C に進んだ状態も引き継ぎ終了済ではない**（資料矛盾の持ち越し）。Phase B だけで Phase C を省略した状態も **引き継ぎ終了済ではない**（Git 未保存）。
 
@@ -185,7 +185,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 
 **Phase C（Git · 後）**
 
-13. [git-save.md](../git-save.md) — 触った各 Git ルートで `committing-with-git-yk` → `pushing-and-pr-yk`（push のみ）
+13. [git-save.md](../git-save.md) — 触った各 Git ルートで `managing-git-yk`（**commit+push**）
 14. セッション MD §2 と先頭表 `commit` 行を Post-C で更新
 15. ユーザーへ commit hash · push 結果を報告（パス · 再開 `@` と合わせて）
 

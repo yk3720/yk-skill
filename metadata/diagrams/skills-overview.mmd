@@ -2,7 +2,7 @@
 %% SSOT: ../SKILLS_INDEX.md · ../skill-categories.yaml
 %% 更新: creating-skills Step 8 または managing-skills-yk 後に同期
 flowchart TD
-  root(["YK スキル L1×35 + nested×2"])
+  root(["YK スキル L1×37 + nested×2"])
 
   subgraph catDiagram["図解・可視化"]
     skRouting["routing-diagram-yk"]
@@ -38,8 +38,7 @@ flowchart TD
   end
 
   subgraph catGit["Git・セッション"]
-    skCommit["committing-with-git-yk (明示のみ)"]
-    skPush["pushing-and-pr-yk (明示のみ)"]
+    skGit["managing-git-yk (明示のみ)"]
     skHandoff["handoff-session-work"]
     skStartApp["starting-app-project-yk"]
   end
@@ -79,4 +78,4 @@ flowchart TD
   root --> catPersonal
 
   classDef explicit fill:#fff3cd,stroke:#856404,stroke-width:2px
-  class skCommit,skPush,skManageSkill explicit
+  class skGit,skManageSkill explicit

@@ -65,15 +65,20 @@ entries:
     classification: L
     note: explicit_only 相当の運用 · 引き継ぎ明示時
 
+  managing-git-yk:
+    count_estimate: null
+    classification: L
+    note: disable-model-invocation · commit/push/PR/クリーン明示時のみ · 旧 committing/pushing を統合
+
   committing-with-git-yk:
     count_estimate: null
     classification: L
-    note: disable-model-invocation · コミット明示時のみ
+    note: 廃止エイリアス → managing-git-yk
 
   pushing-and-pr-yk:
     count_estimate: null
     classification: L
-    note: disable-model-invocation · push/PR 明示時のみ
+    note: 廃止エイリアス → managing-git-yk
 
   managing-skills-yk:
     count_estimate: null

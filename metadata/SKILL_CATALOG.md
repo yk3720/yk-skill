@@ -1,9 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加）  
+**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加 · `managing-git-yk` · clean モード）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
 **人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
-**件数:** L1 **36** · nested **2** · sample **1**（計 **39** `SKILL.md`）
+**件数:** L1 **37** · nested **2** · sample **1**（計 **40** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -25,7 +25,7 @@
 
 | No | name | skill_path | tier | canonical | explicit_only | notes |
 |----|------|------------|------|-----------|---------------|-------|
-| 1 | committing-with-git-yk | `.claude/skills/committing-with-git-yk/SKILL.md` | L1 | — | yes | Git commit（明示のみ） |
+| 1 | committing-with-git-yk | `.claude/skills/committing-with-git-yk/SKILL.md` | L1 | — | yes | 廃止エイリアス → `managing-git-yk` |
 | 2 | creating-curiosity-map | `.claude/skills/creating-curiosity-map/SKILL.md` | L1 | — | no | 文系向け図解 · surge |
 | 3 | creating-diagram-techmap | `.claude/skills/creating-diagram-techmap/SKILL.md` | L1 | — | no | 理系 techmap 図解 |
 | 4 | creating-mermaid-yk | `.claude/skills/creating-mermaid-yk/SKILL.md` | L1 | — | no | Mermaid `.mmd` · `MERMAID_RULES` |
@@ -44,12 +44,13 @@
 | 11 | creating-visual-explainers-fb | `.claude/skills/commenting-visual-explainers/.claude/skills/creating-visual-explainers-fb/SKILL.md` | nested | — | no | FB バンドル専用 |
 | 12 | grill-me | `.claude/skills/grill-me/SKILL.md` | L1 | — | no | 設計インタビュー |
 | 13 | handoff-session-work | `.claude/skills/handoff-session-work/SKILL.md` | L1 | — | no | 引き継ぎ: 終了（commit+push 含む）・再開・確認・整理 |
+| 13b | managing-git-yk | `.claude/skills/managing-git-yk/SKILL.md` | L1 | — | yes | commit / push / PR / クリーン（明示のみ）。旧 committing / pushing を統合 |
 | 14 | managing-skills-yk | `.claude/skills/managing-skills-yk/SKILL.md` | L1 | — | yes | 本台帳の再生成 |
 | 14a | exploring-skills-yk | `.claude/skills/exploring-skills-yk/SKILL.md` | L1 | — | no | 一覧・未使用分析 · SKILLS_INDEX SSOT |
 | 14b | organizing-documents-yk | `.claude/skills/organizing-documents-yk/SKILL.md` | L1 | — | no | 資料 M1 整合 · M2 更新（v1 M1 本実装） |
 | 14c | optimizing-code-yk | `.claude/skills/optimizing-code-yk/SKILL.md` | L1 | — | no | コードチェック · M1 Web+サブエージェント · M2 修正 |
 | 15 | personal-scheduler | `.claude/skills/personal-scheduler/SKILL.md` | L1 | — | no | 個人スケジュール · surge |
-| 16 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | push / GitHub PR（明示のみ） |
+| 16 | pushing-and-pr-yk | `.claude/skills/pushing-and-pr-yk/SKILL.md` | L1 | — | yes | 廃止エイリアス → `managing-git-yk` |
 | 17 | researching-web | `.claude/skills/researching-web/SKILL.md` | L1 | — | no | Web 調査 |
 | 18 | re-explaining-in-chat-yk | `.claude/skills/re-explaining-in-chat-yk/SKILL.md` | L1 | — | no | チャット再説明 · `COMMUNICATION_RULES` |
 | 18b | refining-copy-yk | `.claude/skills/refining-copy-yk/SKILL.md` | L1 | — | no | 文章洗練 · 多視点レビュー→修正ループ · 文体は毎回確認 |
@@ -75,7 +76,8 @@
 | `routing-diagram-yk` ↔ 図解4種 | 形式未指定の受付。実行は curiosity / techmap / visual / fb に委譲 |
 | `designing-playwright-tests-yk` ↔ `using-playwright` | E2E 設計（§13） vs spec 執筆・実行（§12）。description の Do NOT で分離 |
 | `reviewing-code-yk` ↔ `reviewing-with-subagents` | 単一パスコードレビュー vs 多視点並列。description の Do NOT で分離 |
-| `committing-with-git-yk` ↔ `pushing-and-pr-yk` | commit vs push/PR · いずれも `explicit_only`（`disable-model-invocation`） |
+| `handoff-session-work` ↔ `managing-git-yk` | セッション vs Git · Phase C は commit+push |
+| `committing-with-git-yk` / `pushing-and-pr-yk` | 廃止エイリアス → `managing-git-yk` |
 | `creating-react-yk` ↔ `creating-reactflow-yk` | React 一般 vs 表駆動 `@xyflow/react`。description の Do NOT で分離 |
 | `creating-react-yk` ↔ `creating-nextjs-yk` | `components/` Hooks vs `app/` RSC 境界 |
 | `organizing-documents-yk` ↔ `handoff-session-work` | 資料整合 vs セッション運用 · archive · commit。description の Do NOT で分離 |

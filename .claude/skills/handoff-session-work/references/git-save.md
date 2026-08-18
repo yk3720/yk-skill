@@ -8,8 +8,7 @@
 
 | 段階 | スキル |
 |------|--------|
-| commit | `committing-with-git-yk` |
-| push | `pushing-and-pr-yk`（**push モードのみ** · PR は含めない） |
+| commit+push | `managing-git-yk`（**commit+push** · PR は含めない） |
 
 ---
 
@@ -25,7 +24,7 @@
 
 **Post-C 専用 commit は禁止**（「§2 hash 同期」だけの 2 回目 push で Run が +1〜2 される — 下記 C-3）。
 
-**PowerShell で git commit 禁止（Phase C）** — `$(cat <<'EOF'...)` は PowerShell で構文エラーになり **Run が倍化**する。[commit-shell.md §最優先](../../committing-with-git-yk/references/commit-shell.md)
+**PowerShell で git commit 禁止（Phase C）** — `$(cat <<'EOF'...)` は PowerShell で構文エラーになり **Run が倍化**する。[commit-shell.md §最優先](../../managing-git-yk/references/commit-shell.md)
 
 ---
 
@@ -39,7 +38,7 @@
 
 ## 対象リポの列挙
 
-1. [repo-routing.md](../../committing-with-git-yk/references/repo-routing.md) を Read（未読なら）
+1. [repo-routing.md](../../managing-git-yk/references/repo-routing.md) を Read（未読なら）
 2. **触った Git ルート** — セッション §1-3 のパスから得たルート（重複除去）。**Phase B 用 git status Shell は使わない**
 3. 0 ルートかつ変更パスも無い → Phase C をスキップし、§2 に「変更なし」と記録
 
@@ -47,7 +46,7 @@
 
 ## C-1 — add + commit + push（リポごと · 1 Bash）
 
-1. **`committing-with-git-yk` の SKILL.md を Read**（未読なら）— メッセージ草案 · secrets ゲート
+1. **`managing-git-yk` の SKILL.md を Read**（未読なら）— **commit+push** · メッセージ草案 · secrets ゲート
 2. **Bash ツール**で **1 コール** = `status --short`（任意）+ `add` + `commit` + `push`
 3. メッセージ — セッション MD §1 を材料。短い日本語なら **`-m` 1 行**でよい（HEREDOC 失敗回避）
 4. **C-1 と C-2 を別 Shell に分けない**
@@ -65,7 +64,7 @@ cd "c:/yk-memo" && git status --short && git add handoffs/... && git commit -m "
 
 ## C-2 — push
 
-C-1 に **`&& git push`** を含めたため **独立した C-2 Shell は不要**。push 失敗時のみ同一リポで **1 本**再試行（`pushing-and-pr-yk` Read）。
+C-1 に **`&& git push`** を含めたため **独立した C-2 Shell は不要**。push 失敗時のみ同一リポで **1 本**再試行（`managing-git-yk` の **push**）。
 
 ---
 

@@ -2,6 +2,17 @@
 
 **手順 SSOT:** Cursor User Rules `committing-changes-with-git`（調査 · amend 条件）· `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`（RUN 最小 · 初回 `all`）
 
+## Contents
+
+- 引き継ぎ終了 Phase C
+- Bash HEREDOC（最優先）
+- メッセージファイル + `-F`
+- 調査コマンド
+- トラブルシュート
+- 禁止・注意
+
+---
+
 ## 引き継ぎ終了 Phase C — RUN 最小（最優先）
 
 | やる | やらない |
@@ -176,7 +187,7 @@ Remove-Item Env:SKIP
 
 **commit 1 リポの Shell 例（RUN 1 回 + Write）**
 
-1. **Write** で `<ROOT>/.git/COMMIT_EDITMSG_YK.txt`  
+1. **Write** で `<ROOT>/.git/COMMIT_EDITMSG_YK.txt`
 2. **Shell（`all`）1 本:**
 
 ```powershell
@@ -185,13 +196,13 @@ git -C "c:/yk-memo" commit -F "c:/yk-memo/.git/COMMIT_EDITMSG_YK.txt"
 git -C "c:/yk-memo" status
 ```
 
-3. push 依頼があれば **続けて 1 本**（または上記に `; git -C ... push` を足す）  
-4. **commit 成功後**にのみ `COMMIT_EDITMSG_YK.txt` を Delete  
+3. push 依頼があれば **続けて 1 本**（または上記に `; git -C ... push` を足す）
+4. **commit 成功後**にのみ `COMMIT_EDITMSG_YK.txt` を Delete
 5. `index.lock` が残っていれば削除してから再実行
 
 **マルチリポの正しい順（例: yk-skill → yk-memo）**
 
-1. Write `yk-skill/.git/COMMIT_EDITMSG_YK.txt` → add → commit → push → Delete **yk-skill のみ**  
+1. Write `yk-skill/.git/COMMIT_EDITMSG_YK.txt` → add → commit → push → Delete **yk-skill のみ**
 2. Write `yk-memo/.git/COMMIT_EDITMSG_YK.txt` → add → commit → push → Delete **yk-memo のみ**
 
 ## 禁止・注意

@@ -97,7 +97,7 @@ Tier P 範囲で次を検索する。
 - {ファイル一覧}
 
 ## 次にできること
-- 「コミットして」（committing-with-git-yk）
+- 「コミットして」（managing-git-yk）
 - Tier C 横断チェック（明示依頼時）
 - M2 資料最新化（別モード · refresh.md）
 ```

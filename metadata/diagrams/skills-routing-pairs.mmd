@@ -50,7 +50,7 @@ flowchart LR
 
   subgraph pairGit["Git"]
     direction TB
-    commit["committing-with-git-yk"]
-    push["pushing-and-pr-yk"]
-    commit --> push
+    git["managing-git-yk"]
+    handoff["handoff-session-work"]
+    handoff -->|"Phase C commit+push"| git
   end

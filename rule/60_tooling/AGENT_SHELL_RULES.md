@@ -1,7 +1,7 @@
 # エージェント Shell / RUN 承認（YK 横断）
 
 **目的:** Cursor Agent が **Shell（ターミナル）** を呼ぶたびに出る **RUN 承認**を、安全性を保ちつつ減らす。  
-**関連:** `60_tooling/CURSOR_RULES.md`（Windows 実務）· `10_meta/GIT_WORKFLOW_RULES.md` · スキル `committing-with-git-yk` · `handoff-session-work`
+**関連:** `60_tooling/CURSOR_RULES.md`（Windows 実務）· `10_meta/GIT_WORKFLOW_RULES.md` · スキル `managing-git-yk` · `handoff-session-work`
 
 **最終更新:** 2026-06-29
 
@@ -83,7 +83,7 @@
 
 - `commit` / `push` / PR 作成 / テスト実行（`test` · `E2E` · `確認して` 等の明示）
 - **UI 修正で E2E spec を追加した同一ターン** — `PLAYWRIGHT_RULES.md` §12 の完了判定として `npm run test:e2e` 等を実行（スクショ依頼の反復より spec を green にする）
-- 引き継ぎ **終了**（Phase B: Glob/Read のみ · Phase C: `committing-with-git-yk` / `pushing-and-pr-yk` どおり Bash 1 本/リポ）
+- 引き継ぎ **終了**（Phase B: Glob/Read のみ · Phase C: `managing-git-yk` の **commit+push** どおり Bash 1 本/リポ）
 - clone · `npm install` 等、実行が必須の作業
 
 ### 3-3. 1 RUN にまとめる
@@ -108,7 +108,7 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 | Playwright · clone · `npm install` | 初回から **`all`**（該当スキル参照） |
 | 読取のみの git（allowlist 外） | サンドボックス可 → 失敗時のみ `all` |
 
-**非推奨:** サンドボックスで失敗してから `all` で同じコマンドを再実行（RUN が 2 倍になりやすい）。詳細は `committing-with-git-yk/references/commit-shell.md`。
+**非推奨:** サンドボックスで失敗してから `all` で同じコマンドを再実行（RUN が 2 倍になりやすい）。詳細は `managing-git-yk/references/commit-shell.md`。
 
 ### 3-5. 破壊的ファイル操作 · UTF-8 一括書き換え（禁止）
 
@@ -132,7 +132,7 @@ UTF-8 で書く必要がある Shell 処理は `50_gas_html_test/POWERSHELL_HTML
 |----|--------|-------|
 | **D-1** | 引き継ぎ **確認**（`handoff-session-work` 確認モード） | **禁止** — Glob + Read のみ |
 | **D-2** | 引き継ぎ **終了** | Phase B: **git status Shell 禁止** · Phase C: Bash **1 本/リポ**（add+commit+push · 初回 `all` · [git-save.md](../../.claude/skills/handoff-session-work/references/git-save.md)） |
-| **D-3** | **commit**（`committing-with-git-yk`） | 可 — 調査は §3-3、commit は Write + `-F`、初回 `all` |
+| **D-3** | **commit / push / PR / クリーン**（`managing-git-yk`） | 可 — 調査は §3-3、commit は Write + `-F`、初回 `all` |
 | **D-4** | Playwright（`using-playwright` · `PLAYWRIGHT_RULES` §12） | 可 — 上記 §3-2（test 明示 **または** spec 追加の完了判定）· `all` |
 
 ---

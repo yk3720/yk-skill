@@ -7,7 +7,7 @@ description: >
   M2 発火例「資料を最新化して」「古い記述を整理して」。横断は「四リポ横断で整合」等の明示時のみ。
   handoff-session-work 終了 Phase B+ からも Tier P 整合を呼ぶ（持ち越し禁止 · PROJECT_DOCUMENT_RULES §9.1 · §9.2）。
   Do NOT use for handoffs 終了・アーカイブ（handoff-session-work）、L1 ルール追記（distilling-rules-yk）、
-  コード修正（creating-*-yk / optimizing-code-yk）、commit/push のみ（committing-with-git-yk）。
+  コード修正（creating-*-yk / optimizing-code-yk）、commit/push のみ（managing-git-yk）。
 ---
 
 # Organizing Documents（YK）
@@ -47,7 +47,7 @@ description: >
 | ドキュメント種別・正本 | `c:/yk-skill/rule/15_project_mgmt/PROJECT_DOCUMENT_RULES.md` |
 | handoffs フォルダ整合 | `handoff-session-work`（確認 Tier-1）— 本スキルは置換しない |
 | M2 の Web 調査 | `researching-web`（M2 実装時に委譲） |
-| Git commit | **しない** — `committing-with-git-yk` はユーザー明示時のみ |
+| Git commit | **しない** — `managing-git-yk` はユーザー明示時のみ |
 
 ## 使わない場面
 

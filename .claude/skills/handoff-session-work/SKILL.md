@@ -6,7 +6,7 @@ description: >
   再開: 「続きから」「引き継ぎを読んで」「@...SESSION...md」— §4の1件のみ実行
   確認: 「引き継ぎ内容を確認」「handoffsを確認」「引き継ぎの状態を教えて」— Tier-0 索引→指定時 Tier-1 詳細・実行しない
   整理: 「引き継ぎ整理」「handoffsを整理」「引き継ぎをarchive」「archiveして」（handoffs/引き継ぎの文脈）
-  Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit/push のみ（→ committing-with-git-yk / pushing-and-pr-yk）。
+  Do NOT use for 汎用の「整理して」「片付けて」のみ、RULE_IMPROVEMENT_HANDOFF 更新のみ、commit/push のみ（→ managing-git-yk）。
 ---
 
 # Session Handoff
@@ -36,8 +36,7 @@ description: >
 | セッション MD 見出し | [references/template.md](references/template.md) |
 | 確認モードのチェックリスト | [references/folder-audit.md](references/folder-audit.md) |
 | Git 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
-| 終了時 commit | `committing-with-git-yk`（**終了モード Phase C** で Read して実行） |
-| 終了時 push | `pushing-and-pr-yk`（**終了モード Phase C** · push のみ） |
+| 終了時 Git | `managing-git-yk`（**終了モード Phase C** · **commit+push** · PR は含めない） |
 | Phase C 手順 | [references/git-save.md](references/git-save.md) |
 | スキル台帳更新 | `managing-skills-yk`（本スキルとは別） |
 
@@ -48,8 +47,8 @@ description: >
 | `RULE_IMPROVEMENT_HANDOFF.md` の更新だけ | そのファイルの手順（本スキル非使用） |
 | rule 構造の P1〜P7 バックログ | 同上 · 別トラック |
 | 122KB 級の単一 HANDOFF を毎回上書き | 禁止 — セッション MD を新規 Write |
-| **コミットして** / **push して** のみ（引き継ぎ終了なし） | `committing-with-git-yk` / `pushing-and-pr-yk` |
-| 引き継ぎ終了で **PR まで** | 終了モード完了後に PR 明示、または `pushing-and-pr-yk` |
+| **コミットして** / **push して** のみ（引き継ぎ終了なし） | `managing-git-yk` |
+| 引き継ぎ終了で **PR まで** | 終了モード完了後に PR 明示、または `managing-git-yk` の **pr** モード |
 
 ---
 
@@ -93,11 +92,10 @@ description: >
 
 **RUN 予算:** 触った Git ルート数 = Phase C の Shell **最大**（1 リポ = **1 Run**）。Phase B 単独の `git status` **禁止**。
 
-16. **`committing-with-git-yk` を Read** — Phase C は **Bash 1 本/リポ**（add+commit+push）。PowerShell HEREDOC **禁止**
-17. **`pushing-and-pr-yk` を Read** — push は C-1 に含める（別 Shell 不要）
-18. **Post-C 専用 commit 禁止** — hash は完了報告（方式 A）または push 前 amend（方式 B · [git-save.md §C-3](references/git-save.md)）
-19. セッション MD §2 · 先頭表 `commit` — 方式 A なら「完了報告参照」でよい
-20. ユーザーに保存パス · 再開 `@` · **Run 回数** · リポごと commit / push を提示
+16. **`managing-git-yk` を Read** — Phase C は **commit+push** · **Bash 1 本/リポ**（add+commit+push）。PowerShell HEREDOC **禁止**
+17. **Post-C 専用 commit 禁止** — hash は完了報告（方式 A）または push 前 amend（方式 B · [git-save.md §C-3](references/git-save.md)）
+18. セッション MD §2 · 先頭表 `commit` — 方式 A なら「完了報告参照」でよい
+19. ユーザーに保存パス · 再開 `@` · **Run 回数** · リポごと commit / push を提示
 
 **禁止:** Phase A 前の Write · Phase B 前の commit/push · Phase B だけの git status Shell · Post-C 2 回目 push
 

@@ -39,7 +39,7 @@ description: >
 |------|------|
 | Python | `c:/yk-skill/rule/40_python/PYTHON_RULES.md` |
 | スキル MD | `c:/yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` |
-| Git 操作 | レビュー内では **commit/push しない**（`committing-with-git-yk` は別） |
+| Git 操作 | レビュー内では **commit/push しない**（`managing-git-yk` は別） |
 
 ## Step 2: 事前整理（親がやる）
 
