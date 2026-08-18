@@ -285,11 +285,35 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 | 原則 | 内容 |
 |------|------|
 | **埋め込み** | **pywebview は tk Frame に埋め込まない**（メンテナ明言）。`webview.start` と tk `mainloop` は双方ブロッキング — **同一スレッド同居はアンチパターン** |
-| **真の1窓（HWND 1）** | 現行 pywebview 延長では取れない。要時は **tkwebview2 / tkwry 等の別スタック**で POC。一期は別プロセス維持 + `on_top` 等の疑似1窓で体験を先に満たしてよい |
+| **真の1窓（HWND 1）** | pywebview 本体では不可。**tkwebview2**（EdgeChrome を WinForms 子 HWND 化）で CTk 内埋め込み可（`flowchart-excel` rev007）。失敗時は **2窓フォールバック**（別プロセス + `on_top`）を維持 |
 | **Excel COM** | Office OM はスレッドセーフではない（STA）。ライブ更新・ステータス・描画を同一プロセスに寄せるなら **単一ワーカー／キューで直列化** · 描画中はライブ停止 |
-| **製品約束** | 「常時 OS 最前面」を絶対約束にしない。ゴールは **Excel 操作中もプレビュー作業が継続できる**こと |
+| **製品約束** | 「常時 OS 最前面」を絶対約束にしない。ゴールは **Excel 操作中もプレビュー作業が継続できる**こと（1窓なら CTk `-topmost` · 2窓なら子 WebView `on_top` 等の**手段**は可） |
 
-- **アンチパターン:** 「1窓化」＝すぐ pywebview を tk に載せる · 同一プロセス化だけして COM を複数経路から叩く · UI 仕様で常時最前面を必須化する
+- **アンチパターン:** pywebview を tk Frame に直接載せる · 同一プロセス化だけして COM を複数経路から叩く · 「常時最前面」を**製品の絶対約束文言**にする · **pywebview 6.x を tkwebview2 と無確認で混在**
+
+### tkwebview2 + pywebview 版固定（flowchart-excel 1窓 · 2026-07）
+
+`tkwebview2` 3.5.0 は pywebview 旧 API（`EdgeChrome.web_view.web_view`）前提。**pywebview 5+/6+ は `EdgeChrome.webview`** のため、6.x 混在で起動直後に `AttributeError` → exe が即終了する。
+
+加えて **`evaluate_js` も旧シグネチャ**（`script, semaphore, js_r`）のまま。pywebview 5+ は `evaluate_js(script, parse_json)` のため **TypeError で payload 注入が黙って失敗**する。症状: ステータスはライブ ON・画面は「プレビューデータを待機中…」。
+
+| やる | やらない |
+|------|----------|
+| `requirements.txt` で **`pywebview>=5,<6`**（または upstream 追随まで compat 維持） | `pip install pywebview` で 6.x を無条件に上げる |
+| 起動前に **`_ensure_tkwebview2_compat()`** — `__init__`（`self.web = edge.webview`）**と `evaluate_js`** を差し替え | `__init__` だけ直し `evaluate_js` を素のままにする |
+| 埋め込み注入は **`CoreWebView2.ExecuteScriptAsync`** を優先（失敗時リトライ · ログは warning 以上） | 例外を `debug` だけに埋めて UI 無反応のままにする |
+| WebView 初期 HWND サイズは **親 Frame 以下**（狭い1窓で読込ボタン等を覆わない） | 親より大きい固定 `800×480` で `MoveWindow` して放置 |
+| **埋め込み `__init__` 中に `update` / `update_idletasks` しない**（サイズは `after` で同期） | pythonnet STA 上で init 中に `update*` → **GIL fatal で exe 即終了** |
+| **CLR / pywebview `loaded` コールバックでは Tk を触らない**（フラグのみ · Tk メインの `after` pump で inject/resize） | `event_core_completed` / `loaded` から `winfo_*` · `after` · CTk を直接呼ぶ |
+| **STA スレッド**で tk mainloop（`main.py` 参照） | MTA スレッドから tkwebview2 初期化 |
+| PyInstaller: **`--collect-all=tkwebview2`** + webview 同梱（§下記） | webview のみ同梱して tkwebview2 を漏らす |
+| 埋め込み init 失敗時は **子 widget を destroy して 2窓 UI にフォールバック** | 失敗後に同一親へ `pack` 済み領域へ `grid` でエラー表示 |
+
+- **切り分け（起動即終了・ログに exception 無し）:** stderr に `PyEval_RestoreThread` / GIL → **init 中の `update*`** または STA/tk 競合を疑う
+- **切り分け（起動失敗）:** `dist/logs/app.log` の `embedded_preview_init_failed` · venv の `python main.py` は可で exe のみ不可 → 同梱漏れまたは pywebview 版不一致
+- **切り分け（読込無反応）:** `embedded_inject_failed` / `embedded_inject_ok` の有無。ライブ ON なのに「待機中」→ **evaluate_js 非互換または注入未到達**
+- **詳細 POC:** `yk-application/flowchart-excel/docs/03_技術仕様/POC_ルートA_結果_2026-07-27.md`
+- **実装参照:** `yk-application/flowchart-excel/app/ui/embedded_preview.py`（`_ensure_tkwebview2_compat`）
 
 ### 隣接リポを Vite alias する preview-web は両側で npm install
 
@@ -318,7 +342,8 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 | ビルド脚本は **`sys.executable -m PyInstaller`**（＝ `python build_exe.py` した同一環境） | 素の `pyinstaller` コマンド（PATH の別 Python） |
 | ビルド前に `import webview` で **同じ interpreter に入っているか**確認 | 「ビルド exit 0」だけ見て配布 |
 | `--hidden-import=webview`（必要なら `pythonnet` · `clr_loader` も） | delayed/optional import だけに任せた同梱 |
-| ビルド後 smoke: `FlowchartExcel.exe --flowchart-preview payload.json result.json <dist>` が **exit 2 / pywebview missing でない**こと | GUI 目視だけ · warn の `missing module named webview` を無視 |
+| **1窓（tkwebview2）時:** `--collect-all=tkwebview2` も追加 | webview のみ同梱 |
+| ビルド後 smoke: `FlowchartExcel.exe --flowchart-preview payload.json result.json <dist>` が **exit 2 / pywebview missing でない**こと · **GUI 起動で `starting_app` のみで落ちない** | GUI 目視だけ · warn の `missing module named webview` を無視 |
 
 - **切り分け:** `.venv` の `python main.py` でプレビュー可 · 当該 exe だけ不可 → ほぼ同梱漏れ（Runtime / 別PC差分ではない）
 - **warn の合図:** `build/*/warn-*.txt` に `missing module named webview` があれば **配布禁止**で再ビルド
@@ -329,6 +354,8 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 | 日付 | 内容 |
 |------|------|
+| 2026-07-27 | §13 tkwebview2 — `evaluate_js` 互換 · ExecuteScriptAsync 注入 · HWND≤親 · topmost は手段（flowchart-excel） |
+| 2026-07-27 | §13 tkwebview2 + pywebview 版固定 · 1窓 compat · PyInstaller tkwebview2 同梱（flowchart-excel rev007） |
 | 2026-07-27 | §13 PyInstaller — venv 経由必須 · delayed webview 同梱漏れ（flowchart-excel プレビュー） |
 | 2026-07-27 | §13 flowchart-excel — 隣接 studio の npm install · setup 脚本の cp932/✓ 回避 |
 | 2026-07-26 | §13 Tk/CTk + pywebview · Excel COM · 真の1窓（flowchart-excel 事前調査） |

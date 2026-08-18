@@ -1,6 +1,6 @@
 # surge.sh 公開コンテンツ一覧
 
-**最終更新**: 2026年7月5日（briefmap-flowchart-studio-ops を teardown）  
+**最終更新**: 2026年8月14日（卒業制作・フローチャートスタジオ図解を公開）  
 **管理場所**: `c:\yk-skill\metadata\surge-published-list.md`  
 **HTML 正本（公開済み）**: `c:\yk-tool\publish\`  
 **作業用（デプロイ前）**: 各図解スキル内 `output/`（gitignore）→ デプロイ後に `publish/` へコピー
@@ -29,6 +29,11 @@
 | 16 | フローチャート Web アプリ — 社内周知 | ProposalMap | 2026/05/24 | [promap-flowchart-web.surge.sh](https://promap-flowchart-web.surge.sh) | `promap-flowchart-web.html` | 13.5KB |
 || 17 | Cursor Agents Window — エージェント中心開発の実践ガイド | Techmap | 2026/05/28 | [techmap-cursor-agents-window.surge.sh](https://techmap-cursor-agents-window.surge.sh) | `cursor-agents-window-techmap.html` | 44.0KB |
 || 18 | AI が自動でコードを書く時代 — Cursor Agents Window とは | CuriosityMap | 2026/05/28 | [curimap-cursor-agents-window.surge.sh](https://curimap-cursor-agents-window.surge.sh) | `curimap-cursor-agents-window.html` | 34.4KB |
+| 19 | 装置進捗報告の自動化ツール（完成版） | その他 | 2026/08/09 | [diagram-progress-auto-report.surge.sh](https://diagram-progress-auto-report.surge.sh) | `progress-auto-report.html` | 30.9KB |
+| 20 | 図解管理 — 自作ツールの画面仕上げ | その他 | 2026/08/09 | [diagram-manager-ui.surge.sh](https://diagram-manager-ui.surge.sh) | `manager-ui.html` | 113.3KB |
+| 21 | 図解管理 — 画面に記憶を持たせる | その他 | 2026/08/09 | [diagram-manager-memory.surge.sh](https://diagram-manager-memory.surge.sh) | `manager-memory.html` | 196.3KB |
+| 22 | 自分専用の提案スキル — チューニング前後 | その他 | 2026/08/09 | [diagram-proposal-skill-tuning-20260809.surge.sh](https://diagram-proposal-skill-tuning-20260809.surge.sh) | `proposal-skill-tuning.html` | 24.5KB |
+| 23 | フローチャートスタジオ — 自分の武器（卒業制作） | その他 | 2026/08/14 | [diagram-flowchart-studio-weapon.surge.sh](https://diagram-flowchart-studio-weapon.surge.sh) | `flowchart-studio-weapon.html` | 104.1KB |
 
 ---
 
@@ -70,6 +75,11 @@
 | タイトル | URL | 公開日 |
 |---------|-----|--------|
 | 装置進捗報告 自動化ツール（ダッシュボード） | [progress-report-tool.surge.sh](https://progress-report-tool.surge.sh) | 2026/04/21 |
+| 装置進捗報告の自動化ツール（完成版） | [diagram-progress-auto-report.surge.sh](https://diagram-progress-auto-report.surge.sh) | 2026/08/09 |
+| 図解管理 — 自作ツールの画面仕上げ | [diagram-manager-ui.surge.sh](https://diagram-manager-ui.surge.sh) | 2026/08/09 |
+| 図解管理 — 画面に記憶を持たせる | [diagram-manager-memory.surge.sh](https://diagram-manager-memory.surge.sh) | 2026/08/09 |
+| 自分専用の提案スキル — チューニング前後 | [diagram-proposal-skill-tuning-20260809.surge.sh](https://diagram-proposal-skill-tuning-20260809.surge.sh) | 2026/08/09 |
+| フローチャートスタジオ — 自分の武器（卒業制作） | [diagram-flowchart-studio-weapon.surge.sh](https://diagram-flowchart-studio-weapon.surge.sh) | 2026/08/14 |
 
 ---
 
@@ -77,15 +87,15 @@
 
 | 項目 | 値 |
 |------|---|
-| 公開コンテンツ総数 | 18件 |
+| 公開コンテンツ総数 | 23件 |
 | Techmap | 13件 |
 | CuriosityMap | 3件 |
 | ProposalMap | 1件 |
 | BriefMap | 0件（ローカルのみ運用可 · `creating-briefmap-yk`） |
-| その他（ツール） | 1件 |
+| その他（ツール） | 6件 |
 | 最初の公開日 | 2026/03/28 |
-| 最新の公開日 | 2026/05/28 |
-| ローカルファイル合計サイズ | 約 772KB |
+| 最新の公開日 | 2026/08/14 |
+| ローカルファイル合計サイズ | 約 1.2MB |
 
 ---
 
