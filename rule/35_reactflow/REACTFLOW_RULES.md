@@ -199,7 +199,7 @@ validateTable(table)
 | 操作（グローバル） | 公式デフォルトは `nodesDraggable` / `nodesConnectable` / `elementsSelectable` / `edgesReconnectable` すべて **`true`**。表駆動は **四つとも `false` を MUST**（`FlowCanvas.tsx`）。`readOnly` prop は v12 で廃止 — 上記が SSOT |
 | Provider | **`ReactFlowProvider` でラップ MUST**。**`useReactFlow` は Provider の子のみ**（Provider 自身の中では不可 · Common Errors） |
 | 状態 | nodes/edges は **`generateFlowchart` → `toReactFlow` 派生**。`useNodesState` + `onConnect` を表更新の主経路にしない |
-| fitView | **ホーム表示:** `computeHomeViewport`（`lib/flowchart/visual/flowHomeViewport.ts`）— 横フィット + 上段揃え · 動作切替・⌂ ホームで適用。**エクスポート:** `fitViewFull` + `fcFitViewOptions`（全体センター fit）· PNG/SVG 前 **~300ms 待機**（`FlowchartEditor.tsx`）。`<ReactFlow fitView />` prop は使わない |
+| fitView | **ホーム表示:** `computeHomeViewport`（`lib/flowchart/visual/flowHomeViewport.ts`）— 横フィット + 上段揃え · 動作切替・⌂ ホームで適用。**エクスポート:** `fitViewFull` + `fcFitViewOptions`（全体センター fit）· PNG/SVG 前 **~300ms 待機**（`FlowchartEditor.tsx`）。`<ReactFlow fitView />` prop は使わない。**ライブ更新でズーム維持が必要な場合**は `FlowCanvas` の `autoFitView={false}` を使い、nodes/edges 更新時の自動 fit を抑制する（例: `flowchart-excel` の preview-web） |
 | 閲覧操作 | **`panOnDrag` · `zoomOnScroll` は許容**（ADR-010）。`Controls showInteractive={false}` |
 | エクスポート | `data-flowchart-export-root` → **`.react-flow__viewport`** を `html-to-image`（`toPng` / `toSvg`）· **`exportImageFilter.ts`** で Controls · プレビュー専用 UI（`.flow-node-id` 等）を除外（`exportPng.ts` · `exportSvg.ts`） |
 | 安定参照 | `defaultEdgeOptions` 等も **`useMemo` またはモジュール外**（参照: `FlowCanvas.tsx`） |
