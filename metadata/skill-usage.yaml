@@ -3,7 +3,7 @@
 # 0 回でも L（意図的低頻度）のことがある — 削除判断は exploring-skills-yk M2 参照。
 
 schema_version: 1
-updated: 2026-07-05
+updated: 2026-08-18
 audit_note: "初回 M2 — agent-transcripts（c-yk-desk）を部分 Grep + 本セッション実績"
 
 entries:
@@ -27,6 +27,12 @@ entries:
     count_estimate: 1
     last_used: 2026-07-05
     note: 05_送付メール洗練ループ
+
+  writing-in-my-voice-yk:
+    count_estimate: 1
+    last_used: 2026-08-18
+    classification: null
+    note: 04.文章 フォルダ運用 · 保存/特徴/起草
 
   writing-internal-mail-yk:
     count_estimate: 1

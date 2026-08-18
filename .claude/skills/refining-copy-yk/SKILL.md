@@ -36,7 +36,7 @@ description: >
 
 - 対象全文（パスまたは貼り付け）
 - 案件の方針 SSOT（例: `資料作成方針*.md`）· 正本テキスト · 設計メモ（あれば）
-- Step 0 で選んだ文体の参照（例: `writing-internal-mail-yk` の patterns / exemplars）
+- Step 0 で選んだ文体の参照（例: `writing-in-my-voice-yk` → `04.文章/特徴.md`）
 
 ### Step 2: レビュー → 修正ループ
 
@@ -55,7 +55,7 @@ description: >
 
 ### Step 4: 実例の更新（任意）
 
-文体別の参照（例: `writing-internal-mail-yk/references/exemplars.md`）に、採用文面を追記するのは **ユーザー依頼時または creating-skills 完了時**。
+確定稿の保存は `writing-in-my-voice-yk`（`04.文章/`）。本スキルからフォルダへ直接書かない。
 
 ## 境界
 

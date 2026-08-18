@@ -1,6 +1,6 @@
 # YK スキル索引（人間・エージェント向け SSOT）
 
-**最終更新:** 2026-07-05（`exploring-skills-yk` 初版）  
+**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加）  
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
 **図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
@@ -84,7 +84,8 @@
 | name | 発火（要約） | 明示のみ | 用途 |
 |------|-------------|----------|------|
 | `writing-proposals` | 提案文を作って | no | 長い提案文書 |
-| `writing-internal-mail-yk` | **私の文体で**（この句のみ）· 新規起草 | no | 社内メール1通をゼロから |
+| `writing-in-my-voice-yk` | 文章を保存 · 特徴を書き出して · **私の文体で** · Teams | no | 確定稿フォルダの保存・特徴・起草（チャット / メール） |
+| `writing-internal-mail-yk` | 私の文体で**メール** | no | メール発火の入口（手順は `writing-in-my-voice-yk`） |
 | `refining-copy-yk` | 文章を洗練 | no | 既存文の多視点レビュー→修正ループ |
 
 ---
@@ -117,8 +118,9 @@
 | `designing-playwright-tests-yk` ↔ `using-playwright` | 設計 vs spec |
 | `reviewing-code-yk` ↔ `reviewing-with-subagents` | 1周 vs 多視点 |
 | `refining-copy-yk` ↔ `reviewing-with-subagents` | 修正ループあり vs なし |
-| `writing-proposals` ↔ `writing-internal-mail-yk` | 長文提案 vs 送付メール1通 |
-| `writing-internal-mail-yk` ↔ `refining-copy-yk` | 新規起草（私の文体で） vs 洗練（文章を洗練） |
+| `writing-proposals` ↔ `writing-in-my-voice-yk` | 長文提案 vs 短い実務文（保存・特徴・起草） |
+| `writing-in-my-voice-yk` ↔ `writing-internal-mail-yk` | 手順の正本 vs メール発火の入口 |
+| `writing-in-my-voice-yk` ↔ `refining-copy-yk` | 新規起草 · 保存 vs 既存文の洗練 |
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳書込 vs 一覧・監査 |
 
 ---

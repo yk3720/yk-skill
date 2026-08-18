@@ -1,6 +1,6 @@
 ---
 name: writing-proposals
-description: 誰かに何かを提案したいとき、対話で材料を引き出し、結論ファーストで意思決定者に刺さる提案文書を作るスキル。「提案文を作って」「提案書を書いて」「◯◯を提案したい」「提案を通したい」「writing-proposals」と依頼された際に使用する。
+description: 誰かに何かを提案したいとき、対話で材料を引き出し、結論ファーストで意思決定者に刺さる提案文書を作るスキル。「提案文を作って」「提案書を書いて」「◯◯を提案したい」「提案を通したい」「writing-proposals」と依頼された際に使用する。Do NOT use for 短い客先・社内メールの保存・特徴・起草（writing-in-my-voice-yk）。
 ---
 
 # Writing Proposals

@@ -16,7 +16,7 @@
 
 | 文体・媒体 | 参照 |
 |------------|------|
-| 社内メール（YK 文体） | `writing-internal-mail-yk` → patterns · exemplars |
+| 社内メール（YK 文体） | `writing-in-my-voice-yk` → `c:/yk-memo/04.文章/特徴.md`。社内新規の型だけ `writing-internal-mail-yk` exemplars |
 | 上司向け briefmap / 図解 HTML | `creating-briefmap-yk` → copy-refinement · tone-checklist |
 | 長い提案文書 | `writing-proposals` |
 | 体裁共通 | `c:/yk-skill/rule/5_writing/WRITING_RULES.md` §1 |

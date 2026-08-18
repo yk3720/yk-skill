@@ -1,6 +1,6 @@
 # 社内メール — 文体パターン（YK）
 
-実例は [exemplars.md](exemplars.md)。体裁の SSOT は `c:/yk-skill/rule/5_writing/WRITING_RULES.md` §1（■階層 · 結論先出し）。
+本人の口調の正本は `c:/yk-memo/04.文章/特徴.md` と直近の確定稿。本ファイルは補助。体裁の共通規則は `c:/yk-skill/rule/5_writing/WRITING_RULES.md` §1（■階層 · 結論先出し）。
 
 ## 口調
 
@@ -41,4 +41,4 @@ XXXX係長
 
 ## 更新
 
-送信済みメールでよかったものを [exemplars.md](exemplars.md) に追記する。
+確定稿は `c:/yk-memo/04.文章/` へ。抽出は同フォルダ `特徴.md`。社内・新規送付の型だけ [exemplars.md](exemplars.md) に残す。

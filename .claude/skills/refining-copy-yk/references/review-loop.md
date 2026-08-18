@@ -79,4 +79,4 @@ GO / GO with notes / 要修正 のいずれか 1 つ
 - 句点（。）のあとで改行
 - 手順は `1.` `2.` `3.` で統一
 
-案件の `writing-internal-mail-yk` exemplars に追記するかはユーザー判断。
+確定稿の保存は `writing-in-my-voice-yk`（`04.文章/`）。本ファイルから exemplars へ客先本文を足さない。

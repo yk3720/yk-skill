@@ -1,9 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-07-05（`exploring-skills-yk` · `SKILLS_INDEX.md` 追加）  
+**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加）  
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
 **人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
-**件数:** L1 **35** · nested **2** · sample **1**（計 **38** `SKILL.md`）
+**件数:** L1 **36** · nested **2** · sample **1**（計 **39** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -61,7 +61,8 @@
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 | 25 | starting-app-project-yk | `.claude/skills/starting-app-project-yk/SKILL.md` | L1 | — | no | 個人アプリ企画 · handoffs 一本化 · AGENTS.md |
 | 26 | writing-proposals | `.claude/skills/writing-proposals/SKILL.md` | L1 | — | no | 提案文書 · ADS 上流取り込み（`UPSTREAM.md`） |
-| 27 | writing-internal-mail-yk | `.claude/skills/writing-internal-mail-yk/SKILL.md` | L1 | — | no | 「私の文体で」明示時のみ · 社内メール |
+| 27 | writing-in-my-voice-yk | `.claude/skills/writing-in-my-voice-yk/SKILL.md` | L1 | — | no | 確定稿の保存 · 特徴抽出 · 文体起草（チャット / メール） |
+| 28 | writing-internal-mail-yk | `.claude/skills/writing-internal-mail-yk/SKILL.md` | L1 | — | no | メール発火の入口 · 手順は writing-in-my-voice-yk |
 
 ---
 
@@ -81,11 +82,12 @@
 | `organizing-documents-yk` ↔ `distilling-rules-yk` | 資料矛盾 vs 実装→L1 ルール蒸留 |
 | `reviewing-code-yk` ↔ `optimizing-code-yk` | 単一パス差分レビュー vs Web+公式照合+サブエージェント最適化チェック |
 | `optimizing-code-yk` → `researching-web` · `reviewing-with-subagents` · `creating-*-yk` | M1/M2 は子スキル委譲（オーケストレーション） |
-| `writing-proposals` ↔ `writing-internal-mail-yk` | 長い提案文書 vs 係長向け送付メール1通。description の Do NOT で分離 |
-| `writing-internal-mail-yk` ↔ `creating-briefmap-yk` | メール文面 vs 図解 HTML 本文 |
-| `writing-internal-mail-yk` ↔ `refining-copy-yk` | 新規起草（私の文体で） vs 既存文の洗練 |
+| `writing-proposals` ↔ `writing-in-my-voice-yk` | 長い提案文書 vs 短い実務文の保存・特徴・起草。description の Do NOT で分離 |
+| `writing-in-my-voice-yk` ↔ `writing-internal-mail-yk` | 手順の正本 vs メール発火の入口 · exemplars は社内新規送付の型 |
+| `writing-in-my-voice-yk` ↔ `creating-briefmap-yk` | 実務文面 vs 図解 HTML 本文 |
+| `writing-in-my-voice-yk` ↔ `refining-copy-yk` | 新規起草（私の文体で） vs 既存文の洗練 |
 | `refining-copy-yk` ↔ `reviewing-with-subagents` | 洗練（親が修正まで） vs 多視点レビューのみ |
-| `refining-copy-yk` → `writing-internal-mail-yk` · `creating-briefmap-yk` | 文体 SSOT は子参照を Read |
+| `refining-copy-yk` → `writing-in-my-voice-yk` · `creating-briefmap-yk` | 文体 SSOT は子参照を Read |
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳再生成（書込） vs 一覧・監査（Read 基本） |
 | `creating-skills` ↔ `exploring-skills-yk` | 改善実行 vs 健康診断・提案のみ |
 
