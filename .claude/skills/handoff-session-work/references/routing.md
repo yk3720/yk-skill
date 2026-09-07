@@ -296,6 +296,8 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `comment-studio` | `handoffs/comment-studio/HANDOFF.md` | PLC コメント · Web |
 | `lci-studio` | `handoffs/lci-studio/HANDOFF.md` | LCI · Tauri 予定 · MVP 凍結 · 旧 prompt-studio |
 | `excel-shape-arranger` | `handoffs/excel-shape-arranger/HANDOFF.md` | Excel 選択図形のグリッド整列 · `yk-application/excel-shape-arranger` |
+| `excel-kana-toggle` | `handoffs/excel-kana-toggle/HANDOFF.md` | Excel 選択セルのカタカナを全角または半角へ揃える · `yk-application/excel-kana-toggle` |
+| `excel-toolkit` | `handoffs/excel-toolkit/HANDOFF.md` | 起動中 Excel 操作系ツールのプラグイン集約（kana-toggle / shape-arranger）· `yk-application/excel-toolkit` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。

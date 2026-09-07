@@ -355,15 +355,22 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 **対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
 
-**実例:** `bmp-resizer` · `excel-shape-arranger`。置き場は `YK_APPLICATION_RULES` §6。
+**実例:** `bmp-resizer` · `excel-shape-arranger` · `excel-toolkit`（プラグイン集約）。置き場は `YK_APPLICATION_RULES` §6。
 
 **5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
 
 **Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（§13 Tk/CTk + Excel COM と同趣旨）。
 
-**exe:** §13。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。
+**exe:** §13。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
 
 **テスト:** ドメインは unittest。COM 実機はユーザー担当。
+
+**プラグイン集約（複数ツールを 1 窓に · 実例 `excel-toolkit`）:**
+
+- 共有基盤は `app/core/`（COM 接続・選択正規化・`ExcelToolPlugin` 契約・結果型）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
+- 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
+- **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
+- PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`
 
 ---
 
@@ -371,6 +378,8 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-07 | §14 プラグイン集約（`excel-toolkit`）— registry 自動収集 · 純関数コピー · Tk 変数は `build_panel` で · `--collect-submodules` |
+| 2026-09-07 | §14 exe — 新設でビルドするかは `creating-personal-tool-yk` |
 | 2026-09-07 | §14 を Python デスクトップ限定と明記（自作ツール全体はスキル側） |
 | 2026-09-07 | §14 yk-application 小型デスクトップ（docs/ · GetActiveObject · 別リポ） |
 | 2026-09-01 | §13 ソース変更後は dist exe 再ビルド必須（エージェント向け · bmp-resizer） |

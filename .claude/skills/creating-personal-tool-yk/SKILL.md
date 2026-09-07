@@ -27,6 +27,7 @@ description: >
 
 **参照実装（構成の型。ツリーはコピーしない）:**  
 Python GUI: `c:/yk-application/bmp-resizer/` · `c:/yk-application/excel-shape-arranger/`  
+複数ツールの集約（プラグイン方式）: `c:/yk-application/excel-toolkit/`（`app/core/` 契約 + `app/plugins/<name>/` を 1 フォルダ追加で拡張 · 元リポは温存）  
 Web: `c:/yk-application/comment-studio/` · `c:/yk-application/lci-studio/`
 
 ---
@@ -47,7 +48,7 @@ Web: `c:/yk-application/comment-studio/` · `c:/yk-application/lci-studio/`
 - [ ] Step 2: 置き場を決める — `YK_APPLICATION_RULES` 置き場節。迷ったら **yk-application 独立 Git**（推奨）
 - [ ] Step 3: `starting-app-project-yk` **新規**に従い企画パック（独立リポならルート `AGENTS.md` + `docs/`）
 - [ ] Step 4: スタックを決めて実装スキルへ委譲（下表）。Python デスクトップ GUI のときだけ `PYTHON_RULES` 小型デスクトップ節を Read
-- [ ] Step 5: 配布物（exe 等）はユーザーが明示したときだけ
+- [ ] Step 5: Windows デスクトップ GUI は **同一ターンで exe をビルドする**（手順は `PYTHON_RULES` §13 · 小型デスクトップ節）。bat は `dist\` の exe があればそれを起動する。ユーザーが「ソースだけ」と明示したときだけ省略。Web / CLI は各形態の起動手段
 - [ ] Step 6: commit / push / GitHub は明示までしない
 
 応答の先頭は `starting-app-project-yk` に合わせ `[新規]`。
@@ -73,6 +74,7 @@ Web: `c:/yk-application/comment-studio/` · `c:/yk-application/lci-studio/`
 | `yk-tool` モノレポへ日常使う製品ツールを新設 | 置き場節の例外（ユーザー明示）だけ |
 | 言語や形態を Python GUI に決め打ち | ユーザーの用途でスタックを選ぶ |
 | 完成チェックリストの一括実装 | 1 セッション 1 件 |
+| Windows GUI をソースだけで終える（exe なし） | Step 5。ユーザーが「ソースだけ」と明示したときだけ省略 |
 
 ---
 
