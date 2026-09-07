@@ -230,6 +230,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 |------|--------|
 | **L1 rule（SSOT）** | 本ファイル No 17 |
 | **手順スキル（v1）** | `starting-app-project-yk` — 新規 · 整理 · AGENTS のみ |
+| **自作ツール新設** | `creating-personal-tool-yk`（受付）→ 新規パック → スタック別スキル |
 | **セッション運用** | `handoff-session-work`（再開 · 終了 · 整理 archive） |
 | **2 アプリ目以降** | checklist 実例追記 · スキル references 更新 |
 

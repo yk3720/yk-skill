@@ -1,6 +1,6 @@
 ---
 name: creating-pythoncode-yk
-description: Pythonのコードを作成・更新・改善するスキル。「ツールを作って」「pythonでコードを書いて」「ツールを検討して」など依頼された際に使用する。Do NOT use for non-Python stacks only (use domain-specific skills instead).
+description: Pythonのコードを作成・更新・改善するスキル。「pythonで書いて」「.pyを直して」「既存ツールの実装」と依頼された際に使用する。Do NOT use for 新規の自作ツール立ち上げ（creating-personal-tool-yk）、non-Python stacks only（ドメイン別スキル）。
 paths: "**/*.py"
 ---
 

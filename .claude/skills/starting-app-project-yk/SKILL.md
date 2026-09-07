@@ -1,8 +1,8 @@
 ---
 name: starting-app-project-yk
 description: >
-  個人アプリの企画パック新設・handoffs 一本化・エージェント憲法整備。発火例「新しいアプリを始めて」「企画フォルダを作って」「エージェント憲法を作って」「AGENTS.md を作って」「handoffs に移行して」。
-  Do NOT use for セッション再開/引き継ぎ終了（→ handoff-session-work）、スタック実装（→ creating-nextjs-yk 等）、commit（→ managing-git-yk）、rule L1 新設のみ（→ PROGRESSIVE + RULE_INDEX）。
+  個人アプリの企画パック新設・handoffs 一本化・エージェント憲法整備。発火例「新しいアプリを始めて」「企画フォルダを作って」「エージェント憲法を作って」「AGENTS.md を作って」  「handoffs に移行して」。
+  Do NOT use for 自作ツールの新設一式（→ creating-personal-tool-yk）、セッション再開/引き継ぎ終了（→ handoff-session-work）、スタック実装（→ creating-nextjs-yk 等）、commit（→ managing-git-yk）、rule L1 新設のみ（→ PROGRESSIVE + RULE_INDEX）。
 ---
 
 # Starting App Project（YK）
@@ -64,6 +64,7 @@ description: >
 
 | 依頼 | 正しい扱い |
 |------|------------|
+| 自作ツールを新しく | `creating-personal-tool-yk`（本スキルの新規は子として Read） |
 | 続きから · 引き継ぎして | `handoff-session-work` |
 | Next.js / React Flow 実装 | `creating-nextjs-yk` · `creating-reactflow-yk` 等 |
 | commit / push | `managing-git-yk` |

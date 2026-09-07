@@ -5,7 +5,7 @@
 **ステータス:** active（L1）  
 **関連:** `15_project_mgmt/APP_PROJECT_RULES.md`（アプリ開発一般）· `RULE_INDEX.md` No 18  
 
-**最終更新:** 2026-07-23
+**最終更新:** 2026-09-07（§6 置き場 · 自作ツールは形態・言語を問わない）
 
 ---
 
@@ -17,7 +17,7 @@
 |------|------|
 | **物理パス** | `c:/yk-application/{app-slug}/`（**フラット** — 下記 §1-1） |
 | **Git 管理** | **アプリ単位で独立**（`yk-tool` のモノレポには含めない） |
-| **実例** | `flowchart-studio`（本線 React Flow · 2026-06-23 移行）· `tauri-practice`（学習スパイク）· `comment-studio`（Web · docs/実装進行）· `manual-studio`（企画スタブ）· `lci-studio`（企画 docs · MVP 凍結 · 旧 `prompt-studio` · Git 未初期化） |
+| **実例** | `flowchart-studio`（本線 React Flow）· `bmp-resizer` · `excel-shape-arranger`（小型 Windows GUI）· `comment-studio` · `lci-studio` · `tauri-practice` |
 | **セキュリティ** | Windows Defender 等の除外対象（開発効率優先） |
 
 ### 1-1. フラット構成（親スイートフォルダは作らない）
@@ -76,3 +76,18 @@
     - `.git` を含むツリー全体の **上書き** · **空フォルダ化**  
     構成を変える必要があるときは **1 問だけ** 確認し、承認後も **git clone / 新規 mkdir** を優先する（移動で済ませない）。
 5.  **パス一括置換:** `c:/yk-skill/rule` · `c:/yk-memo` · `c:/yk-application` を横断する Shell 一括書き換えは禁止。必要なら **Grep → ファイル単位の StrReplace**（`60_tooling/AGENT_SHELL_RULES.md` §3-5）。
+
+---
+
+## 6. 置き場の早見（自作ツール）
+
+日常使う自作ツールをどこに置くか。形態（GUI / Web / CLI）や言語は問わない。新設の受付手順はスキル `creating-personal-tool-yk`。
+
+| 種別 | 置き場 | 例 |
+|------|--------|-----|
+| 日常使う自作ツール（独立 Git） | `c:/yk-application/{slug}/` | `bmp-resizer` · `excel-shape-arranger` · `comment-studio` |
+| 本線スタジオ（Web / Tauri） | 同上 | `flowchart-studio` · `lci-studio` |
+| 横断スクリプト · 実験モノレポ | `c:/yk-tool/` | `apps/commit-report-tool` · `scripts/` |
+| rev 積層の Python 学習 / 産業テンプレ | `c:/1.cursor/5.Python/` | MZ 系 |
+
+**MUST:** 日常使う製品ツールを `yk-tool` モノレポに新設しない（ユーザーが当ターンで明示したときだけ例外）。

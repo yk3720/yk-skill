@@ -11,7 +11,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-06-28  
+**最終更新:** 2026-09-07  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -255,6 +255,7 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 
 - **対策:** 再ビルド前に `taskkill /IM Foo.exe /F` 相当。リポでは `python/scripts/build_and_verify_converter.py` が自動実行。
 - **アンチパターン:** ビルド失敗を「PyInstaller の不具合」と決めつける。
+- **エージェント:** ソースを変えても `dist/*.exe` は自動更新されない — 作者が exe で確認する前に `build_exe.py` で再ビルドする。
 
 ### 凍結 exe の検証は GUI 目視だけにしない
 
@@ -350,10 +351,29 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 ---
 
-## 14. 変更履歴（L1）
+## 14. YK パターン補足（yk-application 小型デスクトップ · Python）
+
+**対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
+
+**実例:** `bmp-resizer` · `excel-shape-arranger`。置き場は `YK_APPLICATION_RULES` §6。
+
+**5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
+
+**Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（§13 Tk/CTk + Excel COM と同趣旨）。
+
+**exe:** §13。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。
+
+**テスト:** ドメインは unittest。COM 実機はユーザー担当。
+
+---
+
+## 15. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-07 | §14 を Python デスクトップ限定と明記（自作ツール全体はスキル側） |
+| 2026-09-07 | §14 yk-application 小型デスクトップ（docs/ · GetActiveObject · 別リポ） |
+| 2026-09-01 | §13 ソース変更後は dist exe 再ビルド必須（エージェント向け · bmp-resizer） |
 | 2026-07-27 | §13 tkwebview2 — `evaluate_js` 互換 · ExecuteScriptAsync 注入 · HWND≤親 · topmost は手段（flowchart-excel） |
 | 2026-07-27 | §13 tkwebview2 + pywebview 版固定 · 1窓 compat · PyInstaller tkwebview2 同梱（flowchart-excel rev007） |
 | 2026-07-27 | §13 PyInstaller — venv 経由必須 · delayed webview 同梱漏れ（flowchart-excel プレビュー） |

@@ -1,9 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加 · `managing-git-yk` · clean モード）  
+**最終更新:** 2026-09-07（`creating-personal-tool-yk` 追加）
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
 **人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
-**件数:** L1 **37** · nested **2** · sample **1**（計 **40** `SKILL.md`）
+**件数:** L1 **38** · nested **2** · sample **1**（計 **41** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -33,6 +33,7 @@
 | 6 | creating-react-yk | `.claude/skills/creating-react-yk/SKILL.md` | L1 | — | no | React Client · `REACT_RULES` No 36 |
 | 7 | creating-reactflow-yk | `.claude/skills/creating-reactflow-yk/SKILL.md` | L1 | — | no | 表駆動 · `@xyflow/react` No 35 |
 | 8 | creating-shadcn-yk | `.claude/skills/creating-shadcn-yk/SKILL.md` | L1 | — | no | shadcn init/add |
+| 8d | creating-personal-tool-yk | `.claude/skills/creating-personal-tool-yk/SKILL.md` | L1 | — | no | 自作ツール新設 · 受付（形態・言語を問わない） |
 | 8b | creating-vercel-yk | `.claude/skills/creating-vercel-yk/SKILL.md` | L1 | — | no | Vercel link/env/deploy · ROUTER |
 | 8c | creating-supabase-yk | `.claude/skills/creating-supabase-yk/SKILL.md` | L1 | — | no | Supabase Auth · RLS · `SUPABASE_RULES` No 37 |
 | 9 | creating-skills | `.claude/skills/creating-skills/SKILL.md` | L1 | — | no | スキル作成・改善 |
@@ -92,6 +93,7 @@
 | `refining-copy-yk` → `writing-in-my-voice-yk` · `creating-briefmap-yk` | 文体 SSOT は子参照を Read |
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳再生成（書込） vs 一覧・監査（Read 基本） |
 | `creating-skills` ↔ `exploring-skills-yk` | 改善実行 vs 健康診断・提案のみ |
+| `creating-personal-tool-yk` ↔ `starting-app-project-yk` / スタック別 | 自作ツール新設の受付 vs 企画パック vs 実装 |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 

@@ -1,6 +1,6 @@
 # YK スキル索引（人間・エージェント向け SSOT）
 
-**最終更新:** 2026-08-18（`writing-in-my-voice-yk` 追加 · `managing-git-yk` 新設）
+**最終更新:** 2026-09-07（`creating-personal-tool-yk` 追加）
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
 **図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
@@ -42,7 +42,7 @@
 
 | name | 発火（要約） | 明示のみ | 用途 |
 |------|-------------|----------|------|
-| `creating-pythoncode-yk` | Pythonで · ツールを作って | no | `.py` 作成・更新 |
+| `creating-pythoncode-yk` | pythonで書いて · .pyを直して | no | 既存 `.py` の作成・更新 |
 
 ---
 
@@ -67,6 +67,7 @@
 | `pushing-and-pr-yk` | （廃止）→ `managing-git-yk` | **yes** | エイリアス |
 | `handoff-session-work` | 引き継ぎ · 続きから · archive | no | handoffs 運用 |
 | `starting-app-project-yk` | 新しいアプリ · AGENTS.md | no | 個人アプリ企画パック |
+| `creating-personal-tool-yk` | 自作ツール · ユーティリティ · Webアプリのツール | no | 自作ツール新設（形態・言語を問わない） |
 
 ---
 
@@ -124,6 +125,7 @@
 | `writing-in-my-voice-yk` ↔ `refining-copy-yk` | 新規起草 · 保存 vs 既存文の洗練 |
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳書込 vs 一覧・監査 |
 | `handoff-session-work` ↔ `managing-git-yk` | セッション vs Git · Phase C は commit+push |
+| `creating-personal-tool-yk` ↔ `starting-app-project-yk` / スタック別 | 自作ツール新設の受付 vs 企画パック vs 実装 |
 
 ---
 

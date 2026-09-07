@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-08-18（No 65 · `GIT_TRACKING_RULES` 追加）
+**最終更新:** 2026-09-07（No 18 クイック入口 · 自作ツール）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -60,6 +60,7 @@
 | 新ドメイン rule / スキル | 11 | `10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
 | チャット応答（平易さ等） | 16 | `10_meta/COMMUNICATION_RULES.md` | L1 · No 05 §2 精神借用 | `communication-yk`（always） |
 | 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `15_project_mgmt/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
+| 自作ツール新設（形態・言語を問わない） | 18 | `YK_APPLICATION_RULES.md` §6 | 手順: `creating-personal-tool-yk` · 実装はスタック別 | — |
 | 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
 | 独立リポジトリ移行 · yk-application | 18 | `15_project_mgmt/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | UI · 図の線の太さ・統一感 | 19 | `25_design_ux/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
@@ -86,6 +87,7 @@
 | React / ui-kit / flowchart の a11y | No **24** · `A11Y_RULES` | No **52** GAS_REPORT のみ（React chrome には読まない） |
 | アクセシビリティ Phase · CI 段階 | No **23** · `A11Y_ROADMAP` | 本ファイルでチェックリストを再定義しない |
 | Python `.py` · CLI · pandas | No **41** · `creating-pythoncode-yk` | No **42** のみで CLI/SDD を省略 |
+| 自作ツールの**新設** | No **18** §6 · `creating-personal-tool-yk` | いきなり Python スキルだけ · `yk-tool` へ日常製品を新設 |
 | FastAPI · UploadFile · Uvicorn · TestClient | No **42** · `FASTAPI_RULES` + No **41** | No **41** のみ · No **34** で FastAPI 本体デプロイ |
 
 各ドメインの詳細手順は [RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)（**必要時のみ Read**）。
