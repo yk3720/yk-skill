@@ -86,7 +86,7 @@
 | 種別 | 置き場 | 例 |
 |------|--------|-----|
 | 日常使う自作ツール（独立 Git） | `c:/yk-application/{slug}/` | `bmp-resizer` · `excel-shape-arranger` · `comment-studio` |
-| 複数の自作ツールを 1 窓に集約（プラグイン方式） | `c:/yk-application/{slug}/` | `excel-toolkit`（`app/plugins/` に 1 フォルダ追加で拡張 · 元の単機能リポは温存） |
+| 複数の自作ツールを 1 窓に集約（プラグイン方式） | `c:/yk-application/{slug}/` | `toolkit`（旧 `excel-toolkit`。`app/plugins/` に 1 フォルダ追加で拡張 · 元の単機能リポは温存） |
 | 本線スタジオ（Web / Tauri） | 同上 | `flowchart-studio` · `lci-studio` |
 | 横断スクリプト · 実験モノレポ | `c:/yk-tool/` | `apps/commit-report-tool` · `scripts/` |
 | rev 積層の Python 学習 / 産業テンプレ | `c:/1.cursor/5.Python/` | MZ 系 |

@@ -27,7 +27,7 @@ description: >
 
 **参照実装（構成の型。ツリーはコピーしない）:**  
 Python GUI: `c:/yk-application/bmp-resizer/` · `c:/yk-application/excel-shape-arranger/`  
-複数ツールの集約（プラグイン方式）: `c:/yk-application/excel-toolkit/`（`app/core/` 契約 + `app/plugins/<name>/` を 1 フォルダ追加で拡張 · 元リポは温存）  
+複数ツールの集約（プラグイン方式）: `c:/yk-application/toolkit/`（旧 `excel-toolkit`。`app/core/` 契約 + `app/plugins/<name>/` を 1 フォルダ追加で拡張 · 元リポは温存）  
 Web: `c:/yk-application/comment-studio/` · `c:/yk-application/lci-studio/`
 
 ---

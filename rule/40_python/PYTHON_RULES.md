@@ -11,7 +11,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-09-07  
+**最終更新:** 2026-09-08  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -355,7 +355,7 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 **対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
 
-**実例:** `bmp-resizer` · `excel-shape-arranger` · `excel-toolkit`（プラグイン集約）。置き場は `YK_APPLICATION_RULES` §6。
+**実例:** `bmp-resizer` · `excel-shape-arranger` · `toolkit`（旧 `excel-toolkit`。プラグイン集約）。置き場は `YK_APPLICATION_RULES` §6。
 
 **5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
 
@@ -365,9 +365,9 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 **テスト:** ドメインは unittest。COM 実機はユーザー担当。
 
-**プラグイン集約（複数ツールを 1 窓に · 実例 `excel-toolkit`）:**
+**プラグイン集約（複数ツールを 1 窓に · 実例 `toolkit`）:**
 
-- 共有基盤は `app/core/`（COM 接続・選択正規化・`ExcelToolPlugin` 契約・結果型）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
+- 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Excel 非依存）+ `app/core/excel/`（COM 接続・選択正規化。Excel を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
 - 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
 - **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
 - PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`
@@ -378,6 +378,7 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-08 | §14 プラグイン集約の実例を `excel-toolkit`→`toolkit` へ更新（core を `ToolPlugin`(汎用) + `app/core/excel/`(Excel 専用) へ分離） |
 | 2026-09-07 | §14 プラグイン集約（`excel-toolkit`）— registry 自動収集 · 純関数コピー · Tk 変数は `build_panel` で · `--collect-submodules` |
 | 2026-09-07 | §14 exe — 新設でビルドするかは `creating-personal-tool-yk` |
 | 2026-09-07 | §14 を Python デスクトップ限定と明記（自作ツール全体はスキル側） |
