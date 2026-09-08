@@ -300,6 +300,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `toolkit`（旧 `excel-toolkit`） | `handoffs/toolkit/HANDOFF.md` | 自作ツールのプラグイン集約ハブ（kana-toggle / shape-arranger / bmp-resizer）· `yk-application/toolkit` |
 | `word-kana-toggle` | `handoffs/word-kana-toggle/HANDOFF.md` | Word 選択範囲のカタカナ/スペースを全角または半角へ揃える（excel-kana-toggle の Word 版）· `yk-application/word-kana-toggle` |
 | `term-consistency-checker` | `handoffs/term-consistency-checker/HANDOFF.md` | CSV 用語集で Word/Excel 文書の表記ゆれを検出（読取専用・検出のみ）· `yk-application/term-consistency-checker` |
+| `figure-renumberer` | `handoffs/figure-renumberer/HANDOFF.md` | Word 文書の図番号・表番号を出現順に検出・振り直し（検出→プレビュー→適用の2段階）· `yk-application/figure-renumberer` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。
