@@ -391,12 +391,27 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 - **重量級・別スタックのツールは in-process 取り込みしない — launcher プラグイン方式**（`toolkit` の `flowchart-excel`＝React Flow の Web アプリ。2026-09-08）。`app/plugins/<name>/launcher.py` に exe 探索と起動を閉じる: 探索順は **環境変数 override → Toolkit.exe 同梱 / 開発時 `dist/` → 隣接リポ `../<tool>/dist/` → `PATH`**、起動は `subprocess.Popen`（Windows は `creationflags=subprocess.DETACHED_PROCESS`・`cwd=exe.parent`）、未検出時は解決手順つき `ToolError`。純関数コピーは不要（起動するだけ）。GUI は「起動」＋「exe を指定…」程度に留める
   - **アンチパターン:** 別スタックのツールを移植して二重管理を増やす · `Popen(**kwargs)` に `dict[str, object]` を渡す（mypy `call-overload`。キーワード引数を明示するか platform 分岐で書く）
 
+**COM ツールのウィンドウを前面に保つ（`StayOnTop` · 2026-09-08）:**
+
+- **症状:** 起動中の Excel/Word を COM 操作すると、Office 窓が前面を取り自ツール窓が背面へ落ちる。ユーザーが「先に Excel で選択」と Office をクリックした時点でも同じ。`lift()` 単体では戻らない（Windows のフォアグラウンドロック）。
+- **対策:** `-topmost` ビットのトグル（**パルス**＝一瞬 True にして戻す）はバックグラウンドからでも許可される。これで前面へ引き上げる。あわせて「常に最前面」チェックボックス（**既定 ON・セッション限り・設定は永続化しない**＝要求定義の「設定永続化しない」に抵触させない）を置く。
+- **共通ヘルパ `app/ui/stay_on_top.py`**（`StayOnTop` クラス。純関数コピーと同じ方式で各リポへ**コピー**・相互 import しない）:
+  - `StayOnTop(win, *, default=True)` — `super().__init__()` の後、`_build_ui()` の前に生成（import 時に Tk 変数を作らないルールと同じ理由）
+  - `.checkbox(parent)` → 「常に最前面」`CTkCheckBox` を返す。配置はフッターへ呼び出し側が `grid`
+  - `.raise_window()` — **COM 操作の完了・エラー時**（各 `_on_*_done` の `_set_busy(False)` 直後、ハブは `_finish`）に呼ぶ。ON ならそのまま最前面、OFF なら `-topmost` パルスで一度だけ復帰
+  - `tk.TclError` は握りつぶす（ウィンドウ破棄後）
+- **`messagebox` は `parent=self`** を渡す（親に紐付き前面化する）。
+- **適用対象:** 起動中 Office を COM 操作するデスクトップツールすべて（`toolkit` ハブ · `excel-kana-toggle` · `word-kana-toggle` · `term-consistency-checker` · `excel-shape-arranger` · `figure-renumberer`）。**Office 非 COM ツール（`bmp-resizer` 等）は対象外**（隠れる相手がいない）。
+- **新規ツール:** Windows GUI で Office を COM 操作するなら最初から組み込む（`creating-personal-tool-yk` の雛形）。
+- **テスト:** GUI 部品のため `theme.py` 同様ユニットテストは置かない。構築スモーク（`App(); app.update(); app.destroy()`）で足りる。
+
 ---
 
 ## 15. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-08 | §14 COM ツールのウィンドウ前面維持（`StayOnTop` = `-topmost` パルス + 常に最前面トグル · `messagebox(parent=self)`。非 COM は対象外）（toolkit 他 COM 5 ツール） |
 | 2026-09-08 | §14 Word COM は Excel と同型 · 選択/全文走査は `app/core` へ寄せる（toolkit U-1〜U-3） |
 | 2026-09-08 | §13 依存追加後は `.venv` 再 install + `build/` 削除でクリーンリビルド · 部分欠落症状（`count` 1 件少 + `plugin_without_plugin_module`）（toolkit Pillow 同梱漏れ） |
 | 2026-09-08 | §14 重量級・別スタックは launcher プラグイン方式（`subprocess.Popen` + 多段 exe 探索 + `ToolError`。in-process しない）（toolkit flowchart-excel T-4） |
