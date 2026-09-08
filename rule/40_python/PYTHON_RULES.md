@@ -349,6 +349,20 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 - **切り分け:** `.venv` の `python main.py` でプレビュー可 · 当該 exe だけ不可 → ほぼ同梱漏れ（Runtime / 別PC差分ではない）
 - **warn の合図:** `build/*/warn-*.txt` に `missing module named webview` があれば **配布禁止**で再ビルド
 
+### 依存を足したら venv 再インストール + build/ 削除でクリーンリビルド
+
+`toolkit`（2026-09-08）で、`requirements.txt` に `Pillow` を書いたのに **その `.venv` へ `pip install -r requirements.txt` を流し直していなかった**ため、T-2 以降ずっと凍結 `Toolkit.exe` で `bmp-resizer` プラグインが読み込み失敗していた（`resize.py` の `from PIL import Image` が hard import なのに同梱漏れ）。さらに `pip install` 後に素の `build_exe.py` を回しても **PyInstaller が `build/<name>` のキャッシュ解析を再利用し exe は Pillow なしのまま**。`build/<name>` と `dist/<name>.exe` を消して初めて反映された。
+
+| やる | やらない |
+|------|----------|
+| 依存追加後は **`.venv` へ `pip install -r requirements.txt` を流し直す** | `requirements.txt` を編集しただけで「入っている」とみなす |
+| ビルド前に **`requirements.txt` の各行が当該 interpreter で `import` できるか**確認（optional import だけでなく hard import も） | `import webview` 等 optional import だけ確認して満足する |
+| 依存が変わったら **`build/<name>` と `dist/<name>.exe` を削除してからリビルド** | `--noconfirm` の素ビルドでキャッシュ解析を再利用したまま配布 |
+| exe 起動確認は **`plugins_discovered` の件数と id 一覧を期待値と突き合わせ**、`plugin_without_plugin_module` の WARNING が 0 であることまで見る | `count > 0` や GUI 目視だけで OK とする |
+
+- **症状の別型:** §14 が書く `plugins_discovered count=0`（全滅）ではなく、**`count` が期待より 1 件少ない + `plugin_without_plugin_module | package=X`**（部分欠落・ダイアログ無し）。1 プラグインの hard import 依存が exe に無いと出る
+- **切り分け:** `.venv` の `python -c "import <dep>"` が可 · 当該 exe だけプラグイン欠落 → venv 未同期またはキャッシュ再利用
+
 ---
 
 ## 14. YK パターン補足（yk-application 小型デスクトップ · Python）
@@ -370,7 +384,9 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 - 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Excel 非依存）+ `app/core/excel/`（COM 接続・選択正規化。Excel を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
 - 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
 - **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
-- PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`
+- PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`（1 プラグインの hard import 依存漏れは §13「依存を足したら…」参照）
+- **重量級・別スタックのツールは in-process 取り込みしない — launcher プラグイン方式**（`toolkit` の `flowchart-excel`＝React Flow の Web アプリ。2026-09-08）。`app/plugins/<name>/launcher.py` に exe 探索と起動を閉じる: 探索順は **環境変数 override → Toolkit.exe 同梱 / 開発時 `dist/` → 隣接リポ `../<tool>/dist/` → `PATH`**、起動は `subprocess.Popen`（Windows は `creationflags=subprocess.DETACHED_PROCESS`・`cwd=exe.parent`）、未検出時は解決手順つき `ToolError`。純関数コピーは不要（起動するだけ）。GUI は「起動」＋「exe を指定…」程度に留める
+  - **アンチパターン:** 別スタックのツールを移植して二重管理を増やす · `Popen(**kwargs)` に `dict[str, object]` を渡す（mypy `call-overload`。キーワード引数を明示するか platform 分岐で書く）
 
 ---
 
@@ -378,6 +394,8 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-08 | §13 依存追加後は `.venv` 再 install + `build/` 削除でクリーンリビルド · 部分欠落症状（`count` 1 件少 + `plugin_without_plugin_module`）（toolkit Pillow 同梱漏れ） |
+| 2026-09-08 | §14 重量級・別スタックは launcher プラグイン方式（`subprocess.Popen` + 多段 exe 探索 + `ToolError`。in-process しない）（toolkit flowchart-excel T-4） |
 | 2026-09-08 | §14 プラグイン集約の実例を `excel-toolkit`→`toolkit` へ更新（core を `ToolPlugin`(汎用) + `app/core/excel/`(Excel 専用) へ分離） |
 | 2026-09-07 | §14 プラグイン集約（`excel-toolkit`）— registry 自動収集 · 純関数コピー · Tk 変数は `build_panel` で · `--collect-submodules` |
 | 2026-09-07 | §14 exe — 新設でビルドするかは `creating-personal-tool-yk` |
