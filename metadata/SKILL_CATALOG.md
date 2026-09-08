@@ -1,9 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-09-07（`creating-personal-tool-yk` 追加）
+**最終更新:** 2026-09-08（`switching-tone-yk` 新規追加）
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
 **人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
-**件数:** L1 **38** · nested **2** · sample **1**（計 **41** `SKILL.md`）
+**件数:** L1 **39** · nested **2** · sample **1**（計 **42** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -62,6 +62,7 @@
 | 23 | creating-pythoncode-yk | `.claude/skills/creating-pythoncode-yk/SKILL.md` | L1 | — | no | `paths: **/*.py` · PYTHON_RULES |
 | 24 | setup-fb-tool | `.claude/skills/commenting-visual-explainers/.claude/skills/setup-fb-tool/SKILL.md` | nested | — | no | 図解 FB ツールセットアップ |
 | 25 | starting-app-project-yk | `.claude/skills/starting-app-project-yk/SKILL.md` | L1 | — | no | 個人アプリ企画 · handoffs 一本化 · AGENTS.md |
+| 25b | switching-tone-yk | `.claude/skills/switching-tone-yk/SKILL.md` | L1 | — | no | チャット応答の口調切替（複数パターン・明示指示のみ） |
 | 26 | writing-proposals | `.claude/skills/writing-proposals/SKILL.md` | L1 | — | no | 提案文書 · ADS 上流取り込み（`UPSTREAM.md`） |
 | 27 | writing-in-my-voice-yk | `.claude/skills/writing-in-my-voice-yk/SKILL.md` | L1 | — | no | 確定稿の保存 · 特徴抽出 · 文体起草（チャット / メール） |
 | 28 | writing-internal-mail-yk | `.claude/skills/writing-internal-mail-yk/SKILL.md` | L1 | — | no | メール発火の入口 · 手順は writing-in-my-voice-yk |
@@ -94,6 +95,7 @@
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳再生成（書込） vs 一覧・監査（Read 基本） |
 | `creating-skills` ↔ `exploring-skills-yk` | 改善実行 vs 健康診断・提案のみ |
 | `creating-personal-tool-yk` ↔ `starting-app-project-yk` / スタック別 | 自作ツール新設の受付 vs 企画パック vs 実装 |
+| `switching-tone-yk` ↔ `re-explaining-in-chat-yk` | 口調（語尾・一人称等）の切替 vs 内容の平易な再説明。両立可（別軸） |
 
 **バンドル:** `commenting-visual-explainers/` は L1 の `SKILL.md` を持たず、nested スキル 2 件（`creating-visual-explainers-fb` · `setup-fb-tool`）。
 

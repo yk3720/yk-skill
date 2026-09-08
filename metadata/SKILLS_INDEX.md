@@ -1,6 +1,6 @@
 # YK スキル索引（人間・エージェント向け SSOT）
 
-**最終更新:** 2026-09-07（`creating-personal-tool-yk` 追加）
+**最終更新:** 2026-09-08（`switching-tone-yk` 新規追加）
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
 **図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
@@ -78,6 +78,7 @@
 | `researching-web` | ウェブで調べて | no | Web 調査 |
 | `grill-me` | グリルして · 計画を詰めて | no | 設計インタビュー |
 | `re-explaining-in-chat-yk` | もう一度説明 · 平易に | no | チャット再説明 |
+| `switching-tone-yk` | 口調を変えて · 荒くれ者口調で | no | チャット応答の口調切替（複数パターン） |
 
 ---
 
