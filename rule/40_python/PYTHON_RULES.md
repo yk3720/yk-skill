@@ -375,13 +375,16 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 **Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（§13 Tk/CTk + Excel COM と同趣旨）。
 
+**Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM は UI スレッドのみ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
+
 **exe:** §13。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
 
 **テスト:** ドメインは unittest。COM 実機はユーザー担当。
 
 **プラグイン集約（複数ツールを 1 窓に · 実例 `toolkit`）:**
 
-- 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Excel 非依存）+ `app/core/excel/`（COM 接続・選択正規化。Excel を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
+- 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Office 非依存）+ `app/core/excel/` · `app/core/word/`（各 Office を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
+- **選択操作と全文走査は core へ寄せる** — 選択は `selection`（例: `as_cell_range` / `as_text_selection`）、文書・ブック全文の読取は `document` / `workbook`（例: `scan_active_document` / `scan_active_workbook`）。プラグイン内で `GetActiveObject` や全文読取を再実装しない（検出のみツールも書込なしのまま core 経由）。**アンチパターン:** プラグインごとに `word_scan.py` / `excel_scan.py` をコピーして COM 接続を二重管理する
 - 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
 - **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
 - PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`（1 プラグインの hard import 依存漏れは §13「依存を足したら…」参照）
@@ -394,6 +397,7 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-08 | §14 Word COM は Excel と同型 · 選択/全文走査は `app/core` へ寄せる（toolkit U-1〜U-3） |
 | 2026-09-08 | §13 依存追加後は `.venv` 再 install + `build/` 削除でクリーンリビルド · 部分欠落症状（`count` 1 件少 + `plugin_without_plugin_module`）（toolkit Pillow 同梱漏れ） |
 | 2026-09-08 | §14 重量級・別スタックは launcher プラグイン方式（`subprocess.Popen` + 多段 exe 探索 + `ToolError`。in-process しない）（toolkit flowchart-excel T-4） |
 | 2026-09-08 | §14 プラグイン集約の実例を `excel-toolkit`→`toolkit` へ更新（core を `ToolPlugin`(汎用) + `app/core/excel/`(Excel 専用) へ分離） |
