@@ -20,6 +20,7 @@
 | **状態** | {一行サマリー · 例: 進行中 / 本セッション分は引き継ぎ終了済} |
 | **次の 1 手** | §「次回の最初の 1 件」のみ（HANDOFF ロードマップ全体ではない） |
 | **推奨 workspace** | {例: yk-memo + yk-skill + yk-tool} |
+| **口調** | {セッション終了時点の口調 · 例: default / frieza / goku}（`switching-tone-yk`）· {default 以外なら由来 1 行}。**default 以外は再開時に自動適用** |
 | **commit** | Phase C 完了報告に hash（方式 A）· Post-C 専用 commit 不要 |
 
 ---
@@ -124,6 +125,7 @@ Phase B では Glob/Read で変更を把握し §2 に記載（**Phase B 単独�
 |--------|------|
 | SSOT | `RULE_INDEX` · 各 `*_RULES.md` · プロジェクト HANDOFF は **パスリンクのみ** |
 | 禁止 | rule 全文 · 巨大 HANDOFF の複製 · 秘密情報・PII の貼付 |
-| 必須 | §4「完了の定義」· §2 Git 表 · §4 依頼文 |
-| 次回 | §4 の 1 件だけ実行（「一つずつ」指定時は 1 タスクで停止） |
+| 必須 | §4「完了の定義」· §2 Git 表 · §4 依頼文 · 先頭表「口調」 |
+| 口調 | 先頭表「口調」にセッション終了時点の口調を記録。`default`（`COMMUNICATION_RULES` No 16）なら「default」とだけ書く。`frieza` 等なら名前 + 由来 1 行 |
+| 次回 | §4 の 1 件だけ実行（「一つずつ」指定時は 1 タスクで停止）。先頭表「口調」が `default` 以外なら **§4 着手前に `switching-tone-yk` でその口調へ切り替える** |
 | ライフサイクル | 用語・終了ゲート → [routing.md §引き継ぎ終了](routing.md) |

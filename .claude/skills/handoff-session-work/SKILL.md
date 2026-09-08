@@ -34,6 +34,7 @@ description: >
 |------|------|
 | 配置・命名・終了ゲート・アーカイブ | [references/routing.md](references/routing.md) |
 | セッション MD 見出し | [references/template.md](references/template.md) |
+| 口調の引き継ぎ（終了で記録・再開で適用） | `switching-tone-yk`（先頭表「口調」行） |
 | 確認モードのチェックリスト | [references/folder-audit.md](references/folder-audit.md) |
 | Git 方針 | `c:/yk-skill/rule/10_meta/GIT_WORKFLOW_RULES.md` |
 | 終了時 Git | `managing-git-yk`（**終了モード Phase C** · **commit+push** · PR は含めない） |
@@ -72,7 +73,7 @@ description: >
 
 8. [references/template.md](references/template.md) を Read
 9. セッション MD を **新規 Write**（上書き禁止）
-10. テンプレの全見出しを埋める（空欄・`TBD` 禁止）。§1-3 に **Phase A の移動・削除一覧**を記録
+10. テンプレの全見出しを埋める（空欄・`TBD` 禁止）。§1-3 に **Phase A の移動・削除一覧**を記録。先頭表 **「口調」** に本セッション終了時点の口調（`default` または `frieza` 等 + 由来 1 行）を記録
 11. `HANDOFF.md` の **「最新セッション」1 行**（と必要なら §6）だけ更新
 12. 触った各 Git ルートの変更 — **Glob/Read で把握**（**Phase B 単独の `git status` Shell 禁止** · hash は Phase C 完了報告へ）
 13. `{project}/README.md` の「最新セッション」行を HANDOFF と一致させる
@@ -107,6 +108,7 @@ description: >
 2. [routing.md §待機](references/routing.md) — ルート直下セッション **0 本** かつ HANDOFF 先頭表に **待機** → §4 は実行せず §6 の 1 行を報告して停止
 3. `HANDOFF.md` — **先頭表のみ** Read（`| **最新セッション** |` · `| **状態** |`）。ユーザーが `@HANDOFF` 全文を指定したときのみ全文
 3b. **検証駆動フェーズ** — HANDOFF §6 に「検証駆動」「§4 機械消化しない」等がある slug は **§6 が実行正本**。§4 は Read しない（履歴）。検証メモ・明示依頼がなければ §6 の 1 行を報告して停止
+3c. **口調の引き継ぎ** — 最新セッション MD 先頭表の **「口調」** を Read。`default` 以外（`frieza` 等）なら **§4 着手前に `switching-tone-yk` でその口調へ切り替える**（ユーザーが同ターンで別口調を指示していればそちらを優先）。待機・3b で停止する場合も切り替えは行う
 4. 最新セッション MD — **§4 のみ**（Grep `## 4.` 〜 次の `## 5.` 手前、または Read の `offset/limit`）。`@セッション` 指定時は当該 MD の §4 のみ（HANDOFF 省略可）。**3b 該当時はスキップ**
 5. §4 の **1 件だけ**実行（HANDOFF §6 ロードマップ全体には広げない）
 6. 「一つずつ」「順番に」のときは **1 タスクで止め**、次に進む前に確認
