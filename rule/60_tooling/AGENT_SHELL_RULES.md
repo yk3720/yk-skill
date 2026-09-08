@@ -3,7 +3,7 @@
 **目的:** Cursor Agent が **Shell（ターミナル）** を呼ぶたびに出る **RUN 承認**を、安全性を保ちつつ減らす。  
 **関連:** `60_tooling/CURSOR_RULES.md`（Windows 実務）· `10_meta/GIT_WORKFLOW_RULES.md` · スキル `managing-git-yk` · `handoff-session-work`
 
-**最終更新:** 2026-06-29
+**最終更新:** 2026-09-08（§3-6 GitHub API 構造変更ブロック · §6 mv/Rename-Item busy トラブルシュート）
 
 ---
 
@@ -85,6 +85,7 @@
 - **UI 修正で E2E spec を追加した同一ターン** — `PLAYWRIGHT_RULES.md` §12 の完了判定として `npm run test:e2e` 等を実行（スクショ依頼の反復より spec を green にする）
 - 引き継ぎ **終了**（Phase B: Glob/Read のみ · Phase C: `managing-git-yk` の **commit+push** どおり Bash 1 本/リポ）
 - clone · `npm install` 等、実行が必須の作業
+- **exe ビルド**（`creating-personal-tool-yk` Step 5 · ユーザーが exe / 実行ファイルを明示）
 
 ### 3-3. 1 RUN にまとめる
 
@@ -105,7 +106,7 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 | 作業 | Shell の `required_permissions` |
 |------|----------------------------------|
 | `git add` / `commit` / `push`（`.git` 書き込み） | 初回から **`all`** |
-| Playwright · clone · `npm install` | 初回から **`all`**（該当スキル参照） |
+| Playwright · clone · `npm install` · `build_exe.py` / PyInstaller | 初回から **`all`**（該当スキル参照） |
 | 読取のみの git（allowlist 外） | サンドボックス可 → 失敗時のみ `all` |
 
 **非推奨:** サンドボックスで失敗してから `all` で同じコマンドを再実行（RUN が 2 倍になりやすい）。詳細は `managing-git-yk/references/commit-shell.md`。
@@ -124,6 +125,14 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 
 UTF-8 で書く必要がある Shell 処理は `50_gas_html_test/POWERSHELL_HTML_RULES.md` ルール1（`UTF8Encoding($false)` 明示）に従う。
 
+### 3-6. GitHub リポジトリの構造変更は API 直叩きでもブロックされる
+
+`gh` 未導入環境で PAT + `curl` により GitHub API を直接叩いても、Claude Code の自動モード分類器が **構造変更系（PATCH/POST/DELETE）を一律ブロック**する（承認プロンプトも出ない・再試行しても同じ）。読み取り（GET）は通る。
+
+| 禁止（回避策なし） | 代替 |
+|---|---|
+| リポ rename・削除等を API 直叩き（curl + PAT）で行う | ユーザーに GitHub UI（Settings 等）での手動操作を依頼する |
+
 ---
 
 ## 4. タスク別例外（優先: 発火スキル > 本ファイル）
@@ -134,6 +143,7 @@ UTF-8 で書く必要がある Shell 処理は `50_gas_html_test/POWERSHELL_HTML
 | **D-2** | 引き継ぎ **終了** | Phase B: **git status Shell 禁止** · Phase C: Bash **1 本/リポ**（add+commit+push · 初回 `all` · [git-save.md](../../.claude/skills/handoff-session-work/references/git-save.md)） |
 | **D-3** | **commit / push / PR / クリーン**（`managing-git-yk`） | 可 — 調査は §3-3、commit は Write + `-F`、初回 `all` |
 | **D-4** | Playwright（`using-playwright` · `PLAYWRIGHT_RULES` §12） | 可 — 上記 §3-2（test 明示 **または** spec 追加の完了判定）· `all` |
+| **D-5** | 自作ツール **exe**（`creating-personal-tool-yk` · ユーザーが実行ファイルを明示） | 可 — `python build_exe.py`（venv 経由）· 初回 `all` |
 
 ---
 
@@ -163,6 +173,7 @@ yk-memo だけコミット＆プッシュ。git は Bash 1 本（add+commit+push
 | 確認なのに `git status` だらけ | 依頼文に **D-1** の文言を付ける |
 | 日本語 `.md` が文字化け（`å個` 等） | **エンコーディング変換しない**。`git status` → 未コミットなら **`git restore <path>`** で HEAD 復元。正本も壊れているときだけ履歴調査 |
 | フォルダが空 · `.git` だけ残る | **移動・削除を再実行しない**。ユーザーに報告 → `git clone` で復旧（`15_project_mgmt/YK_APPLICATION_RULES.md` §5-4） |
+| `mv` / `Rename-Item` が「busy」「in use」で失敗（同一ボリューム内の単純 rename でも） | Bash/PowerShell **自分自身**の cwd が対象ディレクトリ配下でないか確認（`pwd` / `Get-Location`）。配下なら親へ `cd` / `Set-Location` してから再試行。VSCode 等エディタ側を疑う前にツール自身の cwd を確認する |
 
 ---
 
@@ -176,7 +187,7 @@ Cursor **Settings → Rules** に次を追加すると、グローバルでも R
 - 確認・調査・引き継ぎの俯瞰: Shell 禁止。Glob / Read / Grep のみ。
 - 引き継ぎ**終了** Phase C: **Bash 1 本/リポ**（add+commit+push）。Phase B 単独 git status 禁止。Post-C 専用 commit 禁止。
 - commit 調査（commit 明示ターンのみ）: `git status`/`diff`/`log` は **1 本の Shell に `;` 連結**。初回からフル権限。
-- 副作用が要るタスク（commit / push / test）のみ Shell。SSOT: `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`
+- 副作用が要るタスク（commit / push / test / exe ビルド）のみ Shell。SSOT: `c:/yk-skill/rule/60_tooling/AGENT_SHELL_RULES.md`
 ```
 
 `committing-changes-with-git` の「並列」と矛盾しないよう、**並列または 1 本連結**と読む。
