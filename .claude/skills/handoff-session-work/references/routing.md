@@ -297,7 +297,9 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `lci-studio` | `handoffs/lci-studio/HANDOFF.md` | LCI · Tauri 予定 · MVP 凍結 · 旧 prompt-studio |
 | `excel-shape-arranger` | `handoffs/excel-shape-arranger/HANDOFF.md` | Excel 選択図形のグリッド整列 · `yk-application/excel-shape-arranger` |
 | `excel-kana-toggle` | `handoffs/excel-kana-toggle/HANDOFF.md` | Excel 選択セルのカタカナを全角または半角へ揃える · `yk-application/excel-kana-toggle` |
-| `toolkit`（旧 `excel-toolkit`） | `handoffs/toolkit/HANDOFF.md` | 自作ツールのプラグイン集約ハブ（kana-toggle / shape-arranger、Excel 非依存化へ拡張中）· `yk-application/toolkit` |
+| `toolkit`（旧 `excel-toolkit`） | `handoffs/toolkit/HANDOFF.md` | 自作ツールのプラグイン集約ハブ（kana-toggle / shape-arranger / bmp-resizer）· `yk-application/toolkit` |
+| `word-kana-toggle` | `handoffs/word-kana-toggle/HANDOFF.md` | Word 選択範囲のカタカナ/スペースを全角または半角へ揃える（excel-kana-toggle の Word 版）· `yk-application/word-kana-toggle` |
+| `term-consistency-checker` | `handoffs/term-consistency-checker/HANDOFF.md` | CSV 用語集で Word/Excel 文書の表記ゆれを検出（読取専用・検出のみ）· `yk-application/term-consistency-checker` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。
