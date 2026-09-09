@@ -4,8 +4,9 @@
 
 | 項目 | 値 |
 |------|-----|
-| **状態** | Phase 2 は**保留**（P16 まで完了 · 2026-06-27）。以後は単発の doc-sync / リンク修正のみ。次候補: P9b（manifest CI）を着手するか判断 |
-| **直近セッション** | 2026-09-09 — リンク切れ 8 件修正 · APP_PROJECT §13 末尾移動 + No 25 へ昇格ルール一本化 · A11Y_ROADMAP/PLAYBOOK 重複リンク化 · manifest 34 本同期 · 入口 3 doc 日付同期 |
+| **状態** | Phase 2 は**保留**（P16 まで完了 · 2026-06-27）。以後は単発の doc-sync / リンク修正のみ。**次セッションの実作業: B5（WARN 12本の仕分け）+ 行数ドリフト防止 M1**（いずれも方針確定済み・下記） |
+| **直近セッション** | 2026-09-09（2回目）— **調査・方針確定のみ・実装なし**。監査再実行で `PLAYWRIGHT_RULES` 327 / `REACTFLOW_RULES` 337 を実測 → 前回記録「約290 / 約330」は**目算誤り**、git 履歴上 **リバウンドではなく分割が 250 に届かず中途停止**と判明。行数ドリフト防止策をサブエージェントでレビュー → M1 として確定。口調: frieza（ユーザー指示「フリーザの口調で」· 本セッション内で解除なし） |
+| **1回前セッション** | 2026-09-09（1回目）— リンク切れ 8 件修正 · APP_PROJECT §13 末尾移動 + No 25 へ昇格ルール一本化 · A11Y_ROADMAP/PLAYBOOK 重複リンク化 · manifest 34 本同期 · 入口 3 doc 日付同期 |
 | **リポジトリ** | `c:/yk-skill`（主）· 参照更新済み: `5.Python` · `yk-memo` 一部 · `workspace-ui-kit` |
 | **入口 SSOT** | `c:/yk-skill/rule/RULE_INDEX.md` |
 | **対話の経緯** | ルール矛盾チェック → Web調査 → 多視点レビュー → 対話で1件ずつ決定 → 実装 |
@@ -83,6 +84,7 @@
 - **Secrets SSOT:** `10_meta/SECRETS_HYGIENE_RULES.md` — チェックリスト + 禁止パターン。チャットへの値貼付は **原則禁止（例外なし）**。実装手順は各ドメイン rule
 - **Product Spec（独立リポ）:** `{app}/docs/` + `AGENTS.md`（`specs/` は廃止 · 2026-06-23 移行）
 - **Web L0 入口:** `workspace-ui-kit/.cursor/rules/workspace-dev-entry.mdc` — glob `app` · `components` · `lib` の `*.{ts,tsx}`
+- **行数の記録（2026-09-09 2回目 · M1）:** 絶対行数は散文（`RULE_IMPROVEMENT_HANDOFF` · `RULE_INDEX`）に書かない。必要時は `audit-rule-line-counts.ps1` を実行し機械出力を正とする。分割・監査の記録は質的事実のみ（「§X を references へ」「まだ WARN」等）。目算値の凍結が「約290」誤記の原因
 
 ### 帯フォルダ一覧（SSOT パス）
 
@@ -112,6 +114,7 @@
 
 | ID | 優先 | タイトル | 概要・受け入れ基準 | 主に触るファイル |
 |----|------|----------|-------------------|------------------|
+| **M1** | 高 | 行数ドリフト防止 | サブエージェントレビュー済み（2026-09-09 2回目）。B5 と同時可。**今やる:** ①散文に絶対行数を書かない+誤記訂正 · ★warn-only grep バックストップ · ④Claude Code フック parity（CC 形状アダプタ新規）。**据え置き:** ③縮小版（check-and-fail のみ）· ⑤=P9b が supersede。**却下:** ②コミット生成スナップショット。詳細 → 下記 §M1 詳細 | `.claude/settings.json`（新規）· `.cursor/hooks/` · `RULE_INDEX.md` · `.githooks/pre-commit`（据え置き分） |
 | **P9b** | 予約 | manifest 本格運用 | tag 検証需要時 · `route_refs.py` / CI 連携（PROGRESSIVE §7） | `load-manifest.yaml` |
 
 ### 当初レビューで言及・未タスク化した周辺
@@ -119,8 +122,27 @@
 - ~~ルール全文の **再矛盾チェック**~~ — 2026-06-27（doc-sync C-01〜C-06）· **2026-09-09 再実施**（meta/design/project 帯 + 入口 3 doc + 肥大 L1 2 本）
 - ~~**サブエージェント多視点レビュー**の再実施~~ — **2026-05-24 実施済**（監査ターン）
 - `flowchart-studio/` 等、今回スコープ外リポジトリのルールリンク
-- **2026-09-09 監査の残タスク（未着手）:** B5 = WARN 12 本のリバウンド監査（PLAYWRIGHT 290 · REACTFLOW 330 はまだ WARN）· No 22 DIAGRAM_MANAGER を `active` のまま置くか deprecate するかの最終判断 · 未スキャン帯（30_web_stack 本体 / 40_python / 45_mermaid / GAS 系 51-52-54）の矛盾チェック
+- **2026-09-09 監査の残タスク（未着手）:**
+  - **B5 = WARN 12 本の仕分け（方針: 実務的トリアージで確定）** — 監査実測（2026-09-09 2回目）: `5_writing/references/WRITING_RULES_CONTENT` 473 / `5_writing/references/WRITING_RULES_FORMAT` 383 / `PROJECT_DOCUMENT_RULES` 373 / `REACTFLOW_RULES` 337 / `PLAYWRIGHT_RULES` 327 / `RULE_INDEX` 325 / `GAS_REPORT_DESIGN_RULES` 317 / `VERCEL_RULES` 307 / `REACT_RULES` 299 / `A11Y_ROADMAP` 293 / `MERMAID_RULES` 287 / `RULE_ROUTING_PLAYBOOK` 270。**リバウンドは無し**（PLAYWRIGHT/REACTFLOW は B3/B4 分割が 250 に届かず中途停止しただけ · HEAD=`0b079ff` 以降未編集を git で確認）。**やること:** 真の肥大だけ分割 → `WRITING_RULES_CONTENT`（500 目前・最優先）· `PROJECT_DOCUMENT §12/§15` · `VERCEL §6-1 ダッシュボード画面` · `REACT §3-1 パターン補足`(138行) · `PLAYWRIGHT §10/§11`。残りは各ファイル冒頭 or 台帳に「検分済み・WARN 許容」1行を明記し再 litigate を防ぐ。索引類（`RULE_INDEX` · `RULE_ROUTING_PLAYBOOK`）と `A11Y_ROADMAP`（完了で自然縮小）は対象外。**「対話で1件ずつ」**厳守
+  - No 22 DIAGRAM_MANAGER を `active` のまま置くか deprecate するかの最終判断
+  - 未スキャン帯（30_web_stack 本体 / 40_python / 45_mermaid / GAS 系 51-52-54）の矛盾チェック
+  - **stale 索引の修正（B5 と同時に）:** §帯フォルダ一覧に `5_writing/` 帯（`WRITING_RULES` + references 2 本）と `40_python/FASTAPI_RULES.md` が未記載
 - **2026-09-09 で処理済み:** C1（AGENTS.md 正本の判定表 · APP_PROJECT §5）· C2（diagram-manager = `diagram-manager-web`）· B3（REACTFLOW_PANELS.md）· B4（PLAYWRIGHT_GAS.md）
+
+### M1 詳細（行数ドリフト防止 · 2026-09-09 2回目にサブエージェントレビューで確定）
+
+**背景:** 前回セッションが引き継ぎに「`PLAYWRIGHT_RULES` 430→約290」と目算値を凍結 → 実測 327。根本原因は「絶対行数を散文に手打ちし機械検証しない」こと。既存防御は `audit-rule-line-counts.ps1`（測定エンジン）＋ Cursor pre/post フックのみで、**Cursor 以外（この Claude Code CLI 含む）では無反応**。git フック無し・CI 無し。`core.hooksPath` はこのマシンで未設定。
+
+| # | 判定 | 内容 |
+|---|------|------|
+| ① | **今やる** | `RULE_IMPROVEMENT_HANDOFF` / `RULE_INDEX` は行数の絶対値を書かず質的事実のみ。既存の誤記（約290/約330）は本セッションで訂正済み。RULE_INDEX の該当箇所も次セッションで確認・「スクリプト実行」1行に置換 |
+| ★ | **今やる（新規）** | **warn-only grep バックストップ** — ステージ差分の `RULE_IMPROVEMENT_HANDOFF.md` / `RULE_INDEX.md` を `\d+\s*行` や `\d+\s*[→⇒]\s*(約\s*)?\d+` × ファイル名トークンで検査し**警告のみ**（ブロックしない）。誤検出源が多い（"No 25" · "34 本" · 日付 · "§13"）ので調整必須。~20行。今回のバグ種を実際に捕まえる唯一の機構 |
+| ④ | **今やる（① の隣に格上げ）** | Claude Code `PreToolUse`（L1 500 ブロック）＋ `PostToolUse`（行数注入）。**既存 Cursor .ps1 は流用不可** — CC はペイロード形状が別（`tool_name` / `tool_input.file_path` / Write は `content` · Edit は `old_string`+`new_string` / ブロックは exit 2 か `hookSpecificOutput` deny / 注入は `hookSpecificOutput.additionalContext`）。ツールは `Edit`/`Write`/`MultiEdit`（`Delete` 無し → 削除ゲートは対象外）。`Edit` は全文を持たないのでディスクから読んで置換適用。Windows は `command` が `cmd.exe` 経由 → `powershell -NoProfile -ExecutionPolicy Bypass -File "<abs or $CLAUDE_PROJECT_DIR>"` を明示。`yk-skill/.claude/settings.json` は未存在なので新規作成 |
+| ③ | **据え置き（縮小）** | git `pre-commit`。**`-FailOnError` の 500 ブロックのみ・check-and-fail**（`git add` 禁止・生成ファイル再生成禁止 — フックからインデックスを変えると partial-commit 不整合 · `--amend`/rebase 破壊 · `--no-verify` で嘘ファイルが残る）。`core.hooksPath` 配線＋ per-clone setup 手順化が前提。それが無いなら「advisory」と割り切る |
+| ⑤ | **据え置き（= P9b）** | CI（GitHub Actions で `audit-rule-line-counts.ps1 -FailOnError`）。エディタ非依存・`--no-verify` 不可・ローカル導入不要で **③ を supersede**。現状 `main` へ直コミット運用のため未着手。PR ワークフロー導入時は ③ の機構を飛ばして CI 直行 |
+| ② | **却下** | コミットされる生成スナップショット（`rule/_generated/LINE_AUDIT.md` 等）。diff 汚染 + staleness-lie（`--no-verify` で嘘化）+ 手コピーで①のリスク再導入。RULE_INDEX に「`audit-rule-line-counts.ps1` を実行」の 1 行で代替。`-Markdown` 出力モードは ⑤ が要求したときだけ追加 |
+
+**まだ捕まえられない drift（許容）:** フック未配線のエディタ（vim · `sed` · GitHub Web 編集）· `--no-verify` · `LINE_AUDIT.md` から手コピー（②却下で回避）· サイズOKだが内容が誤り（size ≠ quality）。
 
 ---
 
@@ -159,4 +181,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-09-09（Phase 2 保留を明記 · Hooks ゲート追記 · 2026-09-09 監査の残タスク登録 · manifest 34 本 · RULE_INDEX と日付同期）
+**最終更新:** 2026-09-09（2回目 — B5 前提調査 · リバウンド否定（実測 327/337）· 行数ドリフト防止 M1 をサブエージェントレビューで確定 · stale 索引摘出 · 誤記「約290/約330」訂正。実装は次セッション）
