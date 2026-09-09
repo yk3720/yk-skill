@@ -62,6 +62,7 @@ description: >
 ### Phase A — 整理（必須 · Write より先）
 
 1. [references/routing.md](references/routing.md) を Read
+1b. **差分確認（別PC対策 · 必須 · Write より先）** — 触る予定の各 Git ルート（実装リポ · `c:/yk-memo` · 必要なら `c:/yk-skill`）で `git fetch`。**behind があれば Phase B の Write 前に `git pull --rebase` で取り込む**（stale ツリー上にセッション MD を作らない）。衝突時はユーザーへ報告して止める
 2. プロジェクト slug が不明ならユーザーに確認
 3. `handoffs/{project}/` を Glob — ルート直下のセッション MD（`HANDOFF.md` · `README.md` · `archive/` を除く `*.md`）を列挙
 4. **資料整理** — [routing.md §資料整理](references/routing.md)：完了済み・重複の削除または移行
@@ -109,6 +110,7 @@ description: >
 3. `HANDOFF.md` — **先頭表のみ** Read（`| **最新セッション** |` · `| **状態** |`）。ユーザーが `@HANDOFF` 全文を指定したときのみ全文
 3b. **検証駆動フェーズ** — HANDOFF §6 に「検証駆動」「§4 機械消化しない」等がある slug は **§6 が実行正本**。§4 は Read しない（履歴）。検証メモ・明示依頼がなければ §6 の 1 行を報告して停止
 3c. **口調の引き継ぎ** — 最新セッション MD 先頭表の **「口調」** を Read。`default` 以外（`frieza` 等）なら **§4 着手前に `switching-tone-yk` でその口調へ切り替える**（ユーザーが同ターンで別口調を指示していればそちらを優先）。待機・3b で停止する場合も切り替えは行う
+3d. **差分確認（別PC対策 · 必須）** — 対象プロジェクトの実装リポ（HANDOFF 先頭表の「実装」/「コード」パス）と `c:/yk-memo` で `git fetch`。ローカルが **behind** なら **§4 着手前にユーザーへ報告**し、`git pull --rebase` するか確認してから進む（SessionStart フックがカバーするのは `yk-memo` / `yk-skill` / `yk-tool` のみ。`yk-application/<slug>` は本ステップで見る）
 4. 最新セッション MD — **§4 のみ**（Grep `## 4.` 〜 次の `## 5.` 手前、または Read の `offset/limit`）。`@セッション` 指定時は当該 MD の §4 のみ（HANDOFF 省略可）。**3b 該当時はスキップ**
 5. §4 の **1 件だけ**実行（HANDOFF §6 ロードマップ全体には広げない）
 6. 「一つずつ」「順番に」のときは **1 タスクで止め**、次に進む前に確認
