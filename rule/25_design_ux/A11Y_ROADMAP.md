@@ -159,20 +159,9 @@ Phase 5  キャンバス（別意思決定）
 | `e2e/helpers/a11y.ts` | AxeBuilder · タグ · gate · exclude SSOT |
 | `e2e/manual-check.spec.ts` | 専用 test **1 本**（`openPreviewWithSample` 安定後） |
 
-### 6-2. WCAG タグ（累積指定・SSOT）
+### 6-2. WCAG タグ（累積指定）
 
-```typescript
-const WCAG_TAGS = [
-  "wcag2a",
-  "wcag2aa",
-  "wcag21a",
-  "wcag21aa",
-  "wcag22a",
-  "wcag22aa",
-] as const;
-```
-
-`wcag22aa` のみでは 2.0/2.1 由来ルールが漏れる。
+累積 6 タグ配列の **SSOT は [`A11Y_RULES.md`](A11Y_RULES.md) §7-2**（`WCAG_AXE_TAGS`）。`wcag22aa` のみでは 2.0/2.1 由来ルールが漏れるため 6 タグすべてを指定する。
 
 ### 6-3. CI ゲート
 

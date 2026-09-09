@@ -24,7 +24,7 @@
 | ピラミッド · 選定フロー · 向き/向かない · チェックリスト | `c:/yk-skill/.claude/skills/designing-playwright-tests-yk/references/decision-matrix.md` |
 | Web 調査要約（URL） | 同 `references/web-research.md` |
 | a11y（axe / keyboard） | 同 `references/a11y.md` |
-| ロケーター · 待機 · 幾何 · 実行 | L1 §1–11 · [`PLAYWRIGHT_AGENT_OPS.md`](PLAYWRIGHT_AGENT_OPS.md) · `using-playwright` |
+| ロケーター · 待機 · 幾何 · 実行 | L1 §1–7 · [`PLAYWRIGHT_AGENT_OPS.md`](PLAYWRIGHT_AGENT_OPS.md) · `using-playwright`（GAS/Sheets は [`PLAYWRIGHT_GAS.md`](PLAYWRIGHT_GAS.md)） |
 
 ### 13-2. §12 との役割分担
 

@@ -17,12 +17,13 @@ c:/yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md
 c:/yk-skill/.claude/skills/using-playwright/references/ROUTER.md
 ```
 
-**読み順:** UI レイアウト・重なり → **L1 §12 索引 → `references/PLAYWRIGHT_AGENT_OPS.md`（該当 §12-x）→ spec**。新規 spec 前は §13 + decision-matrix。GAS/Sheets 時のみ L1 §1–11 深読。
+**読み順:** UI レイアウト・重なり → **L1 §12 索引 → `references/PLAYWRIGHT_AGENT_OPS.md`（該当 §12-x）→ spec**。新規 spec 前は §13 + decision-matrix。GAS/Sheets 時のみ [`references/PLAYWRIGHT_GAS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_GAS.md) を深読。
 
 - **§13** — 何を E2E に載せるか。**未設計なら** `designing-playwright-tests-yk` + [`PLAYWRIGHT_TEST_STRATEGY.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_TEST_STRATEGY.md) を先に。
   **省略可:** ユーザーが再現手順・検証意図を 1 件に限定 / UI 修正同一ターンでその修正の回帰 1 本のみ / decision-matrix チェックリストをインラインで満たす
 - **§12** — エージェント運用（Vitest→Playwright、幾何 assert、`toPass`、Trace、配置表）— 詳細は [`PLAYWRIGHT_AGENT_OPS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_AGENT_OPS.md)
-- **§1–11** — GAS/Sheets・ロケーター・待機・アサーション（GAS 時のみ深読）
+- **§1–7** — ロケーター・待機・アサーション・セキュリティ・セッション・タイムアウト（横断原則）
+- **[`references/PLAYWRIGHT_GAS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_GAS.md)** — GAS iframe・スプレッドシート・Google ログイン（GAS/Sheets 時のみ深読）
 
 ## ワークフロー（要約）
 

@@ -134,6 +134,6 @@ create policy "profiles_update_link_self"
 | 装置 · ユニット削除 | `admin` · 各 `created_by` | `010` · `008` |
 
 - **`015` は `016` で上書き** — 015 未適用なら 016 のみ Run でよい（Runbook §12-2b）。
-- SQL 全文 · 本番確認手順: [`DB2_MIGRATION_RUNBOOK.md`](../../../yk-application/flowchart-studio/docs/runbooks/DB2_MIGRATION_RUNBOOK.md) §12-2c · handoffs [`HANDOFF.md`](../../../yk-memo/handoffs/flowchart-studio/HANDOFF.md) §6 権限表。
+- SQL 全文 · 本番確認手順: [`DB2_MIGRATION_RUNBOOK.md`](c:/yk-application/flowchart-studio/docs/runbooks/DB2_MIGRATION_RUNBOOK.md) §12-2c · handoffs [`HANDOFF.md`](c:/yk-memo/handoffs/flowchart-studio/HANDOFF.md) §6 権限表。
 
 ---

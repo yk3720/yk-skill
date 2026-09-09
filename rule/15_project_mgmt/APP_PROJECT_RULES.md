@@ -6,33 +6,7 @@
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-06-26（§2 docs/ 統合 · 検証駆動例外 footnote）
-
----
-
-## 13. 企画ドキュメント種別（経緯 · 合意 · 2026-05-31）
-
-**実例:** [flowchart-studio decision-log](c:/yk-application/flowchart-studio/docs/05_開発ガイドライン/decision-log.md)
-
-| 種別 | パターン | 正本 | 載せる内容 |
-|------|----------|------|------------|
-| **経緯索引** | `05_開発ガイドライン/decision-log.md` | 企画 | タイムライン · リンク · 1 行要約のみ（本文コピー禁止） |
-| **ADR** | `03_技術仕様/意思決定記録(ADR).md` または `ADR-NNN-*.md` | 企画 | Accepted 技術・プロダクト決定（**Draft** = grill 合意済 · 実装前 — 追随 MD は `PROJECT_DOCUMENT_RULES` §9.2） |
-| **grill-me** | `01_要求定義/grill-me_{YYYY-MM-DD}_{論題}.md` | 企画 | 対話 Q&A · 未決 · 優先順位（`相談_*` は同義 · 新規は `grill-me_` 推奨） |
-| **調査** | `01_要求定義/調査_{テーマ}.md` | 企画 | 調査結果 · 比較（決定前） |
-| **計画** | `01_要求定義/計画_{YYYY-MM-DD}_{論題}.md` | 企画 | 相談→実装の分解 · §4 候補 |
-| **セッション** | `handoffs/{slug}/*.md` | handoffs | §4 = 次の 1 件 · 作業記録 |
-
-**昇格ルール（MUST）**
-
-1. grill-me で **Accepted** → ADR（**Draft 可** · 実装前）+ decision-log 1 行 · 追随 MD は **§9.2**（`PROJECT_DOCUMENT_RULES`）  
-2. grill-me で **未決** → grill-me §4 のみ（ADR に書かない）  
-3. セッション終了 → decision-log 1 行 · handoff §1 要約（ADR 全文コピー禁止）  
-4. **戦略 vs 戦術** — 方針合意（grill-me）と §4 実行タスクがズレても正常。decision-log で両方リンクする  
-5. ADR **Accepted** + 実装完了 → 機能設計 SSOT の二層注記を外し一層に統合（§9.2）  
-6. **UI 同一** 等の曖昧語 — grill / ADR で **骨格** と **差分許容**（例: 認証無効時メニュー）を分けて書く
-
-**報告用:** 最終報告は `00_theme/報告書_*`（将来）← decision-log から要約転記。詳細は ADR · grill-me · handoffs へ委譲。
+**最終更新:** 2026-09-09（§13 を末尾へ移動 · 昇格ルールを No 25 へ一本化）
 
 ---
 
@@ -76,7 +50,7 @@ AGENTS.md（憲法）→ コード
 |--------|------|
 | `c:/yk-memo` | **`handoffs/`** · 講座テーマ（`00_テーマ/`）· 企画 stub（独立リポ移行後） |
 | `c:/yk-tool` | 汎用ツール · 実験アプリ（モノレポ） |
-| `c:/yk-application` | **独立 Git** の本線アプリ — **`docs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`）· 構成テンプレ: [`templates/independent-app-repo/STRUCTURE.md`](templates/independent-app-repo/STRUCTURE.md) |
+| `c:/yk-application` | **独立 Git** の本線アプリ — **`docs/` + `AGENTS.md` が Product Spec 正本**（例: `flowchart-studio`）· 構成テンプレ: [`STRUCTURE.md`](c:/yk-skill/templates/independent-app-repo/STRUCTURE.md) |
 | `c:/yk-skill` | **本 rule** · スタック rule · スキル |
 | `c:/1.cursor/5.Python` | Python デスクトップ（rev 積層保護） |
 
@@ -93,7 +67,7 @@ AGENTS.md（憲法）→ コード
 | 1 | **handoffs slug** 決定（小文字 · ハイフン） | ユーザー確認。推測で新 slug を作らない |
 | 2 | `handoffs/{slug}/HANDOFF.md` 初版 | 企画パス · コードパス · §6 ロードマップ |
 | 3 | 企画フォルダ **最小 3 種** | `01_要求定義/` · `04_リポジトリ構造/` · `05_開発ガイドライン/` — `PROJECT_DOCUMENT_RULES` §7 |
-| 4 | `05_開発ガイドライン/エージェント憲法.md` | §5 テンプレ準拠 · 500 行未満 |
+| 4 | 憲法ファイル（独立リポ = ルート `AGENTS.md` · §5） | §5 テンプレ準拠 · 500 行未満 |
 | 5 | slug ↔ 企画フォルダ **対応 1 行** | HANDOFF 表 · 憲法メタ表 |
 | 6 | `handoffs/README.md` プロジェクト一覧に 1 行 | routing.md §既知プロジェクト例 と同期 |
 | 7 | スタック rule | `RULE_INDEX` クイック入口（No 31–35 等） |
@@ -104,9 +78,14 @@ AGENTS.md（憲法）→ コード
 
 ## 5. エージェント憲法 必須項目
 
-各アプリの **`05_開発ガイドライン/エージェント憲法.md`** に **次を含める**（プロジェクト固有値で埋める）。テンプレ → スキル `starting-app-project-yk` · `references/agents-template.md`。
+各アプリの憲法ファイルに **次を含める**（プロジェクト固有値で埋める）。テンプレ → スキル `starting-app-project-yk` · `references/agents-template.md`。
 
-**移行中:** ルート `AGENTS.md` が残るプロジェクトは完了まで参照可。新規はルート `AGENTS.md` を作らない。
+**憲法ファイルの正本位置**（詳細 SSOT: [`PROJECT_DOCUMENT_RULES.md` §3.1・§4](PROJECT_DOCUMENT_RULES.md)）:
+
+| プロジェクト種別 | 憲法正本 |
+|------------------|----------|
+| **独立リポ（`yk-application`・推奨）** | リポ**ルートの `AGENTS.md`**（恒久 · Cursor 標準）。`docs/` への索引を含む |
+| **yk-memo 企画フォルダのみ** | `05_開発ガイドライン/エージェント憲法.md`。ルート `AGENTS.md` は**新規に作らない**（移行中に残るものは完了まで参照可） |
 
 | 節 | 内容 |
 |----|------|
@@ -126,11 +105,11 @@ AGENTS.md（憲法）→ コード
 
 **SSOT:** フォルダ名 · 種別定義 · 吸収ルール · 移行手順は **`15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（No 25）** を Read。本節はライフサイクル上の要約のみ。
 
-**標準（2026-06-23〜）:** 6 種（`01_要求定義/` 〜 `06_ユビキタス言語/`）+ 別枠（`00_テーマ/` · `99_アーカイブ/` · handoffs）。憲法は `05_開発ガイドライン/エージェント憲法.md`。新規は最小 3 種（`01` · `04` · `05/エージェント憲法`）。命名 · 追加トリガー → `PROJECT_DOCUMENT_RULES` §11 · §12。
+**標準（2026-06-23〜）:** 6 種（`01_要求定義/` 〜 `06_ユビキタス言語/`）+ 別枠（`00_テーマ/` · `99_アーカイブ/` · handoffs）。憲法は独立リポなら ルート `AGENTS.md`、yk-memo 企画のみなら `05_開発ガイドライン/エージェント憲法.md`（§5）。新規は最小 3 種（`01` · `04` · 憲法）。命名 · 追加トリガー → `PROJECT_DOCUMENT_RULES` §11 · §12。
 
 **移行中:** 旧 slug `flowchart-web` 等は `flowchart-studio`（`yk-application`）へ移行済 — 物理移行は rule 確定後（`PROJECT_DOCUMENT_RULES` §8）。
 
-**読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → エージェント憲法（移行完了後は `05_開発ガイドライン/`、未完了はルート `AGENTS.md`）。
+**読む順序（再開時 · 3 ファイル）:** handoffs HANDOFF → 最新 §4 → 憲法（独立リポ = ルート `AGENTS.md` · yk-memo 企画のみ = `05_開発ガイドライン/エージェント憲法.md` · §5）。
 
 ---
 
@@ -187,7 +166,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 1. **`15_project_mgmt/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時
 2. **`15_project_mgmt/PROJECT_DOCUMENT_RULES.md`** — 企画フォルダ構成 · 6 種 · 移行時
 3. **handoffs** — 毎セッション §4
-4. **エージェント憲法**（`05_開発ガイドライン/` または移行中はルート `AGENTS.md`）— 境界
+4. **憲法**（独立リポ = ルート `AGENTS.md` · yk-memo 企画のみ = `05_開発ガイドライン/エージェント憲法.md` · §5）— 境界
 5. **スタック L1** — `RULE_INDEX` クイック入口（触るドメインのみ）
 6. **Product Spec** — 仕様疑問時のみ
 
@@ -235,3 +214,22 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | **2 アプリ目以降** | checklist 実例追記 · スキル references 更新 |
 
 スキルは rule 全文をコピーしない。執筆 → `SKILL_AUTHORING_RULES.md` · `creating-skills`。
+
+---
+
+## 13. 企画ドキュメント種別（経緯 · 合意 · 2026-05-31）
+
+**実例:** [flowchart-studio decision-log](c:/yk-application/flowchart-studio/docs/05_開発ガイドライン/decision-log.md)
+
+| 種別 | パターン | 正本 | 載せる内容 |
+|------|----------|------|------------|
+| **経緯索引** | `05_開発ガイドライン/decision-log.md` | 企画 | タイムライン · リンク · 1 行要約のみ（本文コピー禁止） |
+| **ADR** | `03_技術仕様/意思決定記録(ADR).md` または `ADR-NNN-*.md` | 企画 | Accepted 技術・プロダクト決定（**Draft** = grill 合意済 · 実装前 — 追随 MD は `PROJECT_DOCUMENT_RULES` §9.2） |
+| **grill-me** | `01_要求定義/grill-me_{YYYY-MM-DD}_{論題}.md` | 企画 | 対話 Q&A · 未決 · 優先順位（`相談_*` は同義 · 新規は `grill-me_` 推奨） |
+| **調査** | `01_要求定義/調査_{テーマ}.md` | 企画 | 調査結果 · 比較（決定前） |
+| **計画** | `01_要求定義/計画_{YYYY-MM-DD}_{論題}.md` | 企画 | 相談→実装の分解 · §4 候補 |
+| **セッション** | `handoffs/{slug}/*.md` | handoffs | §4 = 次の 1 件 · 作業記録 |
+
+**昇格ルール（MUST）:** grill-me Accepted → ADR（Draft 可）→ decision-log 1 行、の 6 項目は **[`PROJECT_DOCUMENT_RULES.md` §6](PROJECT_DOCUMENT_RULES.md)（No 25）が SSOT**。本ファイルでは再掲しない。
+
+**報告用:** 最終報告は `00_テーマ/報告書_*`（将来）← decision-log から要約転記。詳細は ADR · grill-me · handoffs へ委譲。

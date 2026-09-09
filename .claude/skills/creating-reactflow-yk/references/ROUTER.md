@@ -4,7 +4,7 @@
 **要約・MUST:** `yk-skill/rule/35_reactflow/REACTFLOW_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-06-27（P14 · Standard を L1 索引 + tag 別 `references/` に変更）
+**最終更新:** 2026-09-09（B3 · `persist`/`next-shell` に `REACTFLOW_PANELS.md` を追加 · 本体は P14 版）
 
 ---
 
@@ -33,7 +33,7 @@
 
 | tier | いつ | floor（必ず Read） |
 |------|------|----------------------|
-| **Light** | コメント · ラベル文言 · **操作 chrome の色/class のみ** · パイプライン不変 | L1 §5.6 索引 + [`references/REACTFLOW_UX_CHROME.md`](../../../rule/35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-2a + `design-system.md` §4、または該当 1 ファイル |
+| **Light** | コメント · ラベル文言 · **操作 chrome の色/class のみ** · パイプライン不変 | L1 §5.6 索引 + [`REACTFLOW_UX_CHROME.md`](c:/yk-skill/rule/35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-2a + `design-system.md` §4、または該当 1 ファイル |
 | **Standard** | レイアウト · エッジ · Canvas · 表 UI · 複数ファイル | **L1（§0–§5 索引 · §4）** + **§2.1 tag 別 `references/`** + 参照実装 floor（**§3 Tag — floor に加算**） |
 | **Full** | 新形状種別 · 永続化キー変更 · `toMermaid` 契約変更 · 両アプリ `lib/flowchart` 同期 | Standard floor + 企画 ADR + `lib/flowchart/types.ts` |
 
@@ -47,7 +47,7 @@
 
 | tag | 追加 Read（`references/`） |
 |-----|---------------------------|
-| `persist` · `next-shell` | `REACTFLOW_UX_WORKSPACE.md` |
+| `persist` · `next-shell` | `REACTFLOW_UX_WORKSPACE.md` · **パネル構造/レイアウトキーを触るなら** `REACTFLOW_PANELS.md` |
 | `chrome-ui` | `REACTFLOW_UX_CHROME.md` |
 | `table-ui` | `REACTFLOW_UX_CHROME.md`（§5.6-2 · §5.6-9）+ `REACTFLOW_UX_WORKSPACE.md` §5.7（列順 · normalize） |
 | `layout` · `edges` | `REACTFLOW_EDGES.md` |

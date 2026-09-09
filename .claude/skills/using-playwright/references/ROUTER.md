@@ -4,14 +4,14 @@
 **L1 要約:** `yk-skill/rule/50_gas_html_test/PLAYWRIGHT_RULES.md`  
 **手順:** `../SKILL.md` · 戦略設計は `designing-playwright-tests-yk`
 
-**最終更新:** 2026-06-27（P14c 新設）
+**最終更新:** 2026-09-09（B4 · GAS/Sheets 分は `PLAYWRIGHT_GAS.md` を指す · 本体は P14c 版）
 
 ---
 
 ## 0. 禁止・原則
 
 - L1 §12-13 の **全文を毎ターン Read しない** — 索引 → 本 ROUTER → 該当 `references/` のみ
-- GAS / Sheets 以外は **§1–11 を毎回深読しない**
+- GAS / Sheets 以外は **`references/PLAYWRIGHT_GAS.md` を読まない**（L1 §1–3・§5–7 の横断原則で足りる）
 - decision-matrix を L1 に複製しない
 
 ---
@@ -32,10 +32,10 @@
 |------|-------------------|
 | **回帰 1 本 · UI 修正同一ターン** | L1 §12 索引 + `PLAYWRIGHT_AGENT_OPS.md` の該当 §12-x のみ |
 | **新規 spec · 複数フロー** | 上記 + `PLAYWRIGHT_TEST_STRATEGY.md` + `decision-matrix.md` |
-| **GAS / Sheets E2E** | L1 §1–11 + §12 索引 + 該当 §12-x |
+| **GAS / Sheets E2E** | L1 §1–7 + [`PLAYWRIGHT_GAS.md`](c:/yk-skill/rule/50_gas_html_test/references/PLAYWRIGHT_GAS.md) + §12 索引 + 該当 §12-x |
 | **flowchart-studio E2E** | `PLAYWRIGHT_AGENT_OPS.md` §12-3 · §12-6 · §12-8（触る範囲に応じて） |
 
-**既定:** 迷ったら **Standard** = L1 + `PLAYWRIGHT_AGENT_OPS.md` 全文（~160行 · GAS 時は §1–11 追加）。
+**既定:** 迷ったら **Standard** = L1 + `PLAYWRIGHT_AGENT_OPS.md` 全文（~160行 · GAS 時は `PLAYWRIGHT_GAS.md` 追加）。
 
 ---
 
@@ -45,9 +45,9 @@
 |-----|-----------|
 | `geometry` | `PLAYWRIGHT_AGENT_OPS.md` §12-3 |
 | `flowchart` | §12-6 · §12-8 + REACTFLOW `references/`（ROUTER tag に応じて） |
-| `server-action-stub` | §12-7 + [`SUPABASE_AUTH_SSR.md`](../../../rule/30_web_stack/references/SUPABASE_AUTH_SSR.md) §8-2 |
+| `server-action-stub` | §12-7 + [`SUPABASE_AUTH_SSR.md`](c:/yk-skill/rule/30_web_stack/references/SUPABASE_AUTH_SSR.md) §8-2 |
 | `strategy` | `PLAYWRIGHT_TEST_STRATEGY.md` + `decision-matrix.md` |
-| `gas` | L1 §1–11 · §4 · §7 |
+| `gas` | L1 §1–7 · [`PLAYWRIGHT_GAS.md`](c:/yk-skill/rule/50_gas_html_test/references/PLAYWRIGHT_GAS.md) |
 
 **複数 tag:** Ref Plan または SKILL 完了報告に列挙。
 
@@ -71,5 +71,5 @@
 ## Ref Plan
 - tags: flowchart, geometry
 - load: PLAYWRIGHT_RULES.md §12, references/PLAYWRIGHT_AGENT_OPS.md §12-3, references/PLAYWRIGHT_AGENT_OPS.md §12-8
-- skip: §1–11（GAS 非該当）
+- skip: PLAYWRIGHT_GAS.md（GAS 非該当）
 ```

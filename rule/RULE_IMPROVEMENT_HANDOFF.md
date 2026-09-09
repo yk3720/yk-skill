@@ -4,7 +4,8 @@
 
 | 項目 | 値 |
 |------|-----|
-| **状態** | Phase 2 進行中 · **P16 完了**（Tauri 方針 · yk-memo 注記 · 2026-06-27）· 次候補: P9b（manifest CI） |
+| **状態** | Phase 2 は**保留**（P16 まで完了 · 2026-06-27）。以後は単発の doc-sync / リンク修正のみ。次候補: P9b（manifest CI）を着手するか判断 |
+| **直近セッション** | 2026-09-09 — リンク切れ 8 件修正 · APP_PROJECT §13 末尾移動 + No 25 へ昇格ルール一本化 · A11Y_ROADMAP/PLAYBOOK 重複リンク化 · manifest 34 本同期 · 入口 3 doc 日付同期 |
 | **リポジトリ** | `c:/yk-skill`（主）· 参照更新済み: `5.Python` · `yk-memo` 一部 · `workspace-ui-kit` |
 | **入口 SSOT** | `c:/yk-skill/rule/RULE_INDEX.md` |
 | **対話の経緯** | ルール矛盾チェック → Web調査 → 多視点レビュー → 対話で1件ずつ決定 → 実装 |
@@ -65,12 +66,16 @@
 | **P14f** | L1 肥大化分割（PYTHON） | `PYTHON_RULES.md` 451行から旧 §12–§14 を `40_python/references/` 3 本へ。ROUTER §2.1。distilling Step 3 を L3 追記に変更 |
 | **P15** | Supabase PROGRESSIVE 完遂 | `creating-supabase-yk` · `supabase-dev-entry.mdc` · `SUPABASE_RULES` status `active` · INDEX · PLAYBOOK · manifest · SKILL_CATALOG |
 | **P16** | Tauri 統合方針決定 | 当面統合しない · INDEX「未登録ドメイン」· `tauri-practice/HANDOFF` §6 · yk-memo INDEX 注記 · playwright `.mdc` 同期 |
+| **Hooks** | yk-skill Cursor `preToolUse` / `postToolUse` ゲート | `yk-skill/.cursor/hooks.json` — L1 500行超と rule .md の Delete / 壊滅縮小を拒否 · 編集後に行数を注入。INDEX §新規追加手順 · `QUALITY_GATE_RULES` §8 · `SKILL_AUTHORING` 末尾 |
+| **2026-09-09a** | 単発 doc-sync（Phase 2 外） | リンク切れ 8 · APP_PROJECT §13 移動/一本化（B1·B2）· A11Y_ROADMAP §6-2 · PLAYBOOK 更新節（B6·B7）· manifest 34 本 · 入口 3 doc 日付 · C1（AGENTS.md 正本の判定表）· C2（diagram-manager = `diagram-manager-web` を INDEX/PLAYBOOK/WORKSPACE_RULES 同期） |
+| **2026-09-09b** | L1 肥大化分割（B3·B4） | `REACTFLOW_RULES` 417→約330 · 新 `references/REACTFLOW_PANELS.md`（旧 §5-P〜§5-S ＋ §5.6-10）· ROUTER `persist` 追記。`PLAYWRIGHT_RULES` 430→約290 · 新 `references/PLAYWRIGHT_GAS.md`（旧 §4·§8·§9·§11 GAS 分）· using-playwright / designing ROUTER・SKILL の `§1–11` 参照を `§1–7 + PLAYWRIGHT_GAS.md` に更新 |
 
 ### 採用済みアーキテクチャ決定（再議論しない）
 
 - **入口:** `rule/` 直下は `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md`（**移行スタブは 2026-05-23 削除済み**）。索引＝WHAT/WHEN · プレイブック＝HOW · L1 SSOT は帯フォルダ内
 - **命名:** ファイル名 `{TOPIC}_RULES.md`（番号なし）。論理順は `RULE_INDEX` の **No 列**
-- **帯:** 10刻み（`10_meta` … `60_tooling`）。`load-manifest.yaml` 試作運用中（32 本 · No 00 除く · INDEX と人手同期）
+- **帯:** 10刻み（`10_meta` … `60_tooling`）。`load-manifest.yaml` 試作運用中（34 本 · No 00 除く · INDEX と人手同期）
+- **L1 500行ゲート:** yk-skill Cursor `preToolUse` が L1 500行超・rule .md の Delete / 壊滅縮小を拒否（`postToolUse` が行数注入）。監査は `audit-rule-line-counts.ps1`（WARN 250 / FAIL 500）
 - **企画 vs 実装:** 実装 SSOT は `yk-skill/rule`（Governance 段階7で yk-memo は参考のみ）
 - **Light Ref Plan:** `tier` + `load` のみ。迷ったら **Standard**
 - **ROUTER:** tier/tag/K-ID 表の SSOT は `references/ROUTER.md` のみ
@@ -111,9 +116,11 @@
 
 ### 当初レビューで言及・未タスク化した周辺
 
-- ~~ルール全文の **再矛盾チェック**~~ — **2026-06-27 実施済**（doc-sync C-01〜C-06 · 2026-05-24 監査含む）
+- ~~ルール全文の **再矛盾チェック**~~ — 2026-06-27（doc-sync C-01〜C-06）· **2026-09-09 再実施**（meta/design/project 帯 + 入口 3 doc + 肥大 L1 2 本）
 - ~~**サブエージェント多視点レビュー**の再実施~~ — **2026-05-24 実施済**（監査ターン）
 - `flowchart-studio/` 等、今回スコープ外リポジトリのルールリンク
+- **2026-09-09 監査の残タスク（未着手）:** B5 = WARN 12 本のリバウンド監査（PLAYWRIGHT 290 · REACTFLOW 330 はまだ WARN）· No 22 DIAGRAM_MANAGER を `active` のまま置くか deprecate するかの最終判断 · 未スキャン帯（30_web_stack 本体 / 40_python / 45_mermaid / GAS 系 51-52-54）の矛盾チェック
+- **2026-09-09 で処理済み:** C1（AGENTS.md 正本の判定表 · APP_PROJECT §5）· C2（diagram-manager = `diagram-manager-web`）· B3（REACTFLOW_PANELS.md）· B4（PLAYWRIGHT_GAS.md）
 
 ---
 
@@ -152,4 +159,4 @@
 - 新規決定時: §「採用済みアーキテクチャ決定」に1行追加
 - `RULE_INDEX.md` の最終更新日は構造変更時のみ更新（本ファイルの日付と揃える）
 
-**最終更新:** 2026-07-03（doc-sync R-01〜R-09 · 帯一覧 · manifest 15/25 追随）
+**最終更新:** 2026-09-09（Phase 2 保留を明記 · Hooks ゲート追記 · 2026-09-09 監査の残タスク登録 · manifest 34 本 · RULE_INDEX と日付同期）

@@ -11,7 +11,7 @@
 
 **コードベース:** `c:\yk-tool\diagram-manager-web\`（正本 · `app/page.tsx` が図解管理ルート）。`workspace-ui-kit` の `/diagram-manager` は移行案内のみ（2026-05-24）
 
-**最終更新:** 2026-05-17（シリーズグループ仕様 §4-5・§3 追記）
+**最終更新:** 2026-09-09（コード正本 = `c:/yk-tool/diagram-manager-web/` を INDEX・PLAYBOOK・WORKSPACE_RULES と同期。本文は 2026-05-17 版）
 
 **必ず先に読む（キット共通）:** [`WORKSPACE_RULES.md`](WORKSPACE_RULES.md)（`npm run dev`・Turbopack・A′ の共通パターン・復旧手順）
 

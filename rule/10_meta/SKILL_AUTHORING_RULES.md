@@ -6,7 +6,7 @@
 
 **実行ワークフロー:** スキルの新規作成・更新・改善は `c:/yk-skill/.claude/skills/creating-skills/SKILL.md`（Step 0〜8）。**本ファイルは執筆規範の SSOT**（Step 0 の第 1 必読）。
 
-**最終更新:** 2026-06-27（P14e · §5–§10 · §12 を `references/` へ分割）
+**最終更新:** 2026-09-09（末尾 行数監査ノートに yk-skill Cursor `preToolUse` / `postToolUse` を追記 · 本体は P14e 版）
 
 ---
 

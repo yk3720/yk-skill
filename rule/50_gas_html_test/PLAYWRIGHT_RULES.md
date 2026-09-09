@@ -3,7 +3,7 @@
 
 **ステータス:** active（横断 always · `playwright-agent-yk.mdc` · L2 `designing-playwright-tests-yk` · `using-playwright` · ROUTER: `using-playwright/references/ROUTER.md`）
 
-**最終更新:** 2026-07-03（バージョン表記追随 · 実装は package.json 参照）  
+**最終更新:** 2026-09-09（B4 · 旧 §4・§8・§9・§11 の GAS/Sheets 分を `references/PLAYWRIGHT_GAS.md` へ。L1 は横断原則 §1–3・§5–7 + 索引）  
 **配置:** `c:\yk-tool\playwright-test\`（@playwright/test **v1.61.1** / TypeScript / Chromium / Windows）— [RULE_INDEX](../RULE_INDEX.md) リポジトリマップ参照
 
 ---
@@ -99,13 +99,13 @@ await page.waitForURL('**/exec**', { timeout: 30000 });
 
 ### 2-2. GAS iframe と固定待機（避ける）
 
-GAS の iframe 読み込みでも **`waitForTimeout` は使わない**。`#reportTitle` 等の **web-first アサーション**で準備完了を待つ（→ §4-1）。
+GAS の iframe 読み込みでも **`waitForTimeout` は使わない**。`#reportTitle` 等の **web-first アサーション**で準備完了を待つ（`getContentFrame` ヘルパーは [`references/PLAYWRIGHT_GAS.md`](references/PLAYWRIGHT_GAS.md) §1-1）。
 
 ```typescript
 // ❌ 悪い例（anti-pattern）— フラキーの原因。デバッグ時以外は使わない
 await page.waitForTimeout(2000);
 
-// ✅ 代わりに §4-1 の getContentFrame または expect(byUrl.locator('#reportTitle')).toBeVisible()
+// ✅ 代わりに PLAYWRIGHT_GAS.md §1-1 の getContentFrame または expect(byUrl.locator('#reportTitle')).toBeVisible()
 ```
 
 ---
@@ -153,54 +153,11 @@ await expect.soft(locator).toBeVisible();
 
 ---
 
-## 4. GAS レポート専用：iframe アクセスのルール
+## 4. GAS レポート / Google Sheets 固有（→ references）
 
-GAS の Web アプリは複数の iframe が入れ子になっている。
+GAS Web アプリの**入れ子 iframe アクセス**（`getContentFrame` ヘルパー）· **Spreadsheet 操作**（§8 相当 · `waitUntil` 使い分け · 直列書き込み · キーボードショートカット）· **Google ログイン設定**（§9 相当 · chromium launch args）· **GAS/Sheets 固有エラー表** は [`references/PLAYWRIGHT_GAS.md`](references/PLAYWRIGHT_GAS.md)。
 
-```
-frame[0] : GAS 外側ラッパー（script.google.com/...）
-frame[1] : userCodeAppPanel（中間ラッパー）
-frame[2] : 実際の HTML コンテンツ ← ここを操作する（インデックスは変わる可能性あり）
-```
-
-### 4-1. iframe 取得の優先順位（堅牢な順）
-
-```typescript
-import { expect, type Frame, type Page } from '@playwright/test';
-
-async function getContentFrame(page: Page): Promise<Frame> {
-  await page.goto(GAS_URL, { waitUntil: 'networkidle', timeout: 30000 });
-
-  let resolved: Frame | null = null;
-  await expect(async () => {
-    const byUrl = page.frames().find((f) => f.url().includes('userHtmlFrame'));
-    if (byUrl) {
-      await expect(byUrl.locator('#reportTitle')).toBeVisible({ timeout: 3000 });
-      resolved = byUrl;
-      return;
-    }
-    for (const f of page.frames()) {
-      if ((await f.locator('#reportTitle').count()) > 0) {
-        await expect(f.locator('#reportTitle')).toBeVisible({ timeout: 3000 });
-        resolved = f;
-        return;
-      }
-    }
-    throw new Error('content frame not ready');
-  }).toPass({ timeout: 10000 });
-
-  if (!resolved) {
-    page.frames().forEach((f, i) => console.log(`frames[${i}]: ${f.url()}`));
-    throw new Error(`content frame not found; total=${page.frames().length}`);
-  }
-  return resolved;
-}
-```
-
-### 4-2. ヘルパーの配置方針
-
-- 共通ヘルパー → `tests/helpers/` 配下に置く（複数 spec から使う場合）
-- ファイル内限定ヘルパー → spec ファイル内で定義（1 ファイルしか使わない場合）
+横断ルール（§1 ロケーター · §2 待機 · §3 アサーション · §5 セキュリティ · §6 セッション · §7 タイムアウト）は本ファイルが SSOT。
 
 ---
 
@@ -280,65 +237,9 @@ export default defineConfig({
 
 ---
 
-## 8. Spreadsheet 操作のルール
+## 8. Spreadsheet 操作・Google ログイン（→ references）
 
-### 8-1. `waitUntil` の使い分け
-
-| 対象 URL | 推奨 `waitUntil` | 理由 |
-|---------|----------------|------|
-| GAS Web アプリ（`.../exec`） | `networkidle` | 初期ロード後は通信が止まる |
-| Google スプレッドシート（`docs.google.com/...`） | `load` | 常時 Ajax 通信が続くため `networkidle` にならない |
-
-```typescript
-// ✅ GAS
-await page.goto(GAS_URL, { waitUntil: 'networkidle', timeout: 30000 });
-
-// ✅ スプレッドシート
-await page.goto(SPREADSHEET_URL, { waitUntil: 'load', timeout: 30000 });
-// ❌ これは 30 秒でタイムアウトする
-await page.goto(SPREADSHEET_URL, { waitUntil: 'networkidle', timeout: 30000 });
-```
-
-### 8-2. 並列実行と書き込み競合
-
-```typescript
-// ✅ 書き込みテストは直列実行に設定
-test.describe.configure({ mode: 'serial' });
-```
-
-### 8-3. キーボードショートカット（Windows 専用）
-
-```typescript
-// ✅ 正しい
-await page.keyboard.press('Control+a');
-await page.keyboard.type(cellAddress);
-await page.keyboard.press('Enter');
-
-// ❌ 存在しない API
-await page.keyboard.selectAll();
-```
-
-> **日本語 IME がオンの状態**で `keyboard.type` を使うと意図した文字が入らないことがある。  
-> テスト前に英数モードを確認するか、名前ボックス等には `fill()` を使う方が安定する。
-
----
-
-## 9. Google ログイン設定（Playwright）
-
-```typescript
-const browser = await chromium.launch({
-  headless: false,
-  channel: 'chrome',
-  args: ['--disable-blink-features=AutomationControlled'],
-  ignoreDefaultArgs: ['--enable-automation'],
-});
-const context = await browser.newContext({
-  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ...',
-});
-```
-
-> **注意**: これは Google の検出を回避するための設定だが、ポリシー変更で効果が変わる可能性がある。  
-> テスト専用の Google アカウントを使うことを強く推奨する。
+`waitUntil` の使い分け（GAS = `networkidle` / Sheets = `load`）· 書き込みテストの直列実行 · Windows キーボードショートカット · Google ログイン設定は [`references/PLAYWRIGHT_GAS.md`](references/PLAYWRIGHT_GAS.md) §2・§3（旧 §8・§9）。
 
 ---
 
@@ -380,15 +281,11 @@ cd c:\yk-tool\playwright-test; npx playwright test
 
 ## 11. よくあるエラーと対処
 
+**GAS / Google Sheets 固有のエラー**（`networkidle` タイムアウト · `selectAll` · ログイン画面 · `frames()[2]` · Sheets 並列破損 · IME）→ [`references/PLAYWRIGHT_GAS.md`](references/PLAYWRIGHT_GAS.md) §4。
+
 | エラー | 原因 | 対処 |
 |--------|------|------|
-| `Test timeout of 30000ms exceeded` | Sheets で `networkidle` 待機がタイムアウト | `waitUntil: 'load'` に変更 |
-| `TypeError: page.keyboard.selectAll is not a function` | 存在しない API | `page.keyboard.press('Control+a')` を使う |
-| ログイン画面が表示される | `session.json` が無効 | `npm run setup` を別 PowerShell で再実行 |
-| `frames()[2]` が取得できない | GAS の iframe 構造変更 | URL パターンやコンテンツ要素でフレームを特定する |
 | テストは通るがアサーションが検証されていない | `await` の付け忘れ | `await expect(locator)...` と記載する |
-| 並列実行でスプレッドシートのデータが壊れる | 書き込みテストの競合 | `test.describe.configure({ mode: 'serial' })` を追加 |
-| IME が ON で `type` がおかしい | 日本語入力モードの干渉 | `fill()` を使うか IME OFF を確認 |
 | `トークン '&&' は...有効なステートメント区切りではありません` | **Windows PowerShell 5.1** では `&&` 非対応 | コマンド連結は `;` を使うか **`pwsh`（7+）** に切り替える（`10-1` 参照） |
 | `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
 | `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |

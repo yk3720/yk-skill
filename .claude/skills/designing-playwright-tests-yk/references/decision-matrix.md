@@ -29,7 +29,7 @@
 - 複数画面 / iframe / 実ブラウザ描画が必要なジャーニー
 - レイアウト（重なり・左右）— `PLAYWRIGHT_RULES` §12-3
 - キーボード・フォーカス（axe だけでは不足）
-- GAS iframe / Sheets — §4–7
+- GAS iframe / Sheets — `references/PLAYWRIGHT_GAS.md`（+ L1 §5–7）
 
 ## Playwright E2E 向かない
 

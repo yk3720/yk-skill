@@ -12,7 +12,7 @@
 
 **横断:** [`../30_web_stack/REACT_RULES.md`](../30_web_stack/REACT_RULES.md)（React 一般 · Hooks） · [`../30_web_stack/NEXTJS_RULES.md`](../30_web_stack/NEXTJS_RULES.md)（App Router · §5 RSC · §6 flowchart） · [`../45_mermaid/MERMAID_RULES.md`](../45_mermaid/MERMAID_RULES.md) §1.5（方式境界） · [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`../10_meta/GIT_WORKFLOW_RULES.md`](../10_meta/GIT_WORKFLOW_RULES.md)
 
-**最終更新:** 2026-06-27（P14 · §5.6 を `references/` へ分割 · L1 索引化）  
+**最終更新:** 2026-09-09（B3 · §5-P〜§5-S を `references/REACTFLOW_PANELS.md` へ集約 · 本体は P14 版）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 35
 
 **L0 入口:** 正本 `c:/yk-skill/.cursor/rules/reactflow-dev-entry.mdc`（glob `flowchart-studio/**` · `flowchart-web-mermaid/**`）。同期コピー: `yk-memo/.cursor/rules/` · `yk-tool/.cursor/rules/`。
@@ -96,7 +96,7 @@ surge 図解 HTML → `routing-diagram-yk` 系。**表駆動は本帯のみ**（
 | **UI（flowchart-studio）** | `frontend/src/components/flowchart/` | Client 層 · プレビュー · 表 UI · PNG/SVG（`exportPng.ts` 等） |
 | **UI（flowchart-web-mermaid）** | `components/flowchart/` | 同上（旧単一ツリー構成） |
 
-**四層 SSOT（studio）:** [`flowchart-studio/docs/04_リポジトリ構造/リポジトリ構造.md`](c:/yk-application/flowchart-studio/docs/04_リポジトリ構造/リポジトリ構造.md)
+**四層 SSOT（studio）:** [`flowchart-studio/docs/04_リポジトリ構造/構成詳細.md`](c:/yk-application/flowchart-studio/docs/04_リポジトリ構造/構成詳細.md)
 
 **禁止:** `parseTable` / `layoutGrid` / `buildEdges` に JSX や `useReactFlow` を置く。逆に UI 層に列定義ロジックを複製しない。
 
@@ -254,90 +254,9 @@ validateTable(table)
 
 `lib/flowchart/browser/storageKeys.ts` が SSOT（`browser/draftStorage.ts` · `browser/moduleDraftRepository.ts` · `browser/offlineFlowCache.ts` が参照）。**`flowchart-web-mermaid` は別キーのまま · 同期対象外**。
 
-### 5-P. ワークスペースペインレイアウト — localStorage キーバージョニング
+### 5-P. ワークスペースペイン / react-resizable-panels（→ L3）
 
-**対象:** `react-resizable-panels` + `useDefaultLayout` を使うすべてのアプリ（`flowchart-studio` · `comment-studio` 等）の `workspacePaneLayout.ts`（`OUTER_LAYOUT_ID` · `INNER_LAYOUT_ID` · `DEFAULT_*` 等）
-
-**MUST:** `DEFAULT_INNER_LAYOUT`（または outer）のデフォルト比率を変えるときは、**必ず** 以下の 2 点をセットで行う。
-
-| やること | やらないと起きること |
-|----------|---------------------|
-| `WORKSPACE_INNER_LAYOUT_ID` の末尾を bump（`-v2` → `-v3`） | 既存ユーザーの localStorage に旧比率が残り、新デフォルトが効かない |
-| 旧キーを `LEGACY_LAYOUT_IDS` 配列に追加 | ペイン幅リセット時に旧キーが残り、古い比率で上書きされる |
-
-`clearWorkspacePaneStorage()` は現行キー + LEGACY_LAYOUT_IDS をすべて削除する。リセット後に新デフォルトが適用されるには、旧キーがここに含まれていること。
-
-```ts
-// NG — キーを変えずにデフォルト比率だけ変更
-export const WORKSPACE_INNER_LAYOUT_ID = "flowchart-studio:workspace-inner-v2"; // 旧キーのまま
-export const DEFAULT_INNER_LAYOUT = { canvas: 40, table: 60 }; // 比率だけ変えた
-
-// OK — キー bump + 旧キーを LEGACY に追加
-export const WORKSPACE_INNER_LAYOUT_ID = "flowchart-studio:workspace-inner-v3";
-const LEGACY_LAYOUT_IDS = ["...-v1", "...-v2"] as const;
-export const DEFAULT_INNER_LAYOUT = { canvas: 40, table: 60 };
-```
-
-**パネル順序を変えるとき（swap）も同様。** デフォルト比率は変わらなくても、Panel の並びが変わるとユーザーの保存値（旧パネル ID 比率）が意図しない幅になりうる。判断基準: レイアウトの**意味が変わる変更**はキー bump する。
-
-### 5-Q. Group 外昇格（全幅固定ヘッダー）
-
-`react-resizable-panels` の `<Group>` 内に header を置くと、その Panel の幅にしか広がらない。**全ペインをまたぐ全幅固定ヘッダー**は `<Group>` の外・前に配置する。
-
-```tsx
-// NG — header が table Panel 幅に収まる
-<Group>
-  <Panel id="canvas">…</Panel>
-  <Panel id="table">
-    <header>…toolbar…</header>  {/* table 幅にしか広がらない */}
-    …
-  </Panel>
-</Group>
-
-// OK — header が Canvas/Table 両ペインをまたぐ全幅
-<div className="flex flex-col">
-  <header>…toolbar…</header>   {/* Group の外 → 全幅 */}
-  <Group className="flex-1">
-    <Panel id="canvas">…</Panel>
-    <Panel id="table">…</Panel>
-  </Group>
-</div>
-```
-
-Panel 内に残すのは Panel 固有コンテンツ（タブバー・スクロール領域）のみ。`tableTopSlot` · unsaved バナーも同様に Group 外に出す。
-
-### 5-R. Panel 内タブの実装パターン
-
-`fcMobileTabGroup / fcMobileTabActive / fcMobileTabIdle` は名称が "Mobile" だが、**デスクトップ Panel 内タブにも流用可**（同一クラスセット）。
-
-| 項目 | 実装 |
-|------|------|
-| 表示条件の導出 | `const showRightTabs = !!moduleId && !!designMemoContext;`（nullable を `!!` で AND） |
-| タブバー条件 | `{showRightTabs ? <div className={fcMobileTabGroup} role="tablist">…</div> : null}` |
-| コンテンツ切替 | `!showRightTabs \|\| rightTab === "table"` の単純分岐（else に設計メモ） |
-| state リセット | moduleId 切替の reset effect に `setRightTab("table")` を追加する |
-
-タブが不要な状態（モジュール未選択・`designMemoContext` なし）では `showRightTabs === false` となり、タブバーとコンテンツ分岐を両方スキップして従来の tablePaneBody をそのまま表示する。
-
-### 5-S. Panel 内に sticky ヘッダー + スクロール本体を持たせるレイアウト
-
-Panel に `overflow-y-auto` を付けると Panel 全体がスクロールし、内部の検索バー等の固定ヘッダーも流れてしまう。Panel の `className` を `flex flex-col` にして、スクロールしたい部分だけに `overflow-y-auto` を付ける。
-
-```tsx
-// NG: Panel 全体がスクロールし sticky ヘッダーが流れる
-<Panel className="min-h-0 overflow-y-auto">
-  <StickyBar />
-  <ScrollableContent />
-</Panel>
-
-// OK: Panel は flex flex-col、スクロールは内側のみ
-<Panel className="flex min-h-0 flex-col">
-  <StickyBar />                            {/* 固定 */}
-  <div className="overflow-y-auto">        {/* ここだけスクロール */}
-    <ScrollableContent />
-  </div>
-</Panel>
-```
+`react-resizable-panels` v4（`Group` / `Panel` / `useDefaultLayout`）の実装パターン — 3ペイン PanelGroup · **localStorage レイアウトキーのバージョニング（比率変更時は ID bump + `LEGACY_LAYOUT_IDS`）** · 全幅ヘッダーは Group 外 · Panel 内タブ · Panel 内 sticky ヘッダー — は [`references/REACTFLOW_PANELS.md`](references/REACTFLOW_PANELS.md)（ROUTER tag `persist` · `next-shell`）。`flowchart-studio` · `comment-studio` 共通。
 
 ---
 
@@ -361,7 +280,8 @@ Panel に `overflow-y-auto` を付けると Panel 全体がスクロールし、
 
 | L3 参照 | 節（旧 §5.6 番号） | ROUTER tag |
 |---------|-------------------|------------|
-| [`references/REACTFLOW_UX_WORKSPACE.md`](references/REACTFLOW_UX_WORKSPACE.md) | 5.6-1〜1d · 1b · 1c · 5.6-10 · **5.7** · 5.6-8 | `persist` · `next-shell` |
+| [`references/REACTFLOW_UX_WORKSPACE.md`](references/REACTFLOW_UX_WORKSPACE.md) | 5.6-1〜1d · 1b · 1c · **5.7** · 5.6-8 | `persist` · `next-shell` |
+| [`references/REACTFLOW_PANELS.md`](references/REACTFLOW_PANELS.md) | 5.6-10（PanelGroup v4）· 旧 §5-P〜§5-S（レイアウトキー · Group 構造 · Panel 内タブ/sticky） | `persist` · `next-shell` |
 | [`references/REACTFLOW_UX_CHROME.md`](references/REACTFLOW_UX_CHROME.md) | 5.6-2 · 2a · 2b · 2c · 5.6-3 · 5.6-6 · 5.6-9 | `chrome-ui` · `table-ui` |
 | [`references/REACTFLOW_EDGES.md`](references/REACTFLOW_EDGES.md) | 5.6-4 · 5.6-5 · 5.6-7 | `edges` · `canvas` · `layout` |
 

@@ -83,7 +83,7 @@ c:/yk-application/{app}/
 
 | 項目 | 決定 |
 |------|------|
-| Product Spec 正本 | `{app}/docs/` の 6 種（運用 MD は同 `docs/` 配下 · `STRUCTURE.md` 参照） |
+| Product Spec 正本 | `{app}/docs/` の 6 種（運用 MD は同 `docs/` 配下 · [`STRUCTURE.md`](c:/yk-skill/templates/independent-app-repo/STRUCTURE.md) 参照） |
 | 憲法正本 | ルート **`AGENTS.md`** |
 | handoffs | 従来どおり `yk-memo/handoffs/{slug}/` |
 | yk-memo 企画フォルダ | **stub**（リダイレクト README）+ `00_テーマ/` · `99_アーカイブ/` のみ残す |
@@ -135,7 +135,7 @@ c:/yk-application/{app}/
 | `99_archive/` | `99_アーカイブ/` | 表記統一（アンダースコア） |
 | `00_theme/` | `00_テーマ/` | 表記統一 |
 
-**grill-me 昇格（MUST）** — `APP_PROJECT_RULES` §13 と同じ:
+**grill-me 昇格（MUST）** — 本節が SSOT（`APP_PROJECT_RULES` §13 からリンク参照）:
 
 1. grill-me で **Accepted** → ADR（`03_技術仕様/` · **Draft 可** · 実装前）+ decision-log 1 行 · 追随 MD は **§9.2**  
 2. grill-me で **未決** → grill-me §4 のみ（ADR に書かない）  
@@ -252,7 +252,7 @@ c:/yk-application/{app}/
 | 技術ゲート | `G-1` 等（任意） | `03_技術仕様/` または ADR 1 節 | DB · API 等 |
 | セッション DoD | チェックボックス | handoffs セッション MD **§4** | 今回 1 件の実行完了 |
 
-**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart 製品要求.md](c:/yk-application/flowchart-studio/docs/01_要求定義/製品要求.md)。
+**マイルストーン AC 表（標準）:** 列は `#` · `条件` · `確認方法`（E2E spec · fixture · 手動のいずれか 1 行）。実例 → [flowchart 要求定義書.md](c:/yk-application/flowchart-studio/docs/01_要求定義/要求定義書.md)。
 
 **MUST:** `AC-N` 番号は **マイルストーン層のみ**。§4 に `AC-3 を満たす` と書かない。  
 **MUST:** MVP+（完了条件外）は AC 表の別表に「完了条件外」と明記。

@@ -20,7 +20,7 @@
 | 表示・クリック・文言・件数 | Playwright + `getByRole` / `getByText` | 公式 Best Practices に沿う |
 | レイアウト（重なり・左右関係） | Playwright + `boundingBox` / `page.evaluate` | 下記 §12-3 |
 | ピクセル単位の見た目全体 | `toHaveScreenshot` | OS・フォント差に弱い。必要時のみ |
-| GAS iframe / Sheets | L1 §4 · §7 | 既存パターン |
+| GAS iframe / Sheets | [`PLAYWRIGHT_GAS.md`](PLAYWRIGHT_GAS.md) · L1 §7 | 既存パターン |
 
 **原則:** ユーザーに「画面を見てください」を繰り返す前に、**同じ手順を spec に固定**し `npm run test:e2e`（またはプロジェクトの script）を実行する。失敗時は [Trace Viewer](https://playwright.dev/docs/trace-viewer)（§12-5）で原因を特定する。
 

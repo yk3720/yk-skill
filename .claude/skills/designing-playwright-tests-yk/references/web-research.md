@@ -19,4 +19,4 @@ Playwright 公式は **E2E 割合の数値を規定しない**。業界のヒュ
 
 ## 実装規範（本ファイルに転記しない）
 
-→ `PLAYWRIGHT_RULES` §1–12 · スキル `using-playwright`
+→ `PLAYWRIGHT_RULES` §1–13（GAS/Sheets は `references/PLAYWRIGHT_GAS.md`）· スキル `using-playwright`

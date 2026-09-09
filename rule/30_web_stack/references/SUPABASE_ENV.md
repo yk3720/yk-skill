@@ -60,7 +60,7 @@ Supabase は 2025 年以降、**Project URL と API キーの表示場所を分�
 
 #### Vercel へ貼るとき（再取得）
 
-Vercel の Sensitive env は作成後に値を読めない。**必ず Supabase 側（Connect または §4-1 の表）から再コピー**して Edit で上書き → Redeploy。Vercel 画面の開き方・Redeploy 手順は [`VERCEL_RULES.md`](VERCEL_RULES.md) **§6-1**。
+Vercel の Sensitive env は作成後に値を読めない。**必ず Supabase 側（Connect または §4-1 の表）から再コピー**して Edit で上書き → Redeploy。Vercel 画面の開き方・Redeploy 手順は [`VERCEL_RULES.md`](../VERCEL_RULES.md) **§6-1**。
 
 #### 公式参照
 

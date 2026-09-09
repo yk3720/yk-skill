@@ -103,7 +103,7 @@
 
 | ワークスペース | ルールファイル | ルート例 |
 |----------------|----------------|----------|
-| 図解管理 | `DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` |
+| 図解管理 | `DIAGRAM_MANAGER_WORKSPACE_RULES.md` | 正本 `c:/yk-tool/diagram-manager-web/`（ui-kit `/diagram-manager` は移行案内のみ） |
 | 採用管理（雛形） | `workspace-ui-kit/CLAUDE.md` + ADR | `/`（既定） |
 
 将来ドメインを増やすときは `workspaces/<name>.md` への移行を検討（`RULE_INDEX.md` 参照）。

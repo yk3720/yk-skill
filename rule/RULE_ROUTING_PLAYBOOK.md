@@ -4,7 +4,7 @@
 
 **いつ Read するか:** [RULE_INDEX — タスク別クイック入口](RULE_INDEX.md#タスク別クイック入口) で No と L1 を特定したあと、手順の詳細が必要なときだけ本ファイルを開く。**常時全読みしない**（`10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §3-4）。
 
-**最終更新:** 2026-06-28（P15 Supabase 節 · FastAPI 節追加 · 帯整理 15/25 追随）
+**最終更新:** 2026-09-09（プレイブック更新節を INDEX §新規ルールの追加手順へ集約 · 本体は P15 版）
 
 **誤ルーティング:** [RULE_INDEX — 誤ルーティング早見表](RULE_INDEX.md#誤ルーティング早見表)
 
@@ -204,7 +204,7 @@
 | 用途 | ファイル |
 |------|----------|
 | 採用管理雛形・ADR・スキル | `workspace-ui-kit/CLAUDE.md` |
-| 図解管理の実装 | `app/diagram-manager/` · `components/diagram-manager/` |
+| 図解管理の実装 | **`c:/yk-tool/diagram-manager-web/`**（正本 · No 22）· ui-kit の `app/diagram-manager/` は移行案内のみ |
 
 ---
 
@@ -237,7 +237,7 @@
 ## 読む順序（GAS / Playwright / 大容量 HTML）
 
 1. [RULE_INDEX — カタログ](RULE_INDEX.md#番号付きカタログssot) で該当 No を特定
-2. **GAS** → No 51 · **E2E 設計** → No 53 **§13** → `designing-playwright-tests-yk` · **E2E / UI レイアウト実行** → No 53 **§12** → `using-playwright`（GAS/Sheets 詳細は §1–11 · iframe は `networkidle` 禁止）
+2. **GAS** → No 51 · **E2E 設計** → No 53 **§13** → `designing-playwright-tests-yk` · **E2E / UI レイアウト実行** → No 53 **§12** → `using-playwright`（GAS/Sheets 詳細は No 53 `references/PLAYWRIGHT_GAS.md` · iframe 待機は web-first アサーション）
 3. **大容量 HTML 編集** → No 54（Python 文字列処理が安定する場合は `40_python` も可）
 
 ---
@@ -267,4 +267,4 @@
 ## プレイブックの更新
 
 - ドメイン手順の追加・変更は **本ファイル** を SSOT とし、[RULE_INDEX](RULE_INDEX.md) のクイック入口表のリンク先アンカーのみ同期する
-- 新規ドメイン rule 追加時: `PROGRESSIVE` §10 → L1 作成 → 本ファイルに節追加 → INDEX クイック表に行追加
+- 新規ドメイン rule 追加時の**全手順は [RULE_INDEX §新規ルールの追加手順](RULE_INDEX.md#新規ルールの追加手順)**（帯選択 → カタログ追記 → manifest 同期 まで）。本ファイルへは読む順序節を 1 つ足す作業のみ

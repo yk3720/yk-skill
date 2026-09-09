@@ -34,7 +34,7 @@ description: >
 | 決定マトリクス · チェックリスト | [decision-matrix.md](references/decision-matrix.md) |
 | Web 調査要約（URL） | [web-research.md](references/web-research.md) |
 | a11y（axe / keyboard） | [a11y.md](references/a11y.md) |
-| ロケーター · 待機 · 幾何 · 実行 | L1 §1–11 · [`PLAYWRIGHT_AGENT_OPS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_AGENT_OPS.md) · `using-playwright` |
+| ロケーター · 待機 · 幾何 · 実行 | L1 §1–7 · [`PLAYWRIGHT_AGENT_OPS.md`](../../../rule/50_gas_html_test/references/PLAYWRIGHT_AGENT_OPS.md) · `using-playwright`（GAS/Sheets は `PLAYWRIGHT_GAS.md`） |
 
 ## 出力（設計完了時）
 

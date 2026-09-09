@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`REACTFLOW_RULES.md`](../REACTFLOW_RULES.md) §5.6  
 **ROUTER tag:** `persist` · `next-shell`  
-**最終更新:** 2026-06-27（P14 · L1 から分割）
+**最終更新:** 2026-09-09（B3 · §5.6-10 の本文を `REACTFLOW_PANELS.md` へ移動 · 本体は P14 版）
 
 ---
 
@@ -97,43 +97,9 @@ const isUnsaved =
 | サーバー反映済み ID は楽観セットから外す | **`useMemo` で派生**（`activeOptimisticRemovedModuleIds`）— `useEffect` 内の `setState` は **禁止**（`react-hooks/set-state-in-effect`） |
 | E2E | 成功バナー **と** ナビから当該動作が消えること（`e2e/module-delete.spec.ts`） |
 
-### 5.6-10 3ペイン PanelGroup（react-resizable-panels v4 · ADR-016 PR-B · 2026-06）
+### 5.6-10 3ペイン PanelGroup（→ [`REACTFLOW_PANELS.md`](REACTFLOW_PANELS.md) §1）
 
-デスクトップ（lg+）: 外側 `Group`（ナビ｜エディタ）+ 内側 `Group`（表｜プレビュー）。モバイルは既存タブ UX（`useIsDesktop` フックで切り替え）。
-
-**react-resizable-panels v4 — v2/v3 からの破壊的変更（型定義を読まないと気づかない）**
-
-| v2/v3 | v4 | 備考 |
-|-------|-----|------|
-| `PanelGroup` | `Group` | — |
-| `PanelResizeHandle` | `Separator` | — |
-| `direction="horizontal"` | `orientation="horizontal"` | — |
-| `autoSaveId="key"` prop | `useDefaultLayout({ id: "key" })` フック | localStorage 永続化 |
-| `ref` on Panel | `panelRef` prop + `usePanelRef()` | 型: `PanelImperativeHandle` |
-| `onCollapse`/`onExpand` prop | **なし** — `onResize` + `panelRef.current?.isCollapsed()` | 折りたたみ検知パターン |
-
-**`Panel` の `className` は外側 flex アイテムではなく内側ネスト div に適用される。** flex 子として min-h-0 を設定するなら `<Panel className="flex min-h-0 flex-col">` で OK（外側は Group が flex サイジング）。
-
-**collapse/expand をボタンからトリガーするパターン（`FlowchartWorkspace.tsx` 参照）:**
-
-```tsx
-const navPanelRef = usePanelRef();
-const handleToggle = () => {
-  const p = navPanelRef.current;
-  if (!p) { setNavCollapsed(v => !v); return; }
-  p.isCollapsed() ? p.expand() : p.collapse();
-};
-// <Panel panelRef={navPanelRef} collapsible collapsedSize="48px"
-//        onResize={() => setNavCollapsed(navPanelRef.current?.isCollapsed() ?? false)} />
-```
-
-**`useIsDesktop` フック:** `frontend/src/hooks/useIsDesktop.ts`（`window.matchMedia` · 初期値 `false` で SSR 安全）。親（`FlowchartWorkspace`）で保持し、子（`FlowchartEditor`）へ prop 経由で渡す。フックを両方で呼ぶと render タイミングがずれる。
-
-**`useDefaultLayout` + SSR（`next start` · 2026-06）:** 省略時のデフォルト引数 `storage = localStorage` が**呼び出し時に評価**され、SSR で `ReferenceError: localStorage is not defined` になる。**必ず** `storage: getWorkspaceLayoutStorage()` を渡す（`workspacePaneLayout.ts`）。`react-resizable-panels` を `"use client"` 外のモジュールから import しない（型はローカル interface で足りる）。
-
-**ペイン幅リセット（T4）:** `useGroupRef` × 2（outer + inner）· `resetWorkspacePaneLayouts(outer, inner)` — v1/v2 キーをクリアして `setLayout`（`FlowchartWorkspace` → `FlowchartEditor` → `FlowTableEditor`）。
-
-**tsconfig パスエイリアス:** `frontend/src/` 配下に新サブディレクトリを作ったら `tsconfig.json` の `paths` に `"@/hooks/*": ["./frontend/src/hooks/*"]` を追加する（既存の `@/components/*` と同型）。
+`react-resizable-panels` v4 の破壊的変更・collapse/expand・`useDefaultLayout` + SSR・ペイン幅リセット・レイアウトキーの bump は **[`REACTFLOW_PANELS.md`](REACTFLOW_PANELS.md)** に集約（ROUTER tag は同じ `persist` · `next-shell`）。
 
 ---
 

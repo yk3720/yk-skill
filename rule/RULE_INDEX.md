@@ -105,7 +105,7 @@
 | **新規追加** | 該当帯にファイル作成 → **本表に1行追加**（No は空き番号。既存ファイルのリネームは避ける） |
 | **ルート直下** | `RULE_INDEX.md` · `RULE_ROUTING_PLAYBOOK.md` · `RULE_IMPROVEMENT_HANDOFF.md` · `load-manifest.yaml`（Phase 2 試作）— 移行スタブ削除済み |
 
-**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **33** 本 · No 00 除く · 本格運用は tag 検証需要時または CI 連携時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
+**Phase 2:** [`load-manifest.yaml`](load-manifest.yaml) **試作あり**（L1 **34** 本 · No 00 除く · 本格運用は tag 検証需要時または CI 連携時）。列: `path` · `band` · `tags` · `read_when` · `status` — **人手で INDEX と同期**（自動生成スクリプトは未導入）。
 
 ---
 
@@ -300,7 +300,8 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 図解 HTML 正本（ローカル） | `c:/yk-tool/publish/` | スキル内 `output/` は作業用 · デプロイ後に publish へコピー |
 | 図解以外の Web/ツールアプリ | `c:/yk-tool/apps/` · ルート直下 Next アプリ | 例: `apps/commit-report-tool/` · `workspace-ui-kit/` |
 | **ワークスペース横断スクリプト** | `c:/yk-tool/scripts/` | L1 [`WORKSPACE_SCRIPTS_RULES.md`](60_tooling/WORKSPACE_SCRIPTS_RULES.md) · 台帳 [`catalog.yaml`](c:/yk-tool/catalog.yaml) · 入口 [`scripts/README.md`](c:/yk-tool/scripts/README.md) |
-| 図解管理 UI（Next） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
+| workspace-ui-kit（キット横断・採用管理雛形） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
+| 図解管理 UI（Next） | `c:/yk-tool/diagram-manager-web/` | 正本（`app/page.tsx`）· ui-kit の `/diagram-manager` は移行案内のみ（No 22） |
 | フローチャート Web（React Flow） | `c:/yk-application/flowchart-studio/` | ADR-010 · 表 → React Flow |
 | フローチャート Web（Mermaid 比較） | `c:/yk-tool/flowchart-web-mermaid/` | ADR-010 · 表 → Mermaid プレビュー |
 | Playwright E2E | `c:/yk-tool/playwright-test/` | 移行元: `yk-skill/playwright-test/`（2026-05-23） |

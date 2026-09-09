@@ -46,7 +46,7 @@ Supabase の無料枠では Magic Link の送信頻度に制限（1時間2通程
 | 専用本番 Supabase に共有 admin を置く | 本番データ汚染 · OAuth 一本化方針と矛盾 |
 | `AUTH_DISABLED=1` を Vercel に設定 | 全員無認証 editor · クラウド保存も不整合 |
 
-手順詳細: [`SUPABASE_SETUP.md`](../../../yk-application/flowchart-studio/docs/runbooks/SUPABASE_SETUP.md) §3-1
+手順詳細: [`SUPABASE_SETUP.md`](c:/yk-application/flowchart-studio/docs/runbooks/SUPABASE_SETUP.md) §3-1
 
 ### ⚠ セキュリティ注意
 
@@ -99,7 +99,7 @@ export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico).*)
 |------|-----|
 | `data` の **`ok === false` を成功扱いしない** | `import_equipment_bundle` → `{ ok: false, error: "..." }` |
 | 失敗時は `{ ok: false, error }` をクライアントへ返す | `mapRpcError(row.error)` で文言を統一してよい |
-| E2E スタブは **`requireEditor()` 等の認可の後**に評価する | スタブを認可前に置くと本番誤設定時にバイパスされる（→ [`PLAYWRIGHT_RULES.md`](../50_gas_html_test/PLAYWRIGHT_RULES.md) §12-7） |
+| E2E スタブは **`requireEditor()` 等の認可の後**に評価する | スタブを認可前に置くと本番誤設定時にバイパスされる（→ [`PLAYWRIGHT_RULES.md`](../../50_gas_html_test/PLAYWRIGHT_RULES.md) §12-7） |
 
 ```ts
 const row = data as { ok?: boolean; error?: string; /* ... */ };
