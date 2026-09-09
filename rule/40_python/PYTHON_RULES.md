@@ -197,7 +197,7 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 ### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
 
 - [ ] Office を COM 操作するなら **`StayOnTop`**（`app/ui/stay_on_top.py` をコピー · `_finish`/完了時に `raise_window()` · `messagebox(parent=self)`）。非 COM は不要
-- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `Yu Gothic UI` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）
+- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `BIZ UDPゴシック` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）→ 詳細・選定理由は `PYTHON_YK_DESKTOP.md`
 - [ ] **`pyproject.toml [tool.ruff] select` を明示 pin**（例 `["E","F","I","UP","B"]`）。未 pin リポは変更スコープ内のみ green を基準 · `main.py` DPI catch は `# noqa: BLE001`
 - [ ] **`tk.StringVar()` を import 時に作らない** — `build_panel` / Tk root 確定後に生成
 - [ ] 純ロジックは `app/core/` や Tk 非依存モジュールへ分離しユニットテスト（COM 実機はユーザー担当）

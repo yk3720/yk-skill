@@ -1,6 +1,6 @@
 # YK スキル索引（人間・エージェント向け SSOT）
 
-**最終更新:** 2026-09-08（`switching-tone-yk` 新規追加）
+**最終更新:** 2026-09-09（`syncing-repos-yk` 新規追加）
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
 **図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
@@ -65,6 +65,7 @@
 | `managing-git-yk` | コミットして · push · PRを作って · クリーンにして | **yes** | commit / push / PR / クリーン |
 | `committing-with-git-yk` | （廃止）→ `managing-git-yk` | **yes** | エイリアス |
 | `pushing-and-pr-yk` | （廃止）→ `managing-git-yk` | **yes** | エイリアス |
+| `syncing-repos-yk` | レポジトリを最新にして · 全リポジトリを同期して · 差分をpullして | no | 複数リポジトリ横断 fetch/pull 同期（clean+ff-onlyのみ自動） |
 | `handoff-session-work` | 引き継ぎ · 続きから · archive | no | handoffs 運用 |
 | `starting-app-project-yk` | 新しいアプリ · AGENTS.md | no | 個人アプリ企画パック |
 | `creating-personal-tool-yk` | 自作ツール · ユーティリティ · Webアプリのツール | no | 自作ツール新設（形態・言語を問わない） |
@@ -126,6 +127,7 @@
 | `writing-in-my-voice-yk` ↔ `refining-copy-yk` | 新規起草 · 保存 vs 既存文の洗練 |
 | `managing-skills-yk` ↔ `exploring-skills-yk` | 台帳書込 vs 一覧・監査 |
 | `handoff-session-work` ↔ `managing-git-yk` | セッション vs Git · Phase C は commit+push |
+| `syncing-repos-yk` ↔ `managing-git-yk` | 横断 fetch/pull 同期 vs commit/push/PR/クリーン |
 | `creating-personal-tool-yk` ↔ `starting-app-project-yk` / スタック別 | 自作ツール新設の受付 vs 企画パック vs 実装 |
 
 ---

@@ -34,9 +34,13 @@ flowchart LR
   subgraph pairWriting["文書"]
     direction TB
     proposals["writing-proposals（長文提案）"]
-    mail["writing-internal-mail-yk（私の文体で）"]
+    voice["writing-in-my-voice-yk（保存・特徴・起草）"]
+    mail["writing-internal-mail-yk（メール入口）"]
     refine["refining-copy-yk（文章を洗練）"]
     briefmap["creating-briefmap-yk（図解本文）"]
+    proposals -.->|"短い実務文は"| voice
+    voice -->|"メール発火"| mail
+    voice -.->|"既存文の洗練は"| refine
   end
 
   subgraph pairMeta["メタ運用"]
@@ -50,7 +54,9 @@ flowchart LR
 
   subgraph pairGit["Git"]
     direction TB
-    git["managing-git-yk"]
+    git["managing-git-yk（commit/push/PR/クリーン）"]
+    syncRepos["syncing-repos-yk（横断fetch/pull同期）"]
     handoff["handoff-session-work"]
     handoff -->|"Phase C commit+push"| git
+    syncRepos -.->|"pullの後、変更があれば"| git
   end
