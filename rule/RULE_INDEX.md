@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-09-09（新規手順 · Cursor preToolUse ゲート）
+**最終更新:** 2026-09-10（No 66 CLAUDE_HOOKS_RULES 追加 · draft）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -39,6 +39,7 @@
 | 調査のみ · Shell 抑制 | 62 | `60_tooling/AGENT_SHELL_RULES.md` | [Shell](RULE_ROUTING_PLAYBOOK.md#読む順序agent-が-shell-を使うとき) | `yk-skill` · `agent-shell-yk`（always） |
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
 | 横断スクリプト · hook 用ユーティリティ | 64 | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | L1 → `yk-tool/scripts/README.md` | — |
+| Claude Code フック · `~/.claude/settings.json` · `~/.claude/hooks/` | 66 | `60_tooling/CLAUDE_HOOKS_RULES.md` | L1 直接 · 編集手順は `update-config` | — |
 | Python `.py` · **PyInstaller exe** | 41 | `40_python/PYTHON_RULES.md` §12 索引 · L3 `PYTHON_PYINSTALLER_GUI.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | FastAPI · APIRouter · UploadFile | 42 | `40_python/FASTAPI_RULES.md` | [FastAPI](RULE_ROUTING_PLAYBOOK.md#読む順序fastapi-api-を触るとき) | —（draft · スキル未整備） |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
@@ -226,6 +227,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 62 | 60_tooling | `60_tooling/AGENT_SHELL_RULES.md` | **Agent Shell / RUN 削減** · Read 優先 · allowlist | active |
 | 63 | 60_tooling | `60_tooling/QUALITY_GATE_RULES.md` | **品質ゲート** · lint/hook/CI · hook 失敗時のエージェント行動 | active |
 | 64 | 60_tooling | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | **横断スクリプト配置** · 正本 `yk-tool/scripts/` · `catalog.yaml` | active |
+| 66 | 60_tooling | `60_tooling/CLAUDE_HOOKS_RULES.md` | **Claude Code フック** — 仕組み · 現行フック一覧 · 追加手順 · 状態キャッシュ | draft |
 
 **帯の意味（要約）**
 
@@ -312,6 +314,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | Git commit / push / PR（ユーザー明示時） | 各リポの Git ルート | スキル `managing-git-yk` · 方針は `10_meta/GIT_WORKFLOW_RULES.md` |
 | Agent Shell / RUN 承認 | `60_tooling/cursor-permissions/permissions.json` → `~/.cursor/` にデプロイ | `60_tooling/AGENT_SHELL_RULES.md` · `cursor-permissions/README.md` |
 | Claude Code グローバル設定 | `60_tooling/claude-global/CLAUDE.md` → `~/.claude/` にデプロイ | `claude-global/README.md` |
+| Claude Code フック（`~/.claude/settings.json` · `hooks/`） | 現状リポジトリ管理外 — 一覧・発火条件の SSOT は `60_tooling/CLAUDE_HOOKS_RULES.md` | No 66 · スクリプト本体は `~/.claude/hooks/*.sh` |
 
 ### Cursor マルチルート（目安）
 

@@ -2,13 +2,13 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-09-09 INDEX 同期（L1 34 本 / No 00 除く · 61 CURSOR_RULES 含む）
+# 状態: 2026-09-10 INDEX 同期（L1 35 本 / No 00 除く · 61 CURSOR_RULES · 66 CLAUDE_HOOKS 含む）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 34
+rule_count_l1: 35
 
 rules:
   - no: 05
@@ -248,6 +248,13 @@ rules:
     tags: [scripts, tooling, workspace]
     read_when: 横断スクリプト · hook 用ユーティリティ
     status: active
+
+  - no: 66
+    path: 60_tooling/CLAUDE_HOOKS_RULES.md
+    band: 60_tooling
+    tags: [claude-code, hooks, tooling, settings]
+    read_when: Claude Code フック · ~/.claude/settings.json · ~/.claude/hooks/
+    status: draft
 
 # 索引・プレイブック（L1 ではないが入口）
 meta_entries:
