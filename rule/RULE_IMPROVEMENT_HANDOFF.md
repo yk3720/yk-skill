@@ -62,6 +62,7 @@
 | **P14d** | L1 肥大化分割（SUPABASE · GAS） | `SUPABASE_RULES.md` 500→192行 · `GAS_RULES.md` 428→233行 · 各 `references/` 3 本 |
 | **DocSync** | rule 横断矛盾修正（C-01〜C-06） | `docs/` 統一 · AGENT_SHELL Phase B · manifest 32 本 · WORKSPACE DESIGN 表記 · INDEX 行数目安 |
 | **P14e** | L1 肥大化分割（SHADCN · SKILL_AUTHORING） | `SHADCN_UI` 353→186行 · `SHADCN_*` references 4 本 · `SKILL_AUTHORING` 351→198行 · `SKILL_AUTHORING_*` references 4 本 |
+| **P14f** | L1 肥大化分割（PYTHON） | `PYTHON_RULES.md` 451行から旧 §12–§14 を `40_python/references/` 3 本へ。ROUTER §2.1。distilling Step 3 を L3 追記に変更 |
 | **P15** | Supabase PROGRESSIVE 完遂 | `creating-supabase-yk` · `supabase-dev-entry.mdc` · `SUPABASE_RULES` status `active` · INDEX · PLAYBOOK · manifest · SKILL_CATALOG |
 | **P16** | Tauri 統合方針決定 | 当面統合しない · INDEX「未登録ドメイン」· `tauri-practice/HANDOFF` §6 · yk-memo INDEX 注記 · playwright `.mdc` 同期 |
 

@@ -5,7 +5,7 @@
 
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No **63** · L0: `quality-gates-yk.mdc`
 
-**最終更新:** 2026-06-25（Defender 除外 `\.cache\pre-commit` · pre-commit ブロック対処）
+**最終更新:** 2026-09-09（yk-skill Cursor `preToolUse` / `postToolUse`）
 
 ---
 
@@ -18,7 +18,7 @@
 | **CI / デプロイ** | GitHub Actions · Vercel build | typecheck · test · build |
 | **リモート（人間設定）** | GitHub Push Protection | push 前の秘密ブロック（`--no-verify` 回避策） |
 
-**任意の第4層:** Cursor Agent Hooks（`.cursor/hooks.json`）— format on save とは別物。未導入時は §8 参照。
+**任意の第4層:** Cursor Agent Hooks（`.cursor/hooks.json`）— format on save とは別物。yk-skill は導入済（§8）· 他リポは任意。
 
 ---
 
@@ -28,7 +28,7 @@
 |------|--------|
 | `yk-application/flowchart-studio` | **要**（Web + Python 混在） |
 | `yk-memo` | **任意** — staged `.md` ローカルリンク（`yk-tool/scripts/check-markdown-links-staged.ps1` · `.githooks/pre-commit`）· Cursor `afterFileEdit`（同上 staged 版の姉妹） |
-| `yk-skill` | 不要（MD/ルール中心） |
+| `yk-skill` | Cursor `preToolUse` が L1 500行超と rule .md の Delete / 壊滅縮小を拒否 · `postToolUse` が行数注入 |
 | その他 `yk-tool/*` | `package.json` / `pyproject.toml` の有無で個別判断 |
 
 ---
@@ -179,11 +179,12 @@ pip install -e "python[dev]"
 
 ---
 
-## 8. 将来の拡張（任意・未導入）
+## 8. Cursor Agent Hooks · 将来の拡張
 
 | 候補 | 用途 | 導入条件 |
 |------|------|----------|
-| Cursor `beforeShellExecution` | `git commit --no-verify` 拒否 | AI が hook 回避を試みる場合 |
+| yk-skill `preToolUse` / `postToolUse` | L1 500行超と rule .md の Delete / 壊滅縮小を拒否 · 行数注入 | **導入済**（`yk-skill/.cursor/hooks.json`） |
+| Cursor `beforeShellExecution` | `git commit --no-verify` 拒否 | 将来 — AI が hook 回避を試みる場合 |
 | `detect-secrets` / Gitleaks | より精度の高い秘密検出 | 誤検知 baseline の運用が必要になったとき |
 | CI Playwright 追加 spec | 新機能の UI 回帰 | `designing-playwright-tests-yk` で載せる/載せないを決めたあと |
 | Dependabot / Renovate | hook 依存の自動更新 | 複数人開発・長期運用時 |

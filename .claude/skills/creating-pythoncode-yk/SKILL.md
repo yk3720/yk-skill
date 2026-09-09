@@ -62,6 +62,7 @@ Light でも ROUTER §2「KB03 を足す条件」に当てはまるときは tie
 - **ゲート:** [ssot-audit](references/ssot-audit.md) · [deadline-protocol](references/deadline-protocol.md) · [exemplar](references/exemplar.md)
 - **KB:** [01目次](references/Python_2_技術ナレッジベース_01_目次.md) · [02](references/Python_2_技術ナレッジベース_02_共通品質.md) · [03](references/Python_2_技術ナレッジベース_03_監査・地雷回避.md) · [04](references/Python_2_技術ナレッジベース_04_環境・配布.md) · [05](references/Python_2_技術ナレッジベース_05_外部連携.md) · [06](references/Python_2_技術ナレッジベース_06_Excel連携.md) · [07](references/Python_2_技術ナレッジベース_07_Streamlit.md)
 - **テンプレ:** [3](references/Python_3_テンプレート_プロジェクト仕様書.md)〜[8](references/Python_8_テンプレート_clean.py.md) · [設計墓場](references/Python_9_設計墓場・廃止規律記録.md) · [ファイル構成](references/ファイル構成について.md) · [memo](references/memo_操作方法.md)
+- **L1 パターン:** [PYTHON_OPENPYXL_DATA](../../../rule/40_python/references/PYTHON_OPENPYXL_DATA.md) · [PYTHON_PYINSTALLER_GUI](../../../rule/40_python/references/PYTHON_PYINSTALLER_GUI.md) · [PYTHON_YK_DESKTOP](../../../rule/40_python/references/PYTHON_YK_DESKTOP.md)（`rule/40_python/references/` · Ref Plan `load`）
 
 ---
 

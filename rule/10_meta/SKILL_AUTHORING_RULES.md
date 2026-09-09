@@ -191,4 +191,4 @@ SKILL.md に長い手順を書くより、スクリプトに処理を書いて�
 
 ---
 
-**行数監査:** `yk-tool/scripts/audit-rule-line-counts.ps1` — L1 理想 ~250行 · FAIL 500行超
+**行数監査:** `yk-tool/scripts/audit-rule-line-counts.ps1` — L1 理想 ~250行 · FAIL 500行超。Cursor `preToolUse` が L1 500超と rule .md の Delete / 壊滅縮小を拒否 · `postToolUse` が行数を注入

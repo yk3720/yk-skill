@@ -47,15 +47,16 @@ Web: `c:/yk-application/comment-studio/` · `c:/yk-application/lci-studio/`
 - [ ] Step 1: slug をユーザー確認（小文字 · ハイフン。推測で新設しない）
 - [ ] Step 2: 置き場を決める — `YK_APPLICATION_RULES` 置き場節。迷ったら **yk-application 独立 Git**（推奨）
 - [ ] Step 3: `starting-app-project-yk` **新規**に従い企画パック（独立リポならルート `AGENTS.md` + `docs/`）
-- [ ] Step 4: スタックを決めて実装スキルへ委譲（下表）。Python デスクトップ GUI のときだけ `PYTHON_RULES` 小型デスクトップ節を Read
-- [ ] Step 5: Windows デスクトップ GUI は **同一ターンで exe をビルドする**（手順は `PYTHON_RULES` §13 · 小型デスクトップ節）。bat は `dist\` の exe があればそれを起動する。ユーザーが「ソースだけ」と明示したときだけ省略。Web / CLI は各形態の起動手段
+- [ ] Step 3.5（**着手前ゲート · 必須**）: スタックの L1 を Read してからコードに触る。**Python は `PYTHON_RULES` L1（着手前チェック含む）と Ref Plan で tag `yk_desktop` + `exe` の L3（`PYTHON_YK_DESKTOP.md` · `PYTHON_PYINSTALLER_GUI.md`）を `load`。索引だけ読んで完了としない。** `creating-pythoncode-yk` の invoke がゲート。
+- [ ] Step 4: 実装スキルへ委譲（下表）。**Python は必ず `creating-pythoncode-yk` を invoke**（Step 0「ルールを読む」＋ Ref Plan ゲートを通す）。他スタックも同様に該当スキルを invoke してから書く
+- [ ] Step 5: Windows デスクトップ GUI は **同一ターンで exe をビルドする**（手順は `PYTHON_PYINSTALLER_GUI.md` · `PYTHON_YK_DESKTOP.md`）。bat は `dist\` の exe があればそれを起動する。ユーザーが「ソースだけ」と明示したときだけ省略。Web / CLI は各形態の起動手段
 - [ ] Step 6: commit / push / GitHub は明示までしない
 
 応答の先頭は `starting-app-project-yk` に合わせ `[新規]`。
 
-### 実装の委譲（例）
+### 実装の委譲（必須 · スタック別）
 
-詳細な発火は各スキルの `description`。迷ったら `RULE_INDEX` クイック入口。
+コードを書く前に該当スキルを invoke する（そのスキルの Step 0「ルールを読む」＋ Ref Plan ゲートが着手前の L1 読了を担保する）。詳細な発火は各スキルの `description`。迷ったら `RULE_INDEX` クイック入口。
 
 | スタック | スキル |
 |----------|--------|

@@ -9,6 +9,7 @@
 ### [K-001] 鉄壁のパス解決
 - **絶対座標**: `sys.frozen` 判定を行い、exe内部（_MEIPASS）と外部のパスを厳格に分離せよ。
 - **Pathlibの極致**: フォルダ判定は `pathlib.Path.parts` による完全一致判定を徹底せよ。
+- **YK GUI exe 詳細:** `c:/yk-skill/rule/40_python/references/PYTHON_PYINSTALLER_GUI.md`（tag `exe`）。
 
 ### [K-002] インポート・ハイジーン (Import Hygiene)
 - **パスの聖域化**: エントリポイント（`main.py`）の冒頭において、自身のディレクトリを `sys.path` の先頭に強制挿入するロジック（`sys.path.insert(0, str(Path(__file__).resolve().parent))`）を義務化せよ。

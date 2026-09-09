@@ -41,9 +41,11 @@ description: >
 | Tailwind レイアウト | `TAILWINDCSS_RULES.md` |
 | Git 運用 | `GIT_WORKFLOW_RULES.md` |
 | スキル設計 | `SKILL_AUTHORING_RULES.md` |
+| Python · openpyxl / exe / yk-application GUI | `PYTHON_RULES.md` |
 
 ### Step 3: L1 ファイルを Read して追記位置を決める
 
+- L1 に既に `rule/{帯}/references/` があるドメイン（Python · React Flow 等）は **L3 該当ファイル末尾に追記 + L1 索引に1行**。**L1 本文へ YK パターン全文を足さない**
 - 既存セクション末尾が自然な場合 → そこに追記
 - 新セクションが必要な場合 → `### YK パターン補足` 等を追加
 
@@ -54,3 +56,5 @@ description: >
 ### Step 5: ユーザーに報告する
 
 追記したファイル · 内容の要点（1〜2 行/件）を伝える。
+
+行数は Cursor フック（`[rule-line-count]`）の数値を正とする。L1 の 500 行超や rule 配下 .md の大幅削除はフックが拒否する。手計算しない。

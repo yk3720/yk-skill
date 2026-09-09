@@ -59,6 +59,7 @@
 3. **`creating-pythoncode-yk/references/ROUTER.md`** — tier / tag
 4. **Ref Plan 出力後** — `references/` の列挙ファイルのみ Read  
    - **Light**（局所修正）: `tier` + `load` の短形式 · **Standard 以上**: フル形式（SKILL Step 0.1）
+   - `yk-application` / `GetActiveObject` / `build_exe` は ROUTER §2 強制 tag（`yk_desktop` · `exe`）。L3 は `rule/40_python/references/PYTHON_*.md`
 
 `5.Python` で `.py` を触るときは `python-dev-entry.mdc` が自動適用される。
 

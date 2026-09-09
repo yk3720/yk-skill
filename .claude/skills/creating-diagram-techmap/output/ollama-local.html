@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ollama ローカル LLM — 技術解説 techmap</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif; background:#f1f5f9; }
+  .section-card { background:#fff; border:1px solid #e2e8f0; border-radius:1rem; padding:2rem; margin-bottom:1.75rem; box-shadow:0 1px 3px rgba(15,23,42,.06); }
+  .badge-essential { background:#dc2626; color:#fff; font-size:.7rem; font-weight:700; padding:.15rem .55rem; border-radius:9999px; }
+  .badge-recommended { background:#2563eb; color:#fff; font-size:.7rem; font-weight:700; padding:.15rem .55rem; border-radius:9999px; }
+  .badge-optional { background:#059669; color:#fff; font-size:.7rem; font-weight:700; padding:.15rem .55rem; border-radius:9999px; }
+  .term-box { background:linear-gradient(135deg,#eff6ff,#f0f9ff); border:1px solid #bfdbfe; border-left:4px solid #3b82f6; border-radius:.75rem; padding:1.1rem 1.25rem; margin:1.1rem 0; }
+  .ref-link { display:flex; align-items:flex-start; gap:.6rem; padding:.85rem 1rem; background:#f8fafc; border:1px solid #e2e8f0; border-radius:.75rem; transition:background .15s; }
+  .ref-link:hover { background:#eff6ff; }
+  .code-block { background:#0f172a; color:#e2e8f0; border-radius:.75rem; padding:1.1rem 1.25rem; font-family:ui-monospace,"Cascadia Code","Consolas",monospace; font-size:.82rem; line-height:1.6; overflow-x:auto; }
+  .code-block .c { color:#64748b; }
+  .code-block .k { color:#7dd3fc; }
+  .code-block .s { color:#86efac; }
+  .toc-link.active { color:#2563eb; font-weight:700; }
+  @media print {
+    .no-print { display:none !important; }
+    .section-card { break-inside:avoid; box-shadow:none; border-color:#cbd5e1; }
+    body { background:#fff; }
+  }
+</style>
+</head>
+<body class="text-slate-800">
+
+<!-- ===== ヘッダー ===== -->
+<header class="bg-gradient-to-br from-slate-900 via-blue-900 to-sky-800 text-white">
+  <div class="max-w-4xl mx-auto px-6 py-14">
+    <span class="inline-block bg-sky-500/30 border border-sky-300/40 text-sky-100 text-xs font-bold px-3 py-1 rounded-full mb-4">AI / ローカル推論</span>
+    <h1 class="text-3xl sm:text-4xl font-bold leading-tight">Ollama ローカル LLM</h1>
+    <p class="text-sky-200 mt-3 text-lg">自分の PC の中で大規模言語モデルを動かす — 仕組み・構成・toolkit からの繋ぎ方・モデル選び・損得</p>
+    <p class="text-sky-300/80 mt-4 text-sm">対象読者: 実務経験のある理系エンジニア / 想定文脈: 自作ツール（toolkit）への AI 組み込みの技術評価</p>
+  </div>
+</header>
+
+<!-- ===== フローティング目次（デスクトップ） ===== -->
+<nav class="no-print hidden xl:block fixed top-24 left-[max(1rem,calc((100vw-56rem)/2-15rem))] w-56 text-sm">
+  <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+    <p class="font-bold text-slate-400 text-xs mb-2">目次</p>
+    <ul class="space-y-1.5">
+      <li><a href="#summary" class="toc-link text-slate-600 hover:text-blue-600">ひとことで言えば</a></li>
+      <li><a href="#why" class="toc-link text-slate-600 hover:text-blue-600">なぜ生まれたのか</a></li>
+      <li><a href="#basics" class="toc-link text-slate-600 hover:text-blue-600">まず理解する3つ</a></li>
+      <li><a href="#arch" class="toc-link text-slate-600 hover:text-blue-600">仕組みとアーキテクチャ</a></li>
+      <li><a href="#connect" class="toc-link text-slate-600 hover:text-blue-600">toolkit からの繋ぎ方</a></li>
+      <li><a href="#models" class="toc-link text-slate-600 hover:text-blue-600">モデル選び</a></li>
+      <li><a href="#pitfalls" class="toc-link text-slate-600 hover:text-blue-600">落とし穴</a></li>
+      <li><a href="#cost" class="toc-link text-slate-600 hover:text-blue-600">料金・ライセンス</a></li>
+      <li><a href="#tradeoffs" class="toc-link text-slate-600 hover:text-blue-600">長所と短所</a></li>
+      <li><a href="#glossary" class="toc-link text-slate-600 hover:text-blue-600">専門用語集</a></li>
+      <li><a href="#related" class="toc-link text-slate-600 hover:text-blue-600">次に学ぶと良いもの</a></li>
+      <li><a href="#references" class="toc-link text-slate-600 hover:text-blue-600">参考文献</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="max-w-4xl mx-auto px-6 py-12">
+
+<!-- ===== 1. ひとことで言えば ===== -->
+<section class="section-card" id="summary">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="w-12 h-12 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center"><i data-lucide="message-square" class="w-6 h-6 text-white"></i></div>
+    <h2 class="text-2xl font-bold">ひとことで言えば</h2>
+  </div>
+  <p class="text-lg leading-relaxed">
+    <strong>Ollama（オラマ）とは、量子化した大規模言語モデルを自分の PC 上でダウンロード・実行し、<code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">http://localhost:11434</code> で HTTP API として提供する常駐サービスである。</strong>
+  </p>
+  <p class="mt-4 text-slate-600 leading-relaxed">
+    クラウドの LLM API（Claude・GPT・Gemini など）と同じ「プロンプトを投げると文章が返る」インタフェースを、<strong>従量課金ゼロ・ネットワーク不要・入力データが外部に出ない</strong>形で手元に置ける。代わりに、モデルの重みを自分のマシンのメモリに載せて自分の CPU / GPU で推論するため、<strong>ハードウェアの制約を受け、品質と速度は載せられるモデルサイズで決まる</strong>。
+  </p>
+  <div class="mt-5 grid sm:grid-cols-3 gap-3 text-sm">
+    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3"><span class="font-bold text-emerald-800">カバーする範囲</span><p class="text-slate-600 mt-1">モデル配布・量子化・GPU 割り当て・ローカル REST API</p></div>
+    <div class="bg-sky-50 border border-sky-200 rounded-lg p-3"><span class="font-bold text-sky-800">カバーしない範囲</span><p class="text-slate-600 mt-1">モデルそのものの学習・分散推論・フロンティア級の品質</p></div>
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-3"><span class="font-bold text-amber-800">競合</span><p class="text-slate-600 mt-1">LM Studio・llama.cpp 直・vLLM・Jan・GPT4All</p></div>
+  </div>
+</section>
+
+<!-- ===== 2. なぜ生まれたのか ===== -->
+<section class="section-card" id="why">
+  <div class="flex items-center gap-3 mb-5">
+    <div class="w-12 h-12 bg-gradient-to-br from-slate-600 to-slate-800 rounded-xl flex items-center justify-center"><i data-lucide="history" class="w-6 h-6 text-white"></i></div>
+    <h2 class="text-2xl font-bold">なぜ生まれたのか</h2>
+  </div>
+  <div class="space-y-4 text-slate-700 leading-relaxed">
+    <p>
+      2023 年に Meta の <strong>LLaMA</strong> の重みが公開され、続いて Georgi Gerganov 氏の <strong>llama.cpp</strong> が「GPU が無くても C++ と量子化で LLM を動かせる」ことを実証した。しかし当時の実行手順は、モデルの重みを HuggingFace から探してきて、GGUF に変換し、量子化レベルを選び、プロンプトテンプレートを手で組み立て、CLI の引数を大量に渡す、というものだった。<strong>「動かせる」と「気軽に使える」の間に深い溝があった。</strong>
+    </p>
+    <p>
+      Ollama はこの溝を埋めるために作られた。やったことは Docker が「コンテナ」に対してやったことと同じ発想である。
+    </p>
+    <ul class="list-disc list-inside space-y-2 ml-2">
+      <li><strong>モデルをレジストリ配布に</strong> — <code class="bg-slate-100 px-1 rounded text-sm">ollama pull qwen2.5:7b</code> だけで、正しい量子化・正しいプロンプトテンプレート・正しいパラメータがセットで落ちてくる（<code>docker pull</code> の LLM 版）。</li>
+      <li><strong>実行をデーモン + API に</strong> — バックグラウンドで <code>ollama serve</code> が常駐し、複数のアプリが localhost の HTTP で共有できる。モデルのロード / アンロード / VRAM 割り当てはデーモンが面倒を見る。</li>
+      <li><strong>インタフェースを OpenAI 互換に</strong> — 既存のクラウド API 用コードの <code>base_url</code> を差し替えるだけでローカルに切り替えられる。</li>
+    </ul>
+    <p>
+      背景にある需要は明確だ。<strong>プライバシー</strong>（社内文書・コード・個人情報を外部 API に送りたくない）、<strong>コスト</strong>（大量処理を従量課金でやると高い）、<strong>オフライン / 低レイテンシ</strong>（回線に依存したくない、往復遅延を消したい）、<strong>再現性</strong>（モデルのバージョンが勝手に変わらない）。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 3. まず理解する3つ ===== -->
+<section class="section-card" id="basics">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center"><i data-lucide="star" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">まず理解する3つ</h2><p class="text-slate-500">これだけ分かれば評価に入れる</p></div>
+  </div>
+  <div class="grid gap-4">
+    <div class="flex items-start gap-4 p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-xl border-l-4 border-red-500">
+      <div class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">1</div>
+      <div>
+        <div class="flex items-center gap-2 mb-1"><span class="font-bold text-lg">Ollama は「実行環境」であって「モデル」ではない</span><span class="badge-essential">必須</span></div>
+        <p class="text-slate-600">賢さを決めるのは中に入れるモデル（Qwen2.5・Llama 3.x・Gemma・Phi 等）と、その量子化レベル。Ollama 自体は配布・ロード・API 化を担う土台。DBMS（PostgreSQL エンジン）と、そこに入れるデータ / スキーマの関係に近い。</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-l-4 border-blue-500">
+      <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">2</div>
+      <div>
+        <div class="flex items-center gap-2 mb-1"><span class="font-bold text-lg">常駐デーモンに localhost の HTTP で話す</span><span class="badge-essential">必須</span></div>
+        <p class="text-slate-600"><code class="bg-white/70 px-1 rounded text-sm">ollama serve</code> が <code>127.0.0.1:11434</code> で待ち受ける。アプリ側はライブラリを埋め込むのではなく、ローカルの Web サーバーに JSON を POST する。ローカルの Redis や Postgres に繋ぐのと構造は同じ。</p>
+      </div>
+    </div>
+    <div class="flex items-start gap-4 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border-l-4 border-emerald-500">
+      <div class="w-10 h-10 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0">3</div>
+      <div>
+        <div class="flex items-center gap-2 mb-1"><span class="font-bold text-lg">性能はメモリと量子化のトレードオフで決まる</span><span class="badge-recommended">推奨</span></div>
+        <p class="text-slate-600">モデルの重みは丸ごと RAM（GPU があれば VRAM）に載る。7〜8B のモデルを Q4_K_M 量子化で約 5〜6 GB。載れば動く、載らなければ極端に遅くなるか起動しない。「大きいモデルを雑に量子化」より「小さいモデルを素直に量子化」の方が結果は良い。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 仕組みとアーキテクチャ ===== -->
+<section class="section-card" id="arch">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center"><i data-lucide="layers" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">仕組みとアーキテクチャ</h2><p class="text-slate-500">下から順に積み上がっている</p></div>
+  </div>
+
+  <h3 class="text-lg font-bold text-slate-800 mt-2 mb-3">レイヤ構成</h3>
+  <p class="text-slate-600 mb-4">Ollama は薄いラッパーで、実際の数値計算は下層の <strong>llama.cpp</strong>（および新しい社内エンジン）が担う。上から見ると次のようになっている。</p>
+  <div class="border border-slate-200 rounded-xl overflow-hidden">
+    <div class="bg-sky-50 border-b border-slate-200 p-4"><span class="font-bold text-sky-900">アプリ層</span><span class="text-slate-600 text-sm ml-2">Toolkit.exe / スクリプト / CLI — HTTP クライアント</span></div>
+    <div class="bg-white border-b border-slate-200 p-4"><span class="font-bold text-slate-800">API 層</span><span class="text-slate-600 text-sm ml-2"><code>ollama serve</code> — <code>:11434</code> で REST を提供。ネイティブ <code>/api/*</code> と OpenAI 互換 <code>/v1/*</code> の 2 系統</span></div>
+    <div class="bg-white border-b border-slate-200 p-4"><span class="font-bold text-slate-800">オーケストレーション層</span><span class="text-slate-600 text-sm ml-2">モデルのロード / アンロード（keep-alive）・GPU/CPU への割り当て・プロンプトテンプレートの適用・並列リクエストのキューイング</span></div>
+    <div class="bg-white border-b border-slate-200 p-4"><span class="font-bold text-slate-800">推論エンジン層</span><span class="text-slate-600 text-sm ml-2">llama.cpp（GGML）ほか — 量子化テンソルの行列演算、KV キャッシュ管理、CUDA / Metal / ROCm / AVX への振り分け</span></div>
+    <div class="bg-slate-50 p-4"><span class="font-bold text-slate-800">モデル層</span><span class="text-slate-600 text-sm ml-2">GGUF ファイル（重み + メタデータ + トークナイザ）— <code>~/.ollama/models</code> にレジストリ形式で保存</span></div>
+  </div>
+
+  <div class="term-box">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="book-marked" class="w-5 h-5 text-blue-600"></i><span class="font-bold text-blue-900">用語: GGUF（GPT-Generated Unified Format）</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">llama.cpp が使う単一ファイルのモデル形式。重みテンソル・量子化情報・トークナイザ・プロンプトテンプレート・ハイパーパラメータを 1 つの <code>.gguf</code> にまとめる。<strong>実行ファイルにおける単一バイナリ（static link 済み exe）と同じ発想</strong>で、これ 1 つ配れば依存を解決せずに動く。前身の GGML 形式を置き換えた。</p>
+  </div>
+
+  <div class="term-box">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="book-marked" class="w-5 h-5 text-blue-600"></i><span class="font-bold text-blue-900">用語: 量子化（Quantization）</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">
+      モデルの重み（本来 16 bit 浮動小数）を、4 bit などの低ビット整数 + スケール係数で近似し、メモリと計算量を削る手法。<strong>音声を FLAC（可逆）から 320 kbps MP3、128 kbps MP3 と圧縮していくのに似ている</strong> — ファイルは小さくなり、ある所までは違いが分からず、やり過ぎると明確に劣化する。
+    </p>
+    <ul class="text-sm text-slate-600 mt-2 space-y-1 list-disc list-inside">
+      <li><strong>Q8_0</strong>: 8 bit。ほぼ無劣化。サイズは元の約 1/2</li>
+      <li><strong>Q4_K_M</strong>: 4 bit（K-quant, medium）。<strong>Ollama の既定で実用上の標準</strong>。サイズは元の約 1/4、品質低下はわずか</li>
+      <li><strong>Q3_K / Q2_K</strong>: 3〜2 bit。極端に小さいがハルシネーション・破綻が増える。基本は使わない</li>
+    </ul>
+    <p class="text-slate-700 text-sm mt-2">経験則: <strong>「一段大きいモデルを Q3」より「一段小さいモデルを Q4_K_M」</strong>の方が実用品質は上。</p>
+  </div>
+
+  <h3 class="text-lg font-bold text-slate-800 mt-8 mb-3">推論のとき何が起きているか</h3>
+  <div class="term-box">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="package-open" class="w-5 h-5 text-blue-600"></i><span class="font-bold text-blue-900">たとえ: レストランのセントラルキッチン vs 出前</span></div>
+    <div class="text-slate-700 text-sm space-y-2">
+      <p><strong>クラウド API = 出前。</strong>注文（プロンプト）を電話で伝える。速くて美味い（フロンティア級モデル）が、注文内容は店に伝わるし、頼むたびに代金がかかり、回線が切れたら注文できない。</p>
+      <p><strong>Ollama = 自宅のキッチン。</strong>材料（モデルの重み）を一度買って冷蔵庫（ディスク）に入れ、使うときに調理台（RAM / VRAM）に広げる。作るのは自分の火力（CPU / GPU）次第で、プロの味には届かないこともあるが、<strong>何を作ったかは誰にも伝わらず、材料費以外はかからず、停電しなければいつでも作れる</strong>。</p>
+      <ul class="list-disc list-inside space-y-1 ml-1">
+        <li>買い物（<code>ollama pull</code>）→ ディスクに GGUF を保存</li>
+        <li>調理台に広げる（初回リクエスト）→ 重みを RAM/VRAM にロード（数秒〜数十秒）</li>
+        <li>調理（生成）→ 1 トークンずつ計算。速度は tokens/sec で測る</li>
+        <li>片付け（keep-alive 期限切れ）→ 一定時間使わないとメモリから降ろす（既定 5 分）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="term-box">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="book-marked" class="w-5 h-5 text-blue-600"></i><span class="font-bold text-blue-900">用語: コンテキスト長 / KV キャッシュ</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">
+      コンテキスト長は、モデルが 1 回の推論で参照できるトークン数の上限（例: 8K / 32K / 128K）。会話や文書が長いほど、<strong>KV キャッシュ（Key-Value cache）</strong>という中間状態が VRAM を食う。重みが載っても「重み + KV キャッシュ + 実行時オーバーヘッド」で溢れることがある。<strong>ページングを起こしたときの OS のスワップ地獄と同じ</strong>で、溢れた瞬間に体感速度が桁で落ちる。Ollama では <code>num_ctx</code> パラメータで上限を指定する。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 5. toolkit からの繋ぎ方 ===== -->
+<section class="section-card" id="connect">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-700 rounded-xl flex items-center justify-center"><i data-lucide="plug" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">toolkit からの繋ぎ方</h2><p class="text-slate-500">Python デスクトップアプリから localhost HTTP を叩くだけ</p></div>
+  </div>
+
+  <h3 class="text-lg font-bold text-slate-800 mb-3">構成図（すべて 1 台の PC の中）</h3>
+  <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 font-mono text-xs sm:text-sm leading-6 overflow-x-auto">
+<pre class="text-slate-700">┌───────────────────────── ローカル PC ─────────────────────────┐
+│                                                              │
+│  Toolkit.exe (customtkinter)                                  │
+│    └─ app/core/ai/  … LLM 呼び出しを 1 か所に閉じる            │
+│         │  httpx で POST（ワーカースレッド or after ポンプ）   │
+│         ▼                                                     │
+│    http://127.0.0.1:11434                                     │
+│    ┌────────────────────────────────────────────┐            │
+│    │  ollama serve  (常駐デーモン)               │            │
+│    │   ├─ /api/chat        ネイティブ            │            │
+│    │   ├─ /api/generate    ネイティブ            │            │
+│    │   ├─ /api/embeddings  ベクトル化            │            │
+│    │   ├─ /api/tags        導入済みモデル一覧    │            │
+│    │   └─ /v1/chat/completions  OpenAI 互換     │            │
+│    │        │                                   │            │
+│    │        ▼                                   │            │
+│    │   推論エンジン (llama.cpp)                  │            │
+│    │        │  重みをロード                      │            │
+│    │        ▼                                   │            │
+│    │   RAM / VRAM に展開された GGUF モデル       │            │
+│    └────────────────────────────────────────────┘            │
+│                                                              │
+│  ~/.ollama/models/  … pull したモデルの保管場所（ディスク）   │
+└──────────────────────────────────────────────────────────────┘
+        ネットワーク接続なし・データは PC の外に出ない
+</pre>
+  </div>
+
+  <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 my-6">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="triangle-alert" class="w-5 h-5 text-amber-600"></i><span class="font-bold text-amber-900">toolkit 固有の注意: スレッド</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">
+      toolkit の掟は「COM 操作もジョブも UI スレッドで同期実行」。LLM 呼び出しは<strong>数秒〜数十秒ブロック</strong>するので、これを <code>ctx.submit</code> の同期ジョブに素直に入れると窓が固まる。<strong>LLM 呼び出しだけワーカースレッドに逃がす</strong>（Office COM は UI スレッドのまま）か、<strong>ストリーミングで受けて <code>after()</code> でチャンクを UI に流す</strong>。Word/Excel の COM とネットワーク I/O を混同しないこと。
+    </p>
+  </div>
+
+  <h3 class="text-lg font-bold text-slate-800 mb-3">API の使い分け</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+    <thead class="bg-slate-100 text-slate-700"><tr><th class="text-left p-3">エンドポイント</th><th class="text-left p-3">用途</th><th class="text-left p-3">選ぶ理由</th></tr></thead>
+    <tbody class="divide-y divide-slate-200">
+      <tr><td class="p-3 font-mono">/api/chat</td><td class="p-3">複数ターンの会話（role 付き messages）</td><td class="p-3">Ollama ネイティブ。<code>options</code> で <code>num_ctx</code> 等を細かく渡せる。tool calling もここ</td></tr>
+      <tr><td class="p-3 font-mono">/api/generate</td><td class="p-3">単発のプロンプト → 補完（1 ターン）</td><td class="p-3">要約・言い換えなど「1 回投げて 1 回返す」タスク。<code>system</code> と <code>prompt</code> だけで済む</td></tr>
+      <tr><td class="p-3 font-mono">/v1/chat/completions</td><td class="p-3">OpenAI SDK 互換</td><td class="p-3">クラウドと<strong>同じコードで base_url だけ差し替え</strong>たいとき。将来 Claude / OpenAI に切り替える余地を残せる</td></tr>
+      <tr><td class="p-3 font-mono">/api/embeddings</td><td class="p-3">文をベクトルに変換</td><td class="p-3">用語集の類似検索・重複検出など。生成とは別モデル（<code>nomic-embed-text</code> 等）</td></tr>
+      <tr><td class="p-3 font-mono">/api/tags</td><td class="p-3">導入済みモデルの一覧</td><td class="p-3"><strong>起動チェックと「モデルが入っているか」の確認</strong>に使う</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="text-lg font-bold text-slate-800 mt-8 mb-2">コード例 1: 最小の呼び出し（curl）</h3>
+  <p class="text-slate-600 text-sm mb-2">このコードがやること: 導入済みの <code>qwen2.5:7b</code> に敬語化を頼み、<strong>ストリーミングを切って</strong>一括で JSON を受け取る。</p>
+  <div class="code-block"><span class="c"># stream:false で 1 回のレスポンスにまとめる</span>
+curl http://localhost:11434/api/chat -d '{
+  <span class="k">"model"</span>: <span class="s">"qwen2.5:7b"</span>,
+  <span class="k">"stream"</span>: false,
+  <span class="k">"messages"</span>: [
+    {<span class="k">"role"</span>:<span class="s">"system"</span>, <span class="k">"content"</span>:<span class="s">"入力を丁寧なビジネス敬語に直す。意味は変えない。"</span>},
+    {<span class="k">"role"</span>:<span class="s">"user"</span>, <span class="k">"content"</span>:<span class="s">"明日までに資料送って"</span>}
+  ],
+  <span class="k">"options"</span>: { <span class="k">"temperature"</span>: 0.2, <span class="k">"num_ctx"</span>: 4096 }
+}'
+</div>
+
+  <h3 class="text-lg font-bold text-slate-800 mt-6 mb-2">コード例 2: toolkit 側（httpx・非ストリーム）</h3>
+  <p class="text-slate-600 text-sm mb-2">このコードがやること: <code>app/core/ai/</code> に置く想定の薄いクライアント。タイムアウトを長めに取り、Ollama 未起動なら分かりやすい例外に変換する。</p>
+  <div class="code-block"><span class="k">import</span> httpx
+
+OLLAMA = <span class="s">"http://127.0.0.1:11434"</span>
+
+<span class="k">class</span> OllamaNotRunning(RuntimeError): ...
+
+<span class="k">def</span> is_up() -> bool:
+    <span class="k">try</span>:
+        <span class="k">return</span> httpx.get(<span class="s">f"{OLLAMA}/api/tags"</span>, timeout=1.5).status_code == 200
+    <span class="k">except</span> httpx.HTTPError:
+        <span class="k">return</span> False
+
+<span class="k">def</span> complete(system: str, user: str, model=<span class="s">"qwen2.5:7b"</span>) -> str:
+    <span class="k">if not</span> is_up():
+        <span class="k">raise</span> OllamaNotRunning(
+            <span class="s">"Ollama が起動していません。`ollama serve` を実行し、"</span>
+            <span class="s">"`ollama pull qwen2.5:7b` でモデルを導入してください。"</span>)
+    r = httpx.post(<span class="s">f"{OLLAMA}/api/chat"</span>, timeout=120, json={
+        <span class="s">"model"</span>: model, <span class="s">"stream"</span>: False,
+        <span class="s">"messages"</span>: [
+            {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: system},
+            {<span class="s">"role"</span>: <span class="s">"user"</span>,   <span class="s">"content"</span>: user},
+        ],
+        <span class="s">"options"</span>: {<span class="s">"temperature"</span>: 0.2, <span class="s">"num_ctx"</span>: 4096},
+    })
+    r.raise_for_status()
+    <span class="k">return</span> r.json()[<span class="s">"message"</span>][<span class="s">"content"</span>].strip()
+</div>
+  <p class="text-slate-600 text-sm mt-2">この <code>complete()</code> を <strong>UI スレッドから直接呼ばない</strong>。<code>threading.Thread</code> で走らせ、結果を <code>queue</code> 経由で受けて <code>after()</code> で UI に反映する。</p>
+
+  <h3 class="text-lg font-bold text-slate-800 mt-6 mb-2">コード例 3: OpenAI 互換で書いておく</h3>
+  <p class="text-slate-600 text-sm mb-2">このコードがやること: 公式 <code>openai</code> ライブラリをそのまま使い、<code>base_url</code> をローカルに向ける。将来クラウドへ切り替えるとき、この 2 行だけ変えればよい。</p>
+  <div class="code-block"><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(base_url=<span class="s">"http://127.0.0.1:11434/v1"</span>, api_key=<span class="s">"ollama"</span>)  <span class="c"># キーはダミーで可</span>
+res = client.chat.completions.create(
+    model=<span class="s">"qwen2.5:7b"</span>,
+    messages=[{<span class="s">"role"</span>:<span class="s">"user"</span>,<span class="s">"content"</span>:<span class="s">"この表の列名を英語に直して"</span>}],
+    temperature=0.2,
+)
+<span class="k">print</span>(res.choices[0].message.content)
+</div>
+
+  <div class="bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-5 my-6">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="printer" class="w-5 h-5 text-emerald-600"></i><span class="font-bold text-emerald-900">たとえ: プリンタスプーラ / OS のサービス</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">
+      <code>ollama serve</code> は Windows のサービス（プリンタスプーラや Windows Update）と同じ「常駐して要求を待つ」プロセス。<strong>サービスが止まっていればジョブを投げても <code>Connection refused</code> で即エラー</strong>になる。toolkit の <code>flowchart-excel</code> launcher が「exe を見つけられなければ解決手順つきメッセージで止まる」のと全く同じで、<strong>「未起動・モデル未導入」を握って、ユーザーに次の一手（<code>ollama serve</code> / <code>ollama pull</code>）を示す</strong>のが正しい振る舞い。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 6. モデル選び ===== -->
+<section class="section-card" id="models">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center"><i data-lucide="boxes" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">モデル選び</h2><p class="text-slate-500">「入るサイズ」から逆算する</p></div>
+  </div>
+
+  <p class="text-slate-600 mb-4">選定の順番は「タスク → 必要な賢さ → 手元のメモリに載る最大サイズ → その中でタスクに強いモデル → 量子化 Q4_K_M」。toolkit の用途（敬語化・要約・表記提案・用語抽出）は<strong>難関タスクではない</strong>ので、7〜8B クラスで十分実用になることが多い。</p>
+
+  <div class="overflow-x-auto"><table class="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+    <thead class="bg-slate-100 text-slate-700"><tr>
+      <th class="text-left p-3">モデル（Ollama タグ例）</th><th class="text-left p-3">パラメータ</th><th class="text-left p-3">Q4_K_M サイズ目安</th><th class="text-left p-3">必要メモリ目安<br>(重み+文脈+余裕)</th><th class="text-left p-3">向き</th>
+    </tr></thead>
+    <tbody class="divide-y divide-slate-200">
+      <tr><td class="p-3 font-mono">phi3.5 / phi4-mini</td><td class="p-3">3.8B</td><td class="p-3">約 2.5 GB</td><td class="p-3">約 5 GB</td><td class="p-3">最軽量。短い整形・分類。CPU のみでも実用速度</td></tr>
+      <tr class="bg-emerald-50/40"><td class="p-3 font-mono">qwen2.5:7b</td><td class="p-3">7.6B</td><td class="p-3">約 4.7 GB</td><td class="p-3">約 8 GB</td><td class="p-3"><strong>日本語・指示追従が強い。toolkit のデフォルト候補</strong>。JSON 出力・tool calling 対応</td></tr>
+      <tr><td class="p-3 font-mono">llama3.1:8b</td><td class="p-3">8.0B</td><td class="p-3">約 4.9 GB</td><td class="p-3">約 8 GB</td><td class="p-3">汎用のバランス型。英語寄り。エコシステムの資料が豊富</td></tr>
+      <tr><td class="p-3 font-mono">gemma2:9b</td><td class="p-3">9.2B</td><td class="p-3">約 5.8 GB</td><td class="p-3">約 9〜10 GB</td><td class="p-3">要約・言い換えが自然。やや重い</td></tr>
+      <tr><td class="p-3 font-mono">qwen2.5:14b</td><td class="p-3">14.8B</td><td class="p-3">約 9 GB</td><td class="p-3">約 13〜14 GB</td><td class="p-3">品質を一段上げたいとき。16 GB VRAM か 32 GB RAM が目安</td></tr>
+      <tr><td class="p-3 font-mono">nomic-embed-text</td><td class="p-3">0.14B</td><td class="p-3">約 0.3 GB</td><td class="p-3">約 1 GB</td><td class="p-3">生成ではなく<strong>埋め込み専用</strong>。類似検索・重複検出用に併用</td></tr>
+    </tbody>
+  </table></div>
+  <p class="text-xs text-slate-500 mt-2">※ サイズ・所要メモリは目安。量子化ビルドやコンテキスト長で前後する。実際の VRAM 使用は <code>ollama ps</code> で確認できる。</p>
+
+  <div class="mt-5 grid sm:grid-cols-3 gap-3 text-sm">
+    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"><span class="font-bold text-slate-800">GPU なし / RAM 16 GB</span><p class="text-slate-600 mt-1">phi4-mini か qwen2.5:7b。CPU 推論は 5〜15 tokens/sec 程度。短文タスク向き</p></div>
+    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"><span class="font-bold text-slate-800">VRAM 8 GB（RTX 4060 等）</span><p class="text-slate-600 mt-1">qwen2.5:7b / llama3.1:8b が快適。30〜60 tokens/sec。toolkit の標準想定</p></div>
+    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"><span class="font-bold text-slate-800">VRAM 16〜24 GB</span><p class="text-slate-600 mt-1">qwen2.5:14b、余裕があれば 32B クラス。品質はクラウドの中位に近づく</p></div>
+  </div>
+
+  <div class="term-box">
+    <div class="flex items-center gap-2 mb-2"><i data-lucide="book-marked" class="w-5 h-5 text-blue-600"></i><span class="font-bold text-blue-900">用語: Modelfile</span></div>
+    <p class="text-slate-700 text-sm leading-relaxed">
+      <code>FROM qwen2.5:7b</code> のように既存モデルを起点に、<code>SYSTEM</code> プロンプト・<code>PARAMETER temperature 0.2</code>・停止トークンなどを固定した派生モデルを定義するテキストファイル。<strong>Dockerfile の LLM 版</strong>。toolkit なら「表記チェック用」「敬語化用」といったタスク特化のプリセットを Modelfile で作り、<code>ollama create toolkit-keigo -f Modelfile</code> で名前を付けて配れる。プロンプトをコード外に出せる。
+    </p>
+  </div>
+</section>
+
+<!-- ===== 7. 落とし穴 ===== -->
+<section class="section-card" id="pitfalls">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-rose-600 rounded-xl flex items-center justify-center"><i data-lucide="alert-triangle" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">初心者がはまりやすい落とし穴</h2><p class="text-slate-500">評価前に知っておくと時間を節約できる</p></div>
+  </div>
+  <div class="space-y-4">
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">「小さいモデルでも GPT-4 級だろう」という期待値のズレ</p>
+      <p class="text-slate-700 text-sm mt-1">7〜8B は<strong>フロンティアモデルの数十分の一</strong>の規模。込み入った推論・長文の一貫性・マイナー知識では明確に劣る。<strong>回避策</strong>: タスクを「整形・分類・要約・抽出」など<strong>判断の幅が狭いもの</strong>に絞る。creative な生成や難しい判断はクラウドに回す設計にする。</p>
+    </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">初回リクエストだけ異様に遅い / タイムアウトする</p>
+      <p class="text-slate-700 text-sm mt-1">モデルを RAM/VRAM にロードする時間（数秒〜数十秒）が最初の 1 回に乗る。<strong>回避策</strong>: HTTP クライアントのタイムアウトを 120 秒以上に。起動時に <code>keep_alive</code> を長めにした空リクエストでウォームアップしておく。既定では 5 分無操作でアンロードされ、次でまた遅くなる。</p>
+    </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">コンテキストを増やしたら急に遅く・不安定になった</p>
+      <p class="text-slate-700 text-sm mt-1"><code>num_ctx</code> を大きくすると KV キャッシュが VRAM を食い、閾値を超えた瞬間に CPU へこぼれて<strong>体感が桁で落ちる</strong>。<strong>回避策</strong>: タスクに必要な最小の <code>num_ctx</code>（4K〜8K）にする。長文は要約してから渡す。<code>ollama ps</code> で「100% GPU」から落ちていないか確認。</p>
+    </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">Q2 まで量子化して「使い物にならない」と結論する</p>
+      <p class="text-slate-700 text-sm mt-1">2〜3 bit 量子化は破綻・ハルシネーションが顕著。<strong>回避策</strong>: 迷わず <strong>Q4_K_M</strong>（Ollama 既定）。それで載らないなら 1 段小さいモデルへ。「大きいモデルの過剰量子化」は避ける。</p>
+    </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">exe にモデルや Ollama を同梱しようとする</p>
+      <p class="text-slate-700 text-sm mt-1">モデルは数 GB、Ollama 本体も別インストーラ。PyInstaller の onefile に入れるものではない。<strong>回避策</strong>: <code>flowchart-excel</code> launcher と同じく「外部プロセスに接続するだけ」。Ollama の導入とモデルの <code>pull</code> はユーザー手順（または初回セットアップ bat）にし、アプリは <code>localhost:11434</code> の有無を検出するだけにする。</p>
+    </div>
+    <div class="p-4 bg-red-50 border-l-4 border-red-400 rounded-r-lg">
+      <p class="font-bold text-red-900">CPU 推論を GPU 推論と同じ速度で見積もる</p>
+      <p class="text-slate-700 text-sm mt-1">GPU なしだと 7B で数〜十数 tokens/sec。300 字の敬語化に十数秒かかることもある。<strong>回避策</strong>: UI を非同期に（進捗表示・キャンセル可能に）。短文タスクに限定するか、GPU 前提と割り切る。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 8. 料金・ライセンス ===== -->
+<section class="section-card" id="cost">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-xl flex items-center justify-center"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">料金・ライセンス</h2><p class="text-slate-500">Ollama は無料。注意点はモデル側にある</p></div>
+  </div>
+  <ul class="space-y-3 text-slate-700 text-sm">
+    <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-1"></i><span><strong>Ollama 本体</strong>: オープンソース（MIT ライセンス）。無料。従量課金なし。商用利用可。</span></li>
+    <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-1"></i><span><strong>推論コスト</strong>: 電気代のみ。API 課金・トークン課金は一切ない。オフラインで完結。</span></li>
+    <li class="flex gap-2"><i data-lucide="triangle-alert" class="w-4 h-4 text-amber-600 flex-shrink-0 mt-1"></i><span><strong>モデルのライセンスは個別</strong>: Ollama で配られるモデルはそれぞれライセンスが違う。Apache-2.0 / MIT（Qwen の一部・Mistral 系）は商用も自由。<strong>Llama 系は Meta 独自ライセンス</strong>（月間アクティブユーザー 7 億超の制限、出力で他モデルを学習させない条項など）。<strong>Gemma は Google の利用規約</strong>。業務ツールに組み込むなら、採用モデルのライセンス条文を確認する。</span></li>
+    <li class="flex gap-2"><i data-lucide="info" class="w-4 h-4 text-sky-600 flex-shrink-0 mt-1"></i><span><strong>Ollama Cloud / Turbo</strong>: 同じ CLI・API のままクラウド GPU で大型モデルを動かす有料オプションもある（ローカルで動かない規模のモデル用）。ローカル運用だけなら無関係。</span></li>
+  </ul>
+  <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-5 text-sm">
+    <p class="font-bold text-slate-800 mb-1">クラウド API とのコスト比較（イメージ）</p>
+    <p class="text-slate-600">1 日 200 リクエスト・平均 800 トークン入出力を 1 年続けた場合 —— クラウド（安いモデルでも）で年 数千円〜、Ollama ローカルなら追加ハード費を除けば <strong>ほぼ電気代のみ</strong>。ただし GPU を新規購入するなら初期数万円。低頻度なら差は小さく、<strong>選定理由はコストより「データを外に出さない」になる</strong>ことが多い。</p>
+  </div>
+</section>
+
+<!-- ===== 9. 長所と短所 ===== -->
+<section class="section-card" id="tradeoffs">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-gradient-to-br from-slate-600 to-blue-700 rounded-xl flex items-center justify-center"><i data-lucide="scale" class="w-6 h-6 text-white"></i></div>
+    <div><h2 class="text-2xl font-bold">長所と短所（toolkit の文脈で）</h2></div>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-5">
+    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+      <p class="font-bold text-emerald-900 mb-2 flex items-center gap-2"><i data-lucide="thumbs-up" class="w-5 h-5"></i>向いている</p>
+      <ul class="text-sm text-slate-700 space-y-2 list-disc list-inside">
+        <li><strong>業務文書が外に出ない</strong> — Word/Excel の中身を第三者 API に送らずに済む</li>
+        <li><strong>従量課金ゼロ</strong> — 何回叩いてもコストが増えない。バッチ処理に強い</li>
+        <li><strong>オフライン</strong> — 回線・VPN・プロキシに依存しない</li>
+        <li><strong>再現性</strong> — モデルのバージョンが勝手に変わらない</li>
+        <li><strong>切替可能な設計にしやすい</strong> — OpenAI 互換なので後からクラウドへ差し替えられる</li>
+      </ul>
+    </div>
+    <div class="bg-rose-50 border border-rose-200 rounded-xl p-5">
+      <p class="font-bold text-rose-900 mb-2 flex items-center gap-2"><i data-lucide="thumbs-down" class="w-5 h-5"></i>向いていない / 弱点</p>
+      <ul class="text-sm text-slate-700 space-y-2 list-disc list-inside">
+        <li><strong>品質の天井</strong> — 難しい判断・長文の一貫性はフロンティア級に届かない</li>
+        <li><strong>ハードウェア依存</strong> — GPU が無いと遅い。VRAM が足りないと動かない</li>
+        <li><strong>配布が増える</strong> — ユーザー各自が Ollama 導入 + モデル pull（数 GB）</li>
+        <li><strong>初回ロード遅延</strong> — 使い始めとアンロード後に待ちが入る</li>
+        <li><strong>運用の当事者になる</strong> — モデル更新・VRAM 管理・障害切り分けが自分の仕事になる</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bg-sky-50 border border-sky-200 rounded-xl p-5 mt-5 text-sm text-slate-700">
+    <p><strong>実務的な落としどころ:</strong> 「表記ゆれの提案」「選択範囲の敬語化・要約」など<strong>判断の幅が狭いタスク</strong>を Ollama ローカルで賄い、<code>app/core/ai/</code> の裏側を OpenAI 互換の I/F にしておく。品質が要る場面が出てきたら、その I/F の実装を Claude Haiku 4.5 に差し替えるだけで済む。</p>
+  </div>
+</section>
+
+<!-- ===== 10. 専門用語集 ===== -->
+<section class="section-card" id="glossary">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"><i data-lucide="list" class="w-6 h-6 text-slate-600"></i></div>
+    <div><h2 class="text-2xl font-bold">専門用語集</h2><p class="text-slate-500">この分野で繰り返し出てくる語</p></div>
+  </div>
+  <dl class="space-y-3 text-sm">
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">LLM（Large Language Model：大規模言語モデル）</dt><dd class="text-slate-600 mt-1">大量のテキストで学習し、次のトークンを確率的に予測するニューラルネットワーク。→ <em>推論</em>、<em>トークン</em></dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">推論（Inference）</dt><dd class="text-slate-600 mt-1">学習済みモデルに入力を与えて出力を得る処理。学習（training）と対。Ollama がやるのはこちらだけ。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">トークン（Token）</dt><dd class="text-slate-600 mt-1">モデルが扱う最小単位。日本語なら 1〜2 文字前後で 1 トークンのことが多い。課金も速度も文脈長もトークンで数える。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">llama.cpp</dt><dd class="text-slate-600 mt-1">C/C++ 製の推論エンジン。CPU・各種 GPU で量子化モデルを動かす。Ollama の下層。→ <em>GGUF</em></dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">GGUF</dt><dd class="text-slate-600 mt-1">llama.cpp のモデルファイル形式。重み・トークナイザ・テンプレートを 1 ファイルに同梱。→ <em>量子化</em></dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">量子化（Quantization）</dt><dd class="text-slate-600 mt-1">重みを低ビットで近似してサイズと計算量を削る。<code>Q4_K_M</code> が実用標準。→ <em>VRAM</em></dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">コンテキスト長（Context length / <code>num_ctx</code>）</dt><dd class="text-slate-600 mt-1">1 回の推論で参照できるトークン上限。長いほど KV キャッシュがメモリを食う。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">KV キャッシュ（Key-Value cache）</dt><dd class="text-slate-600 mt-1">既に処理したトークンの中間状態。再計算を避けるための VRAM 常駐データ。文脈が長いほど増える。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">keep-alive</dt><dd class="text-slate-600 mt-1">推論後、モデルをメモリに保持しておく時間（既定 5 分）。切れると次回ロードで待ちが発生。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">Modelfile</dt><dd class="text-slate-600 mt-1">既存モデル + system プロンプト + パラメータを固定した派生モデル定義。Dockerfile の LLM 版。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">埋め込み（Embedding）</dt><dd class="text-slate-600 mt-1">文を固定長ベクトルに変換したもの。類似度計算・検索・重複検出に使う。生成モデルとは別モデル。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">tool calling / function calling</dt><dd class="text-slate-600 mt-1">モデルが「この関数をこの引数で呼べ」という構造化 JSON を返す機能。Ollama も対応モデルで利用可。</dd></div>
+    <div class="border-b border-slate-100 pb-3"><dt class="font-bold text-slate-800">VRAM / RAM</dt><dd class="text-slate-600 mt-1">GPU メモリ / メインメモリ。モデルの重みと KV キャッシュがここに載る。載る量が性能を決める。</dd></div>
+    <div><dt class="font-bold text-slate-800">ストリーミング（SSE：Server-Sent Events）</dt><dd class="text-slate-600 mt-1">生成トークンを 1 つずつ push で受け取る方式。<code>"stream": true</code>。体感速度と途中キャンセルのために使う。</dd></div>
+  </dl>
+</section>
+
+<!-- ===== 11. 次に学ぶと良いもの ===== -->
+<section class="section-card" id="related">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center"><i data-lucide="compass" class="w-6 h-6 text-emerald-600"></i></div>
+    <div><h2 class="text-2xl font-bold">次に学ぶと良いもの</h2><p class="text-slate-500">この知識を起点に広げる</p></div>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-4">
+    <div class="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">llama.cpp と GGUF の内部</div><div class="text-sm text-slate-600 mt-1">Ollama の下で何が起きているか。量子化スキームや GPU offload の仕組みが分かると VRAM 見積もりが正確になる</div></div></div>
+    <div class="flex items-start gap-3 p-4 bg-sky-50 rounded-xl border border-sky-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-sky-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">構造化出力（JSON mode / grammar 制約）</div><div class="text-sm text-slate-600 mt-1">「表記ゆれの候補を配列で返す」など、ツール組み込みでは出力形式の固定がほぼ必須になる</div></div></div>
+    <div class="flex items-start gap-3 p-4 bg-amber-50 rounded-xl border border-amber-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">RAG（検索拡張生成）と埋め込み</div><div class="text-sm text-slate-600 mt-1">用語集や過去文書を根拠にさせたいときの定石。<code>nomic-embed-text</code> + ベクトル検索が入口</div></div></div>
+    <div class="flex items-start gap-3 p-4 bg-purple-50 rounded-xl border border-purple-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">クラウド LLM API の設計（Claude / OpenAI）</div><div class="text-sm text-slate-600 mt-1">品質が要る経路の受け皿。OpenAI 互換 I/F を挟んでおけばローカルと共存できる</div></div></div>
+    <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-slate-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">LM Studio / vLLM / llamafile</div><div class="text-sm text-slate-600 mt-1">同じローカル推論の別アプローチ。GUI 重視・スループット重視・単一実行ファイル配布と、目的で選択肢が分かれる</div></div></div>
+    <div class="flex items-start gap-3 p-4 bg-rose-50 rounded-xl border border-rose-200"><i data-lucide="arrow-right-circle" class="w-6 h-6 text-rose-600 flex-shrink-0 mt-0.5"></i><div><div class="font-bold">量子化の評価指標（perplexity・KL divergence）</div><div class="text-sm text-slate-600 mt-1">「Q4 でどれだけ劣化したか」を数値で語れると、モデル選定が主観から抜けられる</div></div></div>
+  </div>
+</section>
+
+<!-- ===== 12. 参考文献 ===== -->
+<section class="section-card" id="references">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center"><i data-lucide="book-open" class="w-6 h-6 text-slate-600"></i></div>
+    <div><h2 class="text-2xl font-bold">参考文献・公式資料</h2><p class="text-slate-500">一次情報と、作成時に参照した記事</p></div>
+  </div>
+  <div class="space-y-3">
+    <a href="https://github.com/ollama/ollama/blob/main/docs/api.md" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Ollama 公式 API リファレンス（GitHub）</div><div class="text-xs text-slate-500"><code>/api/chat</code>・<code>/api/generate</code>・<code>options</code> の正確な仕様はここ</div></div></a>
+    <a href="https://ollama.com/blog/openai-compatibility" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Ollama Blog — OpenAI compatibility</div><div class="text-xs text-slate-500"><code>/v1</code> エンドポイントの対応範囲と制限</div></div></a>
+    <a href="https://ollama.com/library" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Ollama Model Library</div><div class="text-xs text-slate-500">導入できるモデル一覧。タグごとのサイズ・量子化・ライセンスを確認</div></div></a>
+    <a href="https://github.com/ggerganov/llama.cpp/blob/master/examples/quantize/README.md" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">llama.cpp — 量子化タイプの説明</div><div class="text-xs text-slate-500">Q4_K_M などの記号が何を意味するか</div></div></a>
+    <a href="https://www.promptquorum.com/local-llms/local-llm-openai-compatible-api" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Local LLM OpenAI-Compatible API（解説記事・2026）</div><div class="text-xs text-slate-500">LM Studio との比較。互換 API の使いどころ</div></div></a>
+    <a href="https://localaimaster.com/blog/ollama-model-ram-vram-table" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Ollama Model RAM/VRAM Table（解説記事・2026）</div><div class="text-xs text-slate-500">VRAM 容量別のモデル早見。数値は目安として</div></div></a>
+    <a href="https://sanj.dev/post/self-hosted-llm-guide-2026/" target="_blank" rel="noopener" class="ref-link"><i data-lucide="external-link" class="w-4 h-4 flex-shrink-0 text-sky-500 mt-0.5"></i><div><div class="font-medium text-slate-800">Self-Hosted LLM Guide 2026（解説記事）</div><div class="text-xs text-slate-500">プライバシー・コスト観点でのローカル運用の位置づけ</div></div></a>
+  </div>
+  <p class="text-xs text-slate-400 mt-4">※ モデル名・バージョン・所要メモリは 2026 年時点の目安。導入前に公式 Library で最新のタグとライセンスを確認すること。</p>
+</section>
+
+</main>
+
+<footer class="max-w-4xl mx-auto px-6 pb-16 text-center text-sm text-slate-400">
+  techmap — Ollama ローカル LLM / 自作ツール（toolkit）への AI 組み込み評価用
+</footer>
+
+<!-- PDF ボタン -->
+<button onclick="window.print()" class="no-print fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-full shadow-lg flex items-center gap-2 z-50">
+  <i data-lucide="file-down" class="w-5 h-5"></i>PDFで保存
+</button>
+
+<script>
+  lucide.createIcons();
+  // 目次アクティブ表示
+  const links = document.querySelectorAll('.toc-link');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+  const onScroll = () => {
+    let cur = sections[0];
+    for (const s of sections) { if (s && s.getBoundingClientRect().top <= 120) cur = s; }
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + (cur && cur.id)));
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

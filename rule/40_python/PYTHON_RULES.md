@@ -4,6 +4,7 @@
 **SSOT（本ファイル）:** `yk-skill/rule/40_python/PYTHON_RULES.md`  
 **実行手順・ゲート:** スキル `creating-pythoncode-yk`（`.claude/skills/creating-pythoncode-yk/SKILL.md`）  
 **詳細ナレッジ・テンプレ全文:** 上記スキルの `references/`  
+**YK 実装パターン:** `40_python/references/PYTHON_*.md`  
 **人間向けアーカイブ（rev 積層）:** `c:/1.cursor/5.Python/0.ルール・操作方法/`（入口: 同フォルダ `入口.md`）
 
 **5.Python ワークスペース:** `.cursor/rules/python-dev-entry.mdc`（`**.py` 編集時に自動適用）
@@ -11,7 +12,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-09-08  
+**最終更新:** 2026-09-09（P14f · §12–§14 を `40_python/references/` へ分割）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -23,9 +24,9 @@
 | L1 | **本ファイル** `PYTHON_RULES.md` | 毎回・最初 |
 | L2 | `creating-pythoncode-yk/SKILL.md` | スキル発火 or `.py` 作業時 |
 | L2.5 | **Ref Plan**（チャット出力） | **コード編集前・必須**（Light は短形式 · 質問のみは不要） |
-| L3 | `references/` の個別ファイル | **Ref Plan の `load` に列挙したものだけ** |
+| L3 | Ref Plan の `load` のみ（スキル KB と `40_python/references/` の両方がありうる） | 列挙したものだけ。**全件禁止** |
 
-**禁止:** rev 付きアーカイブの全件 Read · `references/` の全件 Read。
+**禁止:** rev 付きアーカイブの全件 Read · スキル `references/` の全件 Read · `40_python/references/` の全件 Read。
 
 **手順:** `ROUTER.md` で tier（Light/Standard/Full）と tag を決める → Ref Plan を出す → 列挙ファイルのみ Read。
 
@@ -105,7 +106,7 @@ project_root/
 ## 6. 参照ルーティング
 
 **SSOT（何をいつ Read するか）:** スキル `creating-pythoncode-yk/references/ROUTER.md` のみ。  
-tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **ROUTER に書かない**（本節へ複製しない）。
+tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製しない**（ROUTER が SSOT）。
 
 | やること | 参照 |
 |----------|------|
@@ -113,6 +114,7 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **ROUTER に書�
 | K-ID から KB を足す | ROUTER §5 |
 | 実装前に Ref Plan を出す | Light → ROUTER §7 短形式 · Standard 以上 → §7 フル形式 · SKILL Step 0.1 |
 | 読み過ぎを防ぐ | ROUTER §6（パージ） |
+| **L1 パターン**（openpyxl / exe / yk-application GUI） | ROUTER §2.1 |
 | **FastAPI · REST API · UploadFile** | [`FASTAPI_RULES.md`](FASTAPI_RULES.md)（No 42）— 本ファイルの uv/Ruff/SDD は **そのまま適用** |
 
 **目次（KB 全体像が必要なときだけ）:** `references/Python_2_技術ナレッジベース_01_目次.md`
@@ -173,259 +175,40 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **ROUTER に書�
 ## 11. 変更時のルール
 
 - ロード規則を変えるときは **`references/ROUTER.md` のみ**更新する（本ファイル §6 に表を戻さない）。
-- 詳細ナレッジは **`references/` に追記**し、ROUTER の tag / ID 表に1行足す。
+- YK 実装パターンは **`rule/40_python/references/PYTHON_*.md` に追記**し、本ファイル §12 索引と ROUTER §2.1 に1行足す。**L1 へパターン全文を戻さない**。
+- スキル KB（K-ID 等）は **`creating-pythoncode-yk/references/` に追記**し、ROUTER の tag / ID 表に1行足す。
 - `5.Python/0.ルール・操作方法` の rev ファイルは、ユーザー明示時以外 AI が編集しない。
 - 他言語スキルを新設するときは [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md) に従う。
 
 ---
 
-## 12. YK パターン補足（openpyxl / データ処理）
+## 12. L3 索引（YK 実装パターン）
 
-### openpyxl: `data_only=True` でインメモリビルダーの数式セルが全 None になる
+詳細は毎回読まない。ROUTER tag に応じて Ref Plan `load`。索引だけ読んで完了としない。
 
-`load_workbook(path, data_only=True)` は Excel アプリが保存したキャッシュ値を読む。  
-openpyxl 自身が保存したファイルにはキャッシュがないため、**数式セルの値が全部 `None`** になる。
+| ファイル | 旧節 | ROUTER tag | 内容 |
+|----------|------|------------|------|
+| [`PYTHON_OPENPYXL_DATA.md`](references/PYTHON_OPENPYXL_DATA.md) | 旧 §12 | `yk_openpyxl` · `excel` | openpyxl / data_only / Shift-JIS |
+| [`PYTHON_PYINSTALLER_GUI.md`](references/PYTHON_PYINSTALLER_GUI.md) | 旧 §13 | `exe` · `yk_webview` | PyInstaller / build_exe / 埋め込み WebView |
+| [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) | 旧 §14 | `yk_desktop` | yk-application GUI / COM / プラグインハブ |
 
-- **対策:** 数式セルに依存する行を処理するときは `None` / 空文字フォールバックを用意する。  
-- **アンチパターン:** フォールバックなしに `assert cell_value is not None` → テスト fixture で必ず落ちる。
+**Excel / Word 所有権（MUST）:** 自前 `Dispatch` で起こしたプロセスは KB K-010 どおり `Quit`。起動中 `GetActiveObject` は **Quit しない**（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)）。
 
-### データ処理: 空行スキップは「フォールバック適用後」に判定する
+### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
 
-セルが空に見えても数式 → None の場合があるため、「最初に空チェックでスキップ」すると有効行まで消える。
-
-```python
-# NG: フォールバック前にスキップ
-if not any(cells):
-    continue
-
-# OK: フォールバックで値を埋めてから判定
-value = raw_value or derive_from_fallback(idx)
-if not value:
-    continue   # 本当に空の末尾余白行のみここに到達
-```
-
-### Excel テンプレートのプレースホルダー行: sentinel 終端で判定する
-
-Excel テンプレートには「まだ未入力」を示すプレースホルダー行が混在することがある（例: `M001_` — モジュール名 + 末尾アンダースコア）。`is None` チェックだけでは抜けるため、フォールバック後にセル値の末尾文字も判定してスキップする。
-
-```python
-def _is_placeholder(comment: str | None) -> bool:
-    """None・空・末尾アンダースコア（テンプレ未入力）はプレースホルダーとみなす"""
-    if not comment:
-        return True
-    return comment.strip().endswith("_")
-```
-
-- **アンチパターン:** `if comment is None: continue` のみ → 部分入力行（`M001_`）が有効行として通過する
-- sentinel 文字はドメインにより異なる（`-`・`*` 等）。定数化して `constants.py` に置くとメンテしやすい
-
-### 外部ツール向け CSV/TSV 出力は文字コードを明示する
-
-Windows FA ツール（キーエンス KV-STUDIO 等）や業務アプリへのテキスト出力は UTF-8 ではなく Shift-JIS（`cp932`）を要求するケースがある。半角カタカナ（`ﾏｶﾞｼﾞﾝ` 等）は UTF-8 コピペで特に文字化けする。
-
-```python
-# 外部ツール向け（Shift-JIS）
-with open(path, "w", encoding="shift_jis", errors="replace") as f:
-    f.write(f"{address}\t{comment}\n")
-
-# Web アプリ・内部データ向け（UTF-8）
-with open(path, "w", encoding="utf-8") as f:
-    json.dump(data, f, ensure_ascii=False, indent=2)
-```
-
-- `errors="replace"` で変換不能文字を `?` 置換し、サイレントクラッシュを防ぐ
-- エンコード変換は出力層（`export_*.py`）のみに閉じ、読み込み・変換ロジックは UTF-8 で統一する
+- [ ] Office を COM 操作するなら **`StayOnTop`**（`app/ui/stay_on_top.py` をコピー · `_finish`/完了時に `raise_window()` · `messagebox(parent=self)`）。非 COM は不要
+- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `Yu Gothic UI` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）
+- [ ] **`pyproject.toml [tool.ruff] select` を明示 pin**（例 `["E","F","I","UP","B"]`）。未 pin リポは変更スコープ内のみ green を基準 · `main.py` DPI catch は `# noqa: BLE001`
+- [ ] **`tk.StringVar()` を import 時に作らない** — `build_panel` / Tk root 確定後に生成
+- [ ] 純ロジックは `app/core/` や Tk 非依存モジュールへ分離しユニットテスト（COM 実機はユーザー担当）
+- [ ] プラグイン集約なら registry 自動収集 · 純関数は元リポからコピー（相互 import しない · 両方へ反映）
+- [ ] exe は [`PYTHON_PYINSTALLER_GUI.md`](references/PYTHON_PYINSTALLER_GUI.md)（`build/<name>` + `dist/<name>.exe` 削除 → **venv の** `build_exe.py` → `plugins_discovered` 件数・id を突き合わせ）
 
 ---
 
-## 13. YK パターン補足（PyInstaller · GUI exe）
-
-`flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` · `flowchart-excel` の `FlowchartExcel.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify` · **`npm run excel:converter:release`**（版 bump 済み commit 上で verify → タグ → GitHub Release）· `flowchart-excel/build_exe.py`。
-
-### relative import を `__main__.py` に書かない（凍結 exe で ImportError）
-
-PyInstaller の `--windowed` onefile では、Analysis 入口を `package/__main__.py` にすると **`from .module import …` が「no known parent package」で落ちる**。
-
-- **対策:** ロジックは `runner.py` 等に置き **absolute import のみ**（`from pkg.runner import main`）。PyInstaller 入口は `packaging/*_entry.py`（`excel_converter_gui.__main__` を import しない）。
-- **アンチパターン:** `hiddenimports` だけ増やして `__main__.py` の relative import を残す。
-
-### ビルド前に実行中 exe を止める
-
-Windows では dist の exe が起動中だと PyInstaller が `PermissionError: WinError 5` で上書き失敗する（GUI 起動確認 · 作者の手元 exe · エージェントの `Start-Process` テスト）。
-
-- **対策:** 再ビルド前に `taskkill /IM Foo.exe /F` 相当。リポでは `python/scripts/build_and_verify_converter.py` が自動実行。
-- **アンチパターン:** ビルド失敗を「PyInstaller の不具合」と決めつける。
-- **エージェント:** ソースを変えても `dist/*.exe` は自動更新されない — 作者が exe で確認する前に `build_exe.py` で再ビルドする。
-
-### 凍結 exe の検証は GUI 目視だけにしない
-
-`--windowed` exe は `--convert` 等の **ヘッドレス CLI 分岐**を同梱し、smoke で module CLI + 凍結 exe の両方を通す。stdout は cp932 環境で Unicode 記号（中黒等）を避ける。
-
-### 命名は 3 層（作者向け / ファイル名 / 技術キー）
-
-- **GUI · VERSIONINFO:** 日本語可（例: `Flowchart Studio — Excel 変換`）
-- **exe ファイル名 · Release 資産:** **ASCII**（PATH · SmartScreen · npm 脚本）
-- **Python パッケージ · spec · Git タグ:** kebab/snake（`excel_converter_gui` · `excel-converter-v0.1.1`）
-- **Release 自動化:** `python/scripts/release_converter.py` — `pyproject.toml` 版を読み `excel-converter-v{semver}` タグ + 版付き exe 添付（exe 本体は Git に commit しない）
-
-### v0.3 フロー表 ↔ モジュールは ListObject 名を使わない
-
-作者が Excel テーブルをコピペすると **ListObject 名**（例: `動作00018`）は MID と無関係になり、テーブル名から MID を推測すると **別モジュールにフローが紐付く**。
-
-- **SSOT:** `構成` シート（UinID + MID + モジュール名）— Product Spec: `flowchart-studio/docs/03_技術仕様/Excel入力フォーマット_v0.3.md` §6.4
-- **物理表のキー:** 各 Excel テーブル **直上 2 行**（行1: UinID · ユニット / 行2: MID · モジュール）— テンプレは `FlowTableMeta` + `_add_flow_table`（`workbook_builder.py`）が自動挿入
-- **正規化:** `tables._read_table_meta_rows` → `kosei.module_label_for_mid`。**ListObject 名は照合に使わない**
-- **互換:** 見出し 2 行が無い v0.2 / 旧 U0 手書きのみ `resolve_table_module_label`（テーブル名フォールバック）
-- **アンチパターン:** `動作(\d+)` を MID として `% 100` 照合（`動作00018` → MID 18 誤マップ）
-
-### Tk / CTk + pywebview · Excel COM（デスクトップ + 埋め込み Web）
-
-`flowchart-excel` の studio 相当プレビュー調査（2026-07）で確定。詳細 URL · ルート比較はリポ調査書を正本とする:  
-`yk-application/flowchart-excel/docs/03_技術仕様/調査_1窓WebView埋め込み_事前調査_2026-07-26.md`
-
-| 原則 | 内容 |
-|------|------|
-| **埋め込み** | **pywebview は tk Frame に埋め込まない**（メンテナ明言）。`webview.start` と tk `mainloop` は双方ブロッキング — **同一スレッド同居はアンチパターン** |
-| **真の1窓（HWND 1）** | pywebview 本体では不可。**tkwebview2**（EdgeChrome を WinForms 子 HWND 化）で CTk 内埋め込み可（`flowchart-excel` rev007）。失敗時は **2窓フォールバック**（別プロセス + `on_top`）を維持 |
-| **Excel COM** | Office OM はスレッドセーフではない（STA）。ライブ更新・ステータス・描画を同一プロセスに寄せるなら **単一ワーカー／キューで直列化** · 描画中はライブ停止 |
-| **製品約束** | 「常時 OS 最前面」を絶対約束にしない。ゴールは **Excel 操作中もプレビュー作業が継続できる**こと（1窓なら CTk `-topmost` · 2窓なら子 WebView `on_top` 等の**手段**は可） |
-
-- **アンチパターン:** pywebview を tk Frame に直接載せる · 同一プロセス化だけして COM を複数経路から叩く · 「常時最前面」を**製品の絶対約束文言**にする · **pywebview 6.x を tkwebview2 と無確認で混在**
-
-### tkwebview2 + pywebview 版固定（flowchart-excel 1窓 · 2026-07）
-
-`tkwebview2` 3.5.0 は pywebview 旧 API（`EdgeChrome.web_view.web_view`）前提。**pywebview 5+/6+ は `EdgeChrome.webview`** のため、6.x 混在で起動直後に `AttributeError` → exe が即終了する。
-
-加えて **`evaluate_js` も旧シグネチャ**（`script, semaphore, js_r`）のまま。pywebview 5+ は `evaluate_js(script, parse_json)` のため **TypeError で payload 注入が黙って失敗**する。症状: ステータスはライブ ON・画面は「プレビューデータを待機中…」。
-
-| やる | やらない |
-|------|----------|
-| `requirements.txt` で **`pywebview>=5,<6`**（または upstream 追随まで compat 維持） | `pip install pywebview` で 6.x を無条件に上げる |
-| 起動前に **`_ensure_tkwebview2_compat()`** — `__init__`（`self.web = edge.webview`）**と `evaluate_js`** を差し替え | `__init__` だけ直し `evaluate_js` を素のままにする |
-| 埋め込み注入は **`CoreWebView2.ExecuteScriptAsync`** を優先（失敗時リトライ · ログは warning 以上） | 例外を `debug` だけに埋めて UI 無反応のままにする |
-| WebView 初期 HWND サイズは **親 Frame 以下**（狭い1窓で読込ボタン等を覆わない） | 親より大きい固定 `800×480` で `MoveWindow` して放置 |
-| **埋め込み `__init__` 中に `update` / `update_idletasks` しない**（サイズは `after` で同期） | pythonnet STA 上で init 中に `update*` → **GIL fatal で exe 即終了** |
-| **CLR / pywebview `loaded` コールバックでは Tk を触らない**（フラグのみ · Tk メインの `after` pump で inject/resize） | `event_core_completed` / `loaded` から `winfo_*` · `after` · CTk を直接呼ぶ |
-| **STA スレッド**で tk mainloop（`main.py` 参照） | MTA スレッドから tkwebview2 初期化 |
-| PyInstaller: **`--collect-all=tkwebview2`** + webview 同梱（§下記） | webview のみ同梱して tkwebview2 を漏らす |
-| 埋め込み init 失敗時は **子 widget を destroy して 2窓 UI にフォールバック** | 失敗後に同一親へ `pack` 済み領域へ `grid` でエラー表示 |
-
-- **切り分け（起動即終了・ログに exception 無し）:** stderr に `PyEval_RestoreThread` / GIL → **init 中の `update*`** または STA/tk 競合を疑う
-- **切り分け（起動失敗）:** `dist/logs/app.log` の `embedded_preview_init_failed` · venv の `python main.py` は可で exe のみ不可 → 同梱漏れまたは pywebview 版不一致
-- **切り分け（読込無反応）:** `embedded_inject_failed` / `embedded_inject_ok` の有無。ライブ ON なのに「待機中」→ **evaluate_js 非互換または注入未到達**
-- **詳細 POC:** `yk-application/flowchart-excel/docs/03_技術仕様/POC_ルートA_結果_2026-07-27.md`
-- **実装参照:** `yk-application/flowchart-excel/app/ui/embedded_preview.py`（`_ensure_tkwebview2_compat`）
-
-### 隣接リポを Vite alias する preview-web は両側で npm install
-
-`flowchart-excel/preview-web` は `@` → `../../flowchart-studio` で studio の React Flow ソースをバンドルする。解決起点は studio 配下のため、**preview-web だけの `npm install` では `@xyflow/react` 等が解決できず** `vite build` / `build_exe.py` が失敗する。
-
-- **対策:** `c:/yk-application/flowchart-studio` でも `npm install` してから `python build_exe.py`（または `preview-web` の `npm run build`）
-- **アンチパターン:** preview-web 側だけ準備して「依存漏れ」と決めつける · studio 未 clone / 未 install のまま exe ビルド
-
-### Windows コンソール向け print に ✓ 等を書かない
-
-PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeError`** になり、`setup_venv.py` 等が venv 作成前に落ちることがある。
-
-- **対策:** セットアップ · ビルド脚本の stdout は ASCII（`[OK]` 等）。やむを得ず Unicode を出すなら `PYTHONIOENCODING=utf-8` または `sys.stdout.reconfigure(encoding="utf-8")`
-- **アンチパターン:** 成功マークに ✓ / ✔ を使う（凍結 exe の smoke 出力も同様 — 上記「凍結 exe の検証」参照）
-
-### PyInstaller は venv の Python 経由 · 遅延 import の webview を明示同梱
-
-`flowchart-excel`（2026-07）で、**ビルド成功なのに exe でプレビューが開かない**事例。原因は次の複合。
-
-1. **`build_exe.py` が PATH の `pyinstaller`（ストア版 Python）を呼んだ** — 依存は `.venv` に入れたが、解析環境には `webview` が無い  
-2. **`preview_host` が `try: import webview`（delayed + optional）** — Analysis が webview を必須扱いにせず、`--collect-all=webview` も「not a package」でスキップ  
-3. 結果: `preview-web/dist`（HTML）は同梱されるが **`webview` は PYZ に入らない** → 子プロセス `--flowchart-preview` が即終了し `{"error": "pywebview missing"}`（exit 2）
-
-| やる | やらない |
-|------|----------|
-| ビルド脚本は **`sys.executable -m PyInstaller`**（＝ `python build_exe.py` した同一環境） | 素の `pyinstaller` コマンド（PATH の別 Python） |
-| ビルド前に `import webview` で **同じ interpreter に入っているか**確認 | 「ビルド exit 0」だけ見て配布 |
-| `--hidden-import=webview`（必要なら `pythonnet` · `clr_loader` も） | delayed/optional import だけに任せた同梱 |
-| **1窓（tkwebview2）時:** `--collect-all=tkwebview2` も追加 | webview のみ同梱 |
-| ビルド後 smoke: `FlowchartExcel.exe --flowchart-preview payload.json result.json <dist>` が **exit 2 / pywebview missing でない**こと · **GUI 起動で `starting_app` のみで落ちない** | GUI 目視だけ · warn の `missing module named webview` を無視 |
-
-- **切り分け:** `.venv` の `python main.py` でプレビュー可 · 当該 exe だけ不可 → ほぼ同梱漏れ（Runtime / 別PC差分ではない）
-- **warn の合図:** `build/*/warn-*.txt` に `missing module named webview` があれば **配布禁止**で再ビルド
-
-### 依存を足したら venv 再インストール + build/ 削除でクリーンリビルド
-
-`toolkit`（2026-09-08）で、`requirements.txt` に `Pillow` を書いたのに **その `.venv` へ `pip install -r requirements.txt` を流し直していなかった**ため、T-2 以降ずっと凍結 `Toolkit.exe` で `bmp-resizer` プラグインが読み込み失敗していた（`resize.py` の `from PIL import Image` が hard import なのに同梱漏れ）。さらに `pip install` 後に素の `build_exe.py` を回しても **PyInstaller が `build/<name>` のキャッシュ解析を再利用し exe は Pillow なしのまま**。`build/<name>` と `dist/<name>.exe` を消して初めて反映された。
-
-| やる | やらない |
-|------|----------|
-| 依存追加後は **`.venv` へ `pip install -r requirements.txt` を流し直す** | `requirements.txt` を編集しただけで「入っている」とみなす |
-| ビルド前に **`requirements.txt` の各行が当該 interpreter で `import` できるか**確認（optional import だけでなく hard import も） | `import webview` 等 optional import だけ確認して満足する |
-| 依存が変わったら **`build/<name>` と `dist/<name>.exe` を削除してからリビルド** | `--noconfirm` の素ビルドでキャッシュ解析を再利用したまま配布 |
-| exe 起動確認は **`plugins_discovered` の件数と id 一覧を期待値と突き合わせ**、`plugin_without_plugin_module` の WARNING が 0 であることまで見る | `count > 0` や GUI 目視だけで OK とする |
-
-- **症状の別型:** §14 が書く `plugins_discovered count=0`（全滅）ではなく、**`count` が期待より 1 件少ない + `plugin_without_plugin_module | package=X`**（部分欠落・ダイアログ無し）。1 プラグインの hard import 依存が exe に無いと出る
-- **切り分け:** `.venv` の `python -c "import <dep>"` が可 · 当該 exe だけプラグイン欠落 → venv 未同期またはキャッシュ再利用
-
----
-
-## 14. YK パターン補足（yk-application 小型デスクトップ · Python）
-
-**対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
-
-**実例:** `bmp-resizer` · `excel-shape-arranger` · `toolkit`（旧 `excel-toolkit`。プラグイン集約）。置き場は `YK_APPLICATION_RULES` §6。
-
-**5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
-
-**Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（§13 Tk/CTk + Excel COM と同趣旨）。
-
-**Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM は UI スレッドのみ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
-
-**exe:** §13。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
-
-**テスト:** ドメインは unittest。COM 実機はユーザー担当。
-
-**プラグイン集約（複数ツールを 1 窓に · 実例 `toolkit`）:**
-
-- 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Office 非依存）+ `app/core/excel/` · `app/core/word/`（各 Office を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
-- **選択操作と全文走査は core へ寄せる** — 選択は `selection`（例: `as_cell_range` / `as_text_selection`）、文書・ブック全文の読取は `document` / `workbook`（例: `scan_active_document` / `scan_active_workbook`）。プラグイン内で `GetActiveObject` や全文読取を再実装しない（検出のみツールも書込なしのまま core 経由）。**アンチパターン:** プラグインごとに `word_scan.py` / `excel_scan.py` をコピーして COM 接続を二重管理する
-- 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
-- **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
-- PyInstaller: 動的 import は `--collect-submodules=app`（解析対象パッケージ）で同梱。漏れると凍結 exe の `plugins_discovered count=0`（1 プラグインの hard import 依存漏れは §13「依存を足したら…」参照）
-- **重量級・別スタックのツールは in-process 取り込みしない — launcher プラグイン方式**（`toolkit` の `flowchart-excel`＝React Flow の Web アプリ。2026-09-08）。`app/plugins/<name>/launcher.py` に exe 探索と起動を閉じる: 探索順は **環境変数 override → Toolkit.exe 同梱 / 開発時 `dist/` → 隣接リポ `../<tool>/dist/` → `PATH`**、起動は `subprocess.Popen`（Windows は `creationflags=subprocess.DETACHED_PROCESS`・`cwd=exe.parent`）、未検出時は解決手順つき `ToolError`。純関数コピーは不要（起動するだけ）。GUI は「起動」＋「exe を指定…」程度に留める
-  - **アンチパターン:** 別スタックのツールを移植して二重管理を増やす · `Popen(**kwargs)` に `dict[str, object]` を渡す（mypy `call-overload`。キーワード引数を明示するか platform 分岐で書く）
-
-**COM ツールのウィンドウを前面に保つ（`StayOnTop` · 2026-09-08）:**
-
-- **症状:** 起動中の Excel/Word を COM 操作すると、Office 窓が前面を取り自ツール窓が背面へ落ちる。ユーザーが「先に Excel で選択」と Office をクリックした時点でも同じ。`lift()` 単体では戻らない（Windows のフォアグラウンドロック）。
-- **対策:** `-topmost` ビットのトグル（**パルス**＝一瞬 True にして戻す）はバックグラウンドからでも許可される。これで前面へ引き上げる。あわせて「常に最前面」チェックボックス（**既定 ON・セッション限り・設定は永続化しない**＝要求定義の「設定永続化しない」に抵触させない）を置く。
-- **共通ヘルパ `app/ui/stay_on_top.py`**（`StayOnTop` クラス。純関数コピーと同じ方式で各リポへ**コピー**・相互 import しない）:
-  - `StayOnTop(win, *, default=True)` — `super().__init__()` の後、`_build_ui()` の前に生成（import 時に Tk 変数を作らないルールと同じ理由）
-  - `.checkbox(parent)` → 「常に最前面」`CTkCheckBox` を返す。配置はフッターへ呼び出し側が `grid`
-  - `.raise_window()` — **COM 操作の完了・エラー時**（各 `_on_*_done` の `_set_busy(False)` 直後、ハブは `_finish`）に呼ぶ。ON ならそのまま最前面、OFF なら `-topmost` パルスで一度だけ復帰
-  - `tk.TclError` は握りつぶす（ウィンドウ破棄後）
-- **`messagebox` は `parent=self`** を渡す（親に紐付き前面化する）。
-- **適用対象:** 起動中 Office を COM 操作するデスクトップツールすべて（`toolkit` ハブ · `excel-kana-toggle` · `word-kana-toggle` · `term-consistency-checker` · `excel-shape-arranger` · `figure-renumberer`）。**Office 非 COM ツール（`bmp-resizer` 等）は対象外**（隠れる相手がいない）。
-- **新規ツール:** Windows GUI で Office を COM 操作するなら最初から組み込む（`creating-personal-tool-yk` の雛形）。
-- **テスト:** GUI 部品のため `theme.py` 同様ユニットテストは置かない。構築スモーク（`App(); app.update(); app.destroy()`）で足りる。
-
----
-
-## 15. 変更履歴（L1）
+## 13. 変更履歴（L1）
 
 | 日付 | 内容 |
 |------|------|
-| 2026-09-08 | §14 COM ツールのウィンドウ前面維持（`StayOnTop` = `-topmost` パルス + 常に最前面トグル · `messagebox(parent=self)`。非 COM は対象外）（toolkit 他 COM 5 ツール） |
-| 2026-09-08 | §14 Word COM は Excel と同型 · 選択/全文走査は `app/core` へ寄せる（toolkit U-1〜U-3） |
-| 2026-09-08 | §13 依存追加後は `.venv` 再 install + `build/` 削除でクリーンリビルド · 部分欠落症状（`count` 1 件少 + `plugin_without_plugin_module`）（toolkit Pillow 同梱漏れ） |
-| 2026-09-08 | §14 重量級・別スタックは launcher プラグイン方式（`subprocess.Popen` + 多段 exe 探索 + `ToolError`。in-process しない）（toolkit flowchart-excel T-4） |
-| 2026-09-08 | §14 プラグイン集約の実例を `excel-toolkit`→`toolkit` へ更新（core を `ToolPlugin`(汎用) + `app/core/excel/`(Excel 専用) へ分離） |
-| 2026-09-07 | §14 プラグイン集約（`excel-toolkit`）— registry 自動収集 · 純関数コピー · Tk 変数は `build_panel` で · `--collect-submodules` |
-| 2026-09-07 | §14 exe — 新設でビルドするかは `creating-personal-tool-yk` |
-| 2026-09-07 | §14 を Python デスクトップ限定と明記（自作ツール全体はスキル側） |
-| 2026-09-07 | §14 yk-application 小型デスクトップ（docs/ · GetActiveObject · 別リポ） |
-| 2026-09-01 | §13 ソース変更後は dist exe 再ビルド必須（エージェント向け · bmp-resizer） |
-| 2026-07-27 | §13 tkwebview2 — `evaluate_js` 互換 · ExecuteScriptAsync 注入 · HWND≤親 · topmost は手段（flowchart-excel） |
-| 2026-07-27 | §13 tkwebview2 + pywebview 版固定 · 1窓 compat · PyInstaller tkwebview2 同梱（flowchart-excel rev007） |
-| 2026-07-27 | §13 PyInstaller — venv 経由必須 · delayed webview 同梱漏れ（flowchart-excel プレビュー） |
-| 2026-07-27 | §13 flowchart-excel — 隣接 studio の npm install · setup 脚本の cp932/✓ 回避 |
-| 2026-07-26 | §13 Tk/CTk + pywebview · Excel COM · 真の1窓（flowchart-excel 事前調査） |
-| 2026-06-28 | §13 v0.3 フロー表↔モジュール — MID 見出し行 · ListObject 名非使用（excel_normalize） |
-| 2026-06-28 | §13 PyInstaller · GUI exe パターン追記（flowchart-studio 変換 exe） |
-| 2026-07-01 | §12 プレースホルダー行 sentinel 終端判定 · 外部ツール向け Shift-JIS 出力パターン追記（comment-studio） |
+| 2026-09-09 | P14f · 旧 §12–§14 を `40_python/references/PYTHON_*.md` へ分割。L1 は索引 + 着手前チェック + Quit 所有権 MUST |
+| 2026-09-09 | （分割前）StayOnTop / フォント / ruff pin / ハブ純モジュール 等は Git 履歴および L3 を正とする |

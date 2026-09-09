@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-09-07（No 18 クイック入口 · 自作ツール）
+**最終更新:** 2026-09-09（新規手順 · Cursor preToolUse ゲート）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -39,7 +39,7 @@
 | 調査のみ · Shell 抑制 | 62 | `60_tooling/AGENT_SHELL_RULES.md` | [Shell](RULE_ROUTING_PLAYBOOK.md#読む順序agent-が-shell-を使うとき) | `yk-skill` · `agent-shell-yk`（always） |
 | 品質ゲート · lint/hook/CI | 63 | `60_tooling/QUALITY_GATE_RULES.md` | L1 直接 | `quality-gates-yk`（flowchart 等） |
 | 横断スクリプト · hook 用ユーティリティ | 64 | `60_tooling/WORKSPACE_SCRIPTS_RULES.md` | L1 → `yk-tool/scripts/README.md` | — |
-| Python `.py` · **PyInstaller exe** | 41 | `40_python/PYTHON_RULES.md` §13 | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
+| Python `.py` · **PyInstaller exe** | 41 | `40_python/PYTHON_RULES.md` §12 索引 · L3 `PYTHON_PYINSTALLER_GUI.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | FastAPI · APIRouter · UploadFile | 42 | `40_python/FASTAPI_RULES.md` | [FastAPI](RULE_ROUTING_PLAYBOOK.md#読む順序fastapi-api-を触るとき) | —（draft · スキル未整備） |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
@@ -263,7 +263,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 ## 新規ルールの追加手順
 
 1. **帯を選ぶ**（上表「帯の意味」）。該当なしなら **70_** など空き帯を `RULE_INDEX` に定義してから作成
-2. `rule/{帯}/{TOPIC}_RULES.md` を作成（**~250 行目安**（理想 · `PROGRESSIVE` §2）。**500 行超**は `references/` へ · `audit-rule-line-counts.ps1`）
+2. `rule/{帯}/{TOPIC}_RULES.md` を作成（**~250 行目安**（理想 · `PROGRESSIVE` §2）。**500 行超**は `references/` へ · `audit-rule-line-counts.ps1`）。追記後はフックが行数を注入。L1 500超と Delete・壊滅縮小は `preToolUse` が拒否
 3. **本表に行を追加**（No · path · いつ読む · status）
 4. **[RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)** に読む順序節を追加 · クイック入口表のリンクを同期
 5. 既存 rule / スキルから **絶対パス `c:/yk-skill/rule/{帯}/{FILE}`** でリンク（`SKILL_AUTHORING` §12 準拠）

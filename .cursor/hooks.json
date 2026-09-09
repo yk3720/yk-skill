@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/before-rule-edit.ps1",
+        "matcher": "Write|StrReplace|Delete",
+        "failClosed": false
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .cursor/hooks/after-rule-edit.ps1",
+        "matcher": "Write|StrReplace",
+        "failClosed": false
+      }
+    ]
+  }
+}

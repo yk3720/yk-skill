@@ -23,6 +23,7 @@ Excel (win32com)、ファイル操作、およびデスクトップアプリ固�
       pythoncom.CoUninitialize()
   ```
 - **Excel定数**: `win32com.client.constants` を参照。
+- **適用範囲:** 自前 `Dispatch` で起こしたプロセスのみ `Quit`。起動中 `GetActiveObject` は **Quit 禁止** → `c:/yk-skill/rule/40_python/references/PYTHON_YK_DESKTOP.md`。
 
 ### [K-011] Atomic保存 (Atomic Save)
 - **データ破損防止**: 直接上書きせず、一時ファイル（`.tmp`）に書き出し、成功後に `os.replace()` で置換せよ。

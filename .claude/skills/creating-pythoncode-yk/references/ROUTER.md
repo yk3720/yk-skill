@@ -4,13 +4,15 @@
 **要約・MUST:** `yk-skill/rule/40_python/PYTHON_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン（他言語向け）:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-05-23
+**最終更新:** 2026-09-09（P14f）
 
 ---
 
 ## 0. 禁止・原則
 
-- `references/` の **全ファイルを毎回 Read しない**
+- スキル `references/` の **全ファイルを毎回 Read しない**
+- `rule/40_python/references/PYTHON_*.md` の **全ファイルを毎回 Read しない**（tag に応じた 1 本のみ · Ref Plan `load`）
+- `FASTAPI_*.md`（`40_python/references/`）は **FASTAPI_RULES.md 経路**（本 ROUTER の load 対象にしない）
 - `5.Python/0.ルール・操作方法/*rev*.md` を毎回 Read しない（アーカイブ）
 - ロード表を `SKILL.md` や `PYTHON_RULES.md` に **複製しない**（リンクのみ）
 
@@ -41,6 +43,22 @@
 - 複数モジュールにまたがる
 - ユーザーが「品質ゲート厳守」を明示
 
+**強制（Light 禁止 · Standard 以上）:** 対象パスが `c:/yk-application/`、またはシグナルが `GetActiveObject` / `StayOnTop` / `build_exe` / `ToolPlugin` のとき。tag に **`yk_desktop` を必ず付ける**（任意にしない）。exe を変えるなら **`exe` も**。
+
+### 2.1 L1 references — tag 別 floor（Standard / Full）
+
+**正本パス:** `c:/yk-skill/rule/40_python/references/`（L1 §12 索引と同型）
+
+| tag | 追加 Read |
+|-----|-----------|
+| `yk_openpyxl` | `c:/yk-skill/rule/40_python/references/PYTHON_OPENPYXL_DATA.md` |
+| `yk_desktop` | `c:/yk-skill/rule/40_python/references/PYTHON_YK_DESKTOP.md` |
+| `yk_webview` | `c:/yk-skill/rule/40_python/references/PYTHON_PYINSTALLER_GUI.md`（tkwebview2 節） |
+| `exe` | KB `04` · `memo` **に加え** `PYTHON_PYINSTALLER_GUI.md` |
+| `excel` | KB `02` · `06` **に加え** `PYTHON_OPENPYXL_DATA.md` |
+
+**複数 tag:** 該当する reference を **重複なく** Ref Plan `load` に列挙。
+
 ---
 
 ## 3. Tag — floor に加算（OR）
@@ -48,13 +66,16 @@
 | tag | 追加で Read |
 |-----|-------------|
 | `new_project` | `ファイル構成について.md` · `Python_9_設計墓場・廃止規律記録.md` · テンプレ 3〜8（`Python_3`〜`Python_8`）· KB `02` · `04` |
-| `excel` | KB `02_共通品質` · `06_Excel連携` |
+| `excel` | KB `02_共通品質` · `06_Excel連携` · `PYTHON_OPENPYXL_DATA.md` |
 | `gui` | KB `02` · `04`（K-003 DPI 等） |
 | `streamlit` | KB `07_Streamlit` · （UI/通知なら KB `02` も） |
 | `external` | KB `05_外部連携` |
-| `exe` | KB `04_環境・配布` · `memo_操作方法.md` |
+| `exe` | KB `04_環境・配布` · `memo_操作方法.md` · `PYTHON_PYINSTALLER_GUI.md` |
 | `deadline` | `deadline-protocol.md` |
 | `skill_update` | `yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` · `principles.md` · `ssot-audit.md` |
+| `yk_openpyxl` | `PYTHON_OPENPYXL_DATA.md` |
+| `yk_desktop` | `PYTHON_YK_DESKTOP.md` |
+| `yk_webview` | `PYTHON_PYINSTALLER_GUI.md`（tkwebview2 節） |
 
 **Full tier:** 上記 tag に加え、該当テンプレ・`count_stats.py`（物理計量する場合）を Read。
 
@@ -66,8 +87,12 @@
 
 | シグナル | tag |
 |----------|-----|
-| `openpyxl`, `xlsx`, `xlwings`, Excel 操作 | `excel` |
+| `openpyxl`, `data_only`, `shift_jis`, `cp932` | `yk_openpyxl`（+ `excel`） |
+| `xlsx`, `xlwings`, Excel 操作 | `excel` |
 | `customtkinter`, `tkinter`, GUI ウィンドウ | `gui`（Excel 併用なら `excel` も） |
+| `yk-application` 内の `customtkinter` | `gui` + `yk_desktop` |
+| `GetActiveObject`, `StayOnTop`, `ToolPlugin`, `c:/yk-application/` | `yk_desktop` |
+| `tkwebview2`, `pywebview` 埋め込み | `yk_webview` |
 | `streamlit`, `st.`, Plotly in Streamlit | `streamlit` |
 | `httpx`, `requests`, スクレイピング, SQLite 外部 | `external` |
 | `PyInstaller`, `build_exe`, `.spec`, 配布 | `exe` |
@@ -136,3 +161,6 @@
 | 設計墓場 | `Python_9_設計墓場・廃止規律記録.md` |
 | ファイル構成 | `ファイル構成について.md` |
 | memo | `memo_操作方法.md` |
+| PYTHON_OPENPYXL_DATA | `c:/yk-skill/rule/40_python/references/PYTHON_OPENPYXL_DATA.md` |
+| PYTHON_PYINSTALLER_GUI | `c:/yk-skill/rule/40_python/references/PYTHON_PYINSTALLER_GUI.md` |
+| PYTHON_YK_DESKTOP | `c:/yk-skill/rule/40_python/references/PYTHON_YK_DESKTOP.md` |
