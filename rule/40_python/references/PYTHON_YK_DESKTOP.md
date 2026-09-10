@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `yk_desktop`  
-**最終更新:** 2026-09-10（着手前チェックのフォント名を `BIZ UDPゴシック` に統一 · Python 3.13 運用の現実を明記 · `skill-doc-viewer` を実例へ · watchdog 併用時は `PYTHON_PYINSTALLER_GUI.md`）
+**最終更新:** 2026-09-10（Word 書き換えの落とし穴に 8・9 追加 = `Range.Text` 長 ≠ 文字位置（`\x07` 0 幅）で末尾重複 · `Paragraphs.Item(i)` ループ O(N²) フリーズ · `word-kana-toggle` v0.3.1／着手前チェックのフォント名を `BIZ UDPゴシック` に統一 · Python 3.13 運用の現実 · `skill-doc-viewer` を実例へ）
 
 exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本ファイルは **yk-application 小型 GUI**（COM 所有権 · StayOnTop · プラグインハブ）。
 
@@ -30,15 +30,17 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM は UI スレッドのみ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
 
-**Word の選択範囲を書き換えるツールの落とし穴（`word-kana-toggle` v0.3.0 · 2026-09-10 で全部踏んだ）:**
+**Word の選択範囲を書き換えるツールの落とし穴（`word-kana-toggle` v0.3.0〜v0.3.1 · 2026-09-10 で全部踏んだ）:**
 
-1. **表をまたぐ `Selection.Range.Text = …` 一括代入は表を破壊**（セル境界・行・段落が潰れる）。**`Range.Find` の `wdReplaceAll` は表で激遅**（置換ごとにセル再レイアウト。実測: 表1個17箇所で20〜30秒。`ScreenUpdating=False` でも止まらない）。→ `Selection.Range.Tables.Count` で分岐。**表なし**=`Range.Text` 1回 / **表あり**=`Selection.Range.Paragraphs` を**末尾から**、段落ごとに末尾マーカー（`\r` `\x07` 等）を除いた本文だけ `doc.Range(...).Text =`（後ろから編集で位置ずれ回避・対象なし段落は書かない）。
+1. **表をまたぐ `Selection.Range.Text = …` 一括代入は表を破壊**（セル境界・行・段落が潰れる）。**`Range.Find` の `wdReplaceAll` は表で激遅**（置換ごとにセル再レイアウト。実測: 表1個17箇所で20〜30秒。`ScreenUpdating=False` でも止まらない）。→ `Selection.Range.Tables.Count` で分岐。**表なし**=`Range.Text` 1回 / **表あり**=`Selection.Range.Paragraphs` を**末尾から**、段落ごとに **本文レンジ `doc.Range(para.Range.Start, para.Range.End - 1)`**（`\r` を除く。下記 8）へ `.Text =`（後ろから編集で位置ずれ回避・対象なし段落は書かない）。
 2. **`Find.Execute` 等 多引数 COM メソッドはキーワード引数が凍結 exe（`gen_py` 不在＝純遅延バインディング）で無言失敗**し既定値で走る（`Replace` が `wdReplaceNone` に落ち「変わらないのにエラーも出ない」。`.venv` の `python main.py` は makepy で動くので exe だけ再現）。→ プロパティ設定 + 全引数を位置指定。`Execute` の戻り値も見る。
 3. **書き込みは「実測」で成否を出す**（計画件数を success 表示にしない）。書戻し後に領域を読み直し、純関数で「残っている対象数」を数え `変換済み = 総数 − 残り`。`0`→エラー / `<総数`→「一部だけ N/M」/ `==総数`→成功。**完全一致のバイト比較を成功条件にしない**（フィールドコード `\x13…\x15` 等で `Selection.Text` と `Range.Text` の表現が食い違い、中身が合っていても「未確認」に落ちる。診断ログ止まり）。
 4. **書戻し後は変換後領域を `Select()` し直す**（積算した長さ差分 `delta` から `doc.Range(開始, 元終端+delta)`）。サブ範囲編集や `Range.Text=` で Selection は崩れ、`開始+len(期待値)` の位置推定はマーカー差でずれる。再選択で読み直しが `Selection.Range.Text` 基準になり、ユーザーも続けて操作できる。
 5. **`Range.Paragraphs` はテキストボックス・図形・フィールド・ヘッダー/フッター・脚注の中を辿らない**。段落を歩く書き換えはそれらを素通りする（`Range.Text` にも出ないので実測でも検知不可）。対象にするなら `Range.ShapeRange` → `shape.TextFrame.TextRange` を別途。
 6. **`len(Selection.Text)` は画面の文字数より多い**（`\r` `\x07` `\x0c` 等を含む）。上限判定・件数表示はこれらを除いた数で（`word-kana-toggle` の `strip_structural_markers`）。
 7. **変換中だけ `ScreenUpdating` と `Options.CheckSpellingAsYouType` / `CheckGrammarAsYouType` を OFF**（`finally` で復元）。`TrackRevisions` が ON なら warning（勝手に切らない）。
+8. **`Range.Text` の文字数と文字位置は一致しない。** `\x07`（セル/行終端）は `Range.Text` に出るが**位置を 0 しか占めない**（実機ログ `Range(a,b).Text` 長 = `b-a+1`）。`\x13…\x15` フィールド・貼り込み画像も同種。→ **書き込みレンジの終端をテキスト長の引き算で出さない**（`span_end - len(tail)` は `\x07` のぶん 1 引きすぎ、本文末尾が範囲外に残って**変換のたび末尾が 1 文字重複**する。`word-kana-toggle` v0.3.1 実機バグ）。段落本文は `para.Range.End - 1`（`\r` は必ず 1 位置）で取る。
+9. **`Range.Paragraphs` を `.Item(i)` で `i=1..N` 回さない。** `Paragraphs` は内部が連結リストで `.Item(i)` は毎回頭から辿る → **O(N²)**。文書全体を選ぶと `WINWORD` が 1 コア回しっぱなしでツールごとフリーズ（UI スレッド同期実行なら GUI も固まる）。**列挙子で 1 度だけ舐める**（`for para in paragraphs:`）= O(N)。加えて段落数の上限（`MAX_PARAGRAPHS`）で門番し、超過は書き込む前に弾く。長時間になる表あり書戻しは段落ループの合間に `progress(done,total)` コールバック + `update()` で進捗バー / 中断を出す（`word-kana-toggle` v0.3.1）。
 
 **exe:** [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
 
