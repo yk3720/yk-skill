@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `exe` · `yk_webview`  
-**最終更新:** 2026-09-09（P14f · L1 §13 から分割）
+**最終更新:** 2026-09-10（tkinterweb 4.x の frozen 同梱 · watchdog 併用時の型注釈とスレッド安全を追記 · `skill-doc-viewer` で確定）
 
 汎用の `sys.frozen` パス解決はスキル KB `Python_2_技術ナレッジベース_04_環境・配布.md`（K-001）。本ファイルは **PyInstaller GUI exe**（relative import · 同梱 · tkwebview2）。プラグイン欠落の症状差は [`PYTHON_YK_DESKTOP.md`](PYTHON_YK_DESKTOP.md)。
 
@@ -83,6 +83,34 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 - **切り分け（読込無反応）:** `embedded_inject_failed` / `embedded_inject_ok` の有無。ライブ ON なのに「待機中」→ **evaluate_js 非互換または注入未到達**
 - **詳細 POC:** `yk-application/flowchart-excel/docs/03_技術仕様/POC_ルートA_結果_2026-07-27.md`
 - **実装参照:** `yk-application/flowchart-excel/app/ui/embedded_preview.py`（`_ensure_tkwebview2_compat`）
+
+### tkinterweb 4.x（CTk 内埋め込み Markdown/HTML ビュー）の frozen 同梱
+
+`skill-doc-viewer`（2026-09-10）で確定。単一ウィンドウ内に HTML を出したいだけなら
+tkwebview2 + pywebview の重量スタックより `tkinterweb.HtmlFrame` が軽い（描画は Tkhtml3 ＝
+**HTML 4.01 / CSS 2.1 まで**。flexbox・CSS 変数・角丸・影・`rem` は無効。CSS は 2.1 で手書きする）。
+
+- **バイナリは別パッケージ:** tkinterweb 4.x は Python 層 `tkinterweb` と、プリビルド Tkhtml
+  （`libTkhtml3.0.dll`）を持つ `tkinterweb-tkhtml` に分割されている。**`--collect-all=tkinterweb`
+  だけでは DLL が入らず**、frozen 実行時に描画層ごと落ちる（GUI が即終了 or 白画面）。
+- **やる:** `build_exe.py` に `--collect-all=tkinterweb_tkhtml`（import 名なのでハイフンでなく
+  **アンダースコア**）を追加し、保険で `--collect-data=tkinterweb --collect-binaries=tkinterweb` も。
+  `pyinstaller-hooks-contrib` を `requirements.txt` にピン。
+- **ビルド後スモーク:** `dist/<App>/_internal/tkinterweb_tkhtml/tkhtml/libTkhtml3.0.dll` の存在と、
+  `--add-data` した `assets/` の同梱を目視。`warn-*.txt` の `missing module named PIL` は
+  画像描画（`PIL.ImageTk`）用 — 画像を出すなら `Pillow` を依存に足す（出さないなら optional で可）。
+- **リソースパス:** CSS 等は `sys._MEIPASS` 分岐の1関数（K-001）経由。`__file__` / cwd 相対で開かない。
+- **onedir → onefile:** frozen 差分の切り分けが速いので onedir で DLL 同梱を確認してから onefile。
+
+### watchdog を併用するとき（ライブリロード）
+
+- **`watchdog.observers.Observer` は型ではなくファクトリ関数。** mypy で `Observer | None` を
+  注釈にすると `valid-type` エラー。型注釈は `from watchdog.observers.api import BaseObserver` を使う。
+- コールバックは**別スレッド**で発火する。Tk はスレッドセーフでないので、ハンドラから
+  ウィジェットを直接触らず `root.after(0, cb)` で UI スレッドへ渡す。純粋なデバウンス判定は
+  時刻を引数で受ける関数に切り出してユニットテストする。
+- エディタの atomic save（temp 書き込み→rename）は `on_modified` では届かない。
+  `on_modified` / `on_created` / `on_moved`(dest) / `on_deleted` の4種を購読する。
 
 ### 隣接リポを Vite alias する preview-web は両側で npm install
 

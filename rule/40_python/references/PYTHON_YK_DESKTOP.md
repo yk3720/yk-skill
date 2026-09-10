@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `yk_desktop`  
-**最終更新:** 2026-09-09（P14f · L1 §14 から分割 / 種別グループ見出しはバー・選択中項目は複数手掛かりで強調）
+**最終更新:** 2026-09-10（着手前チェックのフォント名を `BIZ UDPゴシック` に統一 · Python 3.13 運用の現実を明記 · `skill-doc-viewer` を実例へ · watchdog 併用時は `PYTHON_PYINSTALLER_GUI.md`）
 
 exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本ファイルは **yk-application 小型 GUI**（COM 所有権 · StayOnTop · プラグインハブ）。
 
@@ -10,12 +10,12 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
 
-**実例:** `bmp-resizer` · `excel-shape-arranger` · `toolkit`（旧 `excel-toolkit`。プラグイン集約）· `word-table-formatter`。置き場は `YK_APPLICATION_RULES` §6。
+**実例:** `bmp-resizer` · `excel-shape-arranger` · `toolkit`（旧 `excel-toolkit`。プラグイン集約）· `word-table-formatter` · `skill-doc-viewer`（非 COM。tkinterweb 埋め込みで yk-skill の rule/skills MD をビュー。CSS 2.1 天井は各リポ decision-log）。置き場は `YK_APPLICATION_RULES` §6。
 
 ### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
 
 - [ ] Office を COM 操作するなら **`StayOnTop`**（`app/ui/stay_on_top.py` をコピー · `_finish`/完了時に `raise_window()` · `messagebox(parent=self)`）。非 COM は不要
-- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `Yu Gothic UI` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）
+- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `BIZ UDPゴシック` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）· 選定理由は下記「フォントファミリ」節
 - [ ] **`pyproject.toml [tool.ruff] select` を明示 pin**（例 `["E","F","I","UP","B"]`）。未 pin リポは変更スコープ内のみ green を基準 · `main.py` DPI catch は `# noqa: BLE001`
 - [ ] **`tk.StringVar()` を import 時に作らない** — `build_panel` / Tk root 確定後に生成
 - [ ] 純ロジックは `app/core/` や Tk 非依存モジュールへ分離しユニットテスト（COM 実機はユーザー担当）
@@ -23,6 +23,8 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 - [ ] exe は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)（`build/<name>` + `dist/<name>.exe` 削除 → **venv の** `build_exe.py` → `plugins_discovered` 件数・id を突き合わせ）
 
 **5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
+
+**Python バージョン（現実）:** yk-application デスクトップ群は**事実上 Python 3.13 運用**（この開発 PC に 3.12 が無い。`toolkit` の venv も 3.13）。`.python-version` の `3.12` 系の記述は「3.12 が使える環境ではそちらを優先」という努力目標であって、3.13 で作って構わない。`requires-python` は `>=3.12` に留め、上限で 3.13 を弾かない。tkinterweb の 3.13 系不具合（空 `<title>` で `TclError`）に当たるなら、生成 HTML の `<title>` を必ず非空にして回避する（`skill-doc-viewer` の `render.py` 参照）。
 
 **Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md) Tk/CTk + Excel COM と同趣旨）。
 
@@ -36,7 +38,7 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **フォント統一（CTk）:** CTk 既定の `Roboto` は日本語グリフを持たず、Tk が **文字ごとに system フォントへ fallback** するため、日本語混在 UI が「フォントバラバラ」に見える（`toolkit` で発覚。ラベル・ボタン・見出しで別々の和文フォントに落ちる）。`app/ui/theme.py` を 1 ファミリ SSOT にし、`apply_theme()` で `ctk.ThemeManager.theme["CTkFont"]["family"]` を **Latin+日本語を 1 面で賄うフォント**へ上書きする（明示 `font=` 未指定の widget も揃う）。サイズ・太さ違いは `font_title()` / `font_body()` / `font_small()` の factory 経由にし、`ctk.CTkFont(size=...)` を各 widget へ直書きしない。`apply_theme()` は `ctk.CTk.__init__` 呼び出し前（widget 生成前）に呼ぶ — 個別の `set_appearance_mode` / `set_default_color_theme` 直書きは `theme.py` に一本化し呼び出し側へ残さない。
 **フォントファミリ:** `BIZ UDPゴシック`（モリサワ製ユニバーサルデザインフォント。Windows 10 October 2018 Update 以降 標準搭載・プロポーショナル版）。似た形の数字・かな濁点半濁点を判別しやすい UD 設計で、小サイズ UI の視認性を優先し採用（2026-09-10 · Web 調査で `Yu Gothic UI` 比較のうえ乗り換え）。固定ピッチ版 `BIZ UDゴシック` は表形式など桁揃えが要る場面用で UI 既定には使わない。旧 `Yu Gothic UI`（Windows 既定 UI フォント）も許容候補ではあるが、新規/横展開は `BIZ UDPゴシック` を既定とする。
-**適用対象:** `toolkit` · `bmp-resizer` · `excel-kana-toggle` · `excel-shape-arranger` · `figure-renumberer` · `term-consistency-checker` · `word-kana-toggle`（2026-09-09 全 7 リポへ `theme.py` 横展開 · 2026-09-10 `BIZ UDPゴシック` へ乗り換え）。**新規ツール:** `creating-personal-tool-yk` の雛形で最初から `theme.py` を持つ。
+**適用対象:** `toolkit` · `bmp-resizer` · `excel-kana-toggle` · `excel-shape-arranger` · `figure-renumberer` · `term-consistency-checker` · `word-kana-toggle`（2026-09-09 全 7 リポへ `theme.py` 横展開 · 2026-09-10 `BIZ UDPゴシック` へ乗り換え）· `skill-doc-viewer`（2026-09-10 新設。`theme.py` を CTk と tkinterweb の CSS 両方の SSOT にし `dynamic_css()` で `<style>` 注入）。**新規ツール:** `creating-personal-tool-yk` の雛形で最初から `theme.py` を持つ。
 
 **プラグイン集約（複数ツールを 1 窓に · 実例 `toolkit`）:**
 

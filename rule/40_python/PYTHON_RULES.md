@@ -12,7 +12,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-09-09（P14f · §12–§14 を `40_python/references/` へ分割）  
+**最終更新:** 2026-09-10（§2 環境に小型 yk-application デスクトップの `uv.lock` なし例外を明記 · 着手前チェックのフォントは `BIZ UDPゴシック`）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -47,7 +47,7 @@
 |------|------|
 | 依存方向 | **UI → Schemas ← Core**（循環参照禁止） |
 | ファイルサイズ | `app/` 内 1 ファイル **500 行以内**（超える前に分割） |
-| 環境 | **uv** + `pyproject.toml` + `uv.lock` + `.python-version` |
+| 環境 | **uv** + `pyproject.toml` + `uv.lock` + `.python-version`（**例外:** 小型 yk-application デスクトップは bmp-resizer 型 = `requirements.txt` + `pyproject.toml` · `uv.lock` なし。詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)） |
 | 静的解析 | **Ruff**（`ruff check --fix`）+ **mypy**（`uv run mypy`）をリリース前に実行 |
 | エントリ | `main.py` 先頭で **インポート・ハイジーン [K-002]**（`sys.path` 聖域化） |
 | パス | `sys.frozen` 判定で exe 内外を分離 **[K-001]** |
@@ -210,5 +210,6 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-10 | §2 環境: 小型 yk-application デスクトップの `uv.lock` なし例外を明記（L3 `PYTHON_YK_DESKTOP.md` が SSOT）。着手前チェックのフォント名は `BIZ UDPゴシック` に統一済 |
 | 2026-09-09 | P14f · 旧 §12–§14 を `40_python/references/PYTHON_*.md` へ分割。L1 は索引 + 着手前チェック + Quit 所有権 MUST |
 | 2026-09-09 | （分割前）StayOnTop / フォント / ruff pin / ハブ純モジュール 等は Git 履歴および L3 を正とする |

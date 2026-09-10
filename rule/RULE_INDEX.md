@@ -305,6 +305,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | workspace-ui-kit（キット横断・採用管理雛形） | `c:/yk-tool/workspace-ui-kit/` | 移行元: `yk-skill/workspace-ui-kit/` |
 | 図解管理 UI（Next） | `c:/yk-tool/diagram-manager-web/` | 正本（`app/page.tsx`）· ui-kit の `/diagram-manager` は移行案内のみ（No 22） |
 | フローチャート Web（React Flow） | `c:/yk-application/flowchart-studio/` | ADR-010 · 表 → React Flow |
+| yk-application デスクトップツール（独立 Git） | `c:/yk-application/{slug}/` | 例: `toolkit` · `bmp-resizer` · `skill-doc-viewer`（yk-skill の rule/skills MD ビューワ）· 置き場は `YK_APPLICATION_RULES` §6 |
 | フローチャート Web（Mermaid 比較） | `c:/yk-tool/flowchart-web-mermaid/` | ADR-010 · 表 → Mermaid プレビュー |
 | Playwright E2E | `c:/yk-tool/playwright-test/` | 移行元: `yk-skill/playwright-test/`（2026-05-23） |
 | Python デスクトップツール | `c:/1.cursor/5.Python/` | 新規本番は必要分のみ **新フォルダへ移出** · `revision-protection` 適用 |
