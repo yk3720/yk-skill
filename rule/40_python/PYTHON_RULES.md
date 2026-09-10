@@ -194,6 +194,8 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 
 **Excel / Word 所有権（MUST）:** 自前 `Dispatch` で起こしたプロセスは KB K-010 どおり `Quit`。起動中 `GetActiveObject` は **Quit しない**（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)）。
 
+**COM 書き込み（MUST）:** `Range.Find.Execute` 等の多引数メソッドは **位置指定**で呼ぶ（凍結 exe の遅延バインディングでキーワード引数が無言で既定値に落ちる）。**表をまたぐ選択に `Range.Text` 一括代入も `Range.Find` の ReplaceAll も使わない**（前者は表破壊、後者はセル再レイアウトで激遅）— 表なしは一括 / 表ありは段落単位の `Range.Text`。書き込みは書戻し後の読み直しで**実測**し「計画件数」を成功表示にしない（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)）。
+
 ### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
 
 - [ ] Office を COM 操作するなら **`StayOnTop`**（`app/ui/stay_on_top.py` をコピー · `_finish`/完了時に `raise_window()` · `messagebox(parent=self)`）。非 COM は不要

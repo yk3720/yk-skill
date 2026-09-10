@@ -30,11 +30,23 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM は UI スレッドのみ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
 
+**Word の選択範囲を書き換えるツールの落とし穴（`word-kana-toggle` v0.3.0 · 2026-09-10 で全部踏んだ）:**
+
+1. **表をまたぐ `Selection.Range.Text = …` 一括代入は表を破壊**（セル境界・行・段落が潰れる）。**`Range.Find` の `wdReplaceAll` は表で激遅**（置換ごとにセル再レイアウト。実測: 表1個17箇所で20〜30秒。`ScreenUpdating=False` でも止まらない）。→ `Selection.Range.Tables.Count` で分岐。**表なし**=`Range.Text` 1回 / **表あり**=`Selection.Range.Paragraphs` を**末尾から**、段落ごとに末尾マーカー（`\r` `\x07` 等）を除いた本文だけ `doc.Range(...).Text =`（後ろから編集で位置ずれ回避・対象なし段落は書かない）。
+2. **`Find.Execute` 等 多引数 COM メソッドはキーワード引数が凍結 exe（`gen_py` 不在＝純遅延バインディング）で無言失敗**し既定値で走る（`Replace` が `wdReplaceNone` に落ち「変わらないのにエラーも出ない」。`.venv` の `python main.py` は makepy で動くので exe だけ再現）。→ プロパティ設定 + 全引数を位置指定。`Execute` の戻り値も見る。
+3. **書き込みは「実測」で成否を出す**（計画件数を success 表示にしない）。書戻し後に領域を読み直し、純関数で「残っている対象数」を数え `変換済み = 総数 − 残り`。`0`→エラー / `<総数`→「一部だけ N/M」/ `==総数`→成功。**完全一致のバイト比較を成功条件にしない**（フィールドコード `\x13…\x15` 等で `Selection.Text` と `Range.Text` の表現が食い違い、中身が合っていても「未確認」に落ちる。診断ログ止まり）。
+4. **書戻し後は変換後領域を `Select()` し直す**（積算した長さ差分 `delta` から `doc.Range(開始, 元終端+delta)`）。サブ範囲編集や `Range.Text=` で Selection は崩れ、`開始+len(期待値)` の位置推定はマーカー差でずれる。再選択で読み直しが `Selection.Range.Text` 基準になり、ユーザーも続けて操作できる。
+5. **`Range.Paragraphs` はテキストボックス・図形・フィールド・ヘッダー/フッター・脚注の中を辿らない**。段落を歩く書き換えはそれらを素通りする（`Range.Text` にも出ないので実測でも検知不可）。対象にするなら `Range.ShapeRange` → `shape.TextFrame.TextRange` を別途。
+6. **`len(Selection.Text)` は画面の文字数より多い**（`\r` `\x07` `\x0c` 等を含む）。上限判定・件数表示はこれらを除いた数で（`word-kana-toggle` の `strip_structural_markers`）。
+7. **変換中だけ `ScreenUpdating` と `Options.CheckSpellingAsYouType` / `CheckGrammarAsYouType` を OFF**（`finally` で復元）。`TrackRevisions` が ON なら warning（勝手に切らない）。
+
 **exe:** [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
 
 **テスト:** ドメインは unittest。COM 実機はユーザー担当。
 
 **静的解析（ruff）:** `pyproject.toml [tool.ruff]` に `select` を書かないと、ruff 更新（0.16 系）で `I001` / `UP028` / `BLE001` / `SIM117` 等が既定に加わり、**既存コードに新規指摘が出る**（`toolkit` の committed main が 10 件・`word-table-formatter` 新設で `BLE001`）。小型ツールは `select` を明示 pin する（例: `["E", "F", "I", "UP", "B"]`）。pin していないリポに手を入れるときは **変更スコープ内のファイルのみ green** を完了基準とし、無関係な既存指摘は同じ変更で直さない。`main.py` の DPI 設定 `except Exception` は `# noqa: BLE001`（best-effort・起動を止めない）を定型にする。
+
+**`BLE001` の抑制条件（`word-kana-toggle` 2026-09-10）:** ruff 0.16 の `BLE001` は `except Exception` でも **ハンドラが例外をログすれば**（`logger.exception(...)` / `logger.debug(..., exc_info=True)`）指摘しない。素の `logger.debug("msg")`（`exc_info` なし）は指摘が残るので `# noqa: BLE001` が要る。逆に、ログ付きハンドラへ `# noqa: BLE001` を付けると `RUF100`（unused directive）になる。`except (AttributeError, pywintypes.com_error)` のように**具体名で捕まえれば** noqa 不要。
 
 **フォント統一（CTk）:** CTk 既定の `Roboto` は日本語グリフを持たず、Tk が **文字ごとに system フォントへ fallback** するため、日本語混在 UI が「フォントバラバラ」に見える（`toolkit` で発覚。ラベル・ボタン・見出しで別々の和文フォントに落ちる）。`app/ui/theme.py` を 1 ファミリ SSOT にし、`apply_theme()` で `ctk.ThemeManager.theme["CTkFont"]["family"]` を **Latin+日本語を 1 面で賄うフォント**へ上書きする（明示 `font=` 未指定の widget も揃う）。サイズ・太さ違いは `font_title()` / `font_body()` / `font_small()` の factory 経由にし、`ctk.CTkFont(size=...)` を各 widget へ直書きしない。`apply_theme()` は `ctk.CTk.__init__` 呼び出し前（widget 生成前）に呼ぶ — 個別の `set_appearance_mode` / `set_default_color_theme` 直書きは `theme.py` に一本化し呼び出し側へ残さない。
 **フォントファミリ:** `BIZ UDPゴシック`（モリサワ製ユニバーサルデザインフォント。Windows 10 October 2018 Update 以降 標準搭載・プロポーショナル版）。似た形の数字・かな濁点半濁点を判別しやすい UD 設計で、小サイズ UI の視認性を優先し採用（2026-09-10 · Web 調査で `Yu Gothic UI` 比較のうえ乗り換え）。固定ピッチ版 `BIZ UDゴシック` は表形式など桁揃えが要る場面用で UI 既定には使わない。旧 `Yu Gothic UI`（Windows 既定 UI フォント）も許容候補ではあるが、新規/横展開は `BIZ UDPゴシック` を既定とする。
