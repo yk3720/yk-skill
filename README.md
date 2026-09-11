@@ -1,74 +1,44 @@
-# パーソナル図解
+# yk-skill
 
-自分の仕事に特化した図解スキルを作るためのリポジトリです。
+Claude Code / Cursor 向けの個人用スキル・ルール基盤。`.claude/skills/` と `rule/` を**1つの体系**として運用しており、あえて2つのリポジトリに分けていません（2026-09-11 検討・分割見送り）。
 
-配布済みの図解ツールは、誰の仕事にも使える汎用ツールです。パーソナル図解スキルは、この汎用ツールに「読者は誰か」「どう伝えるか」を書き込んだものです。
+## なぜ1リポジトリか
+
+- `rule/RULE_INDEX.md` が定義する **L0(`.cursor/rules/*.mdc`) → L1(`rule/*.md`) → L2(スキル `SKILL.md`) → L3(`references/`)** は一本のパイプラインで、スキルはルールを絶対パス `c:/yk-skill/rule/...` で参照する
+- 他リポ（`yk-memo` / `yk-tool` / `yk-application` / `yk-document`）からもこの絶対パスで参照されている（横断で 200 ファイル超）
+- スキルとルールは同一セッション・同一コミットで一緒に更新することが多い（例: 新しい落とし穴を見つけたら L1 ルールに追記しつつスキル手順も直す）
+
+「スキルという名前なのに `.claude/skills/` が隠しフォルダで、`rule/` の方が目立つ」という見え方の違和感は、Claude Code / Cursor がスキルを `.claude/skills/` 配下に置くことを要求する仕様に由来するもので、フォルダ構成を変えても解消しません。
+
+## 迷ったらここを見る
+
+数が増えてきたときに探す場所は、フォルダを分けるのではなく **索引ファイル** に寄せています。
+
+| 知りたいこと | 見る場所 |
+|---|---|
+| どのルールをいつ読むか | [`rule/RULE_INDEX.md`](rule/RULE_INDEX.md) |
+| ルールを読む詳しい手順 | [`rule/RULE_ROUTING_PLAYBOOK.md`](rule/RULE_ROUTING_PLAYBOOK.md) |
+| どんなスキルがあるか（人間向け） | [`metadata/SKILLS_INDEX.md`](metadata/SKILLS_INDEX.md) |
+| スキル台帳（詳細・正本管理） | [`metadata/SKILL_CATALOG.md`](metadata/SKILL_CATALOG.md)（再生成: `managing-skills-yk`） |
+| 公開済み図解 HTML の一覧 | [`metadata/surge-published-list.md`](metadata/surge-published-list.md) |
 
 ## フォルダの中身
 
 ```
-personal-visual-explainers/
-├── .claude/skills/
-│   ├── creating-skills/                  ← スキルの作り方ガイド
-│   └── creating-visual-explainers/       ← 図解を生成するスキル（配布済みの図解ツールと同じもの）
-├── sample/
-│   └── majiai-diagram/                   ← 作成例（本気AIの図解スキル）
-│       ├── .claude/skills/diagram-maji/  ← スキル本体
-│       └── docs/charactor-images/        ← キャラクター画像
-├── output/                               ← 図解の保存先
-├── .gitignore
-└── README.md                             ← この説明書
+yk-skill/
+├── .claude/skills/    ← スキル本体（43件・Claude Code/Cursor が自動発見）
+├── .cursor/rules/     ← L0 entry（.mdc・glob/alwaysApply でルールへの入口を要約）
+├── rule/              ← L1 実務ルール（SSOT・帯フォルダごとに分類。索引は RULE_INDEX.md）
+├── metadata/          ← スキル台帳・公開図解台帳
+├── sample/            ← スキル作成例（`majiai-diagram`）
+├── templates/         ← 独立リポ雛形等
+└── output/            ← 生成物の一時置き場
 ```
 
-| フォルダ | 説明 |
-|---------|------|
-| `.claude/skills/creating-skills/` | スキルの作り方ガイド。設計原則・パターン集・チェックリストが入っています |
-| `.claude/skills/creating-visual-explainers/` | 図解HTMLを生成するスキル。配布済みの図解ツールと同じものです |
-| `sample/majiai-diagram/` | 図解の作成例。本気AIが実際に使っている図解スキルの構造がわかります |
-| `output/` | 生成した図解の保存先 |
+## スキルの作り方を学ぶ
 
-## まず作成例を見てみる
-
-`sample/majiai-diagram/.claude/skills/diagram-maji/` の中にある SKILL.md と references/ フォルダを開いて読んでみてください。
-
-- **SKILL.md** — スキルの全体設計（どんな順番で何をするかのワークフロー）
-- **references/** — デザインガイド、用語辞書、キャラクター設定など
-- **docs/charactor-images/** — 図解に使うキャラクター画像
-
-「スキルの中身はこうなっているんだ」と全体像をつかんでおくと、この後の作業がスムーズです。
-
-## パーソナル図解スキルの作り方
-
-詳しい手順はポータルの課題ページに書かれています。ざっくりした流れは以下の通りです。
-
-```
-  ① ヒアリングシートを埋める
-     「誰のどんな問題を解決するか」を言語化する
-              ↓
-  ② AIにスキルを作ってもらう
-     ヒアリングシートをCursorに貼り付けて依頼する
-              ↓
-  ③ 生成されたスキルを確認・修正する
-     作成例と見比べて、足りない部分を追加する
-              ↓
-  ④ 図解を作って試す
-     「○○を図解して」と依頼して、出力を確認する
-```
-
-## 図解を作る
-
-パーソナル図解スキルが完成したら、チャット欄で「○○を図解して」と依頼するだけです。
-
-生成された図解は `output/` フォルダに保存されます。
-
-## 図解を共有する
-
-PDF での共有方法や URL での公開方法は、配布済みの図解ツールと同じです。
-図解ツールの README を参照してください。
+`sample/majiai-diagram/.claude/skills/diagram-maji/` に実例があります。`SKILL.md`（全体設計）と `references/`（デザインガイド・用語辞書等）を読むと構造がつかめます。新規スキルの作成手順は `.claude/skills/creating-skills/`。
 
 ## 困ったとき
 
-何が起きても、まずはチャット欄で AI に状況を伝えてください。
-AI がエラーの内容を読み取り、次にやるべきことを教えてくれます。
-
-解決しない場合は、ポータルの課題ページにあるトラブルシューティングを確認してください。
+チャットで状況を伝えれば、AI がルール索引・スキル台帳から該当箇所を探します。
