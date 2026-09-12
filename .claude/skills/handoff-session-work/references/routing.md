@@ -301,6 +301,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `word-kana-toggle` | `handoffs/word-kana-toggle/HANDOFF.md` | Word 選択範囲のカタカナ/スペースを全角または半角へ揃える（excel-kana-toggle の Word 版）· `yk-application/word-kana-toggle` |
 | `term-consistency-checker` | `handoffs/term-consistency-checker/HANDOFF.md` | CSV 用語集で Word/Excel 文書の表記ゆれを検出（読取専用・検出のみ）· `yk-application/term-consistency-checker` |
 | `figure-renumberer` | `handoffs/figure-renumberer/HANDOFF.md` | Word 文書の図番号・表番号を出現順に検出・振り直し（検出→プレビュー→適用の2段階）· `yk-application/figure-renumberer` |
+| `local-llm-core` | `handoffs/local-llm-core/HANDOFF.md` | ローカルLLM(Ollama等)のOpenAI互換API共有ラッパー・複数PC(HP OmniBook 5/dynabook)向け共有基盤ライブラリ · `yk-application/local-llm-core` |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。
