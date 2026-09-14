@@ -40,6 +40,7 @@
 | 項目 | SSOT · 方針 |
 |------|-------------|
 | **菱形** | SVG `polygon` · `FLOW_NODE_DIAMOND_STROKE_WIDTH` |
+| **〇（省略記号）** | SVG `circle` · 段高さに内接 · 列スロット中央寄せ（`layoutGrid`） |
 | **入出力（平行四辺形）· 手動入力（台形）** | 同上 — `SlantedPolygonShape` · **`globals.css` の clip-path 禁止** |
 | **順方向エッジ（接続先(下)）** | `graph/buildEdges.ts` — `tierDiff > 0`（先が下段）→ `sourceSide=bottom` · `targetSide=top`（合流も top 入口）。**`levelDiff` 単独で left 入口にしない** |
 | **ループエッジ（上へ戻る）** | 同上 — `isLoop`（戻り先 tier < source tier）は **`sourceSide=right` / `targetSide=left` に固定**（下記ハンドル制約のため。`levelDiff` による分岐はしない） |
