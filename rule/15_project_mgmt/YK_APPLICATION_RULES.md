@@ -17,7 +17,7 @@
 |------|------|
 | **物理パス** | `c:/yk-application/{app-slug}/`（**フラット** — 下記 §1-1） |
 | **Git 管理** | **アプリ単位で独立**（`yk-tool` のモノレポには含めない） |
-| **実例** | `flowchart-studio`（本線 React Flow）· `bmp-resizer` · `excel-shape-arranger`（小型 Windows GUI）· `toolkit`（プラグイン集約ハブ）· `skill-doc-viewer`（yk-skill の rule/skills MD ビューワ）· `comment-studio` · `lci-studio` · `tauri-practice` |
+| **収録アプリ一覧** | `c:/yk-application/README.md`（人間向け・Git 管理外・手動更新。新設/統合/役目終了のたびに表を編集する） |
 | **セキュリティ** | Windows Defender 等の除外対象（開発効率優先） |
 
 ### 1-1. フラット構成（親スイートフォルダは作らない）
