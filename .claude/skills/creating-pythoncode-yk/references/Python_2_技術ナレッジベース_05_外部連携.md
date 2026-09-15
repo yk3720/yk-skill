@@ -19,3 +19,8 @@
 
 ### [K-061] JSON 処理の高速化と安全性
 - **信頼性**: 巨大な JSON や複雑なネスト構造を扱う際は、標準の `json` よりも `orjson` や `msgspec` などの高速なライブラリを検討せよ。
+
+### [K-062] ローカルサーバーのdetached自動起動+ヘルスチェック待機
+- **プロセス切り離し**: CLI終了後もバックグラウンドサーバーを動かし続けるには、Windowsは`subprocess.Popen(..., creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP, stdin/stdout/stderr=subprocess.DEVNULL)`、POSIXは`start_new_session=True`を使う（`**kwargs`辞書展開だとmypyが`Popen`オーバーロード解決に失敗するので、プラットフォーム分岐で別呼び出しにする）。
+- **3値ヘルスチェック**: 「未起動（接続拒否）」「起動済みだが読込中（503等）」「準備完了（200）」を区別し、未起動時のみ起動して二重起動を避ける。テストでは`time.sleep`を直接使わず`sleep_func`引数で注入し、監視ループを実時間に依存せず検証する。
+- **`-hf`系の取得オプションは常駐起動に使わない**: モデルがキャッシュ済みでも毎回リモートへ疎通確認に行き、遅延・ハングの原因になりうる（llama.cppで実測）。日常起動はダウンロード済みのローカルパスを直接指定する。

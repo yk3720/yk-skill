@@ -36,6 +36,14 @@
 ### [K-042] tkinterweb Plotly表示の依存関係
 - **JavaScript有効化**: `HtmlFrame(javascript_enabled=True)` と `pythonmonkey` のインストールが必須。
 
+### [K-058] uv workspace（仮想ルート）による複数パッケージ分離
+- **ルートを空にする**: 依存を共有する複数パッケージに分けるときは、ルート`pyproject.toml`から`[project]`を外し`[tool.uv.workspace] members = [...]`だけを持つ**仮想ルート**にする（各パッケージが独自の`[project]`を持つ）。
+- **相互参照**: パッケージ間の依存は`[tool.uv.sources] pkg-a = { workspace = true }`で明示する。`uv sync`後は`ruff`/`mypy`/`pytest`をルートから実行すれば全パッケージを横断できる。
+
+### [K-059] Windowsコンソールの既定コードページ対策（CLI入出力）
+- **既定はUTF-8ではない**: Windowsの既定コンソールコードページ（cp932等）では、LLM応答等に混入する非Shift-JIS文字（多言語出力・特殊記号）を`print()`しただけで`UnicodeEncodeError`が発生し対話ループ全体が落ちる。標準入力側も同様に文字化け（サロゲート化）しうる。
+- **対策**: CLIエントリポイント冒頭で`sys.stdin.reconfigure(encoding="utf-8", errors="replace")`と`sys.stdout`側も同様にreconfigureする。mypyは`TextIO`に`reconfigure`が無いと怒るため`cast(io.TextIOWrapper, sys.stdin)`で回避する。
+
 ---
 
 ## 第2章：モダン・エンジニアリング (Modern Tooling)
