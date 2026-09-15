@@ -7,11 +7,11 @@
 **ファイルパス（エージェント参照用）:** `c:/yk-skill/rule/40_python/LLAMACPP_RULES.md`
 
 **ステータス:** `draft`（[`RULE_INDEX.md`](../RULE_INDEX.md) No 43）— L1 要約。**専用スキル · L0 entry · ROUTER は未整備**（PROGRESSIVE 段階 1）。  
-**draft でも** §3・§9 の MUST は従う。未確定（実測パス・採用バイナリ名の最終表記）は §12 R2 まで埋めない。
+**draft でも** §3・§9 の MUST は従う。
 
 **親ルール:** [`PYTHON_RULES.md`](PYTHON_RULES.md)（Python クライアント側）· [`SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) · [`AGENT_SHELL_RULES.md`](../60_tooling/AGENT_SHELL_RULES.md)
 
-**最終更新:** 2026-09-13（2周目レビューで収束）
+**最終更新:** 2026-09-15（R2実機追記完了 · HP OmniBook 5でVulkanビルド実機セットアップ）
 
 ---
 
@@ -124,7 +124,9 @@
 
 実行時は `--list-devices` / `--device` で確認（公式）。
 
-**コマンド表記（本 L1 の既定）:** 本文例は **`llama-server` / `llama-cli`**。公式 Quick start の `llama serve` / `llama cli` は同一系統の別表記。**別名を推測して勝手に実行しない**（R2 で実機の実名を1行追記）。
+**コマンド表記（本 L1 の既定）:** 本文例は **`llama-server` / `llama-cli`**。公式 Quick start の `llama serve` / `llama cli` は同一系統の別表記。**別名を推測して勝手に実行しない**。
+
+**R2 実機追記（2026-09-15・HP OmniBook 5）:** `winget install ggml.llamacpp`で導入したバイナリ実名は`llama-server.exe`（`llama-cli.exe`等も同梱）。取得物は**Windows x64 Vulkanビルド**（`llama-b10970-bin-win-vulkan-x64.zip`、ハッシュ検証済み）で、CMakeでの自前ビルドは不要だった。`--list-devices`で`Vulkan0: AMD Radeon(TM) 860M Graphics`を確認（詳細: `local-llm-core` decision-log.md 2026-09-15）。
 
 ---
 
@@ -166,6 +168,8 @@ llama-server -hf org/model-GGUF:Q4_K_M --host 127.0.0.1 --port 8080
 ```
 
 （公式 Quick start 表記は `llama serve` — 実機のバイナリ名は §4 · R2）
+
+**R2 実機追記（2026-09-15）:** GGUFパスは`LLAMA_CACHE`環境変数で`~/.llm_core/models/`に固定（HF cacheレイアウト）。ポートは`8080`で確定運用（`llama-server -hf Qwen/Qwen2.5-7B-Instruct-GGUF:Q4_K_M --host 127.0.0.1 --port 8080 -ngl 99 -c 4096`）。`netstat`で`127.0.0.1:8080`のみLISTENINGを確認済み。
 
 Python: `base_url="http://127.0.0.1:8080/v1"`。`--api-key` 使用時は Secrets 規律。
 
@@ -241,7 +245,7 @@ HF → convert_hf_to_gguf → F16 GGUF → llama-quantize → Q4_K_M 等
 |----------|------|----------|
 | R0 | Web 調査 + L1 + 索引登録 | 済 |
 | R1 | サブエージェント収束レビュー | 済（2周で収束） |
-| R2 | 実機追記（Vulkan · GGUF パス · バイナリ実名 · ポート） | §4–§6 に1行 |
+| R2 | 実機追記（Vulkan · GGUF パス · バイナリ実名 · ポート） | 済（2026-09-15 · HP OmniBook 5） |
 | R3（任意） | スキル / ROUTER / L0 · Status `active` | 人間判断 |
 
 ---
