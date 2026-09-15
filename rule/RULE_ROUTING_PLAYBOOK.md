@@ -17,6 +17,7 @@
 | [PROGRESSIVE 共通手順](#progressive-共通手順スキル付きドメイン) | L1 → SKILL → ROUTER → Ref Plan |
 | [Python](#読む順序python-ツールを触るとき) | `.py` · `5.Python` |
 | [FastAPI](#読む順序fastapi-api-を触るとき) | No 42 · APIRouter · UploadFile |
+| [llama.cpp](#読む順序llamacpp--gguf--llama-server-を触るとき) | No 43 · GGUF · `llama-server` |
 | [Mermaid](#読む順序mermaid-図を書くとき) | `.mmd` |
 | [React Client](#読む順序react-client-コンポーネントを触るとき) | components · Hooks · `app/` |
 | [flowchart React Flow](#読む順序flowchart-studio--react-flow-を触るとき) | No 35 |
@@ -81,6 +82,22 @@
 **Next.js フロント連携:** [`30_web_stack/NEXTJS_RULES.md`](30_web_stack/NEXTJS_RULES.md) — CORS · `NEXT_PUBLIC_*` · fetch UI。
 
 **PROGRESSIVE 未完了:** スキル `creating-fastapi-yk` · ROUTER · L0 entry は未整備（L1 `draft`）。実装前は Ref Plan をチャットで固定。
+
+---
+
+## 読む順序（llama.cpp / GGUF / llama-server を触るとき）
+
+1. **`40_python/LLAMACPP_RULES.md`** — L1 SSOT（毎回）
+2. **クライアント Python を触るなら** — [`40_python/PYTHON_RULES.md`](40_python/PYTHON_RULES.md)（環境 · 機密）
+3. **方針・移行順序が必要なら** — `c:/yk-application/local-llm-core/docs/01_要求定義/検討_2026-09-13_Ollama-vs-llamacpp.md`（該当節のみ）
+4. **ビルド・サーバ詳細** — 公式 `docs/build.md` · `tools/server`（Deep 時のみ · L1 §10）
+
+| 作業 | 追加で Read |
+|------|-------------|
+| `llm_core` 接続 · config | `local-llm-core` のコード / 導入計画（該当節） |
+| Secrets · API キー | [`10_meta/SECRETS_HYGIENE_RULES.md`](10_meta/SECRETS_HYGIENE_RULES.md) |
+
+**PROGRESSIVE 未完了:** 専用スキル · ROUTER · L0 entry は未整備（L1 `draft`）。実装前は Ref Plan をチャットで固定。
 
 ---
 

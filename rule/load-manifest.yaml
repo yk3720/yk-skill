@@ -2,13 +2,13 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-09-10 INDEX 同期（L1 35 本 / No 00 除く · 61 CURSOR_RULES · 66 CLAUDE_HOOKS 含む）
+# 状態: 2026-09-13 INDEX 同期（L1 36 本 / No 00 除く · No 43 LLAMACPP 含む）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 35
+rule_count_l1: 36
 
 rules:
   - no: 05
@@ -184,6 +184,13 @@ rules:
     band: 40_python
     tags: [python, fastapi, api]
     read_when: FastAPI · APIRouter · UploadFile · Uvicorn
+    status: draft
+
+  - no: 43
+    path: 40_python/LLAMACPP_RULES.md
+    band: 40_python
+    tags: [python, llamacpp, gguf, local-llm, llama-server]
+    read_when: llama.cpp · GGUF · llama-server · ローカル LLM 推論
     status: draft
 
   - no: 45

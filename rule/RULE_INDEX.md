@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-09-10（No 66 CLAUDE_HOOKS_RULES 追加 · draft）
+**最終更新:** 2026-09-13（No 43 LLAMACPP_RULES 追加 · draft）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -42,6 +42,7 @@
 | Claude Code フック · `~/.claude/settings.json` · `~/.claude/hooks/` | 66 | `60_tooling/CLAUDE_HOOKS_RULES.md` | L1 直接 · 編集手順は `update-config` | — |
 | Python `.py` · **PyInstaller exe** | 41 | `40_python/PYTHON_RULES.md` §12 索引 · L3 `PYTHON_PYINSTALLER_GUI.md` | [Python](RULE_ROUTING_PLAYBOOK.md#読む順序python-ツールを触るとき) | `5.Python` · `python-dev-entry` |
 | FastAPI · APIRouter · UploadFile | 42 | `40_python/FASTAPI_RULES.md` | [FastAPI](RULE_ROUTING_PLAYBOOK.md#読む順序fastapi-api-を触るとき) | —（draft · スキル未整備） |
+| llama.cpp · GGUF · `llama-server` · ローカル LLM 推論 | 43 | `40_python/LLAMACPP_RULES.md` | [llama.cpp](RULE_ROUTING_PLAYBOOK.md#読む順序llamacpp--gguf--llama-server-を触るとき) | —（draft · スキル未整備） |
 | `.mmd` · 図解 MD | 45 | `45_mermaid/MERMAID_RULES.md` | [Mermaid](RULE_ROUTING_PLAYBOOK.md#読む順序mermaid-図を書くとき) | `yk-skill` · `mermaid-dev-entry` |
 | `@xyflow` · 表駆動 · flowchart RF | 35 | `35_reactflow/REACTFLOW_RULES.md` | [flowchart RF](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-studio--react-flow-を触るとき) | `reactflow-dev-entry` |
 | flowchart · 表 → Mermaid プレビュー | 35 | 同上 | [flowchart mmd](RULE_ROUTING_PLAYBOOK.md#読む順序flowchart-web-mermaid--表--mermaid-プレビュー) | `reactflow-dev-entry` |
@@ -90,6 +91,7 @@
 | Python `.py` · CLI · pandas | No **41** · `creating-pythoncode-yk` | No **42** のみで CLI/SDD を省略 |
 | 自作ツールの**新設** | No **18** §6 · `creating-personal-tool-yk` | いきなり Python スキルだけ · `yk-tool` へ日常製品を新設 |
 | FastAPI · UploadFile · Uvicorn · TestClient | No **42** · `FASTAPI_RULES` + No **41** | No **41** のみ · No **34** で FastAPI 本体デプロイ |
+| GGUF · `llama-server` · ローカル推論バックエンド | No **43** · `LLAMACPP_RULES` | Ollama 手順だけで代替 · No **41** のみで推論エンジンを推測 |
 
 各ドメインの詳細手順は [RULE_ROUTING_PLAYBOOK.md](RULE_ROUTING_PLAYBOOK.md)（**必要時のみ Read**）。
 
@@ -218,6 +220,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 37 | 30_web_stack | `30_web_stack/SUPABASE_RULES.md` | Supabase · RLS · Auth · Server Actions | active |
 | 41 | 40_python | `40_python/PYTHON_RULES.md` | Python ツール（毎回・L1） | active |
 | 42 | 40_python | `40_python/FASTAPI_RULES.md` | FastAPI REST API · ファイルアップロード · Uvicorn | draft |
+| 43 | 40_python | `40_python/LLAMACPP_RULES.md` | llama.cpp · GGUF · `llama-server` · ローカル LLM 推論 | draft |
 | 45 | 45_mermaid | `45_mermaid/MERMAID_RULES.md` | Mermaid DSL（`.mmd` / 図解 MD）・diagram-as-code | active |
 | 51 | 50_gas_html_test | `50_gas_html_test/GAS_RULES.md` | GAS Web アプリ | active |
 | 52 | 50_gas_html_test | `50_gas_html_test/GAS_REPORT_DESIGN_RULES.md` | **GAS 進捗レポート HTML**・surge 図解 HTML の chip デザイン | active |
@@ -240,7 +243,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 25_design_ux | **ビジュアル共通** · **UX ヒューリスティック** · **アクセシビリティ** | ドメイン個別パレット |
 | 30_web_stack | Next / React / shadcn / Tailwind / Vercel / Supabase | workspace-ui-kit の画面仕様 · flowchart の表→RF パイプライン（→ No 35） |
 | 35_reactflow | 表駆動 · React Flow · `flowchart-studio` | Mermaid DSL（→ 45）· surge 図解 HTML |
-| 40_python | Python L1 · FastAPI L1（No 42）· SDD 要約 | KB 全文（スキル references） |
+| 40_python | Python L1 · FastAPI L1（No 42）· llama.cpp L1（No 43）· SDD 要約 | KB 全文（スキル references） |
 | 45_mermaid | Mermaid DSL・図の SDD・検証（mmdc） | L1 本文に手順全文は含めない（→ L2 `creating-mermaid-yk` + `ROUTER.md`） |
 | 50_gas_html_test | GAS（No 51）· レポート/surge HTML デザイン（52）· Playwright E2E（53）· 大容量 HTML+PS（54）— **物理フォルダ名はレガシー** | Next.js UI（→ 30） |
 | 60_tooling | エディタ・OS 操作 | アプリ仕様 |
