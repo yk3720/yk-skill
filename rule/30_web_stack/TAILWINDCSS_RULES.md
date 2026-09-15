@@ -69,3 +69,4 @@
   OK: 外側 div（overflow なし） → 内側 div.overflow-auto
   ```
   `flex-col` レイアウトで複数ペインを積むとき、外側ペイン wrapper に残った `overflow-auto` が原因で踏みやすい。
+- **同じ CSS プロパティを指す複数のユーティリティを `cn()` で合成しない**（`flowchart-excel` 2026-09-15）: 共有定数（例 `fcBorderR = "border-r border-flow-border"`）に、別途 `border-flow-border/60` のような opacity variant を足すと、どちらの `border-color` が効くかは Tailwind の生成順（DOM の `className` 順ではない）に依存し不安定になる。上書きしたい値があるときは共有定数を経由せず、その場で完結したクラス文字列（例 `"border-r border-flow-border/60"`）を書く。

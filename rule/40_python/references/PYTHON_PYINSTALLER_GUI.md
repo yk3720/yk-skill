@@ -145,7 +145,12 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 - **切り分け:** `.venv` の `python main.py` でプレビュー可 · 当該 exe だけ不可 → ほぼ同梱漏れ（Runtime / 別PC差分ではない）
 - **warn の合図:** `build/*/warn-*.txt` に `missing module named webview` があれば **配布禁止**で再ビルド
 
-### 依存を足したら venv 再インストール + build/ 削除でクリーンリビルド
+### preview-web（Vite）ビルドの落とし穴（`flowchart-excel` 2026-09-15）
+
+- **`build_exe.py` は内部で `npm run build`（vite）を呼ぶ。エージェントのシェルの直前の `cd` が `preview-web/dist` 配下（ビルドが削除しようとするディレクトリ）に残っていると、Windows のファイルロックで `EPERM: rmSync` 失敗しビルド全体が止まる。** ビルド系コマンドを打つ前に、プロジェクトルート等の中立なディレクトリへ `cd` し直す。
+- **Vite/esbuild の本番ビルドは変数名・関数名を難読化する。** 自分が書いた関数名（例 `computeRulerSegments`）で `grep` しても本番バンドルでは見つからない。難読化されにくい**文字列リテラル**（Tailwind クラス名・CSS 変数名・JSX の `style` オブジェクトのプロパティキー名、例 `gridTemplateColumns`）で検索する方が、変更がバンドルへ入ったことを確実に確認できる。
+
+### 依存を足したら／ズレていたら venv 再インストール + build/ 削除でクリーンリビルド
 
 `toolkit`（2026-09-08）で、`requirements.txt` に `Pillow` を書いたのに **その `.venv` へ `pip install -r requirements.txt` を流し直していなかった**ため、T-2 以降ずっと凍結 `Toolkit.exe` で `bmp-resizer` プラグインが読み込み失敗していた（`resize.py` の `from PIL import Image` が hard import なのに同梱漏れ）。さらに `pip install` 後に素の `build_exe.py` を回しても **PyInstaller が `build/<name>` のキャッシュ解析を再利用し exe は Pillow なしのまま**。`build/<name>` と `dist/<name>.exe` を消して初めて反映された。
 
@@ -153,6 +158,7 @@ PowerShell / cmd の既定 cp932 では `print("✓ …")` が **`UnicodeEncodeE
 |------|----------|
 | 依存追加後は **`.venv` へ `pip install -r requirements.txt` を流し直す** | `requirements.txt` を編集しただけで「入っている」とみなす |
 | ビルド前に **`requirements.txt` の各行が当該 interpreter で `import` できるか**確認（optional import だけでなく hard import も） | `import webview` 等 optional import だけ確認して満足する |
+| ビルド前に `pip list` を `requirements.txt` の**バージョン制約**（`<`/`>=`）とも突き合わせる | `import` が通ることだけで「制約を満たしている」とみなす（`flowchart-excel` 2026-09-15: `.venv` に禁止版 `pywebview>=6` が入ったまま `import webview` 自体は成功しており、`tkwebview2` は丸ごと未インストールだった。`pip install -r requirements.txt` を流し直して初めて是正） |
 | 依存が変わったら **`build/<name>` と `dist/<name>.exe` を削除してからリビルド** | `--noconfirm` の素ビルドでキャッシュ解析を再利用したまま配布 |
 | exe 起動確認は **`plugins_discovered` の件数と id 一覧を期待値と突き合わせ**、`plugin_without_plugin_module` の WARNING が 0 であることまで見る | `count > 0` や GUI 目視だけで OK とする |
 

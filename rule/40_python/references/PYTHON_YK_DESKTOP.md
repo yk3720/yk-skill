@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `yk_desktop`  
-**最終更新:** 2026-09-10（Word 書き換えの落とし穴に 8・9 追加 = `Range.Text` 長 ≠ 文字位置（`\x07` 0 幅）で末尾重複 · `Paragraphs.Item(i)` ループ O(N²) フリーズ · `word-kana-toggle` v0.3.1／着手前チェックのフォント名を `BIZ UDPゴシック` に統一 · Python 3.13 運用の現実 · `skill-doc-viewer` を実例へ）
+**最終更新:** 2026-09-15（CTk grid の空列だけ伸びる落とし穴を追加 · Excel `Shapes.AddConnector` の `.Type` 実機値・アンカー不要の浮き終点パターン · エージェントの実機Excel検証は隔離インスタンス+`Visible=False`で・`flowchart-excel` 追加）。旧: 2026-09-10（Word 書き換えの落とし穴に 8・9 追加 = `Range.Text` 長 ≠ 文字位置（`\x07` 0 幅）で末尾重複 · `Paragraphs.Item(i)` ループ O(N²) フリーズ · `word-kana-toggle` v0.3.1／着手前チェックのフォント名を `BIZ UDPゴシック` に統一 · Python 3.13 運用の現実 · `skill-doc-viewer` を実例へ）
 
 exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本ファイルは **yk-application 小型 GUI**（COM 所有権 · StayOnTop · プラグインハブ）。
 
@@ -10,7 +10,7 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **対象:** Python の Windows GUI に限る。自作ツール全体（Web · 他言語）の受付はスキル `creating-personal-tool-yk`。本節は Python デスクトップ実装時だけ読む。
 
-**実例:** `bmp-resizer` · `excel-shape-arranger` · `toolkit`（旧 `excel-toolkit`。プラグイン集約）· `word-table-formatter` · `skill-doc-viewer`（非 COM。tkinterweb 埋め込みで yk-skill の rule/skills MD をビュー。CSS 2.1 天井は各リポ decision-log）。置き場は `YK_APPLICATION_RULES` §6。
+**実例:** `bmp-resizer` · `excel-shape-arranger` · `flowchart-excel`（Excel AutoShape フローチャート生成。10列表駆動、WebView埋め込みプレビュー）· `toolkit`（旧 `excel-toolkit`。プラグイン集約）· `word-table-formatter` · `skill-doc-viewer`（非 COM。tkinterweb 埋め込みで yk-skill の rule/skills MD をビュー。CSS 2.1 天井は各リポ decision-log）。置き場は `YK_APPLICATION_RULES` §6。
 
 ### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
 
@@ -27,6 +27,14 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 **Python バージョン（現実）:** yk-application デスクトップ群は**事実上 Python 3.13 運用**（この開発 PC に 3.12 が無い。`toolkit` の venv も 3.13）。`.python-version` の `3.12` 系の記述は「3.12 が使える環境ではそちらを優先」という努力目標であって、3.13 で作って構わない。`requires-python` は `>=3.12` に留め、上限で 3.13 を弾かない。tkinterweb の 3.13 系不具合（空 `<title>` で `TclError`）に当たるなら、生成 HTML の `<title>` を必ず非空にして回避する（`skill-doc-viewer` の `render.py` 参照）。
 
 **Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。COM は UI スレッドのみ（[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md) Tk/CTk + Excel COM と同趣旨）。
+
+**エージェントが実機Excelで動作確認するとき（`flowchart-excel` 2026-09-15）:** `GetActiveObject` はユーザーが**今まさに開いている実インスタンス**に繋がる（実際にこのセッションでユーザーの実ブックが開いた状態のインスタンスへ接続した）。使い捨て検証で新規ブックを作って壊す可能性があるなら、`win32com.client.Dispatch("Excel.Application")` + `app.Visible = False` で**完全に別プロセスの隔離インスタンス**を立て、そちらだけで検証してから `app.Quit()` する（`GetActiveObject` で得たユーザーの実インスタンス側は絶対に `Quit()` しない）。検証前後で `app.Workbooks.Count` を比較し、増減が自分の操作分とズレていないか必ず確認する。
+
+**AutoShape コネクタ（`Shapes.AddConnector`）の落とし穴（`flowchart-excel` 2026-09-15 実機確認、Excel 16.0/365）:**
+- `.Type` は「コネクタは `msoLine`(9)」という通説に反し、実機では **`msoAutoShape`(1)** として報告された（`BeginConnect`/`EndConnect` の有無に関わらず）。「Type で通常図形とコネクタを見分ける」設計は当てにせず、実機で `.Type` を確認してから判定条件を書く。
+- 接続先が無い「浮いた終点」を作りたいだけなら、終点用のダミー図形（アンカー）を作って `EndConnect` → 後で消す、という手順は不要。`AddConnector(type, x1, y1, x2, y2)` の `x2, y2` に浮かせたい座標を直接渡し `BeginConnect` だけ呼べば、未接続のままその座標に固定される。アンカー方式は削除し忘れによる残留シェイプ（不可視・極小サイズの図形がシートに蓄積）のリスクを生む。
+
+**CTk/Tk grid の「空列だけ伸びる」落とし穴（`flowchart-excel` 2026-09-15）:** `grid_columnconfigure(N, weight=1)` を設定しても、その列に**実際にウィジェットが無い**（空のまま）と、ウィンドウ拡大時にその空列だけが伸び、隣の列に置いた実ウィジェットは伸びていないように見える。「ボタンが2列あるはずなのに片方しかリサイズで広がらない」症状が出たら、まず両方の列に実ウィジェットが入っているか（片方が空のプレースホルダー列になっていないか）を疑う。今回はボタンが1個だけ列1に配置され列0が空だったのが原因で、列0にも実際のボタンを置いて初めて両方均等に伸びた。
 
 **Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM は UI スレッドのみ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
 

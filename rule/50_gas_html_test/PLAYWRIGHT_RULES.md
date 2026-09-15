@@ -289,6 +289,7 @@ cd c:\yk-tool\playwright-test; npx playwright test
 | `トークン '&&' は...有効なステートメント区切りではありません` | **Windows PowerShell 5.1** では `&&` 非対応 | コマンド連結は `;` を使うか **`pwsh`（7+）** に切り替える（`10-1` 参照） |
 | `EPERM: operation not permitted, unlink '.../test-results/.last-run.json'` | サンドボックス環境でのファイル書き込み制限 | `required_permissions: ["all"]` でサンドボックスを解除して実行 |
 | `Executable doesn't exist at .../chrome-headless-shell.exe` | Chromium が未インストール | `npx playwright install chromium` を実行 |
+| `browserType.launch:` 起動直後にクラッシュ（`exitCode=3221226505`＝`0xC0000409`）。`channel:"msedge"` で headless/headed 問わず再現（`flowchart-excel` 2026-09-15） | 企業管理端末の常駐セキュリティソフト（例: SS1Agent）が自動操作フラグと衝突している可能性 | まず同梱 Chromium（`npx playwright install chromium`、`msedge` channel を使わない）を試す（未検証だが `chrome-headless-shell` 欠落とは別経路のため通る見込みがある）。それでも再現するなら、その端末ではブラウザ自動化での視覚検証を諦め、ビルド出力の直接確認やユーザーへの目視確認依頼に切り替える |
 | `strict mode violation: getByRole('heading') resolved to 2 elements` | 同一テキストの見出しが nav（h2）と main（h1）等の複数ランドマークに存在 | ランドマークでスコープを絞る — `page.getByRole('main').getByRole('heading', { name: 'X' })` または `page.getByRole('complementary').getByRole('heading', { name: 'X' })`。ヘッダーをレイアウト外へ昇格した場合に発生しやすい |
 
 ---
