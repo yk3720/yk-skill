@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `exe` · `yk_webview`  
-**最終更新:** 2026-09-10（tkinterweb 4.x の frozen 同梱 · watchdog 併用時の型注釈とスレッド安全を追記 · `skill-doc-viewer` で確定）
+**最終更新:** 2026-09-16（`window.pywebview.api`/同期 `evaluate_js` が手組み埋め込みで機能しない件・`ExecuteScriptAsync`+`ContinueWith` によるポーリング代替を追記 · `flowchart-excel` で確定）
 
 汎用の `sys.frozen` パス解決はスキル KB `Python_2_技術ナレッジベース_04_環境・配布.md`（K-001）。本ファイルは **PyInstaller GUI exe**（relative import · 同梱 · tkwebview2）。プラグイン欠落の症状差は [`PYTHON_YK_DESKTOP.md`](PYTHON_YK_DESKTOP.md)。
 
@@ -83,6 +83,23 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 - **切り分け（読込無反応）:** `embedded_inject_failed` / `embedded_inject_ok` の有無。ライブ ON なのに「待機中」→ **evaluate_js 非互換または注入未到達**
 - **詳細 POC:** `yk-application/flowchart-excel/docs/03_技術仕様/POC_ルートA_結果_2026-07-27.md`
 - **実装参照:** `yk-application/flowchart-excel/app/ui/embedded_preview.py`（`_ensure_tkwebview2_compat`）
+
+### JS→Python 通知は `window.pywebview.api` も同期 `evaluate_js` も使えない（`flowchart-excel` 2026-09-16）
+
+上記の手組み埋め込み（`Window(...)` を `webview.start()` を経ずに直接構築）では **`window.gui` が `None` のまま**になる（`Window._initialize(gui, ...)` は pywebview 本来の起動フローでしか呼ばれない）。これが2つの罠を生む。
+
+1. **`window.expose()` はページに反映されない。** `NavigationCompleted` のたび pywebview 自身が呼ぶ `inject_pywebview()` は内部で `window.run_js(js_code)` → `self.gui.evaluate_js(...)` を叩くが `self.gui is None` で `AttributeError`。これは**バックグラウンドスレッドで静かに例外化**し、`window.pywebview` オブジェクト自体がページへ一度も注入されない。React 側から `window.pywebview?.api?.xxx` を呼んでも実体が無く、Python 側の受け口関数は**一度も呼ばれない**（症状: ログにその関数のログ行が一切出ない）。
+2. **pywebview の同期 `evaluate_js`（`EdgeChrome.evaluate_js`）を使うと呼び出しスレッドが無限にハングする。** 内部で `Control.Invoke(...)` → `Semaphore.acquire()` と同期待機するが、`Invoke` の完了には呼び出し先スレッドの **WinForms メッセージポンプ**（`Application.Run()`）が要る。この構成には無い（Tk の `mainloop` のみ）ため、Tk メインスレッドから呼ぶと **アプリ全体が固まる**（実機相当の再現ハーネスで確認済み）。
+
+| やる | やらない |
+|------|----------|
+| JS→Python の読み取りは **`core.ExecuteScriptAsync(script).ContinueWith(Action[Task[String]](callback))`**（非同期・`_inject` と同じ経路） | `window.expose()` + `window.pywebview.api.foo()` で push 通知させる |
+| Python が結果を取りに行く（**ポーリング**：`_live_tick` 等の既存タイマーに相乗り） | React 側からのプッシュ通知に頼る設計にする |
+| `ContinueWith` のコールバックは **フラグ／値をセットするだけ**（CLR/スレッドプール上で発火 — 上記「CLR / pywebview `loaded` コールバックでは Tk を触らない」と同じ制約）。Tk 反映は `after` pump 側で | コールバック内で直接 Tk ウィジェットや `on_payload_change` を呼ぶ |
+| `window.pywebview.api` を使いたい機能は**この埋め込み方式では実現不可**と設計時点で前提に置く | 「`window.expose()` は pywebview の標準機能だから動くはず」と未検証で採用する |
+
+- **切り分け:** 期待した通知が来ない（対応するログ行が皆無）→ `window.pywebview` 依存を疑う。呼び出し元スレッド（Tk メイン等）がタイムアウトなく固まる → 同期 `evaluate_js` の `Invoke` 待ちを疑う
+- **実装参照:** `yk-application/flowchart-excel/app/ui/embedded_preview.py`（`_poll_validation` / `_on_validation_js_result`）
 
 ### tkinterweb 4.x（CTk 内埋め込み Markdown/HTML ビュー）の frozen 同梱
 
