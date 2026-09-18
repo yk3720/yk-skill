@@ -46,6 +46,15 @@ handoffs/
 開発ルールは `C:\yk-skill\rule\` に格納されている。
 **コードを書く・編集する前に、必ず以下の手順でルールを確認すること。**
 
+### 規模別着手（§14）
+
+**SSOT:** `C:\yk-skill\rule\15_project_mgmt\APP_PROJECT_RULES.md` §14
+
+- **大**（複数モジュール／複数画面 · 仕様に「どう作るか」が無い）: 構想設計ファイルを作り、承認するまでコードを書かない
+- **中**: Plan モードで計画を出し、承認後に実装
+- **小**: 仕様から実装してよい
+- 構想設計完了→実装開始は **handoff して新セッション**。`/compact` や `/clear` の前に決定・制約・次の1件をファイルへ残す（同じタスクの圧縮なら `/compact`、無関係な次タスクなら `/clear`）
+
 ### 参照手順
 
 1. `C:\yk-skill\rule\RULE_INDEX.md` の「タスク別クイック入口」表で、触るもの → No → L1 ファイルを特定する
@@ -75,6 +84,7 @@ handoffs/
 | UI ビジュアル統一 | `C:\yk-skill\rule\10_meta\VISUAL_DESIGN_RULES.md` |
 | 品質ゲート / lint / CI | `C:\yk-skill\rule\60_tooling\QUALITY_GATE_RULES.md` |
 | Agent Shell 操作 | `C:\yk-skill\rule\60_tooling\AGENT_SHELL_RULES.md` |
+| 実装の規模判定 · 構想設計 | `C:\yk-skill\rule\15_project_mgmt\APP_PROJECT_RULES.md`（§14） |
 
 ### Governance（優先順位）
 

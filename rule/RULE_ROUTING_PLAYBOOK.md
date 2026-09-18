@@ -4,7 +4,7 @@
 
 **いつ Read するか:** [RULE_INDEX — タスク別クイック入口](RULE_INDEX.md#タスク別クイック入口) で No と L1 を特定したあと、手順の詳細が必要なときだけ本ファイルを開く。**常時全読みしない**（`10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` §3-4）。
 
-**最終更新:** 2026-09-09（プレイブック更新節を INDEX §新規ルールの追加手順へ集約 · 本体は P15 版）
+**最終更新:** 2026-09-18（個人アプリ節に着手ゲート §14 を追加）
 
 **誤ルーティング:** [RULE_INDEX — 誤ルーティング早見表](RULE_INDEX.md#誤ルーティング早見表)
 
@@ -261,13 +261,13 @@
 
 ## 読む順序（個人アプリ新規 · 企画フォルダ · 再開）
 
-1. **`15_project_mgmt/APP_PROJECT_RULES.md`** — 三層モデル · 新規チェックリスト · AGENTS 必須項目
+1. **`15_project_mgmt/APP_PROJECT_RULES.md`** — 三層モデル · 新規チェックリスト · AGENTS 必須項目 · **実装着手ゲート §14**（コード Write 前の規模判定）
 2. **handoffs** — `c:/yk-memo/handoffs/{project}/HANDOFF.md` → 最新セッション MD **§4 の 1 件**
 3. **企画 `AGENTS.md`** — 境界 · SSOT マップ · やる/やらない
 4. **Product Spec** — 仕様疑問時のみ（README 読む順序 · データモデル · ADR）
-5. **スタック L1** — 実装開始後 [RULE_INDEX クイック入口](RULE_INDEX.md#タスク別クイック入口)（No 31–35 等）
+5. **スタック L1** — 実装開始後 [RULE_INDEX クイック入口](RULE_INDEX.md#タスク別クイック入口)（No 31–35 等）。**大**なら構想設計の承認後
 6. **新規/整理/AGENTS 整備** — スキル `starting-app-project-yk`
-7. **引き継ぎ終了** — スキル `handoff-session-work`（本 rule に手順全文は載せない）
+7. **引き継ぎ終了** — スキル `handoff-session-work`（構想設計完了→実装開始も切る · 本 rule に手順全文は載せない）
 
 **実例:** flowchart-studio → [AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/) · [handoffs/flowchart-studio](c:/yk-memo/handoffs/flowchart-studio/HANDOFF.md)
 

@@ -64,7 +64,7 @@ rules:
     path: 15_project_mgmt/APP_PROJECT_RULES.md
     band: 15_project_mgmt
     tags: [app-project, handoffs, planning]
-    read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開
+    read_when: 個人アプリ新規 · 企画フォルダ · handoffs 再開 · 実装着手の規模判定（§14）
     status: active
 
   - no: 18

@@ -1,12 +1,12 @@
 # 個人アプリ開発プロジェクト規則
 ## App Project Lifecycle — YK 共通 v1
 
-**用途:** 個人開発 × AI 支援で **新規アプリを始める · 企画フォルダを整える · 再開する** ときの横断 SSOT。  
+**用途:** 個人開発 × AI 支援で **新規アプリを始める · 企画フォルダを整える · 再開する · 実装の規模を判定してから着手する** ときの横断 SSOT。  
 **ステータス:** active（L1 · スキル `starting-app-project-yk` v1 — 実例 1 件）  
-**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · `RULE_INDEX.md` No 17  
+**関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · L0 `design-before-code-yk` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-09-09（§13 を末尾へ移動 · 昇格ルールを No 25 へ一本化）
+**最終更新:** 2026-09-18（§14 実装着手ゲート）
 
 ---
 
@@ -18,6 +18,7 @@
 | スコープ爆発 | PRD 全文を 1 プロンプトに渡す · 完成チェックリスト一括依頼 |
 | 進捗が信頼できない | `再開メモ` · 手動確認 · handoffs の **日付・定義の不一致** |
 | ルールが散在 | スタック rule（No 31–35）と **プロジェクトの置き方** が未分離 |
+| 大きい実装の途中で設計がブレる | 仕様（何を）だけでコードに入り、「どう作るか」を場当たりで積む |
 
 **目標:** 企画（安定）· セッション（毎回）· 憲法（境界）を分離し、**再開は handoffs §4 の 1 件だけ**（**検証駆動フェーズ**は HANDOFF §6 が実行正本 — §11 実例参照）。
 
@@ -163,7 +164,8 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 
 ## 9. 実装セッションの読む順序
 
-1. **`15_project_mgmt/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時
+0. **規模判定（§14）** — コードを Write する前。大なら構想設計の承認までコード禁止
+1. **`15_project_mgmt/APP_PROJECT_RULES.md`**（本ファイル）— 初回 or 企画整理時 · 着手ゲートは §14
 2. **`15_project_mgmt/PROJECT_DOCUMENT_RULES.md`** — 企画フォルダ構成 · 6 種 · 移行時
 3. **handoffs** — 毎セッション §4
 4. **憲法**（独立リポ = ルート `AGENTS.md` · yk-memo 企画のみ = `05_開発ガイドライン/エージェント憲法.md` · §5）— 境界
@@ -182,6 +184,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | 122KB 級 HANDOFF の毎回上書き | セッション MD を新規 Write |
 | PRD · README 全文を実装プロンプトに貼る | task packet（§4）に分解 |
 | 完成チェックリスト全項目の一括実装依頼 | 1 セッション = 1 テーマ |
+| **大**規模なのに構想設計なしでコードを書き始める | §14。仕様は「何を」、構想は「どう作るか」 |
 | handoffs 本文に rule / ADR 全文コピー | パスリンクのみ |
 | `git commit` / `push` の独断実行 | `GIT_WORKFLOW_RULES.md` |
 
@@ -211,6 +214,7 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | **手順スキル（v1）** | `starting-app-project-yk` — 新規 · 整理 · AGENTS のみ |
 | **自作ツール新設** | `creating-personal-tool-yk`（受付）→ 新規パック → スタック別スキル |
 | **セッション運用** | `handoff-session-work`（再開 · 終了 · 整理 archive） |
+| **構想を詰める / 磨く** | `grill-me` → ファイル化 → 必要なら `converging-plan-reviews`（§14。スキル新設しない） |
 | **2 アプリ目以降** | checklist 実例追記 · スキル references 更新 |
 
 スキルは rule 全文をコピーしない。執筆 → `SKILL_AUTHORING_RULES.md` · `creating-skills`。
@@ -228,8 +232,56 @@ SDD マッピング · AC 3 層 · §4 task packet → `PROJECT_DOCUMENT_RULES` 
 | **grill-me** | `01_要求定義/grill-me_{YYYY-MM-DD}_{論題}.md` | 企画 | 対話 Q&A · 未決 · 優先順位（`相談_*` は同義 · 新規は `grill-me_` 推奨） |
 | **調査** | `01_要求定義/調査_{テーマ}.md` | 企画 | 調査結果 · 比較（決定前） |
 | **計画** | `01_要求定義/計画_{YYYY-MM-DD}_{論題}.md` | 企画 | 相談→実装の分解 · §4 候補 |
+| **構想設計** | `03_技術仕様/構想設計_{YYYY-MM-DD}_{論題}.md`（画面フロー中心なら `02_機能設計/`） | 企画 / `docs/` | **どう作るか**（モジュール · データフロー · 境界）。規模 **大** の実装前 — §14 |
 | **セッション** | `handoffs/{slug}/*.md` | handoffs | §4 = 次の 1 件 · 作業記録 |
 
 **昇格ルール（MUST）:** grill-me Accepted → ADR（Draft 可）→ decision-log 1 行、の 6 項目は **[`PROJECT_DOCUMENT_RULES.md` §6](PROJECT_DOCUMENT_RULES.md)（No 25）が SSOT**。本ファイルでは再掲しない。
 
 **報告用:** 最終報告は `00_テーマ/報告書_*`（将来）← decision-log から要約転記。詳細は ADR · grill-me · handoffs へ委譲。
+
+---
+
+## 14. 実装着手ゲート（規模別 · MUST）
+
+仕様書は「何を作るか」。構想設計は「どう作るか」（モジュール分割 · データ構造 · 処理フロー · 境界）。**ユーザーが「実装して」と言っても、規模が大ならコードを書かない。**
+
+L0 要約: `design-before-code-yk.mdc`。フォルダ追加は `PROJECT_DOCUMENT_RULES` §12.1。
+
+### 14.1 判定
+
+| 規模 | どれか 1 つでも | 着手 |
+|------|-----------------|------|
+| **小** | 1〜2 ファイル · 既存パターンの延長 · 仕様に入出力まで書いてある | 仕様（または合意済み ADR）→ 実装 |
+| **中** | 複数ファイルだが新規アーキテクチャではない · 画面 1 枚の機能追加 | **Plan モード**で計画を出し、承認後に実装。別ファイルは必須にしない |
+| **大** | 複数モジュール／複数画面 · 既存システムとの整合 · 仕様に「どう作るか」が無い | **構想設計ファイル**を作り、ユーザー承認後に実装。承認前のコード Write 禁止 |
+
+迷ったら **中以上**（Plan モード）。小規模を大扱いにしない（`AI_DRIVEN_RULES` 法則 5 · 議論より具体物）。
+
+### 14.2 大の成果物
+
+独立リポなら `docs/`、企画フォルダのみなら同パス。フォルダが無ければ `PROJECT_DOCUMENT_RULES` §12.1 で追加してから書く。
+
+| 中心 | 置き場 |
+|------|--------|
+| モジュール分割 · データフロー · IF · 命名 | `03_技術仕様/構想設計_{YYYY-MM-DD}_{論題}.md` |
+| 画面フロー中心 | `02_機能設計/`（既存の画面構成で足りるなら新規を増やさない） |
+
+既存の `技術方針.md` · ADR で「どう作るか」が既に十分なら **新規ファイルを作らない**。足りない節だけ追記する。
+
+載せるもの（短く）: モジュール境界 · データ／処理の流れ · 触るファイルの目安 · やらないこと · 未決。コードは載せない。
+
+詰める・磨く: `grill-me`（分岐）→ ファイル化 → 必要なら `converging-plan-reviews`。構想設計用のスキルは新設しない。
+
+### 14.3 セッション
+
+大規模を 1 つの長いコンテキストで最後まで進めない。
+
+| タイミング | すること |
+|------------|----------|
+| 構想設計が承認され、実装に入る | `handoff-session-work` 終了 → **新チャット**で実装（決定・制約・次の 1 件をファイルに残してから切る） |
+| 大きなモジュールが一区切り · 試行錯誤が溜まり精度が落ちた | 同上 |
+| 小修正の連続 · 同一モジュールの実装途中 | 切らない |
+
+Cursor に `/clear` 相当はなく、引き継ぎ終了＋新チャットがリセット。Claude Code は同じタスクの圧縮なら `/compact`、無関係な次タスクなら `/clear`。どちらも **先にファイルへ残す**（要約コマンドだけに頼らない）。
+
+Plan モード: Cursor は Plan モードへ切替→承認待ち。Claude Code も同様。

@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-09-13（No 43 LLAMACPP_RULES 追加 · draft）
+**最終更新:** 2026-09-18（No 17 §14 実装着手ゲート · L0 `design-before-code-yk`）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -61,7 +61,7 @@
 | スキル MD 作成・更新 | 12 | `10_meta/SKILL_AUTHORING_RULES.md` | — | — |
 | 新ドメイン rule / スキル | 11 | `10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md` | — | — |
 | チャット応答（平易さ等） | 16 | `10_meta/COMMUNICATION_RULES.md` | L1 · No 05 §2 精神借用 | `communication-yk`（always） |
-| 個人アプリ新規 · 企画フォルダ · 再開 | 17 | `15_project_mgmt/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` | — |
+| 個人アプリ新規 · 企画フォルダ · 再開 · **実装着手（規模判定）** | 17 | `15_project_mgmt/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` · 着手ゲート **§14** | `design-before-code-yk`（always） |
 | 自作ツール新設（形態・言語を問わない） | 18 | `YK_APPLICATION_RULES.md` §6 | 手順: `creating-personal-tool-yk` · 実装はスタック別 | — |
 | 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
 | 独立リポジトリ移行 · yk-application | 18 | `15_project_mgmt/YK_APPLICATION_RULES.md` | L1 直接 | — |
@@ -90,6 +90,7 @@
 | アクセシビリティ Phase · CI 段階 | No **23** · `A11Y_ROADMAP` | 本ファイルでチェックリストを再定義しない |
 | Python `.py` · CLI · pandas | No **41** · `creating-pythoncode-yk` | No **42** のみで CLI/SDD を省略 |
 | 自作ツールの**新設** | No **18** §6 · `creating-personal-tool-yk` | いきなり Python スキルだけ · `yk-tool` へ日常製品を新設 |
+| 大きい機能を仕様書だけでいきなり実装 | No **17** §14 · Plan モードまたは構想設計 | 複数モジュールを場当たりで書き始める |
 | FastAPI · UploadFile · Uvicorn · TestClient | No **42** · `FASTAPI_RULES` + No **41** | No **41** のみ · No **34** で FastAPI 本体デプロイ |
 | GGUF · `llama-server` · ローカル推論バックエンド | No **43** · `LLAMACPP_RULES` | Ollama 手順だけで代替 · No **41** のみで推論エンジンを推測 |
 
@@ -149,7 +150,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 
 **ui-kit / flowchart:** `workspace-ui-kit` 作業は **`yk-tool` をワークスペースに含める**（`workspace-dev-entry.mdc` は `yk-tool/workspace-ui-kit/.cursor/rules/` のみ）。
 
-**yk-memo の `.cursor/rules`（部分セット · yk-skill 全文同期しない）:** alwaysApply 4 本（`communication-yk` · `visual-design-yk` · `agent-shell-yk` · `playwright-agent-yk`）+ `reactflow-dev-entry` · `mermaid-dev-entry` · `quality-gates-yk`。Next/shadcn/Vercel/Supabase entry は **含めない**（企画 · handoffs 中心 WS）。
+**yk-memo の `.cursor/rules`（部分セット · yk-skill 全文同期しない）:** alwaysApply 5 本（`communication-yk` · `visual-design-yk` · `agent-shell-yk` · `playwright-agent-yk` · `design-before-code-yk`）+ `reactflow-dev-entry` · `mermaid-dev-entry` · `quality-gates-yk`。Next/shadcn/Vercel/Supabase entry は **含めない**（企画 · handoffs 中心 WS）。
 
 ---
 
@@ -202,7 +203,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・**エージェント Read 禁止**・保管場所） | active |
 | 65 | 10_meta | `10_meta/GIT_TRACKING_RULES.md` | **Git 追跡対象**（track / not track · `.gitignore` · 生成物除外） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ · No 05 精神借用 · 作業後3点サマリ） | active |
-| 17 | 15_project_mgmt | `15_project_mgmt/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` | active |
+| 17 | 15_project_mgmt | `15_project_mgmt/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` · **実装着手ゲート（§14）** | active |
 | 18 | 15_project_mgmt | `15_project_mgmt/YK_APPLICATION_RULES.md` | **独立リポジトリ移行** · yk-application 管理 | active |
 | 19 | 25_design_ux | `25_design_ux/VISUAL_DESIGN_RULES.md` | **ビジュアル共通** — 線の太さ統一 · 強調の例外 | active |
 | 20 | 25_design_ux | `25_design_ux/USABILITY_HEURISTICS_RULES.md` | **UX 共通** — ニールセン10原則 · UI レビュー · ヒューリスティック評価 | active |
