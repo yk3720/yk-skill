@@ -4,7 +4,7 @@
 **要約・MUST:** `yk-skill/rule/40_python/PYTHON_RULES.md` · **手順:** `../SKILL.md`  
 **設計パターン（他言語向け）:** `yk-skill/rule/10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`
 
-**最終更新:** 2026-09-09（P14f）
+**最終更新:** 2026-09-18（5周のサブエージェントレビュー。§2.1「L1 references」を §3 と統合し廃止。§2 強制Standard条件をリテラル一致のみから意味的シグナル（`win32com.client`/`pythoncom`/`.spec` 等）にも拡張し、`c:/yk-application/` 配下でない Excel COM 実装が Light tier をすり抜ける穴を塞いだ。4周目で §4 との整合を取り直し）。旧: 2026-09-09（P14f）
 
 ---
 
@@ -43,25 +43,17 @@
 - 複数モジュールにまたがる
 - ユーザーが「品質ゲート厳守」を明示
 
-**強制（Light 禁止 · Standard 以上）:** 対象パスが `c:/yk-application/`、またはシグナルが `GetActiveObject` / `StayOnTop` / `build_exe` / `ToolPlugin` のとき。tag に **`yk_desktop` を必ず付ける**（任意にしない）。exe を変えるなら **`exe` も**。
+**強制（Light 禁止 · Standard 以上）:** 対象パスが `c:/yk-application/`、またはシグナルが `GetActiveObject` / `StayOnTop` / `build_exe` / `ToolPlugin` のとき。**このリテラル一致は例であって網羅ではない** — `win32com.client` / `pythoncom` の import・`GetActiveObject`/`Dispatch` 呼び出しなど **Office COM 操作と判断できる兆候があれば、パスが `c:/yk-application/` 配下でなくても同じ扱い**（Light 禁止・`yk_desktop` 必須）にする。**注意:** `customtkinter`/`tkinter` の GUI 単体（COM 操作を伴わない）はこの強制の対象外 — §4 のとおり `gui` タグのみでよい。`c:/yk-application/` 配下の GUI（COM の有無を問わない）は引き続き強制対象。tag に **`yk_desktop` を必ず付ける**（任意にしない）。exe を変えるなら **`exe` も**。（2026-09-18 4周目: §4 のシグナル表と表現を揃え、tkinter 単体を誤って強制対象に含めていた3周目の不整合を是正）
 
-### 2.1 L1 references — tag 別 floor（Standard / Full）
+**優先順位（強制 vs 「typo 明示」Light 例外）:** 強制条件（対象パス／シグナル）は「tier が曖昧なとき」の `typo` 明示 Light 例外より**常に優先**する。対象パスが `c:/yk-application/` 配下、またはシグナルに該当する変更は、ユーザーが「typo だけ直して」と明示していても Standard 以上・`yk_desktop` 必須とする（tag 判定と floor Read は必須。実装の手を広げるかは別途ユーザーに確認してよい）。
 
-**正本パス:** `c:/yk-skill/rule/40_python/references/`（L1 §12 索引と同型）
-
-| tag | 追加 Read |
-|-----|-----------|
-| `yk_openpyxl` | `c:/yk-skill/rule/40_python/references/PYTHON_OPENPYXL_DATA.md` |
-| `yk_desktop` | `c:/yk-skill/rule/40_python/references/PYTHON_YK_DESKTOP.md` |
-| `yk_webview` | `c:/yk-skill/rule/40_python/references/PYTHON_PYINSTALLER_GUI.md`（tkwebview2 節） |
-| `exe` | KB `04` · `memo` **に加え** `PYTHON_PYINSTALLER_GUI.md` |
-| `excel` | KB `02` · `06` **に加え** `PYTHON_OPENPYXL_DATA.md` |
-
-**複数 tag:** 該当する reference を **重複なく** Ref Plan `load` に列挙。
+L1 パターン（openpyxl / yk-application GUI / exe・埋め込みWebView）の tag 別 floor は **§3 に統合済み**（`yk_openpyxl` / `yk_desktop` / `yk_webview` / `exe` / `excel` 行）。
 
 ---
 
 ## 3. Tag — floor に加算（OR）
+
+**正本パス（`PYTHON_*.md` 系）:** `c:/yk-skill/rule/40_python/references/`（フルパスは §8）。**複数 tag は該当する reference を重複なく Ref Plan `load` に列挙する。**
 
 | tag | 追加で Read |
 |-----|-------------|
@@ -75,7 +67,7 @@
 | `skill_update` | `yk-skill/rule/10_meta/SKILL_AUTHORING_RULES.md` · `principles.md` · `ssot-audit.md` |
 | `yk_openpyxl` | `PYTHON_OPENPYXL_DATA.md` |
 | `yk_desktop` | `PYTHON_YK_DESKTOP.md` |
-| `yk_webview` | `PYTHON_PYINSTALLER_GUI.md`（tkwebview2 節） |
+| `yk_webview` | `PYTHON_PYINSTALLER_GUI.md`（Ref Plan にはファイル単位で `load` する。`yk_webview` タグで特に関係が深いのは冒頭目次の tkwebview2 関連3見出しだが、他見出しも同一ファイル内にあるため同時に目に入る） |
 
 **Full tier:** 上記 tag に加え、該当テンプレ・`count_stats.py`（物理計量する場合）を Read。
 
@@ -91,7 +83,7 @@
 | `xlsx`, `xlwings`, Excel 操作 | `excel` |
 | `customtkinter`, `tkinter`, GUI ウィンドウ | `gui`（Excel 併用なら `excel` も） |
 | `yk-application` 内の `customtkinter` | `gui` + `yk_desktop` |
-| `GetActiveObject`, `StayOnTop`, `ToolPlugin`, `c:/yk-application/` | `yk_desktop` |
+| `GetActiveObject`, `StayOnTop`, `ToolPlugin`, `c:/yk-application/`, `win32com.client`, `pythoncom`, `.spec` ファイル | `yk_desktop` |
 | `tkwebview2`, `pywebview` 埋め込み | `yk_webview` |
 | `streamlit`, `st.`, Plotly in Streamlit | `streamlit` |
 | `httpx`, `requests`, スクレイピング, SQLite 外部 | `external` |

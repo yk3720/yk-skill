@@ -2,13 +2,35 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12  
 **ROUTER tag:** `exe` · `yk_webview`  
-**最終更新:** 2026-09-16（`window.pywebview.api`/同期 `evaluate_js` が手組み埋め込みで機能しない件・`ExecuteScriptAsync`+`ContinueWith` によるポーリング代替を追記 · `flowchart-excel` で確定）
+**最終更新:** 2026-09-18（サブエージェントレビューで冒頭に見出し目次を追加。内容は変更なし）。旧: 2026-09-16（`window.pywebview.api`/同期 `evaluate_js` が手組み埋め込みで機能しない件・`ExecuteScriptAsync`+`ContinueWith` によるポーリング代替を追記 · `flowchart-excel` で確定）
 
 汎用の `sys.frozen` パス解決はスキル KB `Python_2_技術ナレッジベース_04_環境・配布.md`（K-001）。本ファイルは **PyInstaller GUI exe**（relative import · 同梱 · tkwebview2）。プラグイン欠落の症状差は [`PYTHON_YK_DESKTOP.md`](PYTHON_YK_DESKTOP.md)。
 
 ---
 
 `flowchart-studio` の `FlowchartStudio-ExcelConverter.exe` · `flowchart-excel` の `FlowchartExcel.exe` 実装で確定したパターン。詳細手順は各リポの `docs/03_技術仕様/装置Excel変換exe.md` · `npm run excel:converter:verify` · **`npm run excel:converter:release`**（版 bump 済み commit 上で verify → タグ → GitHub Release）· `flowchart-excel/build_exe.py`。
+
+### 目次
+
+| 見出し | 一行要約 |
+|--------|----------|
+| relative import を `__main__.py` に書かない | 凍結exeで `ImportError` になる同梱構成の話 |
+| ビルド前に実行中 exe を止める | `WinError 5` 対策 |
+| 凍結 exe の検証は GUI 目視だけにしない | ヘッドレス CLI 分岐での smoke |
+| 命名は 3 層 | GUI表記・exeファイル名・パッケージ名の使い分け |
+| v0.3 フロー表 ↔ モジュールは ListObject 名を使わない | `flowchart-studio` 固有のExcelテーブル照合ルール |
+| **Tk / CTk + pywebview · Excel COM**（tkwebview2 関連①） | 埋め込み1窓 vs 2窓フォールバックの原則表 |
+| **tkwebview2 + pywebview 版固定**（tkwebview2 関連②） | バージョン非互換の症状・対策表 |
+| **JS→Python 通知は `window.pywebview.api` も同期 `evaluate_js` も使えない**（tkwebview2 関連③） | ポーリング代替の設計 |
+| tkinterweb 4.x の frozen 同梱 | `libTkhtml3.0.dll` 同梱漏れ対策 |
+| watchdog を併用するとき | `Observer` 型注釈・スレッド安全性 |
+| 隣接リポを Vite alias する preview-web は両側で npm install | `flowchart-excel`/`flowchart-studio` 依存解決 |
+| Windows コンソール向け print に ✓ 等を書かない | cp932 での `UnicodeEncodeError` 回避 |
+| PyInstaller は venv の Python 経由 · 遅延 import の webview を明示同梱 | ビルド成功なのにexeが動かない事例の原因 |
+| preview-web（Vite）ビルドの落とし穴 | `cd` 位置起因の `EPERM` · 難読化バンドルでの検索方法 |
+| 依存を足したら／ズレていたら venv 再インストール + build/ 削除でクリーンリビルド | PyInstallerのキャッシュ再利用問題 |
+
+---
 
 ### relative import を `__main__.py` に書かない（凍結 exe で ImportError）
 
@@ -75,7 +97,7 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 | **埋め込み `__init__` 中に `update` / `update_idletasks` しない**（サイズは `after` で同期） | pythonnet STA 上で init 中に `update*` → **GIL fatal で exe 即終了** |
 | **CLR / pywebview `loaded` コールバックでは Tk を触らない**（フラグのみ · Tk メインの `after` pump で inject/resize） | `event_core_completed` / `loaded` から `winfo_*` · `after` · CTk を直接呼ぶ |
 | **STA スレッド**で tk mainloop（`main.py` 参照） | MTA スレッドから tkwebview2 初期化 |
-| PyInstaller: **`--collect-all=tkwebview2`** + webview 同梱（§下記） | webview のみ同梱して tkwebview2 を漏らす |
+| PyInstaller: **`--collect-all=tkwebview2`** + webview 同梱（後述の表を参照） | webview のみ同梱して tkwebview2 を漏らす |
 | 埋め込み init 失敗時は **子 widget を destroy して 2窓 UI にフォールバック** | 失敗後に同一親へ `pack` 済み領域へ `grid` でエラー表示 |
 
 - **切り分け（起動即終了・ログに exception 無し）:** stderr に `PyEval_RestoreThread` / GIL → **init 中の `update*`** または STA/tk 競合を疑う

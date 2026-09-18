@@ -12,7 +12,7 @@
 **ルーティング SSOT:** スキル `references/ROUTER.md`（tier + tag + Ref Plan）  
 **他言語向け設計パターン:** [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md)
 
-**最終更新:** 2026-09-10（§2 環境に小型 yk-application デスクトップの `uv.lock` なし例外を明記 · 着手前チェックのフォントは `BIZ UDPゴシック`）  
+**最終更新:** 2026-09-18（`converging-plan-reviews`によるサブエージェントレビュー5周で収束。SSoT重複是正・yk-application例外の明示・着手前チェック8項目化・ROUTER強制tierの穴塞ぎ・Word固有MUSTのスコープ明示等。詳細 §13）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) · スキル執筆は [`../10_meta/SKILL_AUTHORING_RULES.md`](../10_meta/SKILL_AUTHORING_RULES.md)
 
 ---
@@ -26,7 +26,7 @@
 | L2.5 | **Ref Plan**（チャット出力） | **コード編集前・必須**（Light は短形式 · 質問のみは不要） |
 | L3 | Ref Plan の `load` のみ（スキル KB と `40_python/references/` の両方がありうる） | 列挙したものだけ。**全件禁止** |
 
-**禁止:** rev 付きアーカイブの全件 Read · スキル `references/` の全件 Read · `40_python/references/` の全件 Read。
+**禁止（詳細は ROUTER §0）:** rev 付きアーカイブ・スキル `references/`・`40_python/references/` のいずれも全件 Read しない。
 
 **手順:** `ROUTER.md` で tier（Light/Standard/Full）と tag を決める → Ref Plan を出す → 列挙ファイルのみ Read。
 
@@ -45,15 +45,15 @@
 
 | 項目 | 規則 |
 |------|------|
-| 依存方向 | **UI → Schemas ← Core**（循環参照禁止） |
+| 依存方向 | **UI → Schemas ← Core**（循環参照禁止）。**例外:** 小型 yk-application デスクトップは `schemas` 層を持たない実例が多い（詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)） |
 | ファイルサイズ | `app/` 内 1 ファイル **500 行以内**（超える前に分割） |
 | 環境 | **uv** + `pyproject.toml` + `uv.lock` + `.python-version`（**例外:** 小型 yk-application デスクトップは bmp-resizer 型 = `requirements.txt` + `pyproject.toml` · `uv.lock` なし。詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)） |
-| 静的解析 | **Ruff**（`ruff check --fix`）+ **mypy**（`uv run mypy`）をリリース前に実行 |
+| 静的解析 | **Ruff**（`ruff check --fix`）+ **mypy**（`uv run mypy`）をリリース前に実行。**例外:** yk-application 小型ツールは、ruff は `select` 未 pin の場合・mypy は未導入/未設定の場合、それぞれ独立に変更スコープ内 green が基準（全件 green は Full tier のみ必須）。詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) §7 |
 | エントリ | `main.py` 先頭で **インポート・ハイジーン [K-002]**（`sys.path` 聖域化） |
 | パス | `sys.frozen` 判定で exe 内外を分離 **[K-001]** |
 | 機密 | `.env` + `.gitignore` で秘匿 **[K-016]** — 横断: [`../10_meta/SECRETS_HYGIENE_RULES.md`](../10_meta/SECRETS_HYGIENE_RULES.md) |
 
-起動例: `uv run python main.py`
+起動例: `uv run python main.py`（**例外:** 小型 yk-application デスクトップは `uv.lock` を持たないため `python main.py`。詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) §1）
 
 ---
 
@@ -75,7 +75,7 @@ project_root/
 └── プロジェクト名.code-workspace
 ```
 
-詳細ツリー → スキル `references/ファイル構成について.md`
+詳細ツリー → スキル `references/ファイル構成について.md`。**例外:** 小型 yk-application デスクトップはこの標準構成に従わない（`仕様・管理/` は使わず `docs/`、`requirements.txt` 主体、`schemas/` 無し）。詳細 L3 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)
 
 ---
 
@@ -114,7 +114,7 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 | K-ID から KB を足す | ROUTER §5 |
 | 実装前に Ref Plan を出す | Light → ROUTER §7 短形式 · Standard 以上 → §7 フル形式 · SKILL Step 0.1 |
 | 読み過ぎを防ぐ | ROUTER §6（パージ） |
-| **L1 パターン**（openpyxl / exe / yk-application GUI） | ROUTER §2.1 |
+| **L1 パターン**（openpyxl / exe / yk-application GUI） | ROUTER §3 |
 | **FastAPI · REST API · UploadFile** | [`FASTAPI_RULES.md`](FASTAPI_RULES.md)（No 42）— 本ファイルの uv/Ruff/SDD は **そのまま適用** |
 
 **目次（KB 全体像が必要なときだけ）:** `references/Python_2_技術ナレッジベース_01_目次.md`
@@ -175,7 +175,7 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 ## 11. 変更時のルール
 
 - ロード規則を変えるときは **`references/ROUTER.md` のみ**更新する（本ファイル §6 に表を戻さない）。
-- YK 実装パターンは **`rule/40_python/references/PYTHON_*.md` に追記**し、本ファイル §12 索引と ROUTER §2.1 に1行足す。**L1 へパターン全文を戻さない**。
+- YK 実装パターンは **`rule/40_python/references/PYTHON_*.md` に追記**し、本ファイル §12 索引と ROUTER §3 に1行足す。**L1 へパターン全文を戻さない**。
 - スキル KB（K-ID 等）は **`creating-pythoncode-yk/references/` に追記**し、ROUTER の tag / ID 表に1行足す。
 - `5.Python/0.ルール・操作方法` の rev ファイルは、ユーザー明示時以外 AI が編集しない。
 - 他言語スキルを新設するときは [`../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md`](../10_meta/PROGRESSIVE_CONTEXT_ROUTING_RULES.md) に従う。
@@ -184,27 +184,19 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 
 ## 12. L3 索引（YK 実装パターン）
 
-詳細は毎回読まない。ROUTER tag に応じて Ref Plan `load`。索引だけ読んで完了としない。
+詳細は毎回読まない。ROUTER tag との対応は **`ROUTER.md` §3 が正本**（本表には持たない）。索引だけ読んで完了としない。
 
-| ファイル | 旧節 | ROUTER tag | 内容 |
-|----------|------|------------|------|
-| [`PYTHON_OPENPYXL_DATA.md`](references/PYTHON_OPENPYXL_DATA.md) | 旧 §12 | `yk_openpyxl` · `excel` | openpyxl / data_only / Shift-JIS |
-| [`PYTHON_PYINSTALLER_GUI.md`](references/PYTHON_PYINSTALLER_GUI.md) | 旧 §13 | `exe` · `yk_webview` | PyInstaller / build_exe / 埋め込み WebView |
-| [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) | 旧 §14 | `yk_desktop` | yk-application GUI / COM / プラグインハブ |
+| ファイル | 内容 |
+|----------|------|
+| [`PYTHON_OPENPYXL_DATA.md`](references/PYTHON_OPENPYXL_DATA.md) | openpyxl / data_only / Shift-JIS |
+| [`PYTHON_PYINSTALLER_GUI.md`](references/PYTHON_PYINSTALLER_GUI.md) | PyInstaller / build_exe / 埋め込み WebView |
+| [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) | yk-application GUI / COM / プラグインハブ |
 
 **Excel / Word 所有権（MUST）:** 自前 `Dispatch` で起こしたプロセスは KB K-010 どおり `Quit`。起動中 `GetActiveObject` は **Quit しない**（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)）。
 
-**COM 書き込み（MUST）:** `Range.Find.Execute` 等の多引数メソッドは **位置指定**で呼ぶ（凍結 exe の遅延バインディングでキーワード引数が無言で既定値に落ちる）。**表をまたぐ選択に `Range.Text` 一括代入も `Range.Find` の ReplaceAll も使わない**（前者は表破壊、後者はセル再レイアウトで激遅）— 表なしは一括 / 表ありは段落単位の `Range.Text`。書き込みは書戻し後の読み直しで**実測**し「計画件数」を成功表示にしない（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md)）。
+**COM 書き込み（MUST）:** `Range.Find.Execute` 等の多引数メソッドは **位置指定**で呼ぶ（凍結 exe の遅延バインディングでキーワード引数が無言で既定値に落ちる）。**(Word) 表をまたぐ選択に `Range.Text` 一括代入も `Range.Find` の ReplaceAll も使わない**（前者は表破壊、後者はセル再レイアウトで激遅）— 表なしは一括 / 表ありは段落単位の `Range.Text`。書き込みは書戻し後の読み直しで**実測**し「計画件数」を成功表示にしない（詳細 [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) §2.8）。
 
-### 着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）
-
-- [ ] Office を COM 操作するなら **`StayOnTop`**（`app/ui/stay_on_top.py` をコピー · `_finish`/完了時に `raise_window()` · `messagebox(parent=self)`）。非 COM は不要
-- [ ] **フォント統一** — `theme.py` を SSOT に `CTkFont` の family を `BIZ UDPゴシック` へ · `font_title()/font_body()/font_small()` factory 経由（`ctk.CTkFont(size=...)` を widget へ直書きしない）→ 詳細・選定理由は `PYTHON_YK_DESKTOP.md`
-- [ ] **`pyproject.toml [tool.ruff] select` を明示 pin**（例 `["E","F","I","UP","B"]`）。未 pin リポは変更スコープ内のみ green を基準 · `main.py` DPI catch は `# noqa: BLE001`
-- [ ] **`tk.StringVar()` を import 時に作らない** — `build_panel` / Tk root 確定後に生成
-- [ ] 純ロジックは `app/core/` や Tk 非依存モジュールへ分離しユニットテスト（COM 実機はユーザー担当）
-- [ ] プラグイン集約なら registry 自動収集 · 純関数は元リポからコピー（相互 import しない · 両方へ反映）
-- [ ] exe は [`PYTHON_PYINSTALLER_GUI.md`](references/PYTHON_PYINSTALLER_GUI.md)（`build/<name>` + `dist/<name>.exe` 削除 → **venv の** `build_exe.py` → `plugins_discovered` 件数・id を突き合わせ）
+**着手前チェック（yk-application Python デスクトップを新規/改修する前に必ず）:** 正本は [`PYTHON_YK_DESKTOP.md`](references/PYTHON_YK_DESKTOP.md) §1（StayOnTop・フォント統一・ruff select pin・`tk.StringVar()` 生成タイミング・純ロジック分離・プラグイン registry 自動収集・プラグイン間COM共有ロック・exe ビルド手順の8項目）。**本ファイルには全文を複製しない**（`yk_desktop` tag を立てれば ROUTER §3 に従い Ref Plan の `load` に含める）。
 
 ---
 
@@ -212,6 +204,7 @@ tier / tag / K-ID / Ref Plan テンプレ・パージ規則は **本節に複製
 
 | 日付 | 内容 |
 |------|------|
+| 2026-09-18 | `converging-plan-reviews`によるPythonルール一式レビュー(5周・収束)。1周目: §0/§12のSSoT重複是正、ROUTER §2.1廃止(§3へ統合)、`PYTHON_YK_DESKTOP.md`の章立て化と「COMはUIスレッドのみ」の誤記訂正。2周目: yk-application例外の明示、Excel COM境界条件(ライブポーリングとワーカーの同時実行禁止)追加。3周目: ROUTER強制Standard条件の意味的シグナル拡張(Light tier回避の穴塞ぎ)、着手前チェック8項目化、可観測性・ロールバック手順追加。4周目: `PYTHON_YK_DESKTOP.md` §2をサブ見出し(2.1〜2.8)に分割、MUST/SHOULDラベル付与、ROUTER §2/§4矛盾解消。5周目: tier優先順位明記、mypy実行コマンド、Word固有MUSTのスコープ明示。詳細は各ファイルの変更履歴節 |
 | 2026-09-10 | §2 環境: 小型 yk-application デスクトップの `uv.lock` なし例外を明記（L3 `PYTHON_YK_DESKTOP.md` が SSOT）。着手前チェックのフォント名は `BIZ UDPゴシック` に統一済 |
 | 2026-09-09 | P14f · 旧 §12–§14 を `40_python/references/PYTHON_*.md` へ分割。L1 は索引 + 着手前チェック + Quit 所有権 MUST |
 | 2026-09-09 | （分割前）StayOnTop / フォント / ruff pin / ハブ純モジュール 等は Git 履歴および L3 を正とする |

@@ -2,7 +2,7 @@
 
 **SSOT:** 本ファイル · **索引:** [`PYTHON_RULES.md`](../PYTHON_RULES.md) §12
 **ROUTER tag:** `yk_desktop`
-**最終更新:** 2026-09-18（全体を章立てに再構成 · Excel COM は「UIスレッドのみ」ではなく「単一ワーカーで直列化」が正確な表現と訂正 · 空欄区別用の姉妹関数パターン · 埋め込みWebView構成での計算ロジック配置判断基準 · `threading.Thread` と CLR/WinFormsコールバックのTk安全性の違い · `flowchart-excel` の `.venv` に ruff が無い件を追加）。旧: 2026-09-16（3値以上のボタン状態色は既存のポーリングに便乗させ1箇所で計算する · CTk ボタンの状態色は生成直後に確定させる · `update_idletasks()` では同期COM呼び出し前の色変更が反映不安定 · Excel位置ズレ報告は実測ログで裏取りしてから直す · `flowchart-excel` 追加）。旧: 2026-09-15（CTk grid の空列だけ伸びる落とし穴を追加 · Excel `Shapes.AddConnector` の `.Type` 実機値・アンカー不要の浮き終点パターン · エージェントの実機Excel検証は隔離インスタンス+`Visible=False`で・`flowchart-excel` 追加）
+**最終更新:** 2026-09-18（サブエージェントレビュー5周(収束)。5周目: mypyのuv非依存実行コマンドを追記。詳細は本ファイル末尾「変更履歴」）
 
 exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本ファイルは **yk-application 小型 GUI**（COM 所有権 · StayOnTop · プラグインハブ）。
 
@@ -22,19 +22,53 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 - [ ] **`tk.StringVar()` を import 時に作らない** — `build_panel` / Tk root 確定後に生成
 - [ ] 純ロジックは `app/core/` や Tk 非依存モジュールへ分離しユニットテスト（COM 実機はユーザー担当）
 - [ ] プラグイン集約なら registry 自動収集 · 純関数は元リポからコピー（相互 import しない · 両方へ反映）
+- [ ] プラグインハブで複数プラグインが COM/ライブポーリングを共有するなら、停止/再開を `app/core/` の共有ロック・フラグ（例 `live_polling_guard.py`）で行っているか（§2.2 参照）
 - [ ] exe は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)（`build/<name>` + `dist/<name>.exe` 削除 → **venv の** `build_exe.py` → `plugins_discovered` 件数・id を突き合わせ）
 
 **5.Python MZ テンプレとの差:** 独立リポの Product Spec は `docs/`（No 17 / 25）。`仕様・管理/` は使わない。起動は bmp-resizer 型（`requirements.txt` · `python main.py` · 日本語 bat）。`pyproject.toml` は依存・Ruff の併記可（`requirements.txt` 単独を正本にしない）。
 
-**Python バージョン（現実）:** yk-application デスクトップ群は**事実上 Python 3.13 運用**（この開発 PC に 3.12 が無い。`toolkit` の venv も 3.13）。`.python-version` の `3.12` 系の記述は「3.12 が使える環境ではそちらを優先」という努力目標であって、3.13 で作って構わない。`requires-python` は `>=3.12` に留め、上限で 3.13 を弾かない。tkinterweb の 3.13 系不具合（空 `<title>` で `TclError`）に当たるなら、生成 HTML の `<title>` を必ず非空にして回避する（`skill-doc-viewer` の `render.py` 参照）。
+**Python バージョン（現実）:** yk-application デスクトップ群は**事実上 Python 3.13 運用**（この開発 PC に 3.12 が無い。`toolkit` の venv も 3.13）。`.python-version` の `3.12` 系の記述は「3.12 が使える環境ではそちらを優先」という努力目標であって、3.13 で作って構わない。`requires-python` は `>=3.12,<3.15` 程度の緩やかな上限に留め（3.13 を弾かない・将来の破壊的変更が出るメジャー版だけ緩やかに防ぐ）、新しい Python バージョンが出たら明示的に見直す。tkinterweb の 3.13 系不具合（空 `<title>` で `TclError`）に当たるなら、生成 HTML の `<title>` を必ず非空にして回避する（`skill-doc-viewer` の `render.py` 参照）。
 
 ---
 
 ## 2. Excel / Word COM 操作
 
-**Excel を触るとき:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。Office OM はスレッドセーフではない（STA）— COM 呼び出しは Tk メインスレッドか、**1機能につき単一のワーカースレッド**に限り、複数ワーカーから同時に同じブックへ触らせない（直列化。[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md) の表と同趣旨）。「COM は UI スレッドのみ」という言い切りは不正確 — `flowchart-excel` の描画パイプライン（`_worker_from_snapshot`）や C-2 の提案計算ワーカーは実際に専用バックグラウンドスレッド + 自前 `pythoncom.CoInitialize()` で COM を扱っており、これは許容パターンである。守るべきは「スレッドの場所」ではなく「同時に複数スレッドから同じ COM オブジェクトを叩かない」こと。
+### 2.1 GetActiveObject と所有権（Excel）[MUST]
 
-**エージェントが実機Excelで動作確認するとき（`flowchart-excel` 2026-09-15）:** `GetActiveObject` はユーザーが**今まさに開いている実インスタンス**に繋がる（実際にこのセッションでユーザーの実ブックが開いた状態のインスタンスへ接続した）。使い捨て検証で新規ブックを作って壊す可能性があるなら、`win32com.client.Dispatch("Excel.Application")` + `app.Visible = False` で**完全に別プロセスの隔離インスタンス**を立て、そちらだけで検証してから `app.Quit()` する（`GetActiveObject` で得たユーザーの実インスタンス側は絶対に `Quit()` しない）。検証前後で `app.Workbooks.Count` を比較し、増減が自分の操作分とズレていないか必ず確認する。
+**Excel を触るとき（製品コードの通常動作）:** `GetActiveObject` で起動中に接続する。未起動の Excel を `Dispatch` で起こさない。**`Excel.Quit` しない**。`GetActiveObject` は起動中の Excel が1つも無いと `pywintypes.com_error` を送出する — 例外を握りつぶさず、「Excel を先に開いてください」等のガイダンス型通知（K-030 スタイル：【状況】＋【原因】＋【具体的アクション】）でユーザーへ返し処理を中断する。
+
+### 2.2 スレッドモデル（STA・単一ワーカー・ライブポーリング排他）[MUST]
+
+Office OM はスレッドセーフではない（STA）— COM 呼び出しは Tk メインスレッドか、**1機能につき単一のワーカースレッド**に限り、複数ワーカーから同時に同じブックへ触らせない（直列化。[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md) の表と同趣旨）。「COM は UI スレッドのみ」という言い切りは不正確 — `flowchart-excel` の描画パイプライン（`_worker_from_snapshot`）や列自動計算の提案計算ワーカー（`app/core/level_inference.py` 系、C-2機能）は実際に専用バックグラウンドスレッド + 自前 `pythoncom.CoInitialize()` で COM を扱っており、これは許容パターンである。守るべきは「スレッドの場所」ではなく「同時に複数スレッドから同じ COM オブジェクトを叩かない」こと。
+
+**【境界条件・着手前チェック§1にも必須項目あり】Tk メインスレッドのライブポーリングと、バックグラウンドワーカーの COM 呼び出しを同時に走らせない:** 「単一ワーカーで直列化すれば安全」は成り立つが、**ライブポーリング（Tk メインスレッドが `after` タイマーで定期的に COM 読取する処理）自体も1つの COM アクセス経路**であることを見落としやすい。ワーカースレッドが COM 書き込みをしている間にライブポーリングが同時に同じブックへ読み取りに行くと、STA の再入・レースでハング/原因不明のフリーズを起こしうる。**この直列化は「1機能につき単一ワーカー」の範囲を超え、アプリ内の別機能のワーカー（例: 描画ワーカーと提案計算ワーカーが両方起動しうる）ともまたがる** — 機能をまたいで同時に起動されうる設計では、アプリ全体で1つの COM アクセス用ロックに揃える。
+
+- **[MUST] 実装:** ワーカー起動直前にライブポーリングの `after` タイマーを止め、ワーカー完了後（`finally` で確実に）再開する（[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md) の「描画中はライブ停止」と同じ原則）。
+- **[MUST] 共有実装先（§6プラグイン集約の例外）:** プラグイン集約ハブでは複数プラグインが同一プロセスに同居するため、停止/再開は**プラグインをまたいで共有する単一のロック・フラグ**で行う。これは §6 の「（元リポからコピーする）純関数はコピーし相互 import しない」規約に対する例外として、`app/core/`（例 `app/core/live_polling_guard.py`）に共有ガードモジュールを1つだけ置き、各プラグインはそれを import して `pause()`/`resume()`（またはコンテキストマネージャ）を呼ぶ（着手前チェック §1 に対応項目あり）。
+- **[SHOULD] 可観測性:** 停止/再開のたびに `live_polling_paused` / `live_polling_resumed`（理由・呼び出し元を添えて）を1行ログする。停止したまま長時間再開されない（＝サイレント停止）を検知できるよう、次回ポーリング tick 自身が「前回 tick から想定間隔を大きく超えていないか」を自己点検し、超えていれば warning ログを出す（例: 共有ガードモジュールが `last_tick_at` を保持し、次 tick でその差分をチェックする。具体的な閾値・発火頻度はリポ側の裁量でよい）。「ライブ ON のはずなのに UI が固まって見える」症状が出たら、まずこのポーリング一時停止フラグが解除されているかを確認する。
+- **既存の「3値以上のボタン状態色はポーリングに便乗」ルール（§4）との整合:** ポーリングを止めている間はそこに便乗している状態色の更新も止まる。ワーカー起動直前に一度だけ「処理中」色を明示セットしてからポーリングを止め、再開後は通常の便乗計算に戻す。
+
+### 2.3 描画失敗時のロールバック
+
+**複数シェイプにまたがる描画処理は、作成済み分を巻き戻せるようにする（`flowchart-excel` の `_rollback()` パターン）:** ワーカースレッドが描画シーケンスの途中で例外を投げると、途中まで作成したシェイプがシートに残った「半端な図形」になりうる。作成したシェイプ名を逐次リスト（例 `created_names`）へ積み、`except`/`finally` でそのリストを辿って `sheet.Shapes(name).Delete()` を best-effort で呼ぶ（個々の削除失敗は無視して続行）。削除しきれなかった場合はシェイプ名一覧をログとエラー通知に含め、ユーザーが手動で選択・削除できるようにする。
+
+### 2.4 症状→ログ早見表
+
+本ファイル・`PYTHON_PYINSTALLER_GUI.md` に散在する主なログ/イベント名:
+
+| 症状 | まず見るログ・イベント名 |
+|------|---------------------------|
+| ライブ ON のはずなのに UI が固まって見える | `live_polling_paused` / `live_polling_resumed`（§2.2）— 一時停止フラグが解除されているか |
+| 埋め込みプレビューが開かない・即終了 | `dist/logs/app.log` の `embedded_preview_init_failed` |
+| ライブ ON なのに「待機中」のまま | `embedded_inject_failed` / `embedded_inject_ok` の有無（[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)） |
+| プラグインが一部/全部読み込まれない | `plugins_discovered` の件数・id、`plugin_without_plugin_module` warning（[`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)） |
+| 描画位置がおかしい | アンカー解決点のログ（`sheet.Name`/`Range.Address`、§2.6） |
+
+### 2.5 実機検証時の隔離インスタンス（エージェント作業の例外）
+
+**エージェントが実機Excelで動作確認するとき（検証作業に限る例外・`flowchart-excel` 2026-09-15）:** `GetActiveObject` はユーザーが**今まさに開いている実インスタンス**に繋がる（実際にこのセッションでユーザーの実ブックが開いた状態のインスタンスへ接続した）。使い捨て検証で新規ブックを作って壊す可能性があるなら、`win32com.client.Dispatch("Excel.Application")` + `app.Visible = False` で**完全に別プロセスの隔離インスタンス**を立て、そちらだけで検証してから `app.Quit()` する（`GetActiveObject` で得たユーザーの実インスタンス側は絶対に `Quit()` しない）。検証前後で `app.Workbooks.Count` を比較し、増減が自分の操作分とズレていないか必ず確認する。
+
+### 2.6 AutoShape・位置の落とし穴（`flowchart-excel` 個別事例）
 
 **AutoShape コネクタ（`Shapes.AddConnector`）の落とし穴（`flowchart-excel` 2026-09-15 実機確認、Excel 16.0/365）:**
 - `.Type` は「コネクタは `msoLine`(9)」という通説に反し、実機では **`msoAutoShape`(1)** として報告された（`BeginConnect`/`EndConnect` の有無に関わらず）。「Type で通常図形とコネクタを見分ける」設計は当てにせず、実機で `.Type` を確認してから判定条件を書く。
@@ -42,7 +76,11 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **Excel 上の「位置がおかしい」報告は先に実測ログで裏取りする（`flowchart-excel` 2026-09-16）:** `app.Selection` を都度読み直して描画位置を決める設計は正しく動いていても、ユーザーの「意図した位置と違う」報告だけでコードを疑って推測パッチを当てると空振りしやすい。アンカー解決箇所へ `sheet.Name` / `Range.Address` を出すログを1行足し、再現後に `dist/logs/app.log` を読むと、コードは正しく選択セルを使えており、原因はシート上の別テーブルとの近接・重複だった（狙ったセルが別データ島のすぐ近くにあった）。**対策:** COM 経由の「位置がズレる」系の報告は、まずアンカー解決点に実測ログを1行足してから再現してもらう（コードを直す前に「本当にコードが原因か」を実測で切り分ける）。
 
-**Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM の直列化方針は Excel と同じ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
+### 2.7 Word COM [MUST]
+
+**Word を触るとき（Excel と同型）:** 同じく `GetActiveObject`。未起動の Word を `Dispatch` で起こさない。**`Word.Quit` しない**。COM の直列化方針は Excel（§2.2）と同じ。共有基盤は `app/core/word/`（Word を使うプラグインだけが import。Excel 非依存プラグインは触らない）。
+
+### 2.8 Word 選択範囲書き換えの落とし穴（`word-kana-toggle` 個別事例）
 
 **Word の選択範囲を書き換えるツールの落とし穴（`word-kana-toggle` v0.3.0〜v0.3.1 · 2026-09-10 で全部踏んだ）:**
 
@@ -60,7 +98,7 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 ## 3. 非同期・スレッド設計
 
-**通常の `threading.Thread` と CLR/WinForms イベントコールバックは、Tkへの反映方法が異なる（`flowchart-excel` 2026-09-18）:** 自分で起動した通常の `threading.Thread`（例 `main_window.py` の `_worker_from_snapshot`）からは `self.after(0, cb)` でTkメインスレッドへ安全に反映できる（Tcl のイベントキューへの登録はスレッドセーフ）。一方、tkwebview2/CLR側が発火するイベントコールバック（`loaded` · `event_core_completed` 等）は **Tkを直接触ってはいけない**（フラグを立てるだけにして `_main_pump` の `after` ポーリングで拾う、というのが本ファイル既出の鉄則）。**この2種類のバックグラウンド実行元を同一視して「バックグラウンドスレッドだから all `after(0,...)` NG」あるいは逆に「CLRコールバックでも `after` すれば大丈夫」と誤解しないこと。** 新機能の非同期ワーカーを追加するときは、それが自分で `threading.Thread(...).start()` したものか、CLR/WinFormsが呼ぶコールバックかを最初に見極める。
+**通常の `threading.Thread` と CLR/WinForms イベントコールバックは、Tkへの反映方法が異なる（`flowchart-excel` 2026-09-18）:** 自分で起動した通常の `threading.Thread`（例 `main_window.py` の `_worker_from_snapshot`）からは `self.after(0, cb)` でTkメインスレッドへ安全に反映できる（Tcl のイベントキューへの登録はスレッドセーフ）。**ただしこれは「コールバック登録」に限った話**（thread-enabled Tcl ビルド前提）で、ウィジェットへの**同期的な直接アクセス・戻り値取得**をワーカースレッドから行うのは別問題であり、依然として禁止（Tk はスレッドセーフではない。触るのは必ず `after` 経由で main スレッドに渡した先）。一方、tkwebview2/CLR側が発火するイベントコールバック（`loaded` · `event_core_completed` 等）は **Tkを直接触ってはいけない**（フラグを立てるだけにして `_main_pump` の `after` ポーリングで拾う、というのが本ファイル既出の鉄則）。**この2種類のバックグラウンド実行元を同一視して「バックグラウンドスレッドだから all `after(0,...)` NG」あるいは逆に「CLRコールバックでも `after` すれば大丈夫」と誤解しないこと。** 新機能の非同期ワーカーを追加するときは、それが自分で `threading.Thread(...).start()` したものか、CLR/WinFormsが呼ぶコールバックかを最初に見極める。
 
 **埋め込みWebView構成（1窓 tkwebview2）で新機能の計算ロジックをどちら側に置くか（`flowchart-excel` 2026-09-18）:** JS→Python通知が `ExecuteScriptAsync` ポーリング限定（`window.pywebview.api` も同期 `evaluate_js` も使えない。詳細は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)「JS→Python通知は…使えない」節）という制約下では、JS側で計算してもPython側で計算しても結果を受け渡すのに同じポーリング往復が必要になり、計算をJS側に置くレイテンシ上の利点は無い。加えて Excel COM の最新読取・`stop_event` によるキャンセルは Python 側でしか自然に書けない。**対策:** このアーキテクチャで「Excelデータを読んで何かを計算しUIへ出す」新機能は、既存の描画・座標計算ロジック（TS側の React Flow 用ジオメトリ計算）と混同せず、**原則 Python 側に実装する**。TS側に置く理由があるのは React Flow の描画そのものを担う処理（レイアウト座標計算等）に限る。
 
@@ -75,7 +113,7 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **同期COM呼び出し前のボタン色変更は `update_idletasks()` では反映が不安定（`flowchart-excel` 2026-09-16）:** 「読込中」を示すためボタン色を変えてから重い同期処理（Excel COM 読取等）を呼ぶ場合、`widget.update_idletasks()` だけでは実際に画面へ反映される前に処理が始まってしまうことがある。`self.update()`（ウィンドウ全体の pending イベントを処理）を使う方が確実。
 
-**3値以上のボタン状態色は、新規タイマーを足さず既存のポーリングに便乗させて1箇所で計算する（`flowchart-excel` 2026-09-16）:** 「未検出=白 / 検出済み=青 / プレビュー中=緑」のような3値以上の状態色を実装するとき、クリック時だけ一瞬色を変える方式（`configure` → `update()` → 処理 → `configure` で戻す）は、処理が一瞬で終わると人間の目には変化が見えず「変わっていない」という報告になる。この用途では、**既に1秒間隔で外部状態（Excelの選択内容）をポーリングしている関数**（例 `_refresh_status_line`）の中で状態を判定し、そのまま色も確定させる方が確実（新しい状態変数・タイマーを増やさない）。判定に使う値は、ステータス表示に既に使っている値（例: タイトル検出結果）を再利用でき、二重に判定ロジックを持たずに済む。
+**3値以上のボタン状態色は、新規タイマーを足さず既存のポーリングに便乗させて1箇所で計算する（`flowchart-excel` 2026-09-16）:** 「未検出=白 / 検出済み=青 / プレビュー中=緑」のような3値以上の状態色を実装するとき、クリック時だけ一瞬色を変える方式（`configure` → `update()` → 処理 → `configure` で戻す）は、処理が一瞬で終わると人間の目には変化が見えず「変わっていない」という報告になる。この用途では、**既に1秒間隔で外部状態（Excelの選択内容）をポーリングしている関数**（例 `_refresh_status_line`）の中で状態を判定し、そのまま色も確定させる方が確実（新しい状態変数・タイマーを増やさない）。判定に使う値は、ステータス表示に既に使っている値（例: タイトル検出結果）を再利用でき、二重に判定ロジックを持たずに済む。**§2.2のライブポーリング停止ルールとの整合:** COMワーカー実行中はこのポーリング自体が一時停止するため、便乗している状態色の更新も止まる。ワーカー起動直前に一度だけ「処理中」色を明示セットしてからポーリングを止め、再開後は通常の便乗計算に戻す。
 - **アンチパターン:** ボタン色の切り替えを「クリックイベントの前後で一瞬変える」方式だけで実装し、常時変化する外部状態（Excel選択・ライブ監視対象の有無等）との整合を取らない。
 
 **フォント統一（CTk）:** CTk 既定の `Roboto` は日本語グリフを持たず、Tk が **文字ごとに system フォントへ fallback** するため、日本語混在 UI が「フォントバラバラ」に見える（`toolkit` で発覚。ラベル・ボタン・見出しで別々の和文フォントに落ちる）。`app/ui/theme.py` を 1 ファミリ SSOT にし、`apply_theme()` で `ctk.ThemeManager.theme["CTkFont"]["family"]` を **Latin+日本語を 1 面で賄うフォント**へ上書きする（明示 `font=` 未指定の widget も揃う）。サイズ・太さ違いは `font_title()` / `font_body()` / `font_small()` の factory 経由にし、`ctk.CTkFont(size=...)` を各 widget へ直書きしない。`apply_theme()` は `ctk.CTk.__init__` 呼び出し前（widget 生成前）に呼ぶ — 個別の `set_appearance_mode` / `set_default_color_theme` 直書きは `theme.py` に一本化し呼び出し側へ残さない。
@@ -103,6 +141,7 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 ## 6. プラグイン集約（複数ツールを 1 窓に · 実例 `toolkit`）
 
 - 共有基盤は `app/core/`（`ToolPlugin` 契約・結果型。Office 非依存）+ `app/core/excel/` · `app/core/word/`（各 Office を使うプラグインだけが import）。各ツールは `app/plugins/<name>/plugin.py` 末尾で `PLUGIN = ...` を公開し、`registry.discover()` が `pkgutil.iter_modules` + `ispkg` で自動収集する。ハブに if 分岐を足さない
+- **COM/ライブポーリングを使うプラグインが複数同居するなら、停止/再開は `app/core/` の共有ロック・フラグで行う**（§2.2 参照。次の「純関数はコピーし相互 import しない」規約に対する例外）
 - **選択操作と全文走査は core へ寄せる** — 選択は `selection`（例: `as_cell_range` / `as_text_selection`）、文書・ブック全文の読取は `document` / `workbook`（例: `scan_active_document` / `scan_active_workbook`）。プラグイン内で `GetActiveObject` や全文読取を再実装しない（検出のみツールも書込なしのまま core 経由）。**アンチパターン:** プラグインごとに `word_scan.py` / `excel_scan.py` をコピーして COM 接続を二重管理する
 - 純関数は各プラグインフォルダに閉じてユニットテスト。元の単機能リポからはロジック無改変で **コピー**（相互 import しない · 更新は両方へ · コピー元/先を docstring と AGENTS に明記）
 - **`tk.StringVar()` を import 時に生成しない** — `PLUGIN = Plugin()` がモジュール読込で走るため、`__init__` で Tk 変数を作るとヘッドレステストが `RuntimeError: no default root window` で落ちる。Tk 変数は `build_panel`（Tk root 確定後）で生成する
@@ -115,9 +154,13 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 ---
 
-## 7. 静的解析（ruff）
+## 7. 静的解析（ruff・mypy）
 
 **`pyproject.toml [tool.ruff]` に `select` を書かないと**、ruff 更新（0.16 系）で `I001` / `UP028` / `BLE001` / `SIM117` 等が既定に加わり、**既存コードに新規指摘が出る**（`toolkit` の committed main が 10 件・`word-table-formatter` 新設で `BLE001`）。小型ツールは `select` を明示 pin する（例: `["E", "F", "I", "UP", "B"]`）。pin していないリポに手を入れるときは **変更スコープ内のファイルのみ green** を完了基準とし、無関係な既存指摘は同じ変更で直さない。`main.py` の DPI 設定 `except Exception` は `# noqa: BLE001`（best-effort・起動を止めない）を定型にする。
+
+**mypy も同じ基準（`PYTHON_RULES.md` §2 の「リリース前に実行」MUST を yk-application 小型ツールに適用する場合）:** mypy 未導入・未設定のリポでは全件 green を新たに求めない。ruff と同じく **変更スコープ内のファイルのみ** 型エラーが増えていないことを完了基準とする。全件 green を要求するのはリリース・配布のある Full tier のときのみ。**実行コマンド:** yk-application 小型ツールは `uv` プロジェクトではない（§1「環境」の例外）ため `PYTHON_RULES.md` §2 が示す `uv run mypy` はそのままでは動かない。`.venv` に mypy が入っていれば `.venv/Scripts/python.exe -m mypy app`（Windows）を使う。ruff 同様 `.venv` に入っていないこともある（下記参照）ので、`import mypy` が通るか先に確認する。
+
+**「変更スコープ内 green」を無期限の免罪符にしない:** 継続的に機能追加が続き Full tier（次の exe リリース）が長期間発生しないリポは、この緩和が事実上無期限に効いてしまい負債が積み上がる。**運用（SHOULD・回数を機械的に数える仕組みは無いため目安レベル）:** しばらく機能追加が続き Full tier（exe リリース）が来ていないと感じたら、次回の着手前チェック（§1）で `select` pin 自体を1回のタスクとして先に片付けることを検討する。
 
 **`BLE001` の抑制条件（`word-kana-toggle` 2026-09-10）:** ruff 0.16 の `BLE001` は `except Exception` でも **ハンドラが例外をログすれば**（`logger.exception(...)` / `logger.debug(..., exc_info=True)`）指摘しない。素の `logger.debug("msg")`（`exc_info` なし）は指摘が残るので `# noqa: BLE001` が要る。逆に、ログ付きハンドラへ `# noqa: BLE001` を付けると `RUF100`（unused directive）になる。`except (AttributeError, pywintypes.com_error)` のように**具体名で捕まえれば** noqa 不要。
 
@@ -136,4 +179,18 @@ exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本フ�
 
 **exe:** [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。ファイル名は ASCII、画面タイトルは日本語可。bat は `dist\{Exe}.exe` があればそれを起動する。再ビルド前に起動中 exe を止める。**新設で exe まで作るか**はスキル `creating-personal-tool-yk`（Windows GUI は同一ターンでビルド）。
 
+**最小ロールバック:** 小型ツールは `release_converter.py` 相当の版管理自動化を持たないため、再ビルド前に既存の `dist/<name>.exe` を `dist/<name>.exe.bak` 等へ退避しておく。新ビルドに問題が出たら退避コピーに差し戻す。
+
 **テスト:** ドメインは unittest。COM 実機はユーザー担当。
+
+---
+
+## 10. 変更履歴（L3）
+
+| 日付 | 内容 |
+|------|------|
+| 2026-09-18（5周目・収束） | サブエージェントレビュー(検証者・編集様式・フレッシュ第三者)で収束。ROUTER強制tierとtyop明示Lightの優先順位明記、mypyのuv非依存実行コマンド追記、Word固有MUSTのスコープ明示 |
+| 2026-09-18（4周目） | サブエージェントレビュー(PM・フレッシュ第三者)で§2をサブ見出し(2.1〜2.8)に分割・MUST/SHOULDラベル付与・「唯一の例外」等の過剰断定を是正・ROUTER §2/§4間のtkinter単体扱いの矛盾を解消。詳細は Git 履歴 |
+| 2026-09-18（1〜3周目） | サブエージェントレビュー計3周: 章立て再構成・COMスレッドモデルの誤記訂正・ライブポーリング境界条件とその可観測性/共有ロック/ロールバック手順・症状ログ早見表・姉妹関数パターン等を追加。詳細は Git 履歴 |
+| 2026-09-16 | 3値以上のボタン状態色は既存のポーリングに便乗させ1箇所で計算する · CTk ボタンの状態色は生成直後に確定させる · `update_idletasks()` では同期COM呼び出し前の色変更が反映不安定 · Excel位置ズレ報告は実測ログで裏取りしてから直す · `flowchart-excel` 追加 |
+| 2026-09-15 | CTk grid の空列だけ伸びる落とし穴を追加 · Excel `Shapes.AddConnector` の `.Type` 実機値・アンカー不要の浮き終点パターン · エージェントの実機Excel検証は隔離インスタンス+`Visible=False`で · `flowchart-excel` 追加 |
