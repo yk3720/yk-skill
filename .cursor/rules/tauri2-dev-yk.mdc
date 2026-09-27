@@ -8,7 +8,7 @@ alwaysApply: false
 
 **INDEX:** [未登録ドメイン（L0 `.mdc` のみ）](c:/yk-skill/rule/RULE_INDEX.md#未登録ドメインl0-mdc-のみ) — flowchart-studio 統合は **2026-06-27 当面しない**（`tauri-practice` 別リポ）。Supabase Deep Link → [`SUPABASE_RULES.md`](c:/yk-skill/rule/30_web_stack/SUPABASE_RULES.md) §10。
 
-**公式ドキュメント:** https://v2.tauri.app/
+**公式ドキュメント:** https://v2.tauri.app/ — [Capabilities](https://v2.tauri.app/security/capabilities/) · [Command Scopes](https://v2.tauri.app/security/scope/) · [File System plugin](https://v2.tauri.app/plugin/file-system/) · [WebDriver](https://v2.tauri.app/develop/tests/webdriver/)
 
 ## 前提ツール
 
@@ -80,6 +80,7 @@ const msg = await invoke<string>('greet', { name: 'World' });
 - `capabilities/` で **ウィンドウ単位** に権限を定義する（ワイルドカード `*` 禁止）
 - CSP を明示的に設定: `"csp": "default-src 'self'; script-src 'self'"`
 - **最小権限原則**: 使うプラグインの必要なパーミッションのみ追加
+- **権限(permission)とスコープ(scope)は別物**: `fs:allow-read-text-file`等を有効にしただけではどのパスにもアクセスできない。多くの`fs`コマンドは**scope（globパターン）でパスを別途明示許可**しないと実行時に`forbidden path`エラーになる（[公式: Command Scopes](https://v2.tauri.app/security/scope/)）
 - Rustコマンド内で **入力を必ずバリデーション**（フロントエンドを信頼しない）
 - `cargo audit` / `npm audit` を定期実行
 
@@ -138,6 +139,40 @@ export default defineConfig({
 `fs` / `dialog` / `http` / `shell` / `notification` / `store` / `sql` / `updater` / `log` / `clipboard-manager` / `global-shortcut` / `deep-link`
 
 追加: `npx tauri add fs` のように実行。Cargo.toml と capabilities の両方が自動更新される。
+
+**バージョン動向（2026-09 Web調査）:** 2026年も`tauri`本体・プラグイン双方で破壊的変更が継続中（例: Storeプラグインの`Store`コンストラクタ廃止→`createStore`API、`webkit2gtk-rs`更新等）。`npx tauri add <plugin>`実行後は該当プラグインのCHANGELOGを確認する。v1→v2移行の代表的な罠: `@tauri-apps/api/tauri`→`@tauri-apps/api/core`、`@tauri-apps/api/window`→`@tauri-apps/api/webviewWindow`にモジュールが分割されている。
+
+## スキャフォールド時の事故防止（2026-09 実例）
+
+**`npm create tauri-app@latest -- --force`（`-f`）を、既存ファイル（`docs/`・`AGENTS.md`・企画ドキュメント等）がある非空ディレクトリに対して実行すると、それらが黙って削除され、テンプレートで上書きされる。** `git init`直後でコミットが無い状態だと `git restore` で戻せず、実際にプロジェクト企画ドキュメント一式を失う事故が起きた（会話ログから全文復元できたのは幸運）。
+
+| MUST | 理由 |
+|------|------|
+| 対象ディレクトリに既存ファイルがあるなら **`--force`を使わない**。まず空の一時ディレクトリでscaffoldし、生成物だけを対象ディレクトリへコピーする | `--force`は「空でなくても続行」ではなく「中身を問答無用で上書き」 |
+| scaffold前に対象ディレクトリの `git status` を確認し、未コミットファイルがあれば **ユーザーに確認 or 先にcommit** | `AGENT_SHELL_RULES.md` §3-5 の「破壊的ファイル操作」と同じ扱い |
+
+## 任意フォルダへのファイルI/O（ユーザーがダイアログで選んだパス）
+
+`tauri-plugin-fs` はcapabilityで許可した**スコープ内のパスのみ**読み書き可能で、ユーザーが実行時にダイアログで選ぶ任意パス（例: 「保存先フォルダ」機能）には不向き（動的スコープ許可の設定が煩雑）。**カスタム `#[tauri::command]` 内で素の `std::fs`/`tokio::fs` を使う**方がシンプルで、Rustプロセスの権限の範囲でどのパスにもアクセスできる（フロントは`invoke()`でパス文字列を渡すだけ）。`fs`プラグインは `$APPDATA` 等、固定・既知のパスのみで使うのが向いている。
+
+**2026-09 Web調査で確認済み:** これは自己流の回避策ではなく、[公式ドキュメント（File System plugin）](https://v2.tauri.app/plugin/file-system/)が明記している推奨パターン——「バックエンドのファイル操作には`fs`プラグインではなく従来のRustライブラリ（`std::fs`・`tokio::fs`等）を使うこと」。フロント側`fs`プラグインのスコープ検証は受けない分、**Rustコマンド内でのパス検証（親ディレクトリ脱出等）は自前で行う**こと。
+
+## GUI自動テストの注意（2026-09 実例）
+
+**この環境からの疑似キーボード入力（`SendKeys`・`AttachThreadInput`+`SetFocus`・生`SendInput` API の3通り試行）は、WebView2の描画面（`Chrome_RenderWidgetHostHWND`）に一切届かなかった**（単純な1文字キーも無反応）。一方、以下は機能する:
+
+| 対象 | 効く方法 |
+|------|----------|
+| WebView2内のHTML要素（ボタン・input） | UI Automation（`InvokePattern`・`ValuePattern`）— WebView2は標準でアクセシビリティツリーを公開している |
+| ネイティブWin32ダイアログ（フォルダ選択等）の子コントロール | `SendMessage`(`WM_SETTEXT`/`BM_CLICK`) を子HWNDへ直接送る。UI Automationの`InvokePattern`が効かないことがある（レガシーコントロールのMSAAブリッジ由来） |
+| マウスクリック全般 | 疑似`mouse_event`で問題なく機能した |
+
+Ctrl+V等の**キーボードショートカット**を伴う機能（クリップボード貼り付け等）を自動検証する必要があるなら、Win32 APIでの疑似キーボード入力を何度も工夫するより先に、公式の [`tauri-driver`](https://v2.tauri.app/develop/tests/webdriver/) + WebDriver経由を試す（本セッションでは未検証・時間対効果が悪いと判断して途中で撤退した）。
+
+**tauri-driverのセットアップ概要（2026-09 Web調査）:**
+- 最も簡単なのは `npm create wdio@latest ./` →「Desktop Testing」→フレームワークで「Tauri」を選択
+- **対応OS注意:** `tauri-driver`の直接ドライブは **Windows/Linuxのみ**（macOS用のWKWebViewドライバが無い）。macOSはWebdriverIOの埋め込みWebDriverサーバー経由でのみ対応
+- 2026年も継続的に更新されている（5月: `eq-separator`対応 · 2月: stdout汚染修正）ため、Tauri公式サポートのE2E経路として実用段階にある
 
 ## Web + Desktop 並行開発（同一リポ）
 

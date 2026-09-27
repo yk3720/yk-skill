@@ -122,6 +122,7 @@ git -C "c:/yk-memo" status; git -C "c:/yk-skill" status
 | 親スイートフォルダ（`fa-suite` 等）の新設 + 既存アプリ取り込み | `15_project_mgmt/YK_APPLICATION_RULES.md` §1-1（フラット構成） |
 | `Get-ChildItem -Recurse` + `ReadAllText` / `WriteAllText` による横断置換 | **Grep** → **StrReplace / Write**（1 ファイルずつ） |
 | 文字化けへの **Shift-JIS ↔ UTF-8 変換の繰り返し** | 下記 §6「日本語 MD が文字化け」 |
+| scaffoldツール（`npm create <template>` 等）の `--force`/`-f` を**既存ファイルがある非空ディレクトリ**に使う | 空の一時ディレクトリでscaffold→生成物だけ対象へコピー。実例: `npm create tauri-app -- --force` が既存`docs/`一式を無断削除（2026-09・`tauri2-dev-yk.mdc`参照） |
 
 UTF-8 で書く必要がある Shell 処理は `50_gas_html_test/POWERSHELL_HTML_RULES.md` ルール1（`UTF8Encoding($false)` 明示）に従う。
 

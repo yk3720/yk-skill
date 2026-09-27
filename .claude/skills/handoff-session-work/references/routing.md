@@ -302,6 +302,7 @@ Phase A を飛ばして Phase B だけ行った状態は **引き継ぎ終了済
 | `term-consistency-checker` | `handoffs/term-consistency-checker/HANDOFF.md` | CSV 用語集で Word/Excel 文書の表記ゆれを検出（読取専用・検出のみ）· `yk-application/term-consistency-checker` |
 | `figure-renumberer` | `handoffs/figure-renumberer/HANDOFF.md` | Word 文書の図番号・表番号を出現順に検出・振り直し（検出→プレビュー→適用の2段階）· `yk-application/figure-renumberer` |
 | `local-llm-core` | `handoffs/local-llm-core/HANDOFF.md` | ローカルLLM(Ollama等)のOpenAI互換API共有ラッパー・複数PC(HP OmniBook 5/dynabook)向け共有基盤ライブラリ · `yk-application/local-llm-core` |
+| `manual-studio` | `handoffs/manual-studio/HANDOFF.md` | 手順書・マニュアル作成/確認ツール(スクリーンショット注釈編集が核心)・Tauri+React+Konva.js · [`yk-application/manual-studio`](https://github.com/yk3720/manual-studio)(scaffold+CRUD+画像注釈実装済み)。企画初期の自動生成構想は将来構想として`プロジェクト概要.md`に保持 |
 | （別トラック） | `c:/yk-skill/rule/RULE_IMPROVEMENT_HANDOFF.md` | **本スキル非使用** |
 
 新 slug 追加時: `handoffs/{slug}/` 作成 · 初回終了で `handoffs/README.md` に 1 行追加。
