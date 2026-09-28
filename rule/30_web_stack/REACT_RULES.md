@@ -236,6 +236,26 @@ function reducer(state: State, action: Action): State {
 
 派生テキスト（命名規則で生成されるプレビュー文字列等）も同じ state から計算し、`useEffect` で sync しない。
 
+#### 「リセット」と「新規データ到着」を同一 useEffect に混在させない
+
+依存配列に意味の異なる値（例: `[stepId, pendingDataUrl]`）を混ぜると、片方をクリアする副作用（`onConsumed()` 的なコールバックで `null` に戻す）が **同じ effect を再発火**させ、effect 冒頭のリセット処理が直前に読み込んだデータを消す自己破壊ループになる（manual-studio・画像貼り付け機能で実例）。
+
+```typescript
+// NG: 「ステップ切替のリセット」と「新規画像読込」が同一effectに混在
+useEffect(() => {
+  setShapes([]); setImgEl(null); // ステップ切替のリセット
+  if (pendingImageDataUrl) { /* 読込 */ onConsumed(); } // 読込後にnullへ戻す
+  else if (step.image) { /* 保存済み画像読込 */ }
+}, [step.id, pendingImageDataUrl]); // pendingImageDataUrl→null化で再発火し、直前のsetImgElを消す
+
+// OK: 責務ごとにeffectを分離
+useEffect(() => { setShapes([]); setImgEl(null); /* 保存済み画像読込 */ }, [step.id]);
+useEffect(() => {
+  if (!pendingImageDataUrl) return; // クリア時は何もしない
+  /* 新規画像読込 → onConsumed() */
+}, [pendingImageDataUrl]);
+```
+
 #### クリッカブル行の中に子ボタンを置くときの stopPropagation
 
 `TableRow` など行全体を `onClick` で選択可能にした場合、行内の削除ボタン等をクリックすると行選択と削除が同時発火する。子ボタンの `onClick` には必ず `e.stopPropagation()` を付ける。
