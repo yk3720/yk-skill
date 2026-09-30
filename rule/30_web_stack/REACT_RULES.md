@@ -256,6 +256,23 @@ useEffect(() => {
 }, [pendingImageDataUrl]);
 ```
 
+#### Undo 履歴は「変更されうる状態全部」をスナップショットする
+
+Undo(元に戻す)機能の history に、一部の state(例: 図形配列)だけを積んで他の state(例: 背景画像)を含めないと、後者だけを変更する操作(例: 画像のクロップ/差し替え)が **Undo 対象から漏れる**。「この操作は shapes しか変えていないはず」という思い込みで history の型を絞ると、後から追加した別種の変更操作(=別の state を書き換える操作)がその漏れに気づかれないまま Undo 不能になる(manual-studio・画像注釈キャンバスの切り取り機能で実例: `history` が `shapes` 配列だけを保持しており、切り取り時は `setHistory([])` で履歴ごと破棄していたため Undo できなかった)。
+
+```typescript
+// NG: 一部の state だけをスナップショット
+const [history, setHistory] = useState<Shape[][]>([]);
+function pushHistory() { setHistory((h) => [...h, shapes]); }
+// 画像を差し替える操作(クロップ等)が history の型に収まらず、その場しのぎで setHistory([]) してしまう
+
+// OK: Undo対象になりうる state をまとめて1エントリにする
+interface HistoryEntry { imgEl: HTMLImageElement | null; shapes: Shape[]; /* ... */ }
+const [history, setHistory] = useState<HistoryEntry[]>([]);
+function pushHistory() { setHistory((h) => [...h, { imgEl, shapes }]); }
+// 画像を差し替える操作も同じ pushHistory() を呼べばよく、専用の履歴破棄コードが不要になる
+```
+
 #### クリッカブル行の中に子ボタンを置くときの stopPropagation
 
 `TableRow` など行全体を `onClick` で選択可能にした場合、行内の削除ボタン等をクリックすると行選択と削除が同時発火する。子ボタンの `onClick` には必ず `e.stopPropagation()` を付ける。
