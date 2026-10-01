@@ -205,6 +205,25 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 
 **診断のコツ:** リモートでUIを直接見られない状況では、keydown発火・`document.hasFocus()`・関数呼び出し・`img.onload`/`onerror`など各段階に`console.log`を仕込み、DevTools(F12)のConsoleスクリーンショットを送ってもらうと、憶測なしに1段階ずつ原因を切り分けられる。`document.hasFocus()`を診断ログに含めるとフォーカス問題の特定が早い。
 
+## rust_xlsxwriterでのExcel出力（2026-10 実例）
+
+**`write_string_with_format()`+`set_text_wrap()`で複数行（改行入り）テキストを書き込んでも、行の高さ(row height)は自動で広がらない。** 既定の行高(1行分)のまま描画されるため、改行を含む長いテキストが次の行(特に画像を`insert_image()`した行)に重なって表示される不具合が実機で発生した(manual-studio・Excel出力機能、2026-10-02)。
+
+| MUST | 理由 |
+|------|------|
+| テキストを書き込む行は、改行数(+ 列幅を超える折り返し行数の概算)から高さを計算し`set_row_height()`で明示する | `rust_xlsxwriter`(他言語のxlsxwriter系ライブラリも同様)はExcelの「開いたときに自動フィット」を行わず、保存されたファイルの行高をそのまま描画する |
+
+```rust
+fn estimate_text_row_height(text: &str) -> f64 {
+    let line_count = text.lines()
+        .map(|line| ((line.chars().count() as f64 / COLUMN_WIDTH_CHARS).ceil() as usize).max(1))
+        .sum::<usize>().max(1);
+    line_count as f64 * LINE_HEIGHT_PT // 既定フォント1行あたり概算15pt
+}
+```
+
+画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。
+
 ## Web + Desktop 並行開発（同一リポ）
 
 製品本線が Tauri・ブラウザがプレビューのとき（例: lci-studio）:

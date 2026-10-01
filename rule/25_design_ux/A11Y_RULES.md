@@ -118,6 +118,16 @@ WCAG 2.5.8 には **Spacing · Equivalent · Inline · User agent · Essential**
 - エラー · 状態 · 種別は **色 + テキスト / アイコン / 形状** で識別
 - 詳細は No **52** §6（GAS）· flowchart 凡例 · 表の行ハイライトを参照
 
+### 4-5. ホバー時のみ表示する操作（hover-reveal）
+
+**`visibility: hidden` で hover-reveal UI を実装しない。** `visibility: hidden` の要素はブラウザのタブ順序から除外されるため、マウスでホバーしない限り **キーボード（Tab）で到達すらできなくなる**（`:focus-within` を併用しても、子要素自体がタブ順序外なので効果がない）。
+
+| NG | OK |
+|----|-----|
+| `.delete-btn { visibility: hidden; } li:hover .delete-btn { visibility: visible; }` | `.delete-btn { opacity: 0; pointer-events: none; } li:hover .delete-btn, li:focus-within .delete-btn, .delete-btn:focus { opacity: 1; pointer-events: auto; }` |
+
+`opacity: 0; pointer-events: none;` はタブ順序を維持したまま見た目だけ隠す。`:focus-within`（親へのフォーカス）と要素自身の `:focus` の両方を reveal 条件に含めると、Tab で到達した瞬間に可視化され、キーボードのみでも操作できる(manual-studio・ステップ削除ボタンで実例、2026-10-02)。
+
 ---
 
 ## 5. WCAG 2.2 AA — 新規 Success Criteria チェックリスト
