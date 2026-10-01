@@ -2,7 +2,7 @@
 
 エージェント・人間が **どのファイルをいつ読むか** の入口。詳細は各ファイルが SSOT。
 
-**最終更新:** 2026-09-18（No 17 §14 実装着手ゲート · L0 `design-before-code-yk`）
+**最終更新:** 2026-10-01（No 26 `APP_VERSIONING_RULES` 新規追加）
 
 **改善プロジェクトの続き:** [RULE_IMPROVEMENT_HANDOFF.md](RULE_IMPROVEMENT_HANDOFF.md)（未着手バックログ・再開手順）
 
@@ -63,6 +63,7 @@
 | チャット応答（平易さ等） | 16 | `10_meta/COMMUNICATION_RULES.md` | L1 · No 05 §2 精神借用 | `communication-yk`（always） |
 | 個人アプリ新規 · 企画フォルダ · 再開 · **実装着手（規模判定）** | 17 | `15_project_mgmt/APP_PROJECT_RULES.md` | [App project](RULE_ROUTING_PLAYBOOK.md#読む順序個人アプリ新規企画フォルダ再開) · 手順: `starting-app-project-yk` · 着手ゲート **§14** | `design-before-code-yk`（always） |
 | 自作ツール新設（形態・言語を問わない） | 18 | `YK_APPLICATION_RULES.md` §6 | 手順: `creating-personal-tool-yk` · 実装はスタック別 | — |
+| アプリのバージョン番号 · ビルド日時表示 | 26 | `15_project_mgmt/APP_VERSIONING_RULES.md` | L1 直接 | — |
 | 企画フォルダ 6 種 · ドキュメント種別 · 移行 | 25 | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | L1 直接 · 入口は No 17 と併用 | — |
 | 独立リポジトリ移行 · yk-application | 18 | `15_project_mgmt/YK_APPLICATION_RULES.md` | L1 直接 | — |
 | UI · 図の線の太さ・統一感 | 19 | `25_design_ux/VISUAL_DESIGN_RULES.md` | L1 直接 | `visual-design-yk`（always） |
@@ -210,6 +211,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 23 | 25_design_ux | `25_design_ux/A11Y_ROADMAP.md` | **a11y 導入ロードマップ** — WCAG 2.2 AA 段階導入 · Phase 0–5 | active |
 | 24 | 25_design_ux | `25_design_ux/A11Y_RULES.md` | **a11y 横断 SSOT** — WCAG 2.2 AA チェックリスト · ツール · スコープ | active |
 | 25 | 15_project_mgmt | `15_project_mgmt/PROJECT_DOCUMENT_RULES.md` | **企画フォルダ 6 種** — 要求定義〜ユビキタス言語 · 吸収 · 移行 · 仕様↔コード | active |
+| 26 | 15_project_mgmt | `15_project_mgmt/APP_VERSIONING_RULES.md` | **アプリバージョン管理** — SemVer `0.x.y`運用 · PATCH細分化 · ビルド日時表示 | active |
 | 21 | 20_web_workspace | `20_web_workspace/WORKSPACE_RULES.md` | workspace-ui-kit 横断 | active |
 | 22 | 20_web_workspace | `20_web_workspace/DIAGRAM_MANAGER_WORKSPACE_RULES.md` | `/diagram-manager` 作業 | active |
 | 31 | 30_web_stack | `30_web_stack/NEXTJS_RULES.md` | Next.js 作業 | active |

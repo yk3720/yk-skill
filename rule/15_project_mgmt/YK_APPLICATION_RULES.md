@@ -5,7 +5,7 @@
 **ステータス:** active（L1）  
 **関連:** `15_project_mgmt/APP_PROJECT_RULES.md`（アプリ開発一般）· `RULE_INDEX.md` No 18  
 
-**最終更新:** 2026-09-07（§6 置き場 · 自作ツールは形態・言語を問わない）
+**最終更新:** 2026-10-01（§2「開発中」行に`APP_VERSIONING_RULES.md`への参照を追加）
 
 ---
 
@@ -40,7 +40,7 @@
 | フェーズ | 状態 | 置き場 | Git 管理 |
 |----------|------|--------|----------|
 | **初期・実験** | scaffold 直後 · 学習用 | `c:/yk-application/` | 任意（ローカルのみ可） |
-| **開発中** | 機能実装中 · 外部連携あり | `c:/yk-application/` | **必須（アプリ単位）** |
+| **開発中** | 機能実装中 · 外部連携あり | `c:/yk-application/` | **必須（アプリ単位）**・バージョン管理+pre-commitフック導入必須（[`APP_VERSIONING_RULES.md`](APP_VERSIONING_RULES.md) §5） |
 | **完成・運用** | 実用可能 · 安定稼働 | `c:/yk-application/` | 必須（独立リポジトリ継続） |
 
 ---

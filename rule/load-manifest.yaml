@@ -2,13 +2,13 @@
 #
 # 目的: RULE_INDEX カタログの機械可読コピー（tag / tier ルーティング補助）
 # SSOT: rule/RULE_INDEX.md 番号付きカタログ — 食い違い時は INDEX を正として本ファイルを更新
-# 状態: 2026-09-13 INDEX 同期（L1 36 本 / No 00 除く · No 43 LLAMACPP 含む）
+# 状態: 2026-10-01 INDEX 同期（L1 37 本 / No 00 除く · No 26 APP_VERSIONING 追加）
 # excludes: RULE_INDEX No 00（索引本体）は rules 配列外 — meta_entries の index で管理
 # 運用: Ref Plan + ROUTER が主。本 manifest は補助（PROGRESSIVE §7）
 
 version: 1
 generated_from: RULE_INDEX.md
-rule_count_l1: 36
+rule_count_l1: 37
 
 rules:
   - no: 05
@@ -121,6 +121,13 @@ rules:
     band: 15_project_mgmt
     tags: [project-document, planning]
     read_when: 企画フォルダ 6 種 · ドキュメント種別
+    status: active
+
+  - no: 26
+    path: 15_project_mgmt/APP_VERSIONING_RULES.md
+    band: 15_project_mgmt
+    tags: [versioning, semver, pre-commit, build-time]
+    read_when: アプリのバージョン番号 · ビルド日時表示 · pre-commitフック
     status: active
 
   - no: 31

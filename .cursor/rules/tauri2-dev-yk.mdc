@@ -142,6 +142,8 @@ export default defineConfig({
 
 **バージョン動向（2026-09 Web調査）:** 2026年も`tauri`本体・プラグイン双方で破壊的変更が継続中（例: Storeプラグインの`Store`コンストラクタ廃止→`createStore`API、`webkit2gtk-rs`更新等）。`npx tauri add <plugin>`実行後は該当プラグインのCHANGELOGを確認する。v1→v2移行の代表的な罠: `@tauri-apps/api/tauri`→`@tauri-apps/api/core`、`@tauri-apps/api/window`→`@tauri-apps/api/webviewWindow`にモジュールが分割されている。
 
+**`window.confirm()`/`window.alert()`はWebView2(Windows)で実際のネイティブダイアログを表示せず、ブロッキングもしない**——呼び出すと即座に通過してしまい、ユーザーが確認ダイアログを見る前に処理が進む(manual-studio・章削除の確認ダイアログが実機で一切表示されなかった実例、2026-10-01)。削除確認等でユーザーに判断させたい場合は、素の`window.confirm`/`alert`/`prompt`ではなく`@tauri-apps/plugin-dialog`の`confirm()`/`ask()`/`message()`(いずれも`Promise`を返す非同期API・capability`dialog:default`で許可済みなら追加設定不要)を使う。
+
 **`dialog`プラグインの`open({ directory: true })`はファイルを一覧に表示しない**（OSネイティブのフォルダ選択ダイアログの標準仕様。Windows/macOSとも同様）。「manifest.json等のファイルが見えないので選択先が間違っている/壊れている」とユーザーが誤解する実例があった（manual-studio）。手順書等でフォルダ選択を案内する際は、この見た目が正常であると一言添えるとよい。
 
 ## スキャフォールド時の事故防止（2026-09 実例）
