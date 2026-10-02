@@ -224,15 +224,14 @@ fn estimate_text_row_height(text: &str) -> f64 {
 
 画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。
 
-## `npm run tauri dev` と Vite HMR（2026-10 実例）
+## `npm run tauri dev` 実行時の注意点（2026-10 実例）
 
-`npm run tauri dev` 実行中、**`src/`(フロントエンド)のみの変更は Vite HMR でウィンドウへ即反映され、再起動不要**。`src-tauri/`(Rust)の変更があるときだけ自動で再ビルド・再起動される。
+`npm run tauri dev` 実行中、**`src/`(フロントエンド)のみの変更は Vite HMR でウィンドウへ即反映され、再起動不要**(OS非依存)。`src-tauri/`(Rust)の変更があるときだけ自動で再ビルド・再起動される(manual-studio・dnd-kit実装セッションで確認)。
 
 | 症状 | 原因 | 対策 |
 |------|------|------|
-| 再度 `npm run tauri dev` すると `Error: Port 1420 is already in use` で起動失敗 | ウィンドウを閉じた/落ちたあとも Vite 開発サーバー(`node`プロセス)がポートを掴んだまま残っている(`tauri dev`の子プロセスがオーファン化) | `netstat -ano \| grep ':1420'` でPIDを特定し `taskkill //PID <pid> //F` で解放してから再実行 |
-
-**`npm update` 後に `Found version mismatched Tauri packages` 警告が出る**: `@tauri-apps/plugin-*`(npm側)だけ更新され、対応する `tauri-plugin-*`(Cargo側)の実クレートバージョンが古いまま(`Cargo.lock`に残留)だと起動時に警告が出る。`npm update`でTauri系パッケージを更新したら、`cargo update -p <plugin crate名>`で`Cargo.lock`側も追従させる(`Cargo.toml`の`version = "2"`等のレンジ指定自体は変更不要)。
+| 再度 `npm run tauri dev` すると `Error: Port 1420 is already in use` で起動失敗 | ウィンドウを閉じた/落ちたあとも Vite 開発サーバー(`node`プロセス)がポートを掴んだまま残っている(`tauri dev`の子プロセスがオーファン化) | **Windows(PowerShell/cmd)**: `netstat -ano \| findstr ":1420"` でPIDを特定 → `tasklist /FI "PID eq <pid>"` で`node.exe`か確認(PID再利用による誤killを防ぐ) → `taskkill /PID <pid> /F`<br>**Windows(Git Bash等MSYS系シェル)**: 上記が`/PID`をパスとして誤解釈して失敗する場合は `taskkill //PID <pid> //F` に切り替える<br>**macOS/Linux**: `lsof -ti:1420 \| xargs kill -9` |
+| `npm update` 後に `Found version mismatched Tauri packages` 警告が出る(OS非依存) | `@tauri-apps/plugin-*`(npm側)だけ更新され、対応する `tauri-plugin-*`(Cargo側)の実クレートバージョンが古いまま(`Cargo.lock`に残留) | `cargo update -p <plugin crate名>` で`Cargo.lock`側を追従させる(`Cargo.toml`の`version = "2"`等のレンジ指定は変更不要)<br>実行後は `cargo build` 等で正常ビルドを確認(推移的依存を巻き込みうるため)<br>壊れた場合、未コミットなら `git checkout -- src-tauri/Cargo.lock` で復元できる |
 
 ## Web + Desktop 並行開発（同一リポ）
 

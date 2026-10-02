@@ -9,7 +9,7 @@
 
 **横断:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC · `"use client"` — **本ファイルでは再掲しない**） · [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)（表駆動 · `@xyflow/react`） · [`20_web_workspace/WORKSPACE_RULES.md`](../20_web_workspace/WORKSPACE_RULES.md) §3（`lib/` 純関数）
 
-**最終更新:** 2026-10-02（§3-1 に dnd-kit のリスト項目コンポーネント抽出・複数グループ並べ替えの2ジェスチャー簡略化パターン追記）  
+**最終更新:** 2026-10-02（§3-1 に dnd-kit のリスト項目コンポーネント抽出・複数グループ並べ替えのドロップ先2パターン簡略化パターン追記）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 36
 
 **L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-studio` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
@@ -285,7 +285,7 @@ function pushHistory() { setHistory((h) => [...h, { imgEl, shapes }]); }
 <button onClick={(e) => { e.stopPropagation(); deleteRow(i); }}>削除</button>
 ```
 
-#### リスト項目ごとに Hook が必要なとき(dnd-kit 等)は子コンポーネントへ抽出する
+#### リスト項目ごとに Hook が必要なとき（dnd-kit 等）は子コンポーネントへ抽出する
 
 `useSortable` / `useDroppable`(dnd-kit)など、リストの**各要素**にフックが必要なライブラリを `.map()` の中で直接呼ぶと Rules of Hooks 違反(ループ内 Hook 呼び出し)になる。1行をレンダーする専用コンポーネントへ抽出し、親はそのコンポーネントを `.map()` で並べるだけにする。可変個の**グループ見出し**(章見出し等)に個別の `useDroppable` が要る場合も同様に抽出する(要素数が描画のたびに変わっても、各コンポーネントインスタンス内でのフック呼び出し回数自体は安定するため問題ない)。
 
@@ -304,9 +304,34 @@ function Row({ item }: { item: Item }) {
 items.map((item) => <Row key={item.id} item={item} />);
 ```
 
-#### 複数グループにまたがるドラッグ並べ替え(dnd-kit)は「2ジェスチャー」で単純化できる
+#### 複数グループにまたがるドラッグ並べ替え（dnd-kit）は「ドロップ先2パターン」の分岐で単純化できる
 
-`@dnd-kit/sortable` で複数グループ(章等)にまたがる並べ替えを実装するとき、グループごとに個別の `SortableContext` を用意する公式の「Multiple Containers」パターンは正確だが実装コストが高い。グループ境界をまたぐ移動が「末尾への追加」で足りるなら、**全アイテムを1つのフラットな `SortableContext` にまとめ、各グループの見出し(空グループ含む)に `useDroppable` を追加するだけ**で済む: (a) アイテムへドロップ=そのアイテムの直前へ挿入(ドロップ先アイテムのグループを継承)、(b) グループ見出しへドロップ=そのグループの末尾へ挿入。見出しは空グループでも常に描画されるため、アイテムが1つも無いグループにも到達できる(manual-studio・章をまたぐstep移動で実例)。
+`@dnd-kit/sortable` で複数グループ(章等)にまたがる並べ替えを実装するとき、グループごとに個別の `SortableContext` を用意する公式の[Multiple Containers](https://docs.dndkit.com/presets/sortable#multiple-containers)パターンは正確だが実装コストが高い。全アイテムを1つのフラットな `SortableContext` にまとめ、`onDragEnd` でのドロップ先判定を以下の2パターンに分岐させるだけで、空グループを含む任意の位置への移動をカバーできる(manual-studio・章をまたぐstep移動で実例):
+
+- (a) アイテムへドロップ → そのアイテムの直前へ挿入(ドロップ先アイテムのグループ見出しを継承)。**グループ境界をまたぐ移動・グループ内の任意位置への挿入は、これだけで届く**
+- (b) グループ見出しへドロップ → そのグループ見出しの末尾へ挿入。ドロップ先になるアイテムが1つも無い**空グループ**へは、これが唯一の到達経路。各グループ見出しに `useDroppable` を追加する(可変個のグループ見出しごとに呼ぶので、前項「リスト項目ごとに Hook が必要なとき」と同じく専用コンポーネントへ抽出すること)
+
+**前提・限界**:
+- 前提: 同じグループの要素は配列内で常に連続したブロックを成す(非連続に散らばらない)
+- 限界: `onDragEnd`(ドロップ確定時)のみで完結する簡略化。ドラッグ中に他グループへ滑らかに割り込むライブな並べ替えプレビュー(公式Multiple Containersパターンの`onDragOver`ベースの視覚フィードバック)は非対応。それが要件なら公式パターンを使う
+
+`isGroupHeaderId` / `groupIdOf` / `moveToGroupEnd` / `moveBeforeItem` はdnd-kit本体のAPIではなく自作のアプリ側ヘルパー(要実装)。`active.id === over.id`(ほぼ動かさずドロップ)は no-op として早期returnする:
+
+```typescript
+// onDragEnd: ドロップ先2パターンの分岐(isGroupHeaderId等は自作ヘルパー)
+function handleDragEnd({ active, over }: DragEndEvent) {
+  if (!over || active.id === over.id) return; // 自分自身へのドロップは no-op
+  if (isGroupHeaderId(over.id)) {
+    moveToGroupEnd(active.id, groupIdOf(over.id)); // (b) 末尾へ
+  } else {
+    moveBeforeItem(active.id, over.id); // (a) 直前へ・グループ見出しを継承
+  }
+}
+```
+
+| MUST | 理由 |
+|------|------|
+| 空グループでも**グループ見出し**要素を非表示にしない(`display: none`・`visibility: hidden`・条件付きレンダリングでの除去は不可。視覚的に目立たなくしたいだけなら`opacity`等のスタイル調整で対応する) | パターン(b)はグループ見出しが常に描画されdroppable領域(rect)を持つことが前提。非表示にすると、そのグループへの移動先が失われる(到達不能になる) |
 
 #### 表編集と React Flow の再レンダー分離
 
