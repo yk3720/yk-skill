@@ -6,6 +6,8 @@
 
 exe 手順は [`PYTHON_PYINSTALLER_GUI.md`](PYTHON_PYINSTALLER_GUI.md)。本ファイルは **yk-application 小型 GUI**（COM 所有権 · StayOnTop · プラグインハブ）。
 
+**`[MUST]`/`[SHOULD]`ラベルの適用範囲:** §2(Excel/Word COM)のみ、誤ると実機フリーズ・データ破損に直結するため明示ラベルを付けている。それ以外の節(§4〜§8等)はラベルを付けていないが、これは「MUST未満」を意味しない — 通常のプロパティ規律(ドキュメント全体の既定強度)として扱う。
+
 ---
 
 ## 1. 対象・実例・着手前チェック

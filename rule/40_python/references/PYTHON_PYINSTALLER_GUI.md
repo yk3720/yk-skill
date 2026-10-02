@@ -60,6 +60,8 @@ Windows では dist の exe が起動中だと PyInstaller が `PermissionError:
 
 ### v0.3 フロー表 ↔ モジュールは ListObject 名を使わない
 
+**スコープ注記:** 本節のみ`flowchart-studio`固有の業務ロジック(Excelテーブル命名とMID照合)であり、本ファイルの対象(PyInstaller exe配布・relative import・tkwebview2)とは無関係。exe配布だけが目的でこのtagを読み込んだ読者は読み飛ばしてよい。
+
 作者が Excel テーブルをコピペすると **ListObject 名**（例: `動作00018`）は MID と無関係になり、テーブル名から MID を推測すると **別モジュールにフローが紐付く**。
 
 - **SSOT:** `構成` シート（UinID + MID + モジュール名）— Product Spec: `flowchart-studio/docs/03_技術仕様/Excel入力フォーマット_v0.3.md` §6.4
