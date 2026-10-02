@@ -9,7 +9,7 @@
 
 **横断:** [`NEXTJS_RULES.md`](NEXTJS_RULES.md) §5（RSC · `"use client"` — **本ファイルでは再掲しない**） · [`35_reactflow/REACTFLOW_RULES.md`](../35_reactflow/REACTFLOW_RULES.md)（表駆動 · `@xyflow/react`） · [`20_web_workspace/WORKSPACE_RULES.md`](../20_web_workspace/WORKSPACE_RULES.md) §3（`lib/` 純関数）
 
-**最終更新:** 2026-07-01（§3-1 に 連鎖セレクト useReducer パターン追記）  
+**最終更新:** 2026-10-02（§3-1 に dnd-kit のリスト項目コンポーネント抽出・複数グループ並べ替えの2ジェスチャー簡略化パターン追記）  
 **索引:** [`../RULE_INDEX.md`](../RULE_INDEX.md) No 36
 
 **L0 入口:** 広 glob の単独 entry は置かない。`workspace-ui-kit` → `workspace-dev-entry.mdc` · `flowchart-studio` の Client 一般 → `reactflow-dev-entry.mdc` から本ファイルへリンク。
@@ -284,6 +284,29 @@ function pushHistory() { setHistory((h) => [...h, { imgEl, shapes }]); }
 // OK: 行への伝播を止める
 <button onClick={(e) => { e.stopPropagation(); deleteRow(i); }}>削除</button>
 ```
+
+#### リスト項目ごとに Hook が必要なとき(dnd-kit 等)は子コンポーネントへ抽出する
+
+`useSortable` / `useDroppable`(dnd-kit)など、リストの**各要素**にフックが必要なライブラリを `.map()` の中で直接呼ぶと Rules of Hooks 違反(ループ内 Hook 呼び出し)になる。1行をレンダーする専用コンポーネントへ抽出し、親はそのコンポーネントを `.map()` で並べるだけにする。可変個の**グループ見出し**(章見出し等)に個別の `useDroppable` が要る場合も同様に抽出する(要素数が描画のたびに変わっても、各コンポーネントインスタンス内でのフック呼び出し回数自体は安定するため問題ない)。
+
+```tsx
+// NG: .map() の中で直接 useSortable を呼ぶ(ループ内 Hook 呼び出し)
+items.map((item) => {
+  const { setNodeRef } = useSortable({ id: item.id }); // Error
+  return <li ref={setNodeRef}>{item.label}</li>;
+});
+
+// OK: 1行分を専用コンポーネントへ抽出
+function Row({ item }: { item: Item }) {
+  const { setNodeRef } = useSortable({ id: item.id });
+  return <li ref={setNodeRef}>{item.label}</li>;
+}
+items.map((item) => <Row key={item.id} item={item} />);
+```
+
+#### 複数グループにまたがるドラッグ並べ替え(dnd-kit)は「2ジェスチャー」で単純化できる
+
+`@dnd-kit/sortable` で複数グループ(章等)にまたがる並べ替えを実装するとき、グループごとに個別の `SortableContext` を用意する公式の「Multiple Containers」パターンは正確だが実装コストが高い。グループ境界をまたぐ移動が「末尾への追加」で足りるなら、**全アイテムを1つのフラットな `SortableContext` にまとめ、各グループの見出し(空グループ含む)に `useDroppable` を追加するだけ**で済む: (a) アイテムへドロップ=そのアイテムの直前へ挿入(ドロップ先アイテムのグループを継承)、(b) グループ見出しへドロップ=そのグループの末尾へ挿入。見出しは空グループでも常に描画されるため、アイテムが1つも無いグループにも到達できる(manual-studio・章をまたぐstep移動で実例)。
 
 #### 表編集と React Flow の再レンダー分離
 

@@ -224,6 +224,16 @@ fn estimate_text_row_height(text: &str) -> f64 {
 
 画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。
 
+## `npm run tauri dev` と Vite HMR（2026-10 実例）
+
+`npm run tauri dev` 実行中、**`src/`(フロントエンド)のみの変更は Vite HMR でウィンドウへ即反映され、再起動不要**。`src-tauri/`(Rust)の変更があるときだけ自動で再ビルド・再起動される。
+
+| 症状 | 原因 | 対策 |
+|------|------|------|
+| 再度 `npm run tauri dev` すると `Error: Port 1420 is already in use` で起動失敗 | ウィンドウを閉じた/落ちたあとも Vite 開発サーバー(`node`プロセス)がポートを掴んだまま残っている(`tauri dev`の子プロセスがオーファン化) | `netstat -ano \| grep ':1420'` でPIDを特定し `taskkill //PID <pid> //F` で解放してから再実行 |
+
+**`npm update` 後に `Found version mismatched Tauri packages` 警告が出る**: `@tauri-apps/plugin-*`(npm側)だけ更新され、対応する `tauri-plugin-*`(Cargo側)の実クレートバージョンが古いまま(`Cargo.lock`に残留)だと起動時に警告が出る。`npm update`でTauri系パッケージを更新したら、`cargo update -p <plugin crate名>`で`Cargo.lock`側も追従させる(`Cargo.toml`の`version = "2"`等のレンジ指定自体は変更不要)。
+
 ## Web + Desktop 並行開発（同一リポ）
 
 製品本線が Tauri・ブラウザがプレビューのとき（例: lci-studio）:
