@@ -20,7 +20,7 @@
 | **状態** | {一行サマリー · 例: 進行中 / 本セッション分は引き継ぎ終了済} |
 | **次の 1 手** | §「次回の最初の 1 件」のみ（HANDOFF ロードマップ全体ではない） |
 | **推奨 workspace** | {例: yk-memo + yk-skill + yk-tool} |
-| **口調** | {セッション終了時点の口調 · 例: default / frieza / goku}（`switching-tone-yk`）· {default 以外なら由来 1 行}。**default 以外は再開時に自動適用** |
+| **口調** | {例: default / frieza / goku} — 書式・適用ルールは [routing.md §口調の引き継ぎ](routing.md) |
 | **commit** | Phase C 完了報告に hash（方式 A）· Post-C 専用 commit 不要 |
 
 ---
@@ -83,7 +83,7 @@ Phase B では Glob/Read で変更を把握し §2 に記載（**Phase B 単独�
 ### 依頼文（コピペ用）
 
 ```text
-@c:/yk-memo/handoffs/{project}/{このファイル名}.md
+@c:/yk-memo/handoffs/{project}/{このファイル名（.md 拡張子含む · 末尾に .md を重ねて付けない）}
 @c:/yk-memo/handoffs/{project}/HANDOFF.md
 続きから。一つずつ順番に進めてください。
 ```
@@ -119,6 +119,39 @@ Phase B では Glob/Read で変更を把握し §2 に記載（**Phase B 単独�
 
 ---
 
+## 新規 HANDOFF.md 雛形（新 slug 初回のみ）
+
+新しい slug で初めて終了するとき、`handoffs/{slug}/HANDOFF.md` が無ければ以下の構造で Write する（既存プロジェクトの HANDOFF.md を模倣する必要はない）。セッション MD 側の §4（直近 1 件）· §5（恒久ロードマップ参考）と役割が重複しないよう、HANDOFF.md 側の「ロードマップ」は恒久的な全体像のみに留める。
+
+```markdown
+# HANDOFF — {slug}
+
+| 項目 | 値 |
+| --- | --- |
+| **slug** | `{slug}` |
+| **コード** | `{実装リポのパス}`（独立リポなら GitHub リンクも） |
+| **憲法** | `{実装リポ}/AGENTS.md`（独立リポのみ · [routing.md §Product Spec](routing.md) 参照） |
+| **最新セッション** | （初回終了時に記入） |
+| **状態** | 進行中 |
+| **更新** | {YYYY-MM-DD} |
+
+---
+
+## プロダクト
+
+{1〜3 文: 何を解決するためのプロジェクトか}
+
+**Git:** {リポ URL}（private/public）。ブランチ `main`。
+
+---
+
+## 6. ロードマップ（恒久方針 · 参考）
+
+{完了したら次に進む # の一覧。直近 1 件はセッション MD §4 が正 — ここには広げない}
+```
+
+---
+
 ## 記入ルール
 
 | ルール | 内容 |
@@ -126,6 +159,6 @@ Phase B では Glob/Read で変更を把握し §2 に記載（**Phase B 単独�
 | SSOT | `RULE_INDEX` · 各 `*_RULES.md` · プロジェクト HANDOFF は **パスリンクのみ** |
 | 禁止 | rule 全文 · 巨大 HANDOFF の複製 · 秘密情報・PII の貼付 |
 | 必須 | §4「完了の定義」· §2 Git 表 · §4 依頼文 · 先頭表「口調」 |
-| 口調 | 先頭表「口調」にセッション終了時点の口調を記録。`default`（`COMMUNICATION_RULES` No 16）なら「default」とだけ書く。`frieza` 等なら名前 + 由来 1 行 |
-| 次回 | §4 の 1 件だけ実行（「一つずつ」指定時は 1 タスクで停止）。先頭表「口調」が `default` 以外なら **§4 着手前に `switching-tone-yk` でその口調へ切り替える** |
+| 口調 | 書式・記録・適用ルールは [routing.md §口調の引き継ぎ](routing.md)（本ファイルでは再掲しない） |
+| 次回 | §4 の 1 件だけ実行（「一つずつ」指定時は 1 タスクで停止） |
 | ライフサイクル | 用語・終了ゲート → [routing.md §引き継ぎ終了](routing.md) |
