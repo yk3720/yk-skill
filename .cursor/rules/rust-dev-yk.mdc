@@ -198,7 +198,7 @@ Wordの`keep_next()`/`keep_lines()`(後述)と違い、この種のページ制�
 
 **実装前に決めておくべきこと:** 画像の最大表示幅(列幅から逆算するか、固定pxにするか)。`rust_xlsxwriter`は読み戻しAPIを持たないため、生成した`.xlsx`をzip展開しシートXML・共有文字列XMLを直接検査する結合テストで検証する(manual-studioの`write_workbook結合テスト`が実例)。
 
-## Word出力（docx-rs・2026-10 Web調査）
+## Word出力（docx-rs・2026-10 実例+Web調査）
 
 **ライブラリ:** `docx-rs`(bokuweb版・crates.io最新v0.4.22・2026-07更新)。書き込み専用(読み込み・PDF変換なし)。類似名クレートの注意点は上の「主要クレート」表を参照——特に**GitHubのリポジトリ名`bokuweb/docx-rs`と`PoiScript/docx-rs`は重複する**が、crates.ioのクレート名は前者のみ`docx-rs`で後者は`docx`という別名のため、GitHub検索で辿り着いた場合は作者`bokuweb`を確認する。
 
@@ -218,6 +218,8 @@ let docx = Docx::new()
 docx.build().pack(std::fs::File::create(out_path)?)?;
 ```
 
+**`.style("Heading1")`等の見出しスタイル指定だけでは、太字・サイズ等の見た目は確定しない。** `Docx::add_style(...)`で`Heading1`スタイル自体を`styles.xml`に定義しない限り、docx-rsが生成するのは`<w:pStyle w:val="Heading1"/>`という「参照」だけで、対応する`<w:style styleId="Heading1">`の定義自体は書き出されない(実装からの確認・`Docx::add_style`を呼ばなければ`styles.xml`には`Normal`しか入らない)。見た目はWord側がビルトインの「Heading 1」を独自解決した結果になり、**テーマ依存で環境によって変動しうる**。確実に同じ太字・サイズで固定表示したいなら、`style()`と併用して`Run::size(n).bold()`等を明示する(冗長ではなく必須。manual-studio実例、2026-10-04)。
+
 **日本語テキストは`east_asia()`フォントも明示しないと意図したフォントで表示されない**(Wordの`w:rFonts`はチャンネル別にフォントを持ち、全角・CJK文字は常に`east_asia`チャンネル経由で解決される——これはdocx-rs自身のdocsには明記されていないOOXML仕様上の一般知識)。`RunFonts`は`Run`ごとに指定する設計で、ドキュメント既定フォントとして一度だけ設定する機能はない(2026-10時点未確認。何十箇所も書く必要があるなら、共通`Format`/ヘルパー関数化を検討する)。
 
 ```rust
@@ -227,13 +229,17 @@ Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック"))
 Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック").east_asia("游ゴシック"))
 ```
 
-**改ページ制御はExcelより大幅に簡単——手動計算不要。** `rust_xlsxwriter`はページ高さ(pt)を事前計算し`set_page_breaks()`で強制改ページ行を算出する必要があったが(上のExcelセクション参照)、`docx-rs`の`Paragraph`は`keep_next(true)`(次の段落と同じページに留める)・`keep_lines(true)`(段落内の行を分断しない)を持ち、Wordの標準レイアウトエンジンが実際のフォント・余白から改ページ位置を自動計算する。「見出し+説明+画像を分断したくない」なら、見出し〜画像直前の各段落に`keep_next(true)`を設定するだけでよい(最後の段落には不要)。**説明文が複数行の場合、複数`Paragraph`に分けるか1段落内で`Break::new()`改行にするかで`keep_lines`/`keep_next`の効く範囲が変わるため、実装前にどちらにするか決める**。
+**改ページ制御はExcelより大幅に簡単——手動計算不要(実機確認済み)。** `rust_xlsxwriter`はページ高さ(pt)を事前計算し`set_page_breaks()`で強制改ページ行を算出する必要があったが(上のExcelセクション参照)、`docx-rs`の`Paragraph`は`keep_next(true)`(次の段落と同じページに留める)・`keep_lines(true)`(段落内の行を分断しない)を持ち、Wordの標準レイアウトエンジンが実際のフォント・余白から改ページ位置を自動計算する。「見出し+説明+画像を分断したくない」なら、見出し〜画像直前の各段落に`keep_next(true)`を設定するだけでよい(最後の段落には不要)。**説明文が複数行の場合、複数`Paragraph`に分けるか1段落内で`Break::new()`改行にするかで`keep_lines`/`keep_next`の効く範囲が変わるため、実装前にどちらにするか決める**。manual-studioでは複数`Paragraph`方式を採用し、1手順が1ページに収まらないときはその塊ごと自然に次ページへ送られる(ページ末尾に余白ができるのみ・途中で分断されない)ことを実機確認した(2026-10-04)。
+
+**段落前後の余白(space before/after)に`Paragraph::v_space()`を使わない——別物のAPI。** `v_space()`はOOXMLの「テキストフレーム」(段落をページ上にフロート配置する古いWordArt的機能)の上下余白を指定する`<w:framePr w:vSpace="...">`であり、単独で呼んでも通常の段落間隔は一切付かない(ソース確認済み)。段落前後の間隔は`Paragraph::line_spacing(LineSpacing::new().before(x).after(y))`(`u32`・twip単位、1pt=20twip)を使う。「章と章」「手順と手順」の間は広め、1手順内部(手順番号→説明文→画像)は詰める、というメリハリを付けると、罫線の無いWord文書でも手順の境界が視覚的に伝わる(manual-studio実例、2026-10-04)。
+
+**インデントはtwip固定値よりも`leftChars`(全角文字数の100倍単位)が無難。** `Paragraph::indent(left, special_indent, end, start_chars)`の第1引数`left`はtwip単位でフォントサイズに依存しないため、フォントサイズを変えるとインデント幅とのバランスが崩れる。章の下に手順をぶら下げる等、全角文字数基準で揃えたい場合は第4引数`start_chars`(`<w:ind w:leftChars="...">`。100=全角1文字分)を使う方が見た目のブレが出ない。
 
 **画像サイズ:** `Pic::new(&bytes)`は(`image`フィーチャ有効時)画像の実寸pxを自動検出しEMU換算して保持するため、**原寸埋め込みなら`.size()`呼び出しは不要**。最大表示幅でキャップしたい場合のみ、`image::image_dimensions()`等で実寸を読み、縮小後のpx値を`* 9525`(`1px = 9525 EMU` = `914400 EMU/inch ÷ 96px/inch`)して`.size(w, h)`で明示的に上書きする(上のExcelセクションの「大きい場合のみ縮小・両辺同倍率」と同じ設計)。**ExcelでのキャップはExcel列幅から逆算した値なので、Word用紙の使用可能幅(用紙サイズ-余白)で別途計算し直す必要がある**。
 
 **目次は見出しスタイル+TOCフィールドに任せる。** `TableOfContents`(`add_table_of_contents`)に`heading_styles_range()`で見出しレベル(Heading1〜9)を指定すれば、各段落に`Heading1`等を適用するだけで目次が自動構成される。Excelのように章見出し行番号を事前走査して内部リンクを手組みする必要はない。生成直後のTOCフィールドはWordが開いた時点でキャッシュされた表示のままになりがちなので、`dirty()`(生成XMLの`fldChar`に`w:dirty="true"`を付与)でWordに再計算を促す(実機確認は未実施)。
 
-**実装前に決めておくべきこと(2026-10時点未決):** Excel出力との並存方針(同一機能内で選択/別ボタン)・章.節番号をどの見出しレベル(Heading1/Heading2等)に割り当てるか・画像幅キャップのWord向け再計算値。読み戻し検証はExcel出力と同じzip展開+XML検査方式を踏襲する想定(未着手)。
+**manual-studioでの決定事項(2026-10-04実装済み):** Excel出力とは別ボタンで並存(どちらか一方を選ぶ設計にはしない)。見出しレベルは章見出しのみ`Heading1`、手順番号は見出しスタイルにせず太字+色+`leftChars`インデントで区別(TOCに手順番号までは載せない設計)。画像幅キャップはExcelと同じ400pxをそのまま流用(Word既定ページの使用可能幅≈567pxに収まるため再計算不要と判断)。読み戻し検証はExcel出力と同じzip展開+XML検査方式(`word/document.xml`の`<w:t>`抽出・`word/media/`配下のファイル数確認)で結合テスト化した。目次(TOCフィールド)はMVPでは未実装(見送り)。
 
 ## コーディング規約
 
