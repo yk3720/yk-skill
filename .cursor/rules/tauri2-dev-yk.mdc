@@ -80,7 +80,7 @@ const msg = await invoke<string>('greet', { name: 'World' });
 - `capabilities/` で **ウィンドウ単位** に権限を定義する（ワイルドカード `*` 禁止）
 - CSP を明示的に設定: `"csp": "default-src 'self'; script-src 'self'"`
 - **最小権限原則**: 使うプラグインの必要なパーミッションのみ追加
-- **権限(permission)とスコープ(scope)は別物**: `fs:allow-read-text-file`等を有効にしただけではどのパスにもアクセスできない。多くの`fs`コマンドは**scope（globパターン）でパスを別途明示許可**しないと実行時に`forbidden path`エラーになる（[公式: Command Scopes](https://v2.tauri.app/security/scope/)）
+- **権限(permission)とスコープ(scope)は別物**: `fs:allow-read-text-file`等を有効にしただけではどのパスにもアクセスできない。多くの`fs`コマンドは**scope（globパターン）でパスを別途明示許可**しないと実行時に`forbidden path`エラーになる（[公式: Command Scopes](https://v2.tauri.app/security/scope/)）。**`opener`プラグインの`open_path`も同様**: `opener:default`には`allow-open-path`が含まれず、個別に`opener:allow-open-path`を文字列のまま追加しただけだとscope未設定で`Not allowed to open path <path>`エラーになる。`{ "identifier": "opener:allow-open-path", "allow": [{ "path": "**" }] }`のようにオブジェクト形式でscopeを明示する必要がある(manual-studio・フォルダを開くボタン実装、2026-10-04実例)
 - Rustコマンド内で **入力を必ずバリデーション**（フロントエンドを信頼しない）
 - `cargo audit` / `npm audit` を定期実行
 
@@ -216,13 +216,21 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 ```rust
 fn estimate_text_row_height(text: &str) -> f64 {
     let line_count = text.lines()
-        .map(|line| ((line.chars().count() as f64 / COLUMN_WIDTH_CHARS).ceil() as usize).max(1))
+        .map(|line| {
+            // 全角(ASCII以外)は半角の概ね2倍の表示幅を占める。列幅のExcel文字幅単位は
+            // ASCII基準なので、全角をASCIIと同じ1文字として数えると折り返し行数を
+            // 過小評価しテキストが見切れる(manual-studio実例、2026-10-04)。
+            let visual_width: f64 = line.chars().map(|c| if c.is_ascii() { 1.0 } else { 2.0 }).sum();
+            ((visual_width / COLUMN_WIDTH_CHARS).ceil() as usize).max(1)
+        })
         .sum::<usize>().max(1);
     line_count as f64 * LINE_HEIGHT_PT // 既定フォント1行あたり概算15pt
 }
 ```
 
-画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。
+画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。**`set_row_height()`の引数はpt(ポイント)単位**(px単位で指定したい場合は`set_row_height_pixels()`を使う。画像の実寸pxから行高を算出するなら`px * 0.75`(96dpi換算)でptに変換してから渡す)。
+
+**改ページを手動制御したいとき、`set_page_breaks()`(強制改ページ)と`set_print_fit_to_pages()`/`set_print_scale()`(縮小印刷)を併用しない**: fit-to-pageは印刷時にレイアウトを縮小するため、pt単位で事前計算した「1ページの印刷可能高さ(用紙高さ-余白)」の前提(倍率100%)が崩れ、強制改ページの位置と実際の印刷結果がずれる。手順・セクション等の「意味のまとまり」がページをまたがないようにしたい場合は、各行の高さを書き込み前にまとめて計算し、まとまり単位の累積高さがページ高さを超える直前の行へ`set_page_breaks()`で強制改ページを入れる(まとまり自体が1ページに収まらないほど大きい場合は強制改ページを諦め、Excelの自動改ページに任せる。manual-studio実例、2026-10-04)。
 
 ## `npm run tauri dev` 実行時の注意点（2026-10 実例）
 
@@ -232,6 +240,7 @@ fn estimate_text_row_height(text: &str) -> f64 {
 |------|------|------|
 | 再度 `npm run tauri dev` すると `Error: Port 1420 is already in use` で起動失敗 | ウィンドウを閉じた/落ちたあとも Vite 開発サーバー(`node`プロセス)がポートを掴んだまま残っている(`tauri dev`の子プロセスがオーファン化) | **Windows(PowerShell/cmd)**: `netstat -ano \| findstr ":1420"` でPIDを特定 → `tasklist /FI "PID eq <pid>"` で`node.exe`か確認(PID再利用による誤killを防ぐ) → `taskkill /PID <pid> /F`<br>**Windows(Git Bash等MSYS系シェル)**: 上記が`/PID`をパスとして誤解釈して失敗する場合は `taskkill //PID <pid> //F` に切り替える<br>**macOS/Linux**: `lsof -ti:1420 \| xargs kill -9` |
 | `npm update` 後に `Found version mismatched Tauri packages` 警告が出る(OS非依存) | `@tauri-apps/plugin-*`(npm側)だけ更新され、対応する `tauri-plugin-*`(Cargo側)の実クレートバージョンが古いまま(`Cargo.lock`に残留) | `cargo update -p <plugin crate名>` で`Cargo.lock`側を追従させる(`Cargo.toml`の`version = "2"`等のレンジ指定は変更不要)<br>実行後は `cargo build` 等で正常ビルドを確認(推移的依存を巻き込みうるため)<br>壊れた場合、未コミットなら `git checkout -- src-tauri/Cargo.lock` で復元できる |
+| 再ビルド時に `error: failed to remove file ...\{app}.exe`(`アクセスが拒否されました。(os error 5)`) | 前回の`npm run tauri dev`を(バックグラウンド実行のタイムアウト等で)止めても、子プロセス(`{app}.exe`・`cargo.exe`)が孤立して生き残り、実行ファイルをロックしたまま終了していないことがある。**`netstat`でポート1420を確認しても検知できない**——ポートを掴んでいるのはVite/WebViewの接続(`node.exe`)であって、ファイルをロックしている`{app}.exe`/`cargo.exe`自体は別プロセスでポートを持たない | `tasklist \| findstr "{app}.exe cargo.exe"`で直接プロセスを探し、該当PIDを`taskkill /F /PID <pid>`(Git Bash等なら`//F //PID`)で終了してから再実行する(ポートの空き確認だけでは不十分) |
 
 ## Web + Desktop 並行開発（同一リポ）
 
