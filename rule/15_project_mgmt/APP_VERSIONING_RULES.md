@@ -88,12 +88,14 @@ Tauri(`Cargo.toml`+`tauri.conf.json`+`package.json`)のように、1アプリに
 
 ### 5.2 既存アプリへの導入状況
 
-本ルール制定(2026-10-01)時点でmanual-studio以外は未導入。継続開発フェーズのアプリ(`comment-studio`・`lci-studio`・`flowchart-studio`等)への展開は**別途のセッションで個別に実施する**(本ルール文書の確立と同一ターンでは行わない)。導入時はこの節に1行追記する。
+本ルール制定(2026-10-01)時点でmanual-studio以外は未導入だったが、2026-10-04にcomment-studio・lci-studioへ展開済み。継続開発フェーズの残りのアプリ(`flowchart-studio`等)への展開は**別途のセッションで個別に実施する**(本ルール文書の確立と同一ターンでは行わない)。導入時はこの節に1行追記する。
 
 | アプリ | 状態 |
 |--------|------|
 | manual-studio | 導入済み(`scripts/check-version-bump.mjs`) |
-| その他(comment-studio・lci-studio・flowchart-studio等) | 未導入(2026-10-01時点) |
+| comment-studio | 導入済み(`scripts/check-version-bump.mjs`・2026-10-04) |
+| lci-studio | 導入済み(`scripts/check-version-bump.mjs`・2026-10-04) |
+| その他(flowchart-studio等) | 未導入(2026-10-04時点) |
 
 ---
 
