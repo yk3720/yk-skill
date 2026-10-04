@@ -79,6 +79,8 @@ fn load_config(path: &str) -> Result<Config> {
 | アプリエラー | `anyhow` |
 | ログ | `tracing` + `tracing-subscriber` |
 | テストスナップショット | `insta` |
+| Excel生成(書き込み専用) | `rust_xlsxwriter` |
+| Word生成(書き込み専用) | `docx-rs`(bokuweb版。`docx-rust`/`rs-docx`等の類似名クレートと混同しない) |
 
 ## Cargo 主要コマンド
 
@@ -136,6 +138,102 @@ async fn read_file(path: &str) -> anyhow::Result<String> {
 
 - ブロッキング IO / CPU バウンド処理は必ず `spawn_blocking` に移す
 - 非同期関数をまたぐ参照はライフタイムが複雑化するため `Arc` + `clone` を優先
+
+## Excel出力（rust_xlsxwriter・2026-10 実例+Web調査）
+
+**ライブラリ:** `rust_xlsxwriter`(jmcnamara版)。**書き込み専用**(クレート自身が"Write only... not reading or modifying"と明記)。
+
+**最小骨格(タイトル→複数行テキスト→画像):**
+
+```rust
+use rust_xlsxwriter::{Format, Image, Workbook};
+
+let mut workbook = Workbook::new();
+let worksheet = workbook.add_worksheet();
+worksheet.set_column_width(0, 90.0)?; // Excel文字幅単位(ASCII基準)
+worksheet.write_string_with_format(0, 0, title, &Format::new().set_bold())?;
+worksheet.write_string_with_format(1, 0, caption, &Format::new().set_text_wrap())?;
+worksheet.set_row_height(1, 30.0)?; // 自動フィットしないため明示必須(後述)
+let image = Image::new(&image_path)?.set_scale_width(0.5).set_scale_height(0.5);
+worksheet.insert_image(2, 0, &image)?;
+workbook.save(path)?;
+```
+
+**行の高さは自動フィットしない。** `write_string_with_format()`+`set_text_wrap()`で複数行テキストを書き込んでも、`insert_image()`で画像を挿入しても、行高(row height)は既定値のまま描画される(Excelの「開いたときに自動フィット」は行われない)。テキスト行・画像行とも、書き込み前に高さを計算し`set_row_height()`で明示する(manual-studio実例、2026-10-02)。`set_row_height()`は実質**pt単位**(デフォルト値15・px換算係数`4/3`がOOXMLのpt↔px換算と一致。px単位で指定したい場合は`set_row_height_pixels()`を使う。クレート自身のdoc commentは列幅と同じ"character units"表記のままなので、pt単位という理解はソースの実装から導いたもの)。
+
+**日本語キャプションの折り返し行数を概算する際、全角文字を半角と同じ1文字として数えると行数を過小評価し、テキストが見切れる**(列幅のExcel文字幅単位はASCII基準で、全角文字は概ね2倍の表示幅を占めるため。manual-studio実例、2026-10-04)。
+
+```rust
+fn visual_width(line: &str) -> f64 {
+    line.chars().map(|c| if c.is_ascii() { 1.0 } else { 2.0 }).sum()
+}
+// 折り返し行数 = ceil(visual_width(line) / 列幅のExcel文字幅単位)
+```
+
+**画像は列幅いっぱいに引き伸ばされるわけではないので、意図したサイズにするには`set_scale_width()`/`set_scale_height()`で倍率を明示する。** 大きい画像だけ縮小し小さい画像は原寸のままにしたい場合は、`image::image_dimensions()`で実寸pxを読み、`scale = (最大表示幅px / 実寸px).min(1.0)`を両辺に同じ倍率として適用する(manual-studio実例、2026-10-04)。
+
+**改ページを手動制御したい場合、`set_page_breaks()`(強制改ページ)と`set_print_fit_to_pages()`(縮小印刷)を併用しない。** `set_print_fit_to_pages()`は**手動`set_page_breaks()`を丸ごと上書き(無効化)することが公式docに明記**されている(ズレるのではなく、強制改ページ自体が効かなくなる)。`set_print_scale()`との相互作用は公式docに記載がなく未確認だが、同様にpt単位の事前計算との整合が崩れるリスクがあるため避ける。「見出し+本文+画像」等の意味のまとまりがページをまたがないようにしたいなら、各行の高さを書き込み前にまとめて計算し、まとまり単位の累積高さがページ高さを超える直前の行へ`set_page_breaks()`で強制改ページを入れる(まとまり自体が1ページに収まらないほど大きい場合は強制改ページを諦め、自動改ページに任せる。manual-studio実例、2026-10-04)。
+
+```rust
+// printable_height_pt = (用紙高さin - 上下余白in) * 72.0 で事前に算出しておく。
+// groupsは「分断したくない行範囲」を(開始行, 合計高さ)の順で持つ。
+let mut cumulative = 0.0_f64;
+let mut breaks = Vec::new();
+for (start_row, group_height) in groups {
+    if group_height <= printable_height_pt && cumulative + group_height > printable_height_pt {
+        breaks.push(start_row); // このgroupの先頭行の直前で改ページ
+        cumulative = 0.0;
+    }
+    cumulative += group_height;
+    if cumulative > printable_height_pt {
+        cumulative %= printable_height_pt; // 1group自体が1ページ超の例外ケースの近似
+    }
+}
+worksheet.set_page_breaks(&breaks)?;
+```
+
+Wordの`keep_next()`/`keep_lines()`(後述)と違い、この種のページ制御はrust_xlsxwriterでは自前のアルゴリズムが必要。
+
+**`autofit()`は結合セル(`merge_range()`)があると列幅計算が狂う**(`merge_range()`は結合範囲の先頭セルにしか文字列を格納せず、`autofit()`はセル単位で幅を集計するため。公式docに明記はなく実装からの推測)。結合セルを使う列は`autofit()`に任せず`set_column_width()`で明示する方が安全。`autofit()`自体は全セルを文字列化して幅計算するため大規模シートでは高コストになる点は公式docに明記されており、`set_autofit_max_row()`で走査行数を絞れる。
+
+**実装前に決めておくべきこと:** 画像の最大表示幅(列幅から逆算するか、固定pxにするか)。`rust_xlsxwriter`は読み戻しAPIを持たないため、生成した`.xlsx`をzip展開しシートXML・共有文字列XMLを直接検査する結合テストで検証する(manual-studioの`write_workbook結合テスト`が実例)。
+
+## Word出力（docx-rs・2026-10 Web調査）
+
+**ライブラリ:** `docx-rs`(bokuweb版・crates.io最新v0.4.22・2026-07更新)。書き込み専用(読み込み・PDF変換なし)。類似名クレートの注意点は上の「主要クレート」表を参照——特に**GitHubのリポジトリ名`bokuweb/docx-rs`と`PoiScript/docx-rs`は重複する**が、crates.ioのクレート名は前者のみ`docx-rs`で後者は`docx`という別名のため、GitHub検索で辿り着いた場合は作者`bokuweb`を確認する。
+
+**最小骨格(タイトル→見出し→本文→画像):**
+
+```rust
+use docx_rs::*;
+
+let bytes = std::fs::read(image_path)?; // Pic::newがimageクレート経由で実寸pxを自動検出しEMU変換する
+
+let docx = Docx::new()
+    .add_paragraph(Paragraph::new().add_run(Run::new().add_text(title)).style("Title"))
+    .add_paragraph(Paragraph::new().add_run(Run::new().add_text(chapter_title)).style("Heading1"))
+    .add_paragraph(Paragraph::new().add_run(Run::new().add_text(caption)).keep_next(true))
+    .add_paragraph(Paragraph::new().add_run(Run::new().add_image(Pic::new(&bytes))));
+
+docx.build().pack(std::fs::File::create(out_path)?)?;
+```
+
+**日本語テキストは`east_asia()`フォントも明示しないと意図したフォントで表示されない**(Wordの`w:rFonts`はチャンネル別にフォントを持ち、全角・CJK文字は常に`east_asia`チャンネル経由で解決される——これはdocx-rs自身のdocsには明記されていないOOXML仕様上の一般知識)。`RunFonts`は`Run`ごとに指定する設計で、ドキュメント既定フォントとして一度だけ設定する機能はない(2026-10時点未確認。何十箇所も書く必要があるなら、共通`Format`/ヘルパー関数化を検討する)。
+
+```rust
+// ❌ BAD: asciiだけ指定 → 日本語部分はテーマフォント(既定でMS明朝等)のまま
+Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック"))
+// ✅ GOOD: east_asiaも明示
+Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック").east_asia("游ゴシック"))
+```
+
+**改ページ制御はExcelより大幅に簡単——手動計算不要。** `rust_xlsxwriter`はページ高さ(pt)を事前計算し`set_page_breaks()`で強制改ページ行を算出する必要があったが(上のExcelセクション参照)、`docx-rs`の`Paragraph`は`keep_next(true)`(次の段落と同じページに留める)・`keep_lines(true)`(段落内の行を分断しない)を持ち、Wordの標準レイアウトエンジンが実際のフォント・余白から改ページ位置を自動計算する。「見出し+説明+画像を分断したくない」なら、見出し〜画像直前の各段落に`keep_next(true)`を設定するだけでよい(最後の段落には不要)。**説明文が複数行の場合、複数`Paragraph`に分けるか1段落内で`Break::new()`改行にするかで`keep_lines`/`keep_next`の効く範囲が変わるため、実装前にどちらにするか決める**。
+
+**画像サイズ:** `Pic::new(&bytes)`は(`image`フィーチャ有効時)画像の実寸pxを自動検出しEMU換算して保持するため、**原寸埋め込みなら`.size()`呼び出しは不要**。最大表示幅でキャップしたい場合のみ、`image::image_dimensions()`等で実寸を読み、縮小後のpx値を`* 9525`(`1px = 9525 EMU` = `914400 EMU/inch ÷ 96px/inch`)して`.size(w, h)`で明示的に上書きする(上のExcelセクションの「大きい場合のみ縮小・両辺同倍率」と同じ設計)。**ExcelでのキャップはExcel列幅から逆算した値なので、Word用紙の使用可能幅(用紙サイズ-余白)で別途計算し直す必要がある**。
+
+**目次は見出しスタイル+TOCフィールドに任せる。** `TableOfContents`(`add_table_of_contents`)に`heading_styles_range()`で見出しレベル(Heading1〜9)を指定すれば、各段落に`Heading1`等を適用するだけで目次が自動構成される。Excelのように章見出し行番号を事前走査して内部リンクを手組みする必要はない。生成直後のTOCフィールドはWordが開いた時点でキャッシュされた表示のままになりがちなので、`dirty()`(生成XMLの`fldChar`に`w:dirty="true"`を付与)でWordに再計算を促す(実機確認は未実施)。
+
+**実装前に決めておくべきこと(2026-10時点未決):** Excel出力との並存方針(同一機能内で選択/別ボタン)・章.節番号をどの見出しレベル(Heading1/Heading2等)に割り当てるか・画像幅キャップのWord向け再計算値。読み戻し検証はExcel出力と同じzip展開+XML検査方式を踏襲する想定(未着手)。
 
 ## コーディング規約
 

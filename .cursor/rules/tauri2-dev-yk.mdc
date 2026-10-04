@@ -205,32 +205,9 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 
 **診断のコツ:** リモートでUIを直接見られない状況では、keydown発火・`document.hasFocus()`・関数呼び出し・`img.onload`/`onerror`など各段階に`console.log`を仕込み、DevTools(F12)のConsoleスクリーンショットを送ってもらうと、憶測なしに1段階ずつ原因を切り分けられる。`document.hasFocus()`を診断ログに含めるとフォーカス問題の特定が早い。
 
-## rust_xlsxwriterでのExcel出力（2026-10 実例）
+## Excel・Word出力クレートの注意点
 
-**`write_string_with_format()`+`set_text_wrap()`で複数行（改行入り）テキストを書き込んでも、行の高さ(row height)は自動で広がらない。** 既定の行高(1行分)のまま描画されるため、改行を含む長いテキストが次の行(特に画像を`insert_image()`した行)に重なって表示される不具合が実機で発生した(manual-studio・Excel出力機能、2026-10-02)。
-
-| MUST | 理由 |
-|------|------|
-| テキストを書き込む行は、改行数(+ 列幅を超える折り返し行数の概算)から高さを計算し`set_row_height()`で明示する | `rust_xlsxwriter`(他言語のxlsxwriter系ライブラリも同様)はExcelの「開いたときに自動フィット」を行わず、保存されたファイルの行高をそのまま描画する |
-
-```rust
-fn estimate_text_row_height(text: &str) -> f64 {
-    let line_count = text.lines()
-        .map(|line| {
-            // 全角(ASCII以外)は半角の概ね2倍の表示幅を占める。列幅のExcel文字幅単位は
-            // ASCII基準なので、全角をASCIIと同じ1文字として数えると折り返し行数を
-            // 過小評価しテキストが見切れる(manual-studio実例、2026-10-04)。
-            let visual_width: f64 = line.chars().map(|c| if c.is_ascii() { 1.0 } else { 2.0 }).sum();
-            ((visual_width / COLUMN_WIDTH_CHARS).ceil() as usize).max(1)
-        })
-        .sum::<usize>().max(1);
-    line_count as f64 * LINE_HEIGHT_PT // 既定フォント1行あたり概算15pt
-}
-```
-
-画像を`insert_image()`する行も同様に自動フィットしないため、画像のアスペクト比から行高を逆算して`set_row_height()`で明示する(列幅は固定・行高を可変にする設計が組み合わせやすい)。**`set_row_height()`の引数はpt(ポイント)単位**(px単位で指定したい場合は`set_row_height_pixels()`を使う。画像の実寸pxから行高を算出するなら`px * 0.75`(96dpi換算)でptに変換してから渡す)。
-
-**改ページを手動制御したいとき、`set_page_breaks()`(強制改ページ)と`set_print_fit_to_pages()`/`set_print_scale()`(縮小印刷)を併用しない**: fit-to-pageは印刷時にレイアウトを縮小するため、pt単位で事前計算した「1ページの印刷可能高さ(用紙高さ-余白)」の前提(倍率100%)が崩れ、強制改ページの位置と実際の印刷結果がずれる。手順・セクション等の「意味のまとまり」がページをまたがないようにしたい場合は、各行の高さを書き込み前にまとめて計算し、まとまり単位の累積高さがページ高さを超える直前の行へ`set_page_breaks()`で強制改ページを入れる(まとまり自体が1ページに収まらないほど大きい場合は強制改ページを諦め、Excelの自動改ページに任せる。manual-studio実例、2026-10-04)。
+`rust_xlsxwriter`(Excel)・`docx-rs`(Word)の非自明な罠・最小骨格は `c:/yk-skill/.cursor/rules/rust-dev-yk.mdc` の「Excel出力」「Word出力」節に集約した(Tauri固有ではなく一般Rustの知見のため)。`src-tauri/**`配下でこれらのクレートを使う場合も同ファイルを参照する。
 
 ## `npm run tauri dev` 実行時の注意点（2026-10 実例）
 
