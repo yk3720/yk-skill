@@ -222,6 +222,15 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 
 `useImperativeHandle`の依存配列には、書き出し倍率の算出に使うstate(画像寸法・拡大縮小率)も含める(古い値を掴む)。
 
+### Label / Tag のしっぽ(`pointerDirection`)
+
+Konva の `Tag` は `pointerDirection` に `"up"` / `"down"` / `"left"` / `"right"` を取れる。**空文字でしっぽなし**。
+
+| 注意 | 理由 |
+|---|---|
+| 向きを変えると `Label` の原点がしっぽ分ずれる。見た目の位置を保つなら座標補正が必要 | しっぽは Label の bounding box に含まれる |
+| しっぽなしでも `fill` / `stroke` は残る。「枠も背景も無いテキスト」は別 shape にする | しっぽなし吹き出し ≠ テキストのみ |
+
 ## Excel・Word出力クレートの注意点
 
 `rust_xlsxwriter`(Excel)・`docx-rs`(Word)の非自明な罠・最小骨格は `c:/yk-skill/.cursor/rules/rust-dev-yk.mdc` の「Excel出力」「Word出力」節に集約した(Tauri固有ではなく一般Rustの知見のため)。`src-tauri/**`配下でこれらのクレートを使う場合も同ファイルを参照する。
