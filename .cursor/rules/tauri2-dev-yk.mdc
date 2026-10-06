@@ -61,6 +61,8 @@ const msg = await invoke<string>('greet', { name: 'World' });
 - **Event**: fire-and-forget（双方向、`emit` / `listen`）
 - 引数・戻り値はすべて JSON シリアライズ可能な型に限定
 
+**camelCase変換はコマンドの引数にのみ働き、戻り値構造体には働かない。** `invoke("cmd", { folderPath })`のような引数名のキャメルケース変換(`folder_path`との対応)はTauriのコマンド呼び出し機構が行うが、Rust側が返す構造体(`#[derive(Serialize)]`)はこの変換の対象外で、通常のserdeルール(フィールド名そのまま=snake_case)でJSON化される。フロントエンドでキャメルケースのフィールド名(`imagePaths`等)を期待する場合は、既存の`Step`/`Manifest`型が`chapterId`等に個別の`#[serde(rename = "...")]`を付けているのと同じく、戻り値の各フィールドに明示的な`rename`が必要(付け忘れるとフロント側の分割代入が静かに`undefined`になる。manual-studio実例、2026-10-06)。
+
 ## セキュリティ（必須ルール）
 
 ```json

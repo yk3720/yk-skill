@@ -237,7 +237,9 @@ Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック").east
 
 **画像サイズ:** `Pic::new(&bytes)`は(`image`フィーチャ有効時)画像の実寸pxを自動検出しEMU換算して保持するため、**原寸埋め込みなら`.size()`呼び出しは不要**。最大表示幅でキャップしたい場合のみ、`image::image_dimensions()`等で実寸を読み、縮小後のpx値を`* 9525`(`1px = 9525 EMU` = `914400 EMU/inch ÷ 96px/inch`)して`.size(w, h)`で明示的に上書きする(上のExcelセクションの「大きい場合のみ縮小・両辺同倍率」と同じ設計)。**ExcelでのキャップはExcel列幅から逆算した値なので、Word用紙の使用可能幅(用紙サイズ-余白)で別途計算し直す必要がある**。
 
-**目次は見出しスタイル+TOCフィールドに任せる。** `TableOfContents`(`add_table_of_contents`)に`heading_styles_range()`で見出しレベル(Heading1〜9)を指定すれば、各段落に`Heading1`等を適用するだけで目次が自動構成される。Excelのように章見出し行番号を事前走査して内部リンクを手組みする必要はない。生成直後のTOCフィールドはWordが開いた時点でキャッシュされた表示のままになりがちなので、`dirty()`(生成XMLの`fldChar`に`w:dirty="true"`を付与)でWordに再計算を促す(実機確認は未実施)。
+**目次は見出しスタイル+TOCフィールドに任せる。** `TableOfContents`(`add_table_of_contents`)に`heading_styles_range()`で見出しレベル(Heading1〜9)を指定すれば、各段落に`Heading1`等を適用するだけで目次が自動構成される。Excelのように章見出し行番号を事前走査して内部リンクを手組みする必要はない。
+
+**生成したTOCフィールドは、Wordで開いただけでは中身が空のまま。** TOCは「フィールドコード」であり、Wordが開いた瞬間に自動計算するわけではない。`TableOfContents`構造体の`auto`/`dirty`フィールドはソースコード上「don't use」とコメントされており、`dirty()`は目次項目を事前計算(`items`)して埋め込む場合にのみ効果を持つ(`items`を使わない「空の目次」方式——`heading_styles_range()`だけの一般的な使い方——では効果なし)。この制約はdocx-rs側の実装都合ではなくOOXMLのTOCフィールド自体の仕様(`settings.xml`の`<w:updateFields>`等、Wordに「開いたら自動計算して」と指示する設定が別途必要)で、docx-rsにはこの設定を書き込むAPIが無い。**ユーザーがWordで開いた後、目次を右クリック→「フィールド更新」(または目次全体を選択してF9キー)を押すまで、目次は空または「目次が見つかりません」という状態のまま**になる。回避策(XMLの直接後編集でsettings.xmlにupdateFieldsを追記する等)はdocx-rs提供APIのみを使うという実装方針から逸脱するため、UI側で「目次を表示するには右クリック→フィールド更新」という案内を出す対応で十分(manual-studio実例、2026-10-06)。
 
 **manual-studioでの決定事項(2026-10-04実装済み):** Excel出力とは別ボタンで並存(どちらか一方を選ぶ設計にはしない)。見出しレベルは章見出しのみ`Heading1`、手順番号は見出しスタイルにせず太字+色+`leftChars`インデントで区別(TOCに手順番号までは載せない設計)。画像幅キャップはExcelと同じ400pxをそのまま流用(Word既定ページの使用可能幅≈567pxに収まるため再計算不要と判断)。読み戻し検証はExcel出力と同じzip展開+XML検査方式(`word/document.xml`の`<w:t>`抽出・`word/media/`配下のファイル数確認)で結合テスト化した。目次(TOCフィールド)はMVPでは未実装(見送り)。
 
