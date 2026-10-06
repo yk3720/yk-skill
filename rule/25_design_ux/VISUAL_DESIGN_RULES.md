@@ -7,7 +7,7 @@
 
 **関連:** [`COMMUNICATION_RULES.md`](../10_meta/COMMUNICATION_RULES.md) · [`USABILITY_HEURISTICS_RULES.md`](USABILITY_HEURISTICS_RULES.md) No **20**（UX · 文言・画面設計）· [`50_gas_html_test/GAS_REPORT_DESIGN_RULES.md`](../50_gas_html_test/GAS_REPORT_DESIGN_RULES.md)（静的 HTML の Repetition）· [`35_reactflow/references/REACTFLOW_UX_CHROME.md`](../35_reactflow/references/REACTFLOW_UX_CHROME.md) §5.6-3（flowchart 定数）
 
-**最終更新:** 2026-06-25
+**最終更新:** 2026-10-06
 
 ---
 
@@ -48,6 +48,8 @@
 
 - **色の役割分担**はプロジェクトで定義してよい（例: 矢印=青 · 枠=スレート/黒）。
 - **大面積の surface（サイドバー・ナビ・ペイン背景）** はニュートラルにし、**彩度の高い brand / accent 色はプライマリ CTA と小面積の選択・リンク**に寄せる。CTA と図形・矢印がすでに同色 family のとき、ナビ大面積に同系統の chromatic 色を載せない（階層競合 · hue pollution）。
+- **同じ色(濃い塗り)に2つの意味を持たせない。** ツールバー等で「選択中のモード」と「主要操作(確定・適用)」が同じ濃い青の塗りだと、どれが状態でどれが操作か区別できない。**選択中=薄い塗り+アクセント枠+アクセント文字、主要操作=濃い塗り**に分ける（manual-studio 注釈ツールバー実例 2026-10-06）。
+- **確定・キャンセルなど「次に必ず押す」操作は、対象の近く（例: 切り取り範囲の直下）に出す。** ツールバー内の同じ見た目のボタン群に混ぜると埋もれる。ツールバーは役割別セクション（ツール / 加工 / 確定）に分け、確定は端に離す。
 - **色だけに意味を頼らない**（色覚多様性 · ラベル併記）— 詳細はドメイン rule（GAS レポート · 企画の色列 B 等）。
 - **WCAG 2.2 AA · a11y チェックリスト** — [`A11Y_RULES.md`](A11Y_RULES.md) No **24**（コントラスト数値 · focus · タッチターゲット）。
 - 本ファイルは**色のパレット SSOT ではない**。太さの横断ルールが主。flowchart の操作 chrome 詳細は [`design-system.md`](c:/yk-application/flowchart-studio/docs/design-system.md) レイヤー C。
