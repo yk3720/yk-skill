@@ -6,7 +6,7 @@
 
 **ファイルパス（エージェント・スキル参照用）:** `c:/yk-skill/rule/30_web_stack/TAILWINDCSS_RULES.md`
 
-**最終更新:** 2026-07-03
+**最終更新:** 2026-10-06（§4に `@theme` 未宣言トークンが無言で無効化される落とし穴を追加）
 
 **メモ:** ドキュメント取得時点のバージョン表記は **v4.3.2**（v4 は CSS-first · `@import "tailwindcss"` · テーマは `@theme` が既定。レガシー `tailwind.config.js` は移行期のみ）。
 
@@ -70,3 +70,4 @@
   ```
   `flex-col` レイアウトで複数ペインを積むとき、外側ペイン wrapper に残った `overflow-auto` が原因で踏みやすい。
 - **同じ CSS プロパティを指す複数のユーティリティを `cn()` で合成しない**（`flowchart-excel` 2026-09-15）: 共有定数（例 `fcBorderR = "border-r border-flow-border"`）に、別途 `border-flow-border/60` のような opacity variant を足すと、どちらの `border-color` が効くかは Tailwind の生成順（DOM の `className` 順ではない）に依存し不安定になる。上書きしたい値があるときは共有定数を経由せず、その場で完結したクラス文字列（例 `"border-r border-flow-border/60"`）を書く。
+- **`@theme`で未宣言のカスタムカラートークンは、ビルドエラー無しで静かに何も効かない**（`flowchart-excel` 2026-10-06）: `bg-flow-danger-muted` のような任意のカラー系ユーティリティクラスは、対応する `--color-flow-danger-muted` が `@theme`（`@theme inline` 含む）ブロックに宣言されていないと、Tailwind v4は**CSSルールを一切生成しない**（タイプミスでも未宣言でもビルドは成功し、何のエラーも出ない）。別リポ（共有デザインシステムの `globals.css` 等）で定義済みのトークン名をコピーしてクラス名だけ流用すると、見た目上「色が付いていない透明なバナー」のまま気づかれずに残る。疑わしいときはビルド後のCSS（`dist/assets/*.css`）に該当クラスの `.bg-xxx{...}` ルールが実在するか `grep` で確認する（ブラウザの DevTools でも同様に確認できる）。
