@@ -198,6 +198,8 @@ Wordの`keep_next()`/`keep_lines()`(後述)と違い、この種のページ制�
 
 **実装前に決めておくべきこと:** 画像の最大表示幅(列幅から逆算するか、固定pxにするか)。`rust_xlsxwriter`は読み戻しAPIを持たないため、生成した`.xlsx`をzip展開しシートXML・共有文字列XMLを直接検査する結合テストで検証する(manual-studioの`write_workbook結合テスト`が実例)。
 
+**`RowPlan`等の列挙を`matches!`で分岐している箇所は、新バリアント追加時にコンパイラが未対応を検知しない。** exhaustive `match`ならコンパイルエラーになるが、`matches!(plan.get(j), Some(RowPlan::Image(_)))`のような写法は黙って通る。画像の直後に表行を足す等で「まとまり長さ」が足りなくなると、実機でだけページが割れる。新バリアントと同じコミットで、その分岐を通る単体テストを必ず足す(manual-studio・表step実装、2026-10-06)。
+
 ## Word出力（docx-rs・2026-10 実例+Web調査）
 
 **ライブラリ:** `docx-rs`(bokuweb版・crates.io最新v0.4.22・2026-07更新)。書き込み専用(読み込み・PDF変換なし)。類似名クレートの注意点は上の「主要クレート」表を参照——特に**GitHubのリポジトリ名`bokuweb/docx-rs`と`PoiScript/docx-rs`は重複する**が、crates.ioのクレート名は前者のみ`docx-rs`で後者は`docx`という別名のため、GitHub検索で辿り着いた場合は作者`bokuweb`を確認する。
@@ -220,6 +222,8 @@ docx.build().pack(std::fs::File::create(out_path)?)?;
 
 **`.style("Heading1")`等の見出しスタイル指定だけでは、太字・サイズ等の見た目は確定しない。** `Docx::add_style(...)`で`Heading1`スタイル自体を`styles.xml`に定義しない限り、docx-rsが生成するのは`<w:pStyle w:val="Heading1"/>`という「参照」だけで、対応する`<w:style styleId="Heading1">`の定義自体は書き出されない(実装からの確認・`Docx::add_style`を呼ばなければ`styles.xml`には`Normal`しか入らない)。見た目はWord側がビルトインの「Heading 1」を独自解決した結果になり、**テーマ依存で環境によって変動しうる**。確実に同じ太字・サイズで固定表示したいなら、`style()`と併用して`Run::size(n).bold()`等を明示する(冗長ではなく必須。manual-studio実例、2026-10-04)。
 
+**TOC(目次)を使うなら`add_style`でHeading1を定義し、`outline_lvl(0)`も付ける。** 参照だけだと日本語Wordでフィールド更新しても「目次項目が見つかりません」になる(実機2026-10-06)。表示名は日本語環境向けに`name("見出し 1")`でよい。styleIdは`Heading1`のまま(TOCの`heading_styles_range(1, 1)`が参照する識別子)。
+
 **日本語テキストは`east_asia()`フォントも明示しないと意図したフォントで表示されない**(Wordの`w:rFonts`はチャンネル別にフォントを持ち、全角・CJK文字は常に`east_asia`チャンネル経由で解決される——これはdocx-rs自身のdocsには明記されていないOOXML仕様上の一般知識)。`RunFonts`は`Run`ごとに指定する設計で、ドキュメント既定フォントとして一度だけ設定する機能はない(2026-10時点未確認。何十箇所も書く必要があるなら、共通`Format`/ヘルパー関数化を検討する)。
 
 ```rust
@@ -241,7 +245,13 @@ Run::new().add_text(caption).fonts(RunFonts::new().ascii("游ゴシック").east
 
 **生成したTOCフィールドは、Wordで開いただけでは中身が空のまま。** TOCは「フィールドコード」であり、Wordが開いた瞬間に自動計算するわけではない。`TableOfContents`構造体の`auto`/`dirty`フィールドはソースコード上「don't use」とコメントされており、`dirty()`は目次項目を事前計算(`items`)して埋め込む場合にのみ効果を持つ(`items`を使わない「空の目次」方式——`heading_styles_range()`だけの一般的な使い方——では効果なし)。この制約はdocx-rs側の実装都合ではなくOOXMLのTOCフィールド自体の仕様(`settings.xml`の`<w:updateFields>`等、Wordに「開いたら自動計算して」と指示する設定が別途必要)で、docx-rsにはこの設定を書き込むAPIが無い。**ユーザーがWordで開いた後、目次を右クリック→「フィールド更新」(または目次全体を選択してF9キー)を押すまで、目次は空または「目次が見つかりません」という状態のまま**になる。回避策(XMLの直接後編集でsettings.xmlにupdateFieldsを追記する等)はdocx-rs提供APIのみを使うという実装方針から逸脱するため、UI側で「目次を表示するには右クリック→フィールド更新」という案内を出す対応で十分(manual-studio実例、2026-10-06)。
 
-**manual-studioでの決定事項(2026-10-04実装済み・2026-10-06更新):** Excel出力とは別ボタンで並存(どちらか一方を選ぶ設計にはしない)。見出しレベルは章見出しのみ`Heading1`、手順番号は見出しスタイルにせず太字+色+`leftChars`インデントで区別(TOCに手順番号までは載せない設計)。画像の最大幅はExcelの400pxの流用をやめ、Word専用の454px(約120mm)にした(Word既定ページの使用可能幅≈567px以内。105mmでは小さく見えたため)。**高さにも上限を設ける**(680px≈180mm・暫定): 縦長画像が1ページを超えて見切れたり、見出し・説明と別ページに離れたりするのを防ぐ(縮小率は幅基準と高さ基準の小さい方、拡大はしない)。読み戻し検証はExcel出力と同じzip展開+XML検査方式(`word/document.xml`の`<w:t>`抽出・`word/media/`配下のファイル数確認)で結合テスト化した。目次(TOCフィールド)は2026-10-06に実装済み(上の「目次」「フィールド更新」の節を参照)。
+**表を書くときは列幅をセルごとに明示する。** `Table::set_grid(vec![...])`は`<w:tblGrid>`(表示ヒント)だけで、各セルの実幅(`<w:tcW>`)にはならない。意図した列幅にするには、各`TableCell`に`.width(w, WidthType::Dxa)`を付け、`Table::layout(TableLayoutType::Fixed)`も設定する。幅の型は`usize`(DXA)。行の途中でページを割らないなら`TableRow::new(...).cant_split()`(`TableRowProperty`を自分で組む必要はない。manual-studio・表step、2026-10-06)。
+
+**中央寄せは`align(Center)`だけでは見た目に効かないことがある。** docx-rsの既定`tblW`は`w:w="0" w:type="auto"`で、Wordが表をページ幅いっぱいに広げるため、中央寄せの余地が無くなる。列幅の合計を`Table::width(合計, WidthType::Dxa)`で明示してから`.align(TableAlignmentType::Center)`する(manual-studio実機、2026-10-06)。結合テストでは`<w:jc w:val="center"/>`と`<w:tblW w:w="…" w:type="dxa"/>`の両方を見る。
+
+**結合テストで`document.xml`から`<w:t>`を探すとき、素朴な`find("<w:t")`は`<w:tbl`にも当たる。** タグ名の直後が`>`・空白・`/`のときだけ文字タグとみなす。表を含む文書では、この取り違えでパース結果に表のプロパティ断片が混ざりアサーションが落ちる(manual-studio、2026-10-06)。
+
+**manual-studioでの決定事項(2026-10-04実装済み・2026-10-06更新):** Excel出力とは別ボタンで並存(どちらか一方を選ぶ設計にはしない)。見出しレベルは章見出しのみ`Heading1`、手順番号は見出しスタイルにせず太字+色+`leftChars`インデントで区別(TOCに手順番号までは載せない設計)。画像の最大幅はExcelの400pxの流用をやめ、Word専用の454px(約120mm)にした(Word既定ページの使用可能幅≈567px以内。105mmでは小さく見えたため)。**高さにも上限を設ける**(680px≈180mm・暫定): 縦長画像が1ページを超えて見切れたり、見出し・説明と別ページに離れたりするのを防ぐ(縮小率は幅基準と高さ基準の小さい方、拡大はしない)。読み戻し検証はExcel出力と同じzip展開+XML検査方式(`word/document.xml`の`<w:t>`抽出・`word/media/`配下のファイル数確認)で結合テスト化した。目次(TOCフィールド)は2026-10-06に実装済み(上の「目次」「フィールド更新」の節を参照)。表stepは上記のFixed表・`cant_split`で出力する。
 
 ## コーディング規約
 
