@@ -1,6 +1,6 @@
 ---
 name: converging-plan-reviews
-description: 計画・設計ドキュメントに3視点以上のサブエージェントレビューを繰り返しかけ、重大な指摘が出なくなるまで収束させるスキル。「収束するまでレビューして」「計画を練り上げて」「重大な指摘事項がなくなるまでレビューを繰り返して」「何周もレビューして詰めて」と依頼された際に使用する。単発1周のレビューは`reviewing-with-subagents`、壁打ちでの要件定義は`grill-me`を使う。Do NOT use for コードの差分レビュー(reviewing-code-yk)、1周だけで終える多視点レビュー。
+description: 計画・設計ドキュメントに3視点以上のサブエージェントレビューを繰り返しかけ、重大な指摘が出なくなるまで収束させるスキル。「収束するまでレビューして」「計画を練り上げて」「重大な指摘事項がなくなるまでレビューを繰り返して」「何周もレビューして詰めて」と依頼された際に使用する。単発1周のレビューは`reviewing-with-subagents`、壁打ちでの要件定義は`grill-me`を使う。Do NOT use for コードの差分レビュー(reviewing-code-yk)、1周だけで終える多視点レビュー、UI・画面の構想設計のデザインレビュー(reviewing-design-yk)。
 ---
 
 # Converging Plan Reviews

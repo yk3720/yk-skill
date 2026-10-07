@@ -1,9 +1,9 @@
 # YK Skill Catalog（スキル台帳）
 
-**最終更新:** 2026-09-09（`syncing-repos-yk` 新規追加）
+**最終更新:** 2026-10-07（`reviewing-design-yk` 新規追加 · `converging-plan-reviews` 登録漏れを補完）
 **管理:** `.claude/skills/managing-skills-yk/` · 再生成は [regenerate-procedure.md](../.claude/skills/managing-skills-yk/references/regenerate-procedure.md)  
 **人間向け索引:** [SKILLS_INDEX.md](./SKILLS_INDEX.md)（カテゴリ · 発火要約）· 質問は `exploring-skills-yk`  
-**件数:** L1 **40** · nested **2** · sample **1**（計 **43** `SKILL.md`）
+**件数:** L1 **42** · nested **2** · sample **1**（計 **45** `SKILL.md`）
 
 > **人間向けインベントリ。** Cursor ランタイムは各 `SKILL.md` の `description` を自動載せる。台帳は整理依頼・`creating-skills` 完了・本スキル明示時のみ更新する（通常発火では更新しない）。
 
@@ -26,6 +26,7 @@
 | No | name | skill_path | tier | canonical | explicit_only | notes |
 |----|------|------------|------|-----------|---------------|-------|
 | 1 | committing-with-git-yk | `.claude/skills/committing-with-git-yk/SKILL.md` | L1 | — | yes | 廃止エイリアス → `managing-git-yk` |
+| 1b | converging-plan-reviews | `.claude/skills/converging-plan-reviews/SKILL.md` | L1 | — | no | 計画・設計の多視点レビューを収束まで反復（`reviewing-with-subagents` が土台） |
 | 2 | creating-curiosity-map | `.claude/skills/creating-curiosity-map/SKILL.md` | L1 | — | no | 文系向け図解 · surge |
 | 3 | creating-diagram-techmap | `.claude/skills/creating-diagram-techmap/SKILL.md` | L1 | — | no | 理系 techmap 図解 |
 | 4 | creating-mermaid-yk | `.claude/skills/creating-mermaid-yk/SKILL.md` | L1 | — | no | Mermaid `.mmd` · `MERMAID_RULES` |
@@ -56,6 +57,7 @@
 | 18 | re-explaining-in-chat-yk | `.claude/skills/re-explaining-in-chat-yk/SKILL.md` | L1 | — | no | チャット再説明 · `COMMUNICATION_RULES` |
 | 18b | refining-copy-yk | `.claude/skills/refining-copy-yk/SKILL.md` | L1 | — | no | 文章洗練 · 多視点レビュー→修正ループ · 文体は毎回確認 |
 | 19 | reviewing-code-yk | `.claude/skills/reviewing-code-yk/SKILL.md` | L1 | — | no | 単一パスコードレビュー（差分・PR 前） |
+| 19b | reviewing-design-yk | `.claude/skills/reviewing-design-yk/SKILL.md` | L1 | — | no | UI構想設計のデザイン専用レンズレビュー（`reviewing-with-subagents` + `converging-plan-reviews` の上に載る） |
 | 20 | reviewing-with-subagents | `.claude/skills/reviewing-with-subagents/SKILL.md` | L1 | — | no | 多視点サブエージェントレビュー |
 | 21 | routing-diagram-yk | `.claude/skills/routing-diagram-yk/SKILL.md` | L1 | — | no | 図解形式の受付・質問・委譲（HTML は作らない） |
 | 22 | using-playwright | `.claude/skills/using-playwright/SKILL.md` | L1 | — | no | Playwright spec 執筆 · 実行 |
@@ -79,6 +81,8 @@
 | `routing-diagram-yk` ↔ 図解4種 | 形式未指定の受付。実行は curiosity / techmap / visual / fb に委譲 |
 | `designing-playwright-tests-yk` ↔ `using-playwright` | E2E 設計（§13） vs spec 執筆・実行（§12）。description の Do NOT で分離 |
 | `reviewing-code-yk` ↔ `reviewing-with-subagents` | 単一パスコードレビュー vs 多視点並列。description の Do NOT で分離 |
+| `reviewing-design-yk` ↔ `converging-plan-reviews` / `reviewing-with-subagents` | UI構想設計のデザイン専用（前提チェック · デザイン専用レンズ · 承認ゲート）vs 汎用の収束ループ・多視点並列。description の Do NOT で分離 |
+| `reviewing-design-yk` → `reviewing-with-subagents` · `converging-plan-reviews` · `grill-me` | 起動・収束・前段の手順は子スキルを参照（オーケストレーション） |
 | `handoff-session-work` ↔ `managing-git-yk` | セッション vs Git · Phase C は commit+push |
 | `syncing-repos-yk` ↔ `managing-git-yk` | 横断 fetch/pull 同期 vs commit/push/PR/クリーン。description の Do NOT で分離 |
 | `committing-with-git-yk` / `pushing-and-pr-yk` | 廃止エイリアス → `managing-git-yk` |

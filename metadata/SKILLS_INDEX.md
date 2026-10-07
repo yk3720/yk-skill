@@ -1,6 +1,6 @@
 # YK スキル索引（人間・エージェント向け SSOT）
 
-**最終更新:** 2026-09-09（`syncing-repos-yk` 新規追加）
+**最終更新:** 2026-10-07（`reviewing-design-yk` 新規追加 · `converging-plan-reviews` 登録漏れを補完）
 **機械台帳:** [SKILL_CATALOG.md](./SKILL_CATALOG.md) · **カテゴリ:** [skill-categories.yaml](./skill-categories.yaml)  
 **図:** [diagrams/skills-overview.mmd](./diagrams/skills-overview.mmd) · [skills-routing-pairs.mmd](./diagrams/skills-routing-pairs.mmd) · [briefmap-skills-overview.html](./briefmap-skills-overview.html)  
 **聞く:** 「スキル一覧」「〇〇に使えるスキルは？」→ `exploring-skills-yk`
@@ -54,6 +54,7 @@
 | `using-playwright` | Playwright · spec | no | E2E 執筆・実行（§12） |
 | `reviewing-code-yk` | コードレビュー · PR前 | no | 単一パスコードレビュー |
 | `reviewing-with-subagents` | サブエージェントでレビュー · 多視点 | no | 3+レンズ並列レビュー（修正なし） |
+| `reviewing-design-yk` | デザインレビューして · UIの構想設計をレビュー | no | UI構想設計のデザイン専用レンズレビュー（前提チェック → 収束 → 承認ゲート） |
 | `optimizing-code-yk` | コードチェック · 最適化 | no | Web 調査+サブエージェント最適化 |
 
 ---
@@ -78,6 +79,7 @@
 |------|-------------|----------|------|
 | `researching-web` | ウェブで調べて | no | Web 調査 |
 | `grill-me` | グリルして · 計画を詰めて | no | 設計インタビュー |
+| `converging-plan-reviews` | 収束するまでレビューして · 計画を練り上げて | no | 計画・設計ドキュメントの多視点レビューを収束まで反復 |
 | `re-explaining-in-chat-yk` | もう一度説明 · 平易に | no | チャット再説明 |
 | `switching-tone-yk` | 口調を変えて · 荒くれ者口調で | no | チャット応答の口調切替（複数パターン） |
 
@@ -121,6 +123,7 @@
 | `routing-diagram-yk` → 図解4種 | 受付 vs 実行 |
 | `designing-playwright-tests-yk` ↔ `using-playwright` | 設計 vs spec |
 | `reviewing-code-yk` ↔ `reviewing-with-subagents` | 1周 vs 多視点 |
+| `reviewing-design-yk` ↔ `converging-plan-reviews` / `reviewing-with-subagents` | UI構想設計のデザイン専用レンズ vs 汎用の収束・多視点（本スキルは両者の上に載る） |
 | `refining-copy-yk` ↔ `reviewing-with-subagents` | 修正ループあり vs なし |
 | `writing-proposals` ↔ `writing-in-my-voice-yk` | 長文提案 vs 短い実務文（保存・特徴・起草） |
 | `writing-in-my-voice-yk` ↔ `writing-internal-mail-yk` | 手順の正本 vs メール発火の入口 |

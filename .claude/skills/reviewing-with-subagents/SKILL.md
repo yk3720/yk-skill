@@ -4,7 +4,7 @@ description: >
   多視点サブエージェント並列レビュー（3レンズ以上）。発火例「サブエージェントでレビュー」「多視点で見て」「並列レビュー」。
   Runs parallel Agent-tool subagents with one lens each. Use for 3+ explicit lenses at once.
   Do NOT use for 単一パスコードレビュー（reviewing-code-yk）、commit/push/PR、校正のみ、
-  公式推奨との照合・コードチェック（optimizing-code-yk）。
+  公式推奨との照合・コードチェック（optimizing-code-yk）、UI・画面の構想設計のデザインレビュー（reviewing-design-yk）。
 ---
 
 # サブエージェントによる多視点レビュー

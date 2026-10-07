@@ -43,6 +43,7 @@ skills:
   using-playwright: test-review
   reviewing-code-yk: test-review
   reviewing-with-subagents: test-review
+  reviewing-design-yk: test-review
   optimizing-code-yk: test-review
 
   # Git・セッション
@@ -57,6 +58,7 @@ skills:
   # 調査・計画・説明
   researching-web: research-plan
   grill-me: research-plan
+  converging-plan-reviews: research-plan
   re-explaining-in-chat-yk: research-plan
   switching-tone-yk: research-plan
   personal-scheduler: personal
