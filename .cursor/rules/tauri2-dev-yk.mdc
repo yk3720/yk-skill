@@ -222,6 +222,17 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 
 `useImperativeHandle`の依存配列には、書き出し倍率の算出に使うstate(画像寸法・拡大縮小率)も含める(古い値を掴む)。
 
+### 余白の追加・プレビュー・枠線(2026-10 実例・manual-studio)
+
+| 注意 | 理由・やり方 |
+|---|---|
+| 注釈の座標は**縮小表示する`Group`の内側＝元画像のpx**。余白で位置をずらすときは、そのpxをそのまま足す（`groupScale`を掛けない）。表示倍率は変えない | 倍率を再計算すると注釈の大きさ・文字サイズが変わる |
+| 余白は**offscreen canvas**に色（透明は塗らない）を敷いて`drawImage`し、新しい`Image`に差し替える。履歴（Undo）には画像・注釈・倍率・枠線設定を退避する | 切り取り：置き換えと同じ型で Ctrl+Z できる |
+| プレビューで`Group`を`x/y`オフセットした場合、**`toDataURL`の直前に位置を`(0,0)`へ戻し、プレビュー用の背景`Rect`を`visible(false)`**にして、終わったら戻す（`finally`） | 自動の確定保存がプレビュー中に走ると、ずれた領域を書き出してしまう |
+| プレビュー中のキャンバス操作の無効化は`<Stage listening={false}>`。ハンドルは**HTMLの絶対配置の`div`**＋`setPointerCapture`でドラッグする | Konvaの図形イベントと衝突しない。ウィンドウ外で離しても追従する。ヒット領域は見た目より広く（24px以上） |
+| 枠線は`Group`内の`Rect`（`listening={false}`・内側に`幅/2`寄せ・`strokeWidth=幅`）。確定保存で焼き込む | 外側に引くと書き出し範囲で切れる。切り取り時は注釈と同じく焼き込み、設定は空に戻す（二重を防ぐ） |
+| はみ出し判定は`group.getChildren()`の`getClientRect({ relativeTo: group })`を元画像の範囲と比べる（画像本体・枠線は除く） | ステージ座標ではなく`Group`基準で比べないと、倍率で判定がずれる |
+
 ### Label / Tag のしっぽ(`pointerDirection`)
 
 Konva の `Tag` は `pointerDirection` に `"up"` / `"down"` / `"left"` / `"right"` を取れる。**空文字でしっぽなし**。
