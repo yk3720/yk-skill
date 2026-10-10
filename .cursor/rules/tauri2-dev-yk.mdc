@@ -232,6 +232,7 @@ if (target.tagName !== "INPUT" && target.tagName !== "TEXTAREA" && !document.has
 | プレビュー中のキャンバス操作の無効化は`<Stage listening={false}>`。ハンドルは**HTMLの絶対配置の`div`**＋`setPointerCapture`でドラッグする | Konvaの図形イベントと衝突しない。ウィンドウ外で離しても追従する。ヒット領域は見た目より広く（24px以上） |
 | 枠線は`Group`内の`Rect`（`listening={false}`・内側に`幅/2`寄せ・`strokeWidth=幅`）。確定保存で焼き込む | 外側に引くと書き出し範囲で切れる。切り取り時は注釈と同じく焼き込み、設定は空に戻す（二重を防ぐ） |
 | はみ出し判定は`group.getChildren()`の`getClientRect({ relativeTo: group })`を元画像の範囲と比べる（画像本体・枠線は除く） | ステージ座標ではなく`Group`基準で比べないと、倍率で判定がずれる |
+| 市松模様・影など**表示専用の飾りはKonvaのノードにしない**。CSS（`.konvajs-content::before`＋`filter: drop-shadow`）で敷き、画像の範囲は`--image-w/--image-h`で渡す（0.23.8） | `stage.toDataURL`は全ノードを焼き込むため、ノードにすると保存PNGに市松が入る。ステージの最小寸法（320x240）の余りにも出てしまう |
 
 ### Label / Tag のしっぽ(`pointerDirection`)
 

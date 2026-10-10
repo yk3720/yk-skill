@@ -86,6 +86,12 @@
 
 **使い方（MUST）:** 画面レビューで「ボタンが多い・複雑」と言われたら、(1) 画面を群れ（グループ）に分け、(2) 群れごとに上の表の「点検」列を当て、(3) 修正は**グルーピングの変更（近接・共通領域）→見た目の統一（類同）→順序（連続）**の順で検討する。機能を削る前に、群れと余白で整理できないかを先に試す。
 
+**実装メモ（2026-10 manual-studio のレイアウト見直しで判明）:**
+
+- **モード中に沈めるのは「領域（群）」単位**で、見出し・ラベルごと同じ透明度（0.5前後）にする。ボタン個別の`disabled`の薄さ（0.5）と重ねると0.25になるので、`.is-dim button:disabled { opacity: 1 }`で打ち消す。
+- **操作ペインは中身より小さく縮めない**（`flex: 1 0 auto`、親がスクロール）。`flex: 1; min-height: 0`のカードの中でツールバーが折り返すと、子が押しつぶされて下の欄に重なる。左右2ペインでは**右ペインの最小幅を保証し、左を先に縮める**（左に`max-width: calc(100% - 右の最小幅)`）。
+- **主ボタン（確定）は固定位置**にし、折り返しても最終行の右端に残す。モード中は位置も大きさも変えず無効にだけする。案内は通常時は高さを取らない1本の帯に出し、案内→操作ボタンの入れ替えで高さを変えない（`min-height`で固定）。
+
 **出典:** [ゲシュタルト原則の7つの法則とUIデザインへの応用](https://wentz-design.com/post/gestalt-principles-ui-design/) · [UIデザインのための心理学（ベイジ）](https://baigie.me/blog-ui/2022/03/29/psychology_for_uidesign/) · [NN/G: Proximity](https://www.nngroup.com/videos/proximity-gestalt/) · [NN/G: Connectedness](https://www.nngroup.com/videos/connectedness-gestalt/)
 
 ---
