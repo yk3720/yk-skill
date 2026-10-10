@@ -6,7 +6,7 @@
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · L0 `design-before-code-yk` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-10-10（§14.2 成功の定義は書き出し物の受け手の目で）
+**最終更新:** 2026-10-10（§7 実機確認の頼み方・§14.2 成功の定義は書き出し物の受け手の目で）
 
 ---
 
@@ -140,6 +140,13 @@ AGENTS.md（憲法）→ コード
 ```
 
 **人間専用タスク**（目視 · 実機操作）は §4 に載せず、HANDOFF §6 に「担当: ユーザー」と書く。
+
+**実機確認をユーザーに頼むときの書き方（チャットでの依頼方法。記録の置き場は上の HANDOFF §6。manual-studio · 2026-10）:**
+- Playwright・単体テストで確かめられる項目は先に自動化し、実機確認は人間専用の項目に絞る（`PLAYWRIGHT_RULES` §12）。
+- **1回に1項目**だけ指示し、結果を受けてから次へ進む。一覧は最初に件数だけ伝える。一括で出すと、どの項目の結果か分からなくなる。
+- 項目を書く**前に**、テスト対象のデータの状態（原本の有無・画像の形式・旧形式か。手順書フォルダの manifest など）を確認する。状態によって出ない表示を「出ますか」と聞くと、不具合と取り違えて混乱する（実際に起きた）。
+- 各項目に、**見る場所・期待する表示・「出ないのが正しい」条件**を書く。
+- 実機で見つかった不具合は、設計書を先に直す（`PROJECT_DOCUMENT_RULES` §9）。直したあとのバージョンは `APP_VERSIONING_RULES` §2 に従う。
 
 ---
 

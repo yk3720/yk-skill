@@ -318,6 +318,15 @@ Deep Link を確実に受け取るために必須。
    }))
    ```
 
+## 同梱リソース（見本・テンプレートを MSI に入れる）— 2026-10 manual-studio
+
+- `tauri.conf.json` の `bundle.resources` に **配列の glob** `["resources/sample/**/*"]` を書くと、`src-tauri/resources/sample/...` が `$RESOURCE/resources/sample/...` の相対パスのまま入る（サブフォルダも含む）。
+- Rust では `app.path().resolve("resources/sample", tauri::path::BaseDirectory::Resource)`（`use tauri::Manager`）で取り出し、**ユーザー領域へコピーして**使う。同梱元は書き換えない。コピーは Rust コマンド内の `std::fs` なので、フロントの fs capability・スコープは不要。
+- 確認できたのは**MSI（release）に入ること**まで。`tauri dev` での解決先は未確認なので、開発中は `cargo test` のコピー処理テストと MSI で確かめる。
+- MSI に入ったかは、ビルド後の `target/release/wix/x64/main.wxs` に各ファイルの `Source=` が並ぶかで確認する（インストールして開く前に分かる）。
+- コピー処理は、`AppHandle` に依存しない関数に切り出し、テストで `env!("CARGO_MANIFEST_DIR")` 基準の同梱元を読ませる。名前の重複（「見本」「見本 2」…）と、同梱元が変わらないことも固定する。
+- 同梱するのは通常のデータ（manifest と画像）にとどめる（manual-studio の方針: 見本のために新しい保存形式は作らない）。
+
 ## 推奨スタック
 - **Frontend**: React + shadcn/ui + Tailwind CSS (v4)
 - **Rationale**: Web版（flowchart-studio）とのコード共通化、および洗練された UI の迅速な構築のため。
