@@ -201,7 +201,7 @@ Web ドメイン内の「狭い > 広い」の詳細 → `20_web_workspace/WORKS
 | 12 | 10_meta | `10_meta/SKILL_AUTHORING_RULES.md` | スキル作成・更新 | active |
 | 13 | 10_meta | `10_meta/AI_DRIVEN_RULES.md` | 講座・行動指針（**人間向け** — エージェントは通常 Read しない） | active |
 | 14 | 10_meta | `10_meta/GIT_WORKFLOW_RULES.md` | **Git 操作**（commit / push / メッセージ / 禁止事項） | active |
-| 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・**エージェント Read 禁止**・保管場所） | active |
+| 15 | 10_meta | `10_meta/SECRETS_HYGIENE_RULES.md` | **Secrets**（コミット禁止・チャット貼付禁止・**エージェント Read 禁止**・保管場所・画像の隠す操作） | active |
 | 65 | 10_meta | `10_meta/GIT_TRACKING_RULES.md` | **Git 追跡対象**（track / not track · `.gitignore` · 生成物除外） | active |
 | 16 | 10_meta | `10_meta/COMMUNICATION_RULES.md` | **チャット応答**（平易さ · No 05 精神借用 · 作業後3点サマリ） | active |
 | 17 | 15_project_mgmt | `15_project_mgmt/APP_PROJECT_RULES.md` | **個人アプリ**新規 · 企画フォルダ · handoffs 再開 · `AGENTS.md` · **実装着手ゲート（§14）** | active |

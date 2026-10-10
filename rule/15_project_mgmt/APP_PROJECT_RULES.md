@@ -6,7 +6,7 @@
 **関連:** `10_meta/AI_DRIVEN_RULES.md`（行動指針）· `15_project_mgmt/PROJECT_DOCUMENT_RULES.md`（企画フォルダ 6 種 · No 25）· スキル `handoff-session-work` · L0 `design-before-code-yk` · `RULE_INDEX.md` No 17  
 **実例:** [flowchart-studio AGENTS.md](c:/yk-application/flowchart-studio/AGENTS.md) · [docs/](c:/yk-application/flowchart-studio/docs/)
 
-**最終更新:** 2026-09-18（§14 実装着手ゲート）
+**最終更新:** 2026-10-10（§14.2 成功の定義は書き出し物の受け手の目で）
 
 ---
 
@@ -269,6 +269,8 @@ L0 要約: `design-before-code-yk.mdc`。フォルダ追加は `PROJECT_DOCUMENT
 既存の `技術方針.md` · ADR で「どう作るか」が既に十分なら **新規ファイルを作らない**。足りない節だけ追記する。
 
 載せるもの（短く）: モジュール境界 · データ／処理の流れ · 触るファイルの目安 · やらないこと · 未決。コードは載せない。
+
+**構想設計の成功の定義は、書き出し物（Word・Excel・PDF 等）がある機能では、それを受け取る人の目で書く。** 設計で「やらない」と決めた点（例: 拡大画像には番号を付けない）でも、出力だけを見る人が対応を読み取れないなら、実機で指摘される（manual-studio・切り取り範囲の番号 2026-10）。構想設計の成功の定義に「出力物だけを見て分かるか」を1項目入れ、やらない点の判断はその観点で見直す。
 
 詰める・磨く: `grill-me`（分岐）→ ファイル化 → 必要なら `converging-plan-reviews`。構想設計用のスキルは新設しない。
 
